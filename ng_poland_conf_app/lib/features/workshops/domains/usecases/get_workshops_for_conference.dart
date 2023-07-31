@@ -1,0 +1,28 @@
+import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
+import 'package:ng_poland_conf_app/features/workshops/domains/entities/workshop.dart';
+import 'package:ng_poland_conf_app/features/workshops/domains/repositories/workshops_repository.dart';
+
+@injectable
+class GetWorkshopsForConference implements UseCase<List<WorkShop>?, Params> {
+  final WorkshopsRepository workshopsRepository;
+
+  GetWorkshopsForConference(this.workshopsRepository);
+
+  @override
+  Future<List<WorkShop>> call(Params params) {
+    return workshopsRepository.getWorkshops(params);
+  }
+}
+
+class Params {
+  final String eventItemType;
+  final String confId;
+  final int limit;
+
+  Params({
+    required this.eventItemType,
+    required this.confId,
+    required this.limit,
+  });
+}

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
-import 'package:ng_poland_conf_app/domains/usecases/get_theme_mode.dart';
-import 'package:ng_poland_conf_app/domains/usecases/update_theme_mode.dart';
+import 'package:ng_poland_conf_app/features/home/domains/usecases/get_theme_mode.dart';
+import 'package:ng_poland_conf_app/features/home/domains/usecases/update_theme_mode.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 
 part 'theme_mode_state.dart';

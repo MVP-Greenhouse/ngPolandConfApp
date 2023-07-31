@@ -1,6 +1,6 @@
 name: ng_poland_conf_app
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -9,38 +9,45 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+
   go_router: ^9.0.0
 
   injectable: ^2.1.2
   get_it: ^7.6.0
   flutter_dotenv: ^5.1.0
+  intl: ^0.18.1
+  url_launcher: ^6.1.12
 
   font_awesome_flutter: ^10.5.0
 
-  hive: 
-  hive_flutter: 
+  hive:
+  hive_flutter:
 
   dio: ^5.2.1+1
+  retrofit: ">=4.0.0 <5.0.0"
+  logger:
 
   flutter_bloc: ^8.1.3
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.1
-  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
   freezed: ^2.3.5
+  retrofit_generator: ">=5.0.0 <6.0.0"
   json_serializable: ^6.7.1
 
   injectable_generator:
-  hive_generator: 
+  hive_generator:
   build_runner:
 
 flutter:
   uses-material-design: true
 
   assets:
+    - assets/icons/
+    - assets/images/
+    - assets/images/authors/
     - .env
