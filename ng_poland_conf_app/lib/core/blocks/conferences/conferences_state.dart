@@ -4,5 +4,10 @@ part of 'conferences_cubit.dart';
 class ConferencesState with _$ConferencesState {
   const factory ConferencesState.initial() = _Initial;
 
-  const factory ConferencesState.loaded(Conferences conferences) = _Loaded;
+  const factory ConferencesState.loaded({
+    required Conferences conferences,
+    required Conference selectedConference,
+  }) = _Loaded;
+
+  const factory ConferencesState.error(String error) = _Error;
 }

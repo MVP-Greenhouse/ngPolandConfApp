@@ -11,6 +11,8 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Pages currentPage = getIt.get<Routing>().currentPage(context);
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -27,6 +29,7 @@ class CustomDrawer extends StatelessWidget {
             _buildCustomListTile(
               context,
               page,
+              currentPage,
             ),
           Container(
             alignment: Alignment.centerLeft,
@@ -34,7 +37,7 @@ class CustomDrawer extends StatelessWidget {
               builder: (context, state) {
                 return state.when(
                   initial: () => const SizedBox.shrink(),
-                  loaded: (ThemeMode themeMode) => _buildSwitch(themeMode),
+                  loaded: (ThemeMode themeMode) => _buildDarkModeSwitch(themeMode),
                 );
               },
             ),
@@ -51,8 +54,12 @@ class CustomDrawer extends StatelessWidget {
   Widget _buildCustomListTile(
     BuildContext context,
     Pages page,
+    Pages currentPage,
   ) {
     return ListTile(
+      selected: page == currentPage,
+      selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
+      selectedColor: Theme.of(context).colorScheme.onPrimaryContainer,
       leading: Icon(
         _buildIconForPage(page),
       ),
@@ -64,25 +71,33 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildSwitch(ThemeMode themeMode) {
+  Widget _buildDarkModeSwitch(ThemeMode themeMode) {
     bool valueForSwitch = switch (themeMode) {
       ThemeMode.dark => true,
       ThemeMode.light || ThemeMode.system => false,
     };
 
-    return Switch(
-      value: valueForSwitch,
-      onChanged: (val) async {
-        ThemeMode? newThemeMode;
+    return Row(
+      children: [
+        Switch(
+          value: valueForSwitch,
+          onChanged: (val) async {
+            ThemeMode? newThemeMode;
 
-        if (val) {
-          newThemeMode = ThemeMode.dark;
-        } else {
-          newThemeMode = ThemeMode.light;
-        }
+            if (val) {
+              newThemeMode = ThemeMode.dark;
+            } else {
+              newThemeMode = ThemeMode.light;
+            }
 
-        await getIt.get<ThemeModeCubit>().updateThemeMode(newThemeMode);
-      },
+            await getIt.get<ThemeModeCubit>().updateThemeMode(newThemeMode);
+          },
+        ),
+        const SizedBox(
+          width: 18,
+        ),
+        const Text('DarkMode')
+      ],
     );
   }
 

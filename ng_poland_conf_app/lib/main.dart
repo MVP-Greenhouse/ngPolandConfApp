@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
-import 'package:ng_poland_conf_app/routing/Routing.dart';
+import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/theme.dart';
 
 void main() async {
-  await dotenv.load(fileName: '.env');
-
-  configureDependencies();
+  configureDependencies(
+    Environment.prod,
+  );
 
   await Hive.initFlutter();
 
@@ -37,7 +37,7 @@ class MainApp extends StatelessWidget {
           return state.when(
             initial: () => const SizedBox.shrink(),
             loaded: (themeMode) => MaterialApp.router(
-              routerConfig: router,
+              routerConfig: getIt.get<Routing>().router,
               theme: ThemeData(
                 useMaterial3: true,
                 colorScheme: lightColorScheme,
