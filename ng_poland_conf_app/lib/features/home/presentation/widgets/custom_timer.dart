@@ -24,30 +24,35 @@ class CustomTimer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _buildTile(
+          context,
           value: duration.inDays,
           unit: 'days',
-          color: Theme.of(context).colorScheme.primary,
+          color: const Color.fromRGBO(255, 0, 122, 1),
         ),
         _buildTile(
+          context,
           value: duration.inHours.remainder(24),
           unit: 'hours',
-          color: Theme.of(context).colorScheme.primary,
+          color: const Color.fromRGBO(255, 193, 7, 1),
         ),
         _buildTile(
+          context,
           value: duration.inMinutes.remainder(60),
           unit: 'minutes',
-          color: Theme.of(context).colorScheme.primary,
+          color: const Color.fromRGBO(0, 193, 193, 1),
         ),
         _buildTile(
+          context,
           value: duration.inSeconds.remainder(60),
           unit: 'seconds',
-          color: Theme.of(context).colorScheme.primary,
+          color: const Color.fromRGBO(139, 195, 74, 1),
         ),
       ],
     );
   }
 
-  Widget _buildTile({
+  Widget _buildTile(
+    BuildContext context, {
     required int value,
     required String unit,
     required Color color,
@@ -56,15 +61,16 @@ class CustomTimer extends StatelessWidget {
       children: [
         Text(
           value.toString(),
-          style: TextStyle(
-            color: color,
-          ),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: color,
+              ),
         ),
         Text(
           unit.toUpperCase(),
-          style: TextStyle(
-            color: color,
-          ),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: color,
+              ),
         ),
       ],
     );

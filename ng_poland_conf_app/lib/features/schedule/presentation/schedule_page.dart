@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_cubit.dart';
+import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
@@ -37,16 +38,9 @@ class _SchedulePageState extends State<SchedulePage> {
               children: [
                 ...listEvents
                     .map(
-                      (eventItem) => ListTile(
-                        title: Text(
-                          eventItem.title.toString(),
-                        ),
-                        leading: Column(
-                          children: [
-                            Text(eventItem.startTime()),
-                            Text(eventItem.endTime()),
-                          ],
-                        ),
+                      (eventItem) => ScheduleEvent(
+                        eventItem,
+                        Theme.of(context).colorScheme.secondary,
                       ),
                     )
                     .toList()

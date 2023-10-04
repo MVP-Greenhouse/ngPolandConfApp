@@ -15,7 +15,9 @@ class CustomDrawer extends StatelessWidget {
 
     return Drawer(
       child: ListView(
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8.0,
+        ),
         children: <Widget>[
           const DrawerHeader(
             child: Text(
@@ -31,13 +33,23 @@ class CustomDrawer extends StatelessWidget {
               page,
               currentPage,
             ),
+          Divider(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            height: 30.0,
+          ),
           Container(
             alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12.0,
+            ),
             child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
               builder: (context, state) {
                 return state.when(
                   initial: () => const SizedBox.shrink(),
-                  loaded: (ThemeMode themeMode) => _buildDarkModeSwitch(themeMode),
+                  loaded: (ThemeMode themeMode) => _buildDarkModeSwitch(
+                    context,
+                    themeMode: themeMode,
+                  ),
                 );
               },
             ),
@@ -60,10 +72,16 @@ class CustomDrawer extends StatelessWidget {
       selected: page == currentPage,
       selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
       selectedColor: Theme.of(context).colorScheme.onPrimaryContainer,
-      leading: Icon(
-        _buildIconForPage(page),
+      leading: SizedBox(
+        width: 34.0,
+        child: Icon(
+          _buildIconForPage(page),
+        ),
       ),
-      title: Text(page.nameKey),
+      title: Text(
+        page.nameKey,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
       onTap: () => _goTo(
         context,
         page: page,
@@ -71,7 +89,10 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildDarkModeSwitch(ThemeMode themeMode) {
+  Widget _buildDarkModeSwitch(
+    BuildContext context, {
+    required ThemeMode themeMode,
+  }) {
     bool valueForSwitch = switch (themeMode) {
       ThemeMode.dark => true,
       ThemeMode.light || ThemeMode.system => false,
@@ -94,9 +115,12 @@ class CustomDrawer extends StatelessWidget {
           },
         ),
         const SizedBox(
-          width: 18,
+          width: 16.0,
         ),
-        const Text('DarkMode')
+        Text(
+          'DarkMode',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ],
     );
   }
