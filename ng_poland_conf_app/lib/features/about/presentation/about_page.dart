@@ -45,7 +45,7 @@ class AboutPage extends StatelessWidget {
                 color: Theme.of(context).dividerTheme.color,
                 height: 35,
               ),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: Text(
                   'Authors:',
@@ -93,7 +93,7 @@ class AboutPage extends StatelessWidget {
                   height: 50,
                 ),
                 title: InkWell(
-                  onTap: () => launch('https://github.com/gdgradzymin/ngPolandConfNext'),
+                  onTap: () => launchUrl(Uri.parse('https://github.com/gdgradzymin/ngPolandConfNext')),
                   child: const Text(
                     'ngPolandConfNext',
                     style: TextStyle(color: Colors.blue, fontSize: 12),
