@@ -33,7 +33,7 @@ class _SpeakersPageState extends State<SpeakersPage> {
               children: [
                 ...listSpeakers
                     .map(
-                      (speaker) => Text(speaker.name),
+                      (speaker) => Text(speaker.name ?? ''),
                     )
                     .toList(),
               ],
