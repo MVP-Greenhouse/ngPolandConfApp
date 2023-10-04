@@ -9,10 +9,9 @@ import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/theme.dart';
 
 void main() async {
-  configureDependencies(
+  await configureDependencies(
     Environment.prod,
   );
-
   await Hive.initFlutter();
 
   runApp(const MainApp());
