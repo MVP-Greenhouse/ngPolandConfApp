@@ -14,20 +14,25 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
+Speaker _$SpeakerFromJson(Map<String, dynamic> json) {
+  return _Speaker.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Speaker {
-  String get name => throw _privateConstructorUsedError;
-  String get role => throw _privateConstructorUsedError;
-  String get bio => throw _privateConstructorUsedError;
-  String get photoFileUrl => throw _privateConstructorUsedError;
-  String get photoTitle => throw _privateConstructorUsedError;
-  String get photoDescription => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
-  String get urlGithub => throw _privateConstructorUsedError;
-  String get urlLinkedIn => throw _privateConstructorUsedError;
-  String get urlTwitter => throw _privateConstructorUsedError;
-  String get urlWww => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  String? get role => throw _privateConstructorUsedError;
+  String? get bio => throw _privateConstructorUsedError;
+  String? get photoFileUrl => throw _privateConstructorUsedError;
+  String? get photoTitle => throw _privateConstructorUsedError;
+  String? get photoDescription => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  String? get urlGithub => throw _privateConstructorUsedError;
+  String? get urlLinkedIn => throw _privateConstructorUsedError;
+  String? get urlTwitter => throw _privateConstructorUsedError;
+  String? get urlWww => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $SpeakerCopyWith<Speaker> get copyWith => throw _privateConstructorUsedError;
 }
@@ -38,17 +43,17 @@ abstract class $SpeakerCopyWith<$Res> {
       _$SpeakerCopyWithImpl<$Res, Speaker>;
   @useResult
   $Res call(
-      {String name,
-      String role,
-      String bio,
-      String photoFileUrl,
-      String photoTitle,
-      String photoDescription,
-      String email,
-      String urlGithub,
-      String urlLinkedIn,
-      String urlTwitter,
-      String urlWww});
+      {String? name,
+      String? role,
+      String? bio,
+      String? photoFileUrl,
+      String? photoTitle,
+      String? photoDescription,
+      String? email,
+      String? urlGithub,
+      String? urlLinkedIn,
+      String? urlTwitter,
+      String? urlWww});
 }
 
 /// @nodoc
@@ -64,63 +69,63 @@ class _$SpeakerCopyWithImpl<$Res, $Val extends Speaker>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
-    Object? role = null,
-    Object? bio = null,
-    Object? photoFileUrl = null,
-    Object? photoTitle = null,
-    Object? photoDescription = null,
-    Object? email = null,
-    Object? urlGithub = null,
-    Object? urlLinkedIn = null,
-    Object? urlTwitter = null,
-    Object? urlWww = null,
+    Object? name = freezed,
+    Object? role = freezed,
+    Object? bio = freezed,
+    Object? photoFileUrl = freezed,
+    Object? photoTitle = freezed,
+    Object? photoDescription = freezed,
+    Object? email = freezed,
+    Object? urlGithub = freezed,
+    Object? urlLinkedIn = freezed,
+    Object? urlTwitter = freezed,
+    Object? urlWww = freezed,
   }) {
     return _then(_value.copyWith(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      role: null == role
+              as String?,
+      role: freezed == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
+              as String?,
+      bio: freezed == bio
           ? _value.bio
           : bio // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoFileUrl: null == photoFileUrl
+              as String?,
+      photoFileUrl: freezed == photoFileUrl
           ? _value.photoFileUrl
           : photoFileUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoTitle: null == photoTitle
+              as String?,
+      photoTitle: freezed == photoTitle
           ? _value.photoTitle
           : photoTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoDescription: null == photoDescription
+              as String?,
+      photoDescription: freezed == photoDescription
           ? _value.photoDescription
           : photoDescription // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
+              as String?,
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      urlGithub: null == urlGithub
+              as String?,
+      urlGithub: freezed == urlGithub
           ? _value.urlGithub
           : urlGithub // ignore: cast_nullable_to_non_nullable
-              as String,
-      urlLinkedIn: null == urlLinkedIn
+              as String?,
+      urlLinkedIn: freezed == urlLinkedIn
           ? _value.urlLinkedIn
           : urlLinkedIn // ignore: cast_nullable_to_non_nullable
-              as String,
-      urlTwitter: null == urlTwitter
+              as String?,
+      urlTwitter: freezed == urlTwitter
           ? _value.urlTwitter
           : urlTwitter // ignore: cast_nullable_to_non_nullable
-              as String,
-      urlWww: null == urlWww
+              as String?,
+      urlWww: freezed == urlWww
           ? _value.urlWww
           : urlWww // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -133,17 +138,17 @@ abstract class _$$_SpeakerCopyWith<$Res> implements $SpeakerCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String name,
-      String role,
-      String bio,
-      String photoFileUrl,
-      String photoTitle,
-      String photoDescription,
-      String email,
-      String urlGithub,
-      String urlLinkedIn,
-      String urlTwitter,
-      String urlWww});
+      {String? name,
+      String? role,
+      String? bio,
+      String? photoFileUrl,
+      String? photoTitle,
+      String? photoDescription,
+      String? email,
+      String? urlGithub,
+      String? urlLinkedIn,
+      String? urlTwitter,
+      String? urlWww});
 }
 
 /// @nodoc
@@ -156,69 +161,69 @@ class __$$_SpeakerCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
-    Object? role = null,
-    Object? bio = null,
-    Object? photoFileUrl = null,
-    Object? photoTitle = null,
-    Object? photoDescription = null,
-    Object? email = null,
-    Object? urlGithub = null,
-    Object? urlLinkedIn = null,
-    Object? urlTwitter = null,
-    Object? urlWww = null,
+    Object? name = freezed,
+    Object? role = freezed,
+    Object? bio = freezed,
+    Object? photoFileUrl = freezed,
+    Object? photoTitle = freezed,
+    Object? photoDescription = freezed,
+    Object? email = freezed,
+    Object? urlGithub = freezed,
+    Object? urlLinkedIn = freezed,
+    Object? urlTwitter = freezed,
+    Object? urlWww = freezed,
   }) {
     return _then(_$_Speaker(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      role: null == role
+              as String?,
+      role: freezed == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
+              as String?,
+      bio: freezed == bio
           ? _value.bio
           : bio // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoFileUrl: null == photoFileUrl
+              as String?,
+      photoFileUrl: freezed == photoFileUrl
           ? _value.photoFileUrl
           : photoFileUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoTitle: null == photoTitle
+              as String?,
+      photoTitle: freezed == photoTitle
           ? _value.photoTitle
           : photoTitle // ignore: cast_nullable_to_non_nullable
-              as String,
-      photoDescription: null == photoDescription
+              as String?,
+      photoDescription: freezed == photoDescription
           ? _value.photoDescription
           : photoDescription // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
+              as String?,
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      urlGithub: null == urlGithub
+              as String?,
+      urlGithub: freezed == urlGithub
           ? _value.urlGithub
           : urlGithub // ignore: cast_nullable_to_non_nullable
-              as String,
-      urlLinkedIn: null == urlLinkedIn
+              as String?,
+      urlLinkedIn: freezed == urlLinkedIn
           ? _value.urlLinkedIn
           : urlLinkedIn // ignore: cast_nullable_to_non_nullable
-              as String,
-      urlTwitter: null == urlTwitter
+              as String?,
+      urlTwitter: freezed == urlTwitter
           ? _value.urlTwitter
           : urlTwitter // ignore: cast_nullable_to_non_nullable
-              as String,
-      urlWww: null == urlWww
+              as String?,
+      urlWww: freezed == urlWww
           ? _value.urlWww
           : urlWww // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_Speaker implements _Speaker {
   const _$_Speaker(
       {required this.name,
@@ -233,28 +238,31 @@ class _$_Speaker implements _Speaker {
       required this.urlTwitter,
       required this.urlWww});
 
+  factory _$_Speaker.fromJson(Map<String, dynamic> json) =>
+      _$$_SpeakerFromJson(json);
+
   @override
-  final String name;
+  final String? name;
   @override
-  final String role;
+  final String? role;
   @override
-  final String bio;
+  final String? bio;
   @override
-  final String photoFileUrl;
+  final String? photoFileUrl;
   @override
-  final String photoTitle;
+  final String? photoTitle;
   @override
-  final String photoDescription;
+  final String? photoDescription;
   @override
-  final String email;
+  final String? email;
   @override
-  final String urlGithub;
+  final String? urlGithub;
   @override
-  final String urlLinkedIn;
+  final String? urlLinkedIn;
   @override
-  final String urlTwitter;
+  final String? urlTwitter;
   @override
-  final String urlWww;
+  final String? urlWww;
 
   @override
   String toString() {
@@ -285,6 +293,7 @@ class _$_Speaker implements _Speaker {
             (identical(other.urlWww, urlWww) || other.urlWww == urlWww));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -305,44 +314,53 @@ class _$_Speaker implements _Speaker {
   @pragma('vm:prefer-inline')
   _$$_SpeakerCopyWith<_$_Speaker> get copyWith =>
       __$$_SpeakerCopyWithImpl<_$_Speaker>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_SpeakerToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Speaker implements Speaker {
   const factory _Speaker(
-      {required final String name,
-      required final String role,
-      required final String bio,
-      required final String photoFileUrl,
-      required final String photoTitle,
-      required final String photoDescription,
-      required final String email,
-      required final String urlGithub,
-      required final String urlLinkedIn,
-      required final String urlTwitter,
-      required final String urlWww}) = _$_Speaker;
+      {required final String? name,
+      required final String? role,
+      required final String? bio,
+      required final String? photoFileUrl,
+      required final String? photoTitle,
+      required final String? photoDescription,
+      required final String? email,
+      required final String? urlGithub,
+      required final String? urlLinkedIn,
+      required final String? urlTwitter,
+      required final String? urlWww}) = _$_Speaker;
+
+  factory _Speaker.fromJson(Map<String, dynamic> json) = _$_Speaker.fromJson;
 
   @override
-  String get name;
+  String? get name;
   @override
-  String get role;
+  String? get role;
   @override
-  String get bio;
+  String? get bio;
   @override
-  String get photoFileUrl;
+  String? get photoFileUrl;
   @override
-  String get photoTitle;
+  String? get photoTitle;
   @override
-  String get photoDescription;
+  String? get photoDescription;
   @override
-  String get email;
+  String? get email;
   @override
-  String get urlGithub;
+  String? get urlGithub;
   @override
-  String get urlLinkedIn;
+  String? get urlLinkedIn;
   @override
-  String get urlTwitter;
+  String? get urlTwitter;
   @override
-  String get urlWww;
+  String? get urlWww;
   @override
   @JsonKey(ignore: true)
   _$$_SpeakerCopyWith<_$_Speaker> get copyWith =>

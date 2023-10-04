@@ -28,6 +28,7 @@ mixin _$EventItemModel {
   String? get description => throw _privateConstructorUsedError;
   String? get startDate => throw _privateConstructorUsedError;
   String? get endDate => throw _privateConstructorUsedError;
+  Speaker? get speaker => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,7 +50,10 @@ abstract class $EventItemModelCopyWith<$Res> {
       String? shortDescription,
       String? description,
       String? startDate,
-      String? endDate});
+      String? endDate,
+      Speaker? speaker});
+
+  $SpeakerCopyWith<$Res>? get speaker;
 }
 
 /// @nodoc
@@ -73,6 +77,7 @@ class _$EventItemModelCopyWithImpl<$Res, $Val extends EventItemModel>
     Object? description = freezed,
     Object? startDate = freezed,
     Object? endDate = freezed,
+    Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
       title: freezed == title
@@ -107,7 +112,23 @@ class _$EventItemModelCopyWithImpl<$Res, $Val extends EventItemModel>
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as String?,
+      speaker: freezed == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as Speaker?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SpeakerCopyWith<$Res>? get speaker {
+    if (_value.speaker == null) {
+      return null;
+    }
+
+    return $SpeakerCopyWith<$Res>(_value.speaker!, (value) {
+      return _then(_value.copyWith(speaker: value) as $Val);
+    });
   }
 }
 
@@ -127,7 +148,11 @@ abstract class _$$_EventItemModelCopyWith<$Res>
       String? shortDescription,
       String? description,
       String? startDate,
-      String? endDate});
+      String? endDate,
+      Speaker? speaker});
+
+  @override
+  $SpeakerCopyWith<$Res>? get speaker;
 }
 
 /// @nodoc
@@ -149,6 +174,7 @@ class __$$_EventItemModelCopyWithImpl<$Res>
     Object? description = freezed,
     Object? startDate = freezed,
     Object? endDate = freezed,
+    Object? speaker = freezed,
   }) {
     return _then(_$_EventItemModel(
       title: freezed == title
@@ -183,6 +209,10 @@ class __$$_EventItemModelCopyWithImpl<$Res>
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as String?,
+      speaker: freezed == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as Speaker?,
     ));
   }
 }
@@ -198,7 +228,8 @@ class _$_EventItemModel extends _EventItemModel {
       required this.shortDescription,
       required this.description,
       required this.startDate,
-      required this.endDate})
+      required this.endDate,
+      required this.speaker})
       : super._();
 
   factory _$_EventItemModel.fromJson(Map<String, dynamic> json) =>
@@ -220,10 +251,12 @@ class _$_EventItemModel extends _EventItemModel {
   final String? startDate;
   @override
   final String? endDate;
+  @override
+  final Speaker? speaker;
 
   @override
   String toString() {
-    return 'EventItemModel(title: $title, confId: $confId, type: $type, category: $category, shortDescription: $shortDescription, description: $description, startDate: $startDate, endDate: $endDate)';
+    return 'EventItemModel(title: $title, confId: $confId, type: $type, category: $category, shortDescription: $shortDescription, description: $description, startDate: $startDate, endDate: $endDate, speaker: $speaker)';
   }
 
   @override
@@ -242,13 +275,14 @@ class _$_EventItemModel extends _EventItemModel {
                 other.description == description) &&
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
-            (identical(other.endDate, endDate) || other.endDate == endDate));
+            (identical(other.endDate, endDate) || other.endDate == endDate) &&
+            (identical(other.speaker, speaker) || other.speaker == speaker));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, title, confId, type, category,
-      shortDescription, description, startDate, endDate);
+      shortDescription, description, startDate, endDate, speaker);
 
   @JsonKey(ignore: true)
   @override
@@ -273,7 +307,8 @@ abstract class _EventItemModel extends EventItemModel {
       required final String? shortDescription,
       required final String? description,
       required final String? startDate,
-      required final String? endDate}) = _$_EventItemModel;
+      required final String? endDate,
+      required final Speaker? speaker}) = _$_EventItemModel;
   const _EventItemModel._() : super._();
 
   factory _EventItemModel.fromJson(Map<String, dynamic> json) =
@@ -295,6 +330,8 @@ abstract class _EventItemModel extends EventItemModel {
   String? get startDate;
   @override
   String? get endDate;
+  @override
+  Speaker? get speaker;
   @override
   @JsonKey(ignore: true)
   _$$_EventItemModelCopyWith<_$_EventItemModel> get copyWith =>

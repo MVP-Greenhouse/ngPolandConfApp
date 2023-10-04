@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
 part 'event_item_model.freezed.dart';
 part 'event_item_model.g.dart';
@@ -17,12 +18,13 @@ class EventItemModel with _$EventItemModel {
     required String? description,
     required String? startDate,
     required String? endDate,
+    required Speaker? speaker,
   }) = _EventItemModel;
 
   factory EventItemModel.fromJson(Map<String, dynamic> json) => _$EventItemModelFromJson(json['fields']);
 
   EventItem toEntity() => EventItem(
-        title: title,
+        title: title ?? '',
         confId: confId,
         type: type,
         category: category,
@@ -30,5 +32,6 @@ class EventItemModel with _$EventItemModel {
         description: description,
         startDate: DateTime.tryParse(startDate ?? ''),
         endDate: DateTime.tryParse(endDate ?? ''),
+        speaker: speaker,
       );
 }
