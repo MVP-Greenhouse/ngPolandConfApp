@@ -55,7 +55,7 @@ class MainApp extends StatelessWidget {
                     bodyMedium: const TextStyle(fontSize: 28, fontWeight: FontWeight.normal),
                     bodySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     displayMedium: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSecondary),
+                    titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary),
                     displaySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                   )),
               darkTheme: ThemeData(

@@ -10,13 +10,13 @@ import 'package:ng_poland_conf_app/features/speakers/presentation/speakers_page.
 import 'package:ng_poland_conf_app/features/workshops/presentation/workshops_page.dart';
 
 enum Pages {
-  home('/', 'home'),
-  schedule('/schedule', 'schedule'),
-  workshops('/workshops', 'workshops'),
-  nggirls('/nggirls', 'nggirls'),
-  speakers('/speakers', 'speakers'),
-  info('/info', 'info'),
-  about('/about', 'about');
+  home('/', 'Home'),
+  schedule('/schedule', 'Schedule'),
+  workshops('/workshops', 'Workshops'),
+  nggirls('/nggirls', 'ngGirls'),
+  speakers('/speakers', 'Speakers'),
+  info('/info', 'Info'),
+  about('/about', 'About');
 
   final String path;
   final String nameKey;

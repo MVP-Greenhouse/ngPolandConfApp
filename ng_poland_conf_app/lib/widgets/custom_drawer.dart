@@ -20,10 +20,8 @@ class CustomDrawer extends StatelessWidget {
           horizontal: 8.0,
         ),
         children: <Widget>[
-          const DrawerHeader(
-            child: Text(
-              'Drawer Header',
-            ),
+          DrawerHeader(
+            child: Image.asset('assets/images/logo.png'),
           ),
           for (Pages page in Pages.values)
             _buildCustomListTile(
@@ -33,6 +31,7 @@ class CustomDrawer extends StatelessWidget {
             ),
           Divider(
             color: Theme.of(context).colorScheme.secondary,
+            thickness: 1.0,
             height: 30.0,
           ),
           Container(
@@ -67,6 +66,9 @@ class CustomDrawer extends StatelessWidget {
     Pages currentPage,
   ) {
     return ListTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6.0),
+      ),
       selected: page == currentPage,
       selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
       selectedColor: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -100,6 +102,9 @@ class CustomDrawer extends StatelessWidget {
     return Row(
       children: [
         Switch(
+          thumbColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface),
+          trackColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
+          trackOutlineColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
           value: valueForSwitch,
           onChanged: (val) async {
             ThemeMode? newThemeMode;
@@ -117,8 +122,8 @@ class CustomDrawer extends StatelessWidget {
           width: 16.0,
         ),
         Text(
-          'DarkMode',
-          style: Theme.of(context).textTheme.titleMedium,
+          (valueForSwitch ? 'Dark mode' : 'Light mode'),
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.primary),
         ),
       ],
     );
@@ -130,8 +135,8 @@ class CustomDrawer extends StatelessWidget {
       Pages.schedule => FontAwesomeIcons.solidClock,
       Pages.workshops => FontAwesomeIcons.solidKeyboard,
       Pages.nggirls => FontAwesomeIcons.personDress,
-      Pages.speakers => FontAwesomeIcons.users,
-      Pages.info => FontAwesomeIcons.info,
+      Pages.speakers => FontAwesomeIcons.microphone,
+      Pages.info => FontAwesomeIcons.circleInfo,
       Pages.about => FontAwesomeIcons.code,
     };
   }
