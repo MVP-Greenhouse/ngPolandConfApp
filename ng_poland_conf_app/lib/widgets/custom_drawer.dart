@@ -14,6 +14,7 @@ class CustomDrawer extends StatelessWidget {
     final Pages currentPage = getIt.get<Routing>().currentPage(context);
 
     return Drawer(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       child: ListView(
         padding: const EdgeInsets.symmetric(
           horizontal: 8.0,
@@ -22,9 +23,6 @@ class CustomDrawer extends StatelessWidget {
           const DrawerHeader(
             child: Text(
               'Drawer Header',
-              style: TextStyle(
-                fontSize: 24,
-              ),
             ),
           ),
           for (Pages page in Pages.values)
@@ -34,7 +32,7 @@ class CustomDrawer extends StatelessWidget {
               currentPage,
             ),
           Divider(
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: Theme.of(context).colorScheme.secondary,
             height: 30.0,
           ),
           Container(
@@ -76,12 +74,13 @@ class CustomDrawer extends StatelessWidget {
         width: 34.0,
         child: Icon(
           _buildIconForPage(page),
+          color: page == currentPage ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.primary,
         ),
       ),
-      title: Text(
-        page.nameKey,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
+      title: Text(page.nameKey,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: page == currentPage ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.primary,
+              )),
       onTap: () => _goTo(
         context,
         page: page,

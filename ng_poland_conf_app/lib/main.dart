@@ -48,6 +48,7 @@ class MainApp extends StatelessWidget {
                     alignedDropdown: false,
                     colorScheme: lightButtonColorScheme,
                   ),
+                  dividerColor: Theme.of(context).colorScheme.secondary,
                   textTheme: TextTheme(
                     displayLarge: const TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
                     titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSecondary),
