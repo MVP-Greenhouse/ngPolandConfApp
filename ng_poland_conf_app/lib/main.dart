@@ -61,6 +61,15 @@ class MainApp extends StatelessWidget {
               darkTheme: ThemeData(
                 useMaterial3: true,
                 colorScheme: darkColorScheme,
+                appBarTheme: const AppBarTheme(backgroundColor: Color(0xff4a148c), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
+                applyElevationOverlayColor: false,
+                bottomNavigationBarTheme:
+                    const BottomNavigationBarThemeData(backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
+                buttonTheme: const ButtonThemeData(
+                  alignedDropdown: false,
+                  colorScheme: darkButtonColorScheme,
+                ),
+                dividerColor: Theme.of(context).colorScheme.secondary,
               ),
               themeMode: themeMode,
             ),
