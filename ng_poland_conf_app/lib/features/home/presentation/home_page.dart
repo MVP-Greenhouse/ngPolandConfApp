@@ -47,13 +47,13 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           body: Container(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               horizontal: 24.0,
               vertical: 24.0,
             ),
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/background.jpg'),
+                image: AssetImage('assets/images/background_blured.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -70,25 +70,29 @@ class _HomePageState extends State<HomePage> {
         children: [
           Column(
             children: [
+              const SizedBox(
+                height: 30.0,
+              ),
               AnimatedSize(
                 alignment: Alignment.topCenter,
                 duration: const Duration(milliseconds: 200),
                 child: state.maybeWhen(
-                  initial: () => const Text('The Biggest Angular Conference'),
+                  initial: () => Text('The Biggest Angular Conference',
+                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200))),
                   loaded: (conferences, selectedConference) => Text(
                     selectedConference.description,
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200)),
                   ),
                   orElse: () => const SizedBox.shrink(),
                 ),
               ),
               const SizedBox(
-                height: 30.0,
+                height: 50.0,
               ),
               _buildTimer(),
-              Divider(
-                height: 30.0,
+              const Divider(
+                height: 40.0,
               ),
               state.maybeWhen(
                 loaded: (conferences, selectedConference) => Column(
@@ -99,25 +103,28 @@ class _HomePageState extends State<HomePage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.calendar_month),
-                                SizedBox(
+                                Icon(
+                                  Icons.calendar_month,
+                                  color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(150),
+                                  size: 16.0,
+                                ),
+                                const SizedBox(
                                   width: 12.0,
                                 ),
-                                Text(
-                                  e.desc,
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                ),
+                                Text(e.desc,
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(170), fontSize: 16.0))
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 6.0,
                             ),
                             Text(
                               e.name,
-                              style: Theme.of(context).textTheme.titleMedium,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
                             ),
-                            SizedBox(
-                              height: 12.0,
+                            const SizedBox(
+                              height: 18.0,
                             ),
                           ],
                         ),

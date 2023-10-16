@@ -38,13 +38,47 @@ class MainApp extends StatelessWidget {
             loaded: (themeMode) => MaterialApp.router(
               routerConfig: getIt.get<Routing>().router,
               theme: ThemeData(
-                useMaterial3: true,
-                colorScheme: lightColorScheme,
-              ),
+                  useMaterial3: true,
+                  colorScheme: lightColorScheme,
+                  appBarTheme: const AppBarTheme(backgroundColor: Color(0xff4f00d0), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
+                  applyElevationOverlayColor: false,
+                  bottomNavigationBarTheme:
+                      const BottomNavigationBarThemeData(backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
+                  buttonTheme: const ButtonThemeData(
+                    alignedDropdown: false,
+                    colorScheme: lightButtonColorScheme,
+                  ),
+                  dividerColor: Theme.of(context).colorScheme.secondary,
+                  textTheme: TextTheme(
+                    displayLarge: const TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+                    titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSecondary),
+                    bodyMedium: const TextStyle(fontSize: 28, fontWeight: FontWeight.normal),
+                    bodySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    displayMedium: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary),
+                    displaySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                  )),
               darkTheme: ThemeData(
-                useMaterial3: true,
-                colorScheme: darkColorScheme,
-              ),
+                  useMaterial3: true,
+                  colorScheme: darkColorScheme,
+                  appBarTheme: const AppBarTheme(backgroundColor: Color(0xffE91E63), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
+                  applyElevationOverlayColor: false,
+                  bottomNavigationBarTheme:
+                      const BottomNavigationBarThemeData(backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
+                  buttonTheme: const ButtonThemeData(
+                    alignedDropdown: false,
+                    colorScheme: darkButtonColorScheme,
+                  ),
+                  dividerColor: Theme.of(context).colorScheme.secondary,
+                  textTheme: TextTheme(
+                    displayLarge: const TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+                    titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSecondary),
+                    bodyMedium: const TextStyle(fontSize: 28, fontWeight: FontWeight.normal),
+                    bodySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    displayMedium: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary),
+                    displaySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                  )),
               themeMode: themeMode,
             ),
           );

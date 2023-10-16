@@ -63,14 +63,13 @@ class CustomTimer extends StatelessWidget {
           value.toString(),
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,
+                fontSize: 26.0,
                 color: color,
               ),
         ),
         Text(
           unit.toUpperCase(),
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: color,
-              ),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color, fontWeight: FontWeight.w400, fontSize: 12.0),
         ),
       ],
     );
