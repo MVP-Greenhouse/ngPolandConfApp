@@ -12,4 +12,4 @@ You can download the app here:
 
 #
 
-[<img src="media/screens/android/screens.png">](media/screens/android/screens.png)
+[<img src="media/screens/android/screens.png">](ng_poland_conf_app/media/screens/light_theme_drawer.png)
