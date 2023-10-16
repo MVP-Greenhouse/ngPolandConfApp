@@ -48,14 +48,20 @@ class MainApp extends StatelessWidget {
                     alignedDropdown: false,
                     colorScheme: lightButtonColorScheme,
                   ),
-                  dividerColor: Theme.of(context).colorScheme.secondary,
+                  dividerTheme: DividerThemeData(
+                    color: lightColorScheme.secondary,
+                    thickness: 1.0,
+                    space: 0.0,
+                    indent: 0.0,
+                    endIndent: 0.0,
+                  ),
                   textTheme: TextTheme(
                     displayLarge: const TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
-                    titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSecondary),
+                    titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: lightColorScheme.onSecondary),
                     bodyMedium: const TextStyle(fontSize: 28, fontWeight: FontWeight.normal),
                     bodySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     displayMedium: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary),
+                    titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: lightColorScheme.onPrimary),
                     displaySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                   )),
               darkTheme: ThemeData(
@@ -69,7 +75,13 @@ class MainApp extends StatelessWidget {
                     alignedDropdown: false,
                     colorScheme: darkButtonColorScheme,
                   ),
-                  dividerColor: Theme.of(context).colorScheme.secondary,
+                  dividerTheme: DividerThemeData(
+                    color: darkColorScheme.primary,
+                    thickness: 1.0,
+                    space: 0.0,
+                    indent: 0.0,
+                    endIndent: 0.0,
+                  ),
                   textTheme: TextTheme(
                     displayLarge: const TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
                     titleLarge: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSecondary),

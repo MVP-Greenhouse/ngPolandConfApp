@@ -87,14 +87,14 @@ const darkColorScheme = ColorScheme(
     outlineVariant: Color(0xffffffff),
     primary: Color(0xffFFEDEB),
     primaryContainer: Color(0xffE91E63),
-    secondary: Color(0xffFF8A80),
-    secondaryContainer: Color(0xffFF1744),
+    secondary: Color(0xffF50057),
+    secondaryContainer: Color(0xff4f00d0),
     shadow: Color(0xff000000),
     surface: Color(0xff424242),
     surfaceTint: Color(0xff4A148C),
     surfaceVariant: Color(0xff424242),
-    tertiary: Color(0xff64ffda),
-    tertiaryContainer: Color(0xff64ffda));
+    tertiary: Color(0xff82B1FF),
+    tertiaryContainer: Color(0xff82B1FF));
 
 const darkButtonColorScheme = ColorScheme(
     background: Color(0xff616161),
