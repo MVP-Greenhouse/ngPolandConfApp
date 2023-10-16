@@ -14,7 +14,8 @@ class CustomDrawer extends StatelessWidget {
     final Pages currentPage = getIt.get<Routing>().currentPage(context);
 
     return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(210),
+      shadowColor: Theme.of(context).colorScheme.surface,
       child: ListView(
         padding: const EdgeInsets.symmetric(
           horizontal: 8.0,
@@ -30,7 +31,7 @@ class CustomDrawer extends StatelessWidget {
               currentPage,
             ),
           Divider(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.primary,
             thickness: 1.0,
             height: 30.0,
           ),
