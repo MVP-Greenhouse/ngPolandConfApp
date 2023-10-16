@@ -99,7 +99,7 @@ class ScheduleEvent extends StatelessWidget {
           ),
           Divider(
             color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
-            height: 0,
+            height: 20,
           ),
         ],
       ),
