@@ -29,8 +29,8 @@ const lightColorScheme = ColorScheme(
     surface: Color(0xffffffff),
     surfaceTint: Color(0xff6200ee),
     surfaceVariant: Color(0xffffffff),
-    tertiary: Color(0xff03dac6),
-    tertiaryContainer: Color(0xff03dac6));
+    tertiary: Color(0xffFF4081),
+    tertiaryContainer: Color(0xffffffff));
 
 const lightButtonColorScheme = ColorScheme(
     background: Color(0xff9575cd),
@@ -61,8 +61,8 @@ const lightButtonColorScheme = ColorScheme(
     surface: Color(0xffffffff),
     surfaceTint: Color(0xff6200ee),
     surfaceVariant: Color(0xffffffff),
-    tertiary: Color(0xff03dac6),
-    tertiaryContainer: Color(0xff03dac6));
+    tertiary: Color(0xffFF4081),
+    tertiaryContainer: Color(0xffffffff));
 
 const darkColorScheme = ColorScheme(
     background: Color(0xff303030),
@@ -93,7 +93,7 @@ const darkColorScheme = ColorScheme(
     surface: Color(0xff424242),
     surfaceTint: Color(0xff4A148C),
     surfaceVariant: Color(0xff424242),
-    tertiary: Color(0xff82B1FF),
+    tertiary: Color(0xffA9C7FF),
     tertiaryContainer: Color(0xff82B1FF));
 
 const darkButtonColorScheme = ColorScheme(

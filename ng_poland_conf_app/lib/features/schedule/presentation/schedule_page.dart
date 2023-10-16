@@ -40,10 +40,10 @@ class _SchedulePageState extends State<SchedulePage> {
                     .map(
                       (eventItem) => ScheduleEvent(
                         eventItem,
-                        Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).colorScheme.tertiary,
                       ),
                     )
-                    .toList()
+                    .toList(),
               ],
             ),
             orElse: SizedBox.shrink,

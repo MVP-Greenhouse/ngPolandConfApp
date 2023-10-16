@@ -19,7 +19,7 @@ class ScheduleEvent extends StatelessWidget {
     var icon = switch (category) {
       'registration' => FontAwesomeIcons.addressCard,
       'welcome' => FontAwesomeIcons.child,
-      'presentation' => FontAwesomeIcons.microphoneAlt,
+      'presentation' => FontAwesomeIcons.microphone,
       'eating' => FontAwesomeIcons.utensils,
       'award' => FontAwesomeIcons.trophy,
       'break' => FontAwesomeIcons.solidComments,
@@ -40,60 +40,68 @@ class ScheduleEvent extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ListTile(
-        onTap: eventItem.speaker == null
-            ? null
-            : () {
-                // Navigator.of(context).pushNamed(
-                //   Presenter.routeName,
-                //   arguments: {
-                //     'title': widget.eventItem.title,
-                //     'description': widget.eventItem.description,
-                //     'icon': _getIcon(
-                //       widget.eventItem.category,
-                //       _iconsColor,
-                //     ),
-                //     'speaker': widget.eventItem.speaker,
-                //   },
-                // );
-              },
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            if (startDate != null)
-              Text(
-                DateFormat.Hm().format(startDate),
-                style: TextStyle(
-                  fontSize: 12,
-                  // color: Theme.of(context).textTheme.bodyText1.color,
+      child: Column(
+        children: [
+          ListTile(
+            onTap: eventItem.speaker == null
+                ? null
+                : () {
+                    // Navigator.of(context).pushNamed(
+                    //   Presenter.routeName,
+                    //   arguments: {
+                    //     'title': widget.eventItem.title,
+                    //     'description': widget.eventItem.description,
+                    //     'icon': _getIcon(
+                    //       widget.eventItem.category,
+                    //       _iconsColor,
+                    //     ),
+                    //     'speaker': widget.eventItem.speaker,
+                    //   },
+                    // );
+                  },
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                if (startDate != null)
+                  Text(
+                    DateFormat.Hm().format(startDate),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
+                    ),
+                  ),
+                if (endDate != null)
+                  Text(
+                    DateFormat.Hm().format(endDate),
+                    style: const TextStyle(fontSize: 12),
+                  ),
+              ],
+            ),
+            title: Text(
+              eventItem.title,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.8),
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            subtitle: _buildSpeaker(eventItem.speaker),
+            trailing: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Opacity(
+                  opacity: 0.7,
+                  child: _getIcon(eventItem.category),
                 ),
-              ),
-            if (endDate != null)
-              Text(
-                DateFormat.Hm().format(endDate),
-                style: const TextStyle(fontSize: 12),
-              ),
-          ],
-        ),
-        title: Text(
-          eventItem.title,
-          style: TextStyle(
-            // color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
+              ],
+            ),
           ),
-        ),
-        subtitle: _buildSpeaker(eventItem.speaker),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Opacity(
-              opacity: 0.4,
-              child: _getIcon(eventItem.category),
-            )
-          ],
-        ),
+          Divider(
+            color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
+            height: 0,
+          ),
+        ],
       ),
     );
   }

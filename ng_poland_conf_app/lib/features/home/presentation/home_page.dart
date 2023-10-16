@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               ),
               _buildTimer(),
               const Divider(
-                height: 40.0,
+                height: 60.0,
               ),
               state.maybeWhen(
                 loaded: (conferences, selectedConference) => Column(
