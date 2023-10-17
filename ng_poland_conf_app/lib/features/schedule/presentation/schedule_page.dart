@@ -4,6 +4,7 @@ import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_cubit.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
+import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/schedule_bottom_nav.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
 class SchedulePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class SchedulePage extends StatefulWidget {
 
 class _SchedulePageState extends State<SchedulePage> {
   late final ScheduleCubit _cubit;
+  final selectedTabItem = EventItemType.ngPoland;
 
   @override
   void initState() {
@@ -26,6 +28,18 @@ class _SchedulePageState extends State<SchedulePage> {
     super.initState();
   }
 
+  void onEventItemTabChange(int idx) {
+    if (idx == 0) {
+      _cubit.getListEvents(
+        eventItemType: EventItemType.ngPoland,
+      );
+    } else {
+      _cubit.getListEvents(
+        eventItemType: EventItemType.jsPoland,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -33,23 +47,23 @@ class _SchedulePageState extends State<SchedulePage> {
         bloc: _cubit,
         builder: (context, state) {
           return state.maybeWhen(
-            loaded: (listEvents) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...listEvents
-                    .map(
-                      (eventItem) => ScheduleEvent(
-                        eventItem,
-                        Theme.of(context).colorScheme.tertiary,
-                      ),
-                    )
-                    .toList(),
-              ],
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
             ),
+            loaded: (listEvents) => ListView.builder(
+                itemCount: listEvents.length,
+                itemBuilder: (context, index) {
+                  return ScheduleEvent(
+                    listEvents[index],
+                    Theme.of(context).colorScheme.tertiary,
+                  );
+                }),
             orElse: SizedBox.shrink,
           );
         },
       ),
+      showBottomNavigationBar: true,
+      bottomNavigationBar: ScheduleBottomNavigationBar(onItemTapped: onEventItemTabChange),
     );
   }
 }

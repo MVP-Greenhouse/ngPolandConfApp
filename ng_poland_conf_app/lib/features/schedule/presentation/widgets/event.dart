@@ -38,6 +38,8 @@ class ScheduleEvent extends StatelessWidget {
     final DateTime? startDate = eventItem.startDate;
     final DateTime? endDate = eventItem.endDate;
 
+    print('event item: ${eventItem.speaker}');
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
@@ -109,6 +111,7 @@ class ScheduleEvent extends StatelessWidget {
   Widget _buildSpeaker(Speaker? speaker) {
     final String? photoFileUrl = speaker?.photoFileUrl;
     final String? name = speaker?.name;
+    print('speaker name: $name');
 
     return speaker == null
         ? const Text('')

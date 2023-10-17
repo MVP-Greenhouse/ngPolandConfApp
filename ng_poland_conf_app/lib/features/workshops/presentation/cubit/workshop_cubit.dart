@@ -23,6 +23,9 @@ class WorkShopCubit extends Cubit<WorkShopState> {
   Future<void> getListWorkshop({
     required EventItemType eventItemType,
   }) async {
+    emit(const WorkShopState.loading());
+    // delay for 1s for better UX
+    await Future.delayed(const Duration(milliseconds: 500));
     final Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) return;

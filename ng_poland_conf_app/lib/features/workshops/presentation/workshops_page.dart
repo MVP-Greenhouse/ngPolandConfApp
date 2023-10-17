@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/cubit/workshop_cubit.dart';
+import 'package:ng_poland_conf_app/features/workshops/presentation/widgets/workshops_bottom_nav.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
@@ -25,6 +27,18 @@ class _WorkShopsPageState extends State<WorkShopsPage> {
     super.initState();
   }
 
+  void onEventItemTabChange(int idx) {
+    if (idx == 0) {
+      _cubit.getListWorkshop(
+        eventItemType: EventItemType.ngPoland,
+      );
+    } else {
+      _cubit.getListWorkshop(
+        eventItemType: EventItemType.jsPoland,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WorkShopCubit, WorkShopState>(
@@ -34,6 +48,9 @@ class _WorkShopsPageState extends State<WorkShopsPage> {
           body: Column(
             children: [
               state.maybeWhen(
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
                 loaded: (listWorkshop) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,11 +63,12 @@ class _WorkShopsPageState extends State<WorkShopsPage> {
                     ],
                   );
                 },
-                orElse: () => const SizedBox.shrink(),
+                orElse: SizedBox.shrink,
               ),
-              Text('WorkShopsPage'),
             ],
           ),
+          showBottomNavigationBar: true,
+          bottomNavigationBar: WorkshopsBottomNavigationBar(onItemTapped: onEventItemTabChange),
         );
       },
     );
