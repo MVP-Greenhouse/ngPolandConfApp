@@ -4,8 +4,9 @@ import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_cubit.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
-import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/schedule_bottom_nav.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
+
+import '../../../widgets/confs_bottom_nav_bar.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -63,7 +64,7 @@ class _SchedulePageState extends State<SchedulePage> {
         },
       ),
       showBottomNavigationBar: true,
-      bottomNavigationBar: ScheduleBottomNavigationBar(onItemTapped: onEventItemTabChange),
+      bottomNavigationBar: ConfsBottomNavigationBar(onItemTapped: onEventItemTabChange),
     );
   }
 }

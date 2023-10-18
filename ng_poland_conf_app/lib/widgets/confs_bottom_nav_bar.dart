@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ScheduleBottomNavigationBar extends StatefulWidget {
-  const ScheduleBottomNavigationBar({super.key, required this.onItemTapped});
+class ConfsBottomNavigationBar extends StatefulWidget {
+  const ConfsBottomNavigationBar({super.key, required this.onItemTapped});
   final Function(int) onItemTapped;
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
-  State<ScheduleBottomNavigationBar> createState() => _ScheduleBottomNavigationBarState();
+  State<ConfsBottomNavigationBar> createState() => _ConfsBottomNavigationBarState();
 }
 
-class _ScheduleBottomNavigationBarState extends State<ScheduleBottomNavigationBar> {
+class _ConfsBottomNavigationBarState extends State<ConfsBottomNavigationBar> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {

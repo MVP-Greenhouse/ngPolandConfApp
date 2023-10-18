@@ -3,10 +3,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'workshop.freezed.dart';
 
 @freezed
-class WorkShop with _$WorkShop {
-  const WorkShop._();
+class Workshop with _$Workshop {
+  const Workshop._();
 
-  const factory WorkShop({
+  const factory Workshop({
     required String title,
     required String confId,
     required String description,
@@ -14,5 +14,5 @@ class WorkShop with _$WorkShop {
     required String endDate,
     required String locationDescription,
     required int? pricePln,
-  }) = _WorkShop;
+  }) = _Workshop;
 }

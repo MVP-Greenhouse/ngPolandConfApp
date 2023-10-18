@@ -20,7 +20,7 @@ class WorkshopModel with _$WorkshopModel {
 
   factory WorkshopModel.fromJson(Map<String, dynamic> json) => _$WorkshopModelFromJson(json['fields']);
 
-  WorkShop toEntity() => WorkShop(
+  Workshop toEntity() => Workshop(
         title: title,
         confId: confId,
         description: description,

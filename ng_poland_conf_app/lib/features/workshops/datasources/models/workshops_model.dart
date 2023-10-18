@@ -15,7 +15,7 @@ class WorkshopsModel with _$WorkshopsModel {
 
   factory WorkshopsModel.fromJson(Map<String, dynamic> json) => _$WorkshopsModelFromJson(json);
 
-  List<WorkShop> toEntity() =>
+  List<Workshop> toEntity() =>
       items
           ?.map(
             (workshopModel) => workshopModel.toEntity(),

@@ -48,7 +48,7 @@ class Routing {
         ),
         GoRoute(
           path: Pages.workshops.path,
-          builder: (context, state) => const WorkShopsPage(),
+          builder: (context, state) => const WorkshopsPage(),
         ),
         GoRoute(
           path: Pages.nggirls.path,

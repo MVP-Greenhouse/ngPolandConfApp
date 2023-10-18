@@ -146,7 +146,7 @@ class ScheduleEvent extends StatelessWidget {
                     if (name != null)
                       Text(
                         name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             // color: _darkMode ? Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7) : Theme.of(context).primaryColor,
                             fontSize: 13),
                       ),

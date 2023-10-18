@@ -15,12 +15,12 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$WorkShopState {
+mixin _$WorkshopState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<WorkShop> listWorkshop) loaded,
+    required TResult Function(List<Workshop> listWorkshop) loaded,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$WorkShopState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<WorkShop> listWorkshop)? loaded,
+    TResult? Function(List<Workshop> listWorkshop)? loaded,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$WorkShopState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<WorkShop> listWorkshop)? loaded,
+    TResult Function(List<Workshop> listWorkshop)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -69,16 +69,16 @@ mixin _$WorkShopState {
 }
 
 /// @nodoc
-abstract class $WorkShopStateCopyWith<$Res> {
-  factory $WorkShopStateCopyWith(
-          WorkShopState value, $Res Function(WorkShopState) then) =
-      _$WorkShopStateCopyWithImpl<$Res, WorkShopState>;
+abstract class $WorkshopStateCopyWith<$Res> {
+  factory $WorkshopStateCopyWith(
+          WorkshopState value, $Res Function(WorkshopState) then) =
+      _$WorkshopStateCopyWithImpl<$Res, WorkshopState>;
 }
 
 /// @nodoc
-class _$WorkShopStateCopyWithImpl<$Res, $Val extends WorkShopState>
-    implements $WorkShopStateCopyWith<$Res> {
-  _$WorkShopStateCopyWithImpl(this._value, this._then);
+class _$WorkshopStateCopyWithImpl<$Res, $Val extends WorkshopState>
+    implements $WorkshopStateCopyWith<$Res> {
+  _$WorkshopStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -95,7 +95,7 @@ abstract class _$$_InitialCopyWith<$Res> {
 
 /// @nodoc
 class __$$_InitialCopyWithImpl<$Res>
-    extends _$WorkShopStateCopyWithImpl<$Res, _$_Initial>
+    extends _$WorkshopStateCopyWithImpl<$Res, _$_Initial>
     implements _$$_InitialCopyWith<$Res> {
   __$$_InitialCopyWithImpl(_$_Initial _value, $Res Function(_$_Initial) _then)
       : super(_value, _then);
@@ -108,7 +108,7 @@ class _$_Initial implements _Initial {
 
   @override
   String toString() {
-    return 'WorkShopState.initial()';
+    return 'WorkshopState.initial()';
   }
 
   @override
@@ -125,7 +125,7 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<WorkShop> listWorkshop) loaded,
+    required TResult Function(List<Workshop> listWorkshop) loaded,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -136,7 +136,7 @@ class _$_Initial implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<WorkShop> listWorkshop)? loaded,
+    TResult? Function(List<Workshop> listWorkshop)? loaded,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -147,7 +147,7 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<WorkShop> listWorkshop)? loaded,
+    TResult Function(List<Workshop> listWorkshop)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -195,7 +195,7 @@ class _$_Initial implements _Initial {
   }
 }
 
-abstract class _Initial implements WorkShopState {
+abstract class _Initial implements WorkshopState {
   const factory _Initial() = _$_Initial;
 }
 
@@ -208,7 +208,7 @@ abstract class _$$_LoadingCopyWith<$Res> {
 
 /// @nodoc
 class __$$_LoadingCopyWithImpl<$Res>
-    extends _$WorkShopStateCopyWithImpl<$Res, _$_Loading>
+    extends _$WorkshopStateCopyWithImpl<$Res, _$_Loading>
     implements _$$_LoadingCopyWith<$Res> {
   __$$_LoadingCopyWithImpl(_$_Loading _value, $Res Function(_$_Loading) _then)
       : super(_value, _then);
@@ -221,7 +221,7 @@ class _$_Loading implements _Loading {
 
   @override
   String toString() {
-    return 'WorkShopState.loading()';
+    return 'WorkshopState.loading()';
   }
 
   @override
@@ -238,7 +238,7 @@ class _$_Loading implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<WorkShop> listWorkshop) loaded,
+    required TResult Function(List<Workshop> listWorkshop) loaded,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -249,7 +249,7 @@ class _$_Loading implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<WorkShop> listWorkshop)? loaded,
+    TResult? Function(List<Workshop> listWorkshop)? loaded,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -260,7 +260,7 @@ class _$_Loading implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<WorkShop> listWorkshop)? loaded,
+    TResult Function(List<Workshop> listWorkshop)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -308,7 +308,7 @@ class _$_Loading implements _Loading {
   }
 }
 
-abstract class _Loading implements WorkShopState {
+abstract class _Loading implements WorkshopState {
   const factory _Loading() = _$_Loading;
 }
 
@@ -317,12 +317,12 @@ abstract class _$$_LoadedCopyWith<$Res> {
   factory _$$_LoadedCopyWith(_$_Loaded value, $Res Function(_$_Loaded) then) =
       __$$_LoadedCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<WorkShop> listWorkshop});
+  $Res call({List<Workshop> listWorkshop});
 }
 
 /// @nodoc
 class __$$_LoadedCopyWithImpl<$Res>
-    extends _$WorkShopStateCopyWithImpl<$Res, _$_Loaded>
+    extends _$WorkshopStateCopyWithImpl<$Res, _$_Loaded>
     implements _$$_LoadedCopyWith<$Res> {
   __$$_LoadedCopyWithImpl(_$_Loaded _value, $Res Function(_$_Loaded) _then)
       : super(_value, _then);
@@ -336,7 +336,7 @@ class __$$_LoadedCopyWithImpl<$Res>
       listWorkshop: null == listWorkshop
           ? _value._listWorkshop
           : listWorkshop // ignore: cast_nullable_to_non_nullable
-              as List<WorkShop>,
+              as List<Workshop>,
     ));
   }
 }
@@ -344,12 +344,12 @@ class __$$_LoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loaded implements _Loaded {
-  const _$_Loaded({required final List<WorkShop> listWorkshop})
+  const _$_Loaded({required final List<Workshop> listWorkshop})
       : _listWorkshop = listWorkshop;
 
-  final List<WorkShop> _listWorkshop;
+  final List<Workshop> _listWorkshop;
   @override
-  List<WorkShop> get listWorkshop {
+  List<Workshop> get listWorkshop {
     if (_listWorkshop is EqualUnmodifiableListView) return _listWorkshop;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_listWorkshop);
@@ -357,7 +357,7 @@ class _$_Loaded implements _Loaded {
 
   @override
   String toString() {
-    return 'WorkShopState.loaded(listWorkshop: $listWorkshop)';
+    return 'WorkshopState.loaded(listWorkshop: $listWorkshop)';
   }
 
   @override
@@ -384,7 +384,7 @@ class _$_Loaded implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<WorkShop> listWorkshop) loaded,
+    required TResult Function(List<Workshop> listWorkshop) loaded,
     required TResult Function(String error) error,
   }) {
     return loaded(listWorkshop);
@@ -395,7 +395,7 @@ class _$_Loaded implements _Loaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<WorkShop> listWorkshop)? loaded,
+    TResult? Function(List<Workshop> listWorkshop)? loaded,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(listWorkshop);
@@ -406,7 +406,7 @@ class _$_Loaded implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<WorkShop> listWorkshop)? loaded,
+    TResult Function(List<Workshop> listWorkshop)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -454,11 +454,11 @@ class _$_Loaded implements _Loaded {
   }
 }
 
-abstract class _Loaded implements WorkShopState {
-  const factory _Loaded({required final List<WorkShop> listWorkshop}) =
+abstract class _Loaded implements WorkshopState {
+  const factory _Loaded({required final List<Workshop> listWorkshop}) =
       _$_Loaded;
 
-  List<WorkShop> get listWorkshop;
+  List<Workshop> get listWorkshop;
   @JsonKey(ignore: true)
   _$$_LoadedCopyWith<_$_Loaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -474,7 +474,7 @@ abstract class _$$_ErrorCopyWith<$Res> {
 
 /// @nodoc
 class __$$_ErrorCopyWithImpl<$Res>
-    extends _$WorkShopStateCopyWithImpl<$Res, _$_Error>
+    extends _$WorkshopStateCopyWithImpl<$Res, _$_Error>
     implements _$$_ErrorCopyWith<$Res> {
   __$$_ErrorCopyWithImpl(_$_Error _value, $Res Function(_$_Error) _then)
       : super(_value, _then);
@@ -503,7 +503,7 @@ class _$_Error implements _Error {
 
   @override
   String toString() {
-    return 'WorkShopState.error(error: $error)';
+    return 'WorkshopState.error(error: $error)';
   }
 
   @override
@@ -528,7 +528,7 @@ class _$_Error implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<WorkShop> listWorkshop) loaded,
+    required TResult Function(List<Workshop> listWorkshop) loaded,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -539,7 +539,7 @@ class _$_Error implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<WorkShop> listWorkshop)? loaded,
+    TResult? Function(List<Workshop> listWorkshop)? loaded,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -550,7 +550,7 @@ class _$_Error implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<WorkShop> listWorkshop)? loaded,
+    TResult Function(List<Workshop> listWorkshop)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -598,7 +598,7 @@ class _$_Error implements _Error {
   }
 }
 
-abstract class _Error implements WorkShopState {
+abstract class _Error implements WorkshopState {
   const factory _Error(final String error) = _$_Error;
 
   String get error;
