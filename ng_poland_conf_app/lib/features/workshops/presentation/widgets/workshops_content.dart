@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../domains/entities/workshop.dart';
@@ -29,28 +30,27 @@ class WorkshopsContent extends StatelessWidget {
                 //   },
                 // );
               },
-              child: Text('hello'),
-              // child: Hero(
-              //     tag: workshop.title, // workshop.speaker.photoFileUrl,
-              //     child: Container()
-              //     // CachedNetworkImage(
-              //     //   progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
-              //     //   imageUrl: 'http:${_workshopsItems[index].speaker.photoFileUrl}',
-              //     //   errorWidget: (context, url, dynamic error) {
-              //     //     return Image.asset('assets/images/person.png');
-              //     //   },
-              //     //   imageBuilder: (context, imageProvider) => Container(
-              //     //     width: 50,
-              //     //     height: 50,
-              //     //     decoration: BoxDecoration(
-              //     //       shape: BoxShape.circle,
-              //     //       image: DecorationImage(
-              //     //         image: imageProvider,
-              //     //       ),
-              //     //     ),
-              //     //   ),
-              //     // ),
-              //     ),
+              child: CachedNetworkImage(
+                progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset(
+                  'assets/images/person.png',
+                  width: 50,
+                  height: 50,
+                ),
+                imageUrl: 'http:${workshop.speaker.photoFileUrl}',
+                errorWidget: (context, url, dynamic error) {
+                  return Image.asset('assets/images/person.png', width: 50, height: 50);
+                },
+                imageBuilder: (context, imageProvider) => Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: imageProvider,
+                    ),
+                  ),
+                ),
+              ),
             ),
             title: Text(
               workshop.title,
@@ -62,25 +62,25 @@ class WorkshopsContent extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.010,
                 ),
-                // RichText(
-                //   text: TextSpan(
-                //     children: [
-                //       TextSpan(
-                //         text: workshop.speaker.name,
-                //         style: TextStyle(color: _darkMode ? Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7) : Theme.of(context).primaryColor, fontSize: 13),
-                //         recognizer: TapGestureRecognizer()
-                //           ..onTap = () {
-                //             Navigator.of(context).pushNamed(
-                //               Presenter.routeName,
-                //               arguments: {
-                //                 'speaker': _workshopsItems[index].speaker,
-                //               },
-                //             );
-                //           },
-                //       ),
-                //     ],
-                //   ),
-                // ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: workshop.speaker.name,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).textTheme.titleSmall?.color?.withOpacity(0.7)),
+                        // recognizer: TapGestureRecognizer()
+                        //   ..onTap = () {
+                        //     // Navigator.of(context).pushNamed(
+                        //     //   Presenter.routeName,
+                        //     //   arguments: {
+                        //     //     'speaker': _workshopsItems[index].speaker,
+                        //     //   },
+                        //     // );
+                        //   },
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),

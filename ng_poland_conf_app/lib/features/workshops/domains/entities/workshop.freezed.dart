@@ -22,6 +22,7 @@ mixin _$Workshop {
   String get startDate => throw _privateConstructorUsedError;
   String get endDate => throw _privateConstructorUsedError;
   String get locationDescription => throw _privateConstructorUsedError;
+  Speaker get speaker => throw _privateConstructorUsedError;
   int? get pricePln => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -41,7 +42,10 @@ abstract class $WorkshopCopyWith<$Res> {
       String startDate,
       String endDate,
       String locationDescription,
+      Speaker speaker,
       int? pricePln});
+
+  $SpeakerCopyWith<$Res> get speaker;
 }
 
 /// @nodoc
@@ -63,6 +67,7 @@ class _$WorkshopCopyWithImpl<$Res, $Val extends Workshop>
     Object? startDate = null,
     Object? endDate = null,
     Object? locationDescription = null,
+    Object? speaker = null,
     Object? pricePln = freezed,
   }) {
     return _then(_value.copyWith(
@@ -90,11 +95,23 @@ class _$WorkshopCopyWithImpl<$Res, $Val extends Workshop>
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
               as String,
+      speaker: null == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as Speaker,
       pricePln: freezed == pricePln
           ? _value.pricePln
           : pricePln // ignore: cast_nullable_to_non_nullable
               as int?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SpeakerCopyWith<$Res> get speaker {
+    return $SpeakerCopyWith<$Res>(_value.speaker, (value) {
+      return _then(_value.copyWith(speaker: value) as $Val);
+    });
   }
 }
 
@@ -112,7 +129,11 @@ abstract class _$$_WorkshopCopyWith<$Res> implements $WorkshopCopyWith<$Res> {
       String startDate,
       String endDate,
       String locationDescription,
+      Speaker speaker,
       int? pricePln});
+
+  @override
+  $SpeakerCopyWith<$Res> get speaker;
 }
 
 /// @nodoc
@@ -132,6 +153,7 @@ class __$$_WorkshopCopyWithImpl<$Res>
     Object? startDate = null,
     Object? endDate = null,
     Object? locationDescription = null,
+    Object? speaker = null,
     Object? pricePln = freezed,
   }) {
     return _then(_$_Workshop(
@@ -159,6 +181,10 @@ class __$$_WorkshopCopyWithImpl<$Res>
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
               as String,
+      speaker: null == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as Speaker,
       pricePln: freezed == pricePln
           ? _value.pricePln
           : pricePln // ignore: cast_nullable_to_non_nullable
@@ -177,6 +203,7 @@ class _$_Workshop extends _Workshop {
       required this.startDate,
       required this.endDate,
       required this.locationDescription,
+      required this.speaker,
       required this.pricePln})
       : super._();
 
@@ -193,11 +220,13 @@ class _$_Workshop extends _Workshop {
   @override
   final String locationDescription;
   @override
+  final Speaker speaker;
+  @override
   final int? pricePln;
 
   @override
   String toString() {
-    return 'Workshop(title: $title, confId: $confId, description: $description, startDate: $startDate, endDate: $endDate, locationDescription: $locationDescription, pricePln: $pricePln)';
+    return 'Workshop(title: $title, confId: $confId, description: $description, startDate: $startDate, endDate: $endDate, locationDescription: $locationDescription, speaker: $speaker, pricePln: $pricePln)';
   }
 
   @override
@@ -214,13 +243,14 @@ class _$_Workshop extends _Workshop {
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
             (identical(other.locationDescription, locationDescription) ||
                 other.locationDescription == locationDescription) &&
+            (identical(other.speaker, speaker) || other.speaker == speaker) &&
             (identical(other.pricePln, pricePln) ||
                 other.pricePln == pricePln));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, title, confId, description,
-      startDate, endDate, locationDescription, pricePln);
+      startDate, endDate, locationDescription, speaker, pricePln);
 
   @JsonKey(ignore: true)
   @override
@@ -237,6 +267,7 @@ abstract class _Workshop extends Workshop {
       required final String startDate,
       required final String endDate,
       required final String locationDescription,
+      required final Speaker speaker,
       required final int? pricePln}) = _$_Workshop;
   const _Workshop._() : super._();
 
@@ -252,6 +283,8 @@ abstract class _Workshop extends Workshop {
   String get endDate;
   @override
   String get locationDescription;
+  @override
+  Speaker get speaker;
   @override
   int? get pricePln;
   @override
