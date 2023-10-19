@@ -99,7 +99,7 @@ class ScheduleEvent extends StatelessWidget {
           ),
           Divider(
             color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
-            height: 20,
+            height: 40,
           ),
         ],
       ),
@@ -109,8 +109,6 @@ class ScheduleEvent extends StatelessWidget {
   Widget _buildSpeaker(Speaker? speaker) {
     final String? photoFileUrl = speaker?.photoFileUrl;
     final String? name = speaker?.name;
-    print('speaker name: $name');
-
     return speaker == null
         ? const Text('')
         : Padding(

@@ -51,14 +51,17 @@ class _SchedulePageState extends State<SchedulePage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
-            loaded: (listEvents) => ListView.builder(
-                itemCount: listEvents.length,
-                itemBuilder: (context, index) {
-                  return ScheduleEvent(
-                    listEvents[index],
-                    Theme.of(context).colorScheme.tertiary,
-                  );
-                }),
+            loaded: (listEvents) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              child: ListView.builder(
+                  itemCount: listEvents.length,
+                  itemBuilder: (context, index) {
+                    return ScheduleEvent(
+                      listEvents[index],
+                      Theme.of(context).colorScheme.tertiary,
+                    );
+                  }),
+            ),
             orElse: SizedBox.shrink,
           );
         },

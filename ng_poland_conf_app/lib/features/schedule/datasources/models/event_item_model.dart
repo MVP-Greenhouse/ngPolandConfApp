@@ -1,9 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
+import 'package:ng_poland_conf_app/features/speakers/datasources/models/speaker_model.dart';
 
 part 'event_item_model.freezed.dart';
-part 'event_item_model.g.dart';
 
 @freezed
 class EventItemModel with _$EventItemModel {
@@ -18,10 +17,53 @@ class EventItemModel with _$EventItemModel {
     required String? description,
     required String? startDate,
     required String? endDate,
-    required Speaker? speaker,
+    required SpeakerModel? speaker,
   }) = _EventItemModel;
 
-  factory EventItemModel.fromJson(Map<String, dynamic> json) => _$EventItemModelFromJson(json['fields']);
+  factory EventItemModel.fromJson(Map<String, dynamic> json) {
+    dynamic speaker;
+    String photoFileUrl = '';
+    if (json['fields']['presenter'] != null) {
+      for (final dynamic asset in json['includes']['Entry']) {
+        if (asset['sys']['id'] == json['fields']['presenter']['sys']['id']) {
+          speaker = asset['fields'];
+        }
+      }
+
+      for (final dynamic asset in json['includes']['Asset']) {
+        if (asset['sys']['id'] == speaker['photo']['sys']['id']) {
+          photoFileUrl = asset['fields']['file']['url'] as String;
+        }
+      }
+    }
+
+    return EventItemModel(
+      title: json['fields']['title'],
+      confId: json['fields']['confId'] as String,
+      type: json['fields']['type'] ?? '',
+      category: json['fields']['category'] ?? '',
+      shortDescription: json['fields']['shortDescription'] ?? '',
+      description: json['fields']['description'] ?? '',
+      startDate: json['fields']['startDate'] ?? '',
+      endDate: json['fields']['endDate'] ?? '',
+      speaker: speaker == null
+          ? null
+          : SpeakerModel(
+              name: speaker['name'] as String,
+              confIds: [],
+              role: speaker['role'] ?? '',
+              bio: speaker['bio'] ?? '',
+              photoFileUrl: photoFileUrl,
+              photoTitle: speaker['photoTitle'] ?? '',
+              photoDescription: speaker['photoDescription'] ?? '',
+              email: speaker['email'] ?? '',
+              urlGithub: speaker['urlGithub'] ?? '',
+              urlLinkedIn: speaker['urlLinkedIn'] ?? '',
+              urlTwitter: speaker['urlTwitter'] ?? '',
+              urlWww: speaker['urlWww'] ?? '',
+            ),
+    );
+  }
 
   EventItem toEntity() => EventItem(
         title: title ?? '',
@@ -32,6 +74,6 @@ class EventItemModel with _$EventItemModel {
         description: description,
         startDate: DateTime.tryParse(startDate ?? ''),
         endDate: DateTime.tryParse(endDate ?? ''),
-        speaker: speaker,
+        speaker: speaker?.toEntity(),
       );
 }
