@@ -38,10 +38,8 @@ class ScheduleEvent extends StatelessWidget {
     final DateTime? startDate = eventItem.startDate;
     final DateTime? endDate = eventItem.endDate;
 
-    print('event item: ${eventItem.speaker}');
-
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
           ListTile(

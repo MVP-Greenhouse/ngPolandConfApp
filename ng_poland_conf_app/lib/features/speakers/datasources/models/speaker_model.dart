@@ -23,19 +23,25 @@ class SpeakerModel with _$SpeakerModel {
     required String? urlWww,
   }) = _SpeakerModel;
 
-  factory SpeakerModel.fromJson(Map<String, dynamic> json) => _$SpeakerModelFromJson(json['fields']);
+  factory SpeakerModel.fromJson(Map<String, dynamic> json) {
+    print('`**************************');
+    print(json['includes']);
+    return _$SpeakerModelFromJson(json['fields']);
+  }
 
-  Speaker toEntity() => Speaker(
-        name: name,
-        role: role,
-        bio: bio,
-        photoFileUrl: photoFileUrl ?? '',
-        photoTitle: photoTitle ?? '',
-        photoDescription: photoDescription ?? '',
-        email: email ?? '',
-        urlGithub: urlGithub ?? '',
-        urlLinkedIn: urlLinkedIn ?? '',
-        urlTwitter: urlTwitter ?? '',
-        urlWww: urlWww ?? '',
-      );
+  Speaker toEntity() {
+    return Speaker(
+      name: name,
+      role: role,
+      bio: bio,
+      photoFileUrl: photoFileUrl ?? '',
+      photoTitle: photoTitle ?? '',
+      photoDescription: photoDescription ?? '',
+      email: email ?? '',
+      urlGithub: urlGithub ?? '',
+      urlLinkedIn: urlLinkedIn ?? '',
+      urlTwitter: urlTwitter ?? '',
+      urlWww: urlWww ?? '',
+    );
+  }
 }
