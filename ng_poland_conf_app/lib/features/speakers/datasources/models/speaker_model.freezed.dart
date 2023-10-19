@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-SpeakerModel _$SpeakerModelFromJson(Map<String, dynamic> json) {
-  return _SpeakerModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$SpeakerModel {
   String get name => throw _privateConstructorUsedError;
@@ -33,7 +29,6 @@ mixin _$SpeakerModel {
   String? get urlTwitter => throw _privateConstructorUsedError;
   String? get urlWww => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $SpeakerModelCopyWith<SpeakerModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -240,7 +235,7 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$_SpeakerModel extends _SpeakerModel {
   const _$_SpeakerModel(
       {required this.name,
@@ -257,9 +252,6 @@ class _$_SpeakerModel extends _SpeakerModel {
       required this.urlWww})
       : _confIds = confIds,
         super._();
-
-  factory _$_SpeakerModel.fromJson(Map<String, dynamic> json) =>
-      _$$_SpeakerModelFromJson(json);
 
   @override
   final String name;
@@ -322,7 +314,6 @@ class _$_SpeakerModel extends _SpeakerModel {
             (identical(other.urlWww, urlWww) || other.urlWww == urlWww));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -344,13 +335,6 @@ class _$_SpeakerModel extends _SpeakerModel {
   @pragma('vm:prefer-inline')
   _$$_SpeakerModelCopyWith<_$_SpeakerModel> get copyWith =>
       __$$_SpeakerModelCopyWithImpl<_$_SpeakerModel>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_SpeakerModelToJson(
-      this,
-    );
-  }
 }
 
 abstract class _SpeakerModel extends SpeakerModel {
@@ -368,9 +352,6 @@ abstract class _SpeakerModel extends SpeakerModel {
       required final String? urlTwitter,
       required final String? urlWww}) = _$_SpeakerModel;
   const _SpeakerModel._() : super._();
-
-  factory _SpeakerModel.fromJson(Map<String, dynamic> json) =
-      _$_SpeakerModel.fromJson;
 
   @override
   String get name;

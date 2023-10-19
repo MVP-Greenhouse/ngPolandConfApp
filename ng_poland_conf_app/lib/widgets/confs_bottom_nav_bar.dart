@@ -32,7 +32,11 @@ class _ConfsBottomNavigationBarState extends State<ConfsBottomNavigationBar> {
                 opacity: _selectedIndex == 0 ? 1 : 0.3,
                 child: FittedBox(
                   fit: BoxFit.fill,
-                  child: Image.asset('assets/images/ngpolandlogo.png'), // replace with your image path
+                  child: Image.asset(
+                    'assets/images/ngpolandlogo.png',
+                    height: 20,
+                    width: 20,
+                  ), // replace with your image path
                 ),
               ),
             ),
@@ -48,7 +52,11 @@ class _ConfsBottomNavigationBarState extends State<ConfsBottomNavigationBar> {
                 opacity: _selectedIndex == 1 ? 1 : 0.3,
                 child: FittedBox(
                   fit: BoxFit.fill,
-                  child: Image.asset('assets/images/jspolandlogo.png'), // replace with your image path
+                  child: Image.asset(
+                    'assets/images/jspolandlogo.png',
+                    height: 20,
+                    width: 20,
+                  ), // replace with your image path
                 ),
               ),
             ),

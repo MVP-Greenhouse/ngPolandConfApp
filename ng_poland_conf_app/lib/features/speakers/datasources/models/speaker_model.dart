@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
 part 'speaker_model.freezed.dart';
-part 'speaker_model.g.dart';
 
 @freezed
 class SpeakerModel with _$SpeakerModel {
@@ -24,9 +23,28 @@ class SpeakerModel with _$SpeakerModel {
   }) = _SpeakerModel;
 
   factory SpeakerModel.fromJson(Map<String, dynamic> json) {
-    print('`**************************');
-    print(json['includes']);
-    return _$SpeakerModelFromJson(json['fields']);
+    String photoFileUrl = '';
+    for (final dynamic asset in json['includes']['Asset']) {
+      if (asset['sys']['id'] == json['fields']['photo']['sys']['id']) {
+        photoFileUrl = asset['fields']['file']['url'] as String;
+      }
+    }
+
+    return SpeakerModel(
+      name: json['fields']['name'] as String,
+      confIds: json['fields']['confIds'],
+      role: json['fields']['role'] as String,
+      bio: json['fields']['bio'] as String,
+      photoFileUrl: photoFileUrl,
+      photoTitle: json['fields']['photoTitle'] ?? '',
+      photoDescription: json['fields']['photoDescription'] ?? '',
+      email: json['fields']['email'] ?? '',
+      urlGithub: json['fields']['urlGithub'] ?? '',
+      urlLinkedIn: json['fields']['urlLinkedIn'] ?? '',
+      urlTwitter: json['fields']['urlTwitter'] ?? '',
+      urlWww: json['fields']['urlWww'] ?? '',
+    );
+    //  return _$SpeakerModelFromJson(json['fields']);
   }
 
   Speaker toEntity() {

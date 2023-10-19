@@ -37,11 +37,14 @@ class _SpeakersPageState extends State<SpeakersPage> {
             ),
             loaded: (listSpeakers) => listSpeakers.isEmpty
                 ? const EmptyListInformation()
-                : ListView.builder(
-                    itemCount: listSpeakers.length,
-                    itemBuilder: (context, index) {
-                      return SpeakerTile(listSpeakers[index]);
-                    },
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    child: ListView.builder(
+                      itemCount: listSpeakers.length,
+                      itemBuilder: (context, index) {
+                        return SpeakerTile(listSpeakers[index]);
+                      },
+                    ),
                   ),
             orElse: () => const SizedBox.shrink(),
           ),

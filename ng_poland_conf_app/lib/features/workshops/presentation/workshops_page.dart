@@ -50,11 +50,14 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
-            loaded: (listWorkshop) => ListView.builder(
-              itemCount: listWorkshop.length,
-              itemBuilder: (context, index) {
-                return WorkshopsContent(workshop: listWorkshop[index]);
-              },
+            loaded: (listWorkshop) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: ListView.builder(
+                itemCount: listWorkshop.length,
+                itemBuilder: (context, index) {
+                  return WorkshopsContent(workshop: listWorkshop[index]);
+                },
+              ),
             ),
             orElse: SizedBox.shrink,
           );
