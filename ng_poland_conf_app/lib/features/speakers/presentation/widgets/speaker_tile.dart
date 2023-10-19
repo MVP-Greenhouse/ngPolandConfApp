@@ -1,6 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/features/speakers/presentation/speakers_page.dart';
+import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
 
+import '../../../../routing/routing.dart';
 import '../../domains/entities/speaker.dart';
 
 class SpeakerTile extends StatelessWidget {
@@ -15,18 +19,27 @@ class SpeakerTile extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
+            onTap: () {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => SpeakerDetails(speaker: speaker),
+              //   ),
+              // );
+              // Navigator.of(context).pushNamed(
+              //   SpeakerDetails.routeName,
+              //   arguments: {
+              //     'id': speaker.id,
+              //   },
+              // );
+              context.pushNamed(SpeakerDetails.routeName, pathParameters: {
+                'id': speaker.id,
+              });
+            },
             leading: InkWell(
               borderRadius: const BorderRadius.all(
                 Radius.circular(25),
               ),
-              onTap: () {
-                // Navigator.of(context).pushNamed(
-                //   Presenter.routeName,
-                //   arguments: {
-                //     'speaker': _workshopsItems[index].speaker,
-                //   },
-                // );
-              },
               child: CachedNetworkImage(
                 progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
                 imageUrl: 'http:${speaker.photoFileUrl}',

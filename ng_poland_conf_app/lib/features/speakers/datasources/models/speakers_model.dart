@@ -24,6 +24,7 @@ class SpeakersModel with _$SpeakersModel {
 
       speakers.add(
         SpeakerModel(
+          id: item['sys']['id'] as String,
           name: item['fields']['name'] as String,
           confIds: [], // item['fields']['confIds'] as List<String>,
           role: item['fields']['role'] as String,

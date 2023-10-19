@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SpeakerModel {
+  String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   List<String> get confIds => throw _privateConstructorUsedError;
   String get role => throw _privateConstructorUsedError;
@@ -41,7 +42,8 @@ abstract class $SpeakerModelCopyWith<$Res> {
       _$SpeakerModelCopyWithImpl<$Res, SpeakerModel>;
   @useResult
   $Res call(
-      {String name,
+      {String id,
+      String name,
       List<String> confIds,
       String role,
       String bio,
@@ -68,6 +70,7 @@ class _$SpeakerModelCopyWithImpl<$Res, $Val extends SpeakerModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? confIds = null,
     Object? role = null,
@@ -82,6 +85,10 @@ class _$SpeakerModelCopyWithImpl<$Res, $Val extends SpeakerModel>
     Object? urlWww = freezed,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -143,7 +150,8 @@ abstract class _$$_SpeakerModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String name,
+      {String id,
+      String name,
       List<String> confIds,
       String role,
       String bio,
@@ -168,6 +176,7 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? name = null,
     Object? confIds = null,
     Object? role = null,
@@ -182,6 +191,10 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
     Object? urlWww = freezed,
   }) {
     return _then(_$_SpeakerModel(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -238,7 +251,8 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
 
 class _$_SpeakerModel extends _SpeakerModel {
   const _$_SpeakerModel(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required final List<String> confIds,
       required this.role,
       required this.bio,
@@ -253,6 +267,8 @@ class _$_SpeakerModel extends _SpeakerModel {
       : _confIds = confIds,
         super._();
 
+  @override
+  final String id;
   @override
   final String name;
   final List<String> _confIds;
@@ -286,7 +302,7 @@ class _$_SpeakerModel extends _SpeakerModel {
 
   @override
   String toString() {
-    return 'SpeakerModel(name: $name, confIds: $confIds, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
+    return 'SpeakerModel(id: $id, name: $name, confIds: $confIds, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
   }
 
   @override
@@ -294,6 +310,7 @@ class _$_SpeakerModel extends _SpeakerModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SpeakerModel &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             const DeepCollectionEquality().equals(other._confIds, _confIds) &&
             (identical(other.role, role) || other.role == role) &&
@@ -317,6 +334,7 @@ class _$_SpeakerModel extends _SpeakerModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       name,
       const DeepCollectionEquality().hash(_confIds),
       role,
@@ -339,7 +357,8 @@ class _$_SpeakerModel extends _SpeakerModel {
 
 abstract class _SpeakerModel extends SpeakerModel {
   const factory _SpeakerModel(
-      {required final String name,
+      {required final String id,
+      required final String name,
       required final List<String> confIds,
       required final String role,
       required final String bio,
@@ -353,6 +372,8 @@ abstract class _SpeakerModel extends SpeakerModel {
       required final String? urlWww}) = _$_SpeakerModel;
   const _SpeakerModel._() : super._();
 
+  @override
+  String get id;
   @override
   String get name;
   @override

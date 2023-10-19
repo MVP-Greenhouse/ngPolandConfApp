@@ -49,6 +49,7 @@ class EventItemModel with _$EventItemModel {
       speaker: speaker == null
           ? null
           : SpeakerModel(
+              id: speaker['id'] as String,
               name: speaker['name'] as String,
               confIds: [],
               role: speaker['role'] ?? '',

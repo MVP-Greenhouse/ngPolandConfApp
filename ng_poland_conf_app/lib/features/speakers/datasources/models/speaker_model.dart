@@ -8,6 +8,7 @@ class SpeakerModel with _$SpeakerModel {
   const SpeakerModel._();
 
   const factory SpeakerModel({
+    required String id,
     required String name,
     required List<String> confIds,
     required String role,
@@ -31,6 +32,7 @@ class SpeakerModel with _$SpeakerModel {
     }
 
     return SpeakerModel(
+      id: json['sys']['id'] as String,
       name: json['fields']['name'] as String,
       confIds: json['fields']['confIds'],
       role: json['fields']['role'] as String,
@@ -49,6 +51,7 @@ class SpeakerModel with _$SpeakerModel {
 
   Speaker toEntity() {
     return Speaker(
+      id: id,
       name: name,
       role: role,
       bio: bio,

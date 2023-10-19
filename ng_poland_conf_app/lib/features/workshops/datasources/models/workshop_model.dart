@@ -42,6 +42,7 @@ class WorkshopModel with _$WorkshopModel {
       confId: json['fields']['confId'] as String,
       description: json['fields']['description'] as String,
       speaker: SpeakerModel(
+        id: speaker['id'] as String,
         name: speaker['name'] as String,
         confIds: [],
         role: speaker['role'] as String,

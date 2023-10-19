@@ -6,7 +6,8 @@ part 'speaker.g.dart';
 @freezed
 class Speaker with _$Speaker {
   const factory Speaker(
-      {required String? name,
+      {required String id,
+      required String? name,
       required String? role,
       required String? bio,
       required String? photoFileUrl,

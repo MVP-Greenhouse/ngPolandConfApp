@@ -46,7 +46,8 @@ class EventsModel with _$EventsModel {
           speaker: speaker == null
               ? null
               : SpeakerModel(
-                  name: speaker['name'] as String,
+                  id: speaker['id'] ?? '',
+                  name: speaker['name'] ?? '',
                   confIds: [],
                   role: speaker['role'] ?? '',
                   bio: speaker['bio'] ?? '',

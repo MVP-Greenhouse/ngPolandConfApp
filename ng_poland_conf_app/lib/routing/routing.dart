@@ -7,6 +7,7 @@ import 'package:ng_poland_conf_app/features/info/presentation/info_page.dart';
 import 'package:ng_poland_conf_app/features/nggirls/presentation/nggirls_page.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_page.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/speakers_page.dart';
+import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/workshops_page.dart';
 
 enum Pages {
@@ -56,7 +57,19 @@ class Routing {
         ),
         GoRoute(
           path: Pages.speakers.path,
+          name: Pages.speakers.nameKey,
           builder: (context, state) => const SpeakersPage(),
+          routes: [
+            GoRoute(
+              path: ':id',
+              name: SpeakerDetails.routeName,
+              builder: (context, state) {
+                // Extract the id from the path
+                final id = state.pathParameters['id'];
+                return SpeakerDetails(id: id!);
+              },
+            ),
+          ],
         ),
         GoRoute(
           path: Pages.info.path,
