@@ -33,7 +33,10 @@ class Routing {
   late final GlobalKey<NavigatorState> navigatorKey;
   late final GoRouter router;
 
-  Pages currentPage(BuildContext context) => Pages.values.firstWhere((page) => page.path == ModalRoute.of(context)?.settings.name);
+  Pages currentPage(BuildContext context) => Pages.values.firstWhere(
+        (page) => page.path == ModalRoute.of(context)?.settings.name,
+        orElse: () => Pages.home,
+      );
 
   Routing() {
     navigatorKey = GlobalKey<NavigatorState>();
@@ -69,7 +72,7 @@ class Routing {
           path: Pages.nggirls.path,
           builder: (context, state) => const NgGirlsPage(),
         ),
-        GoRoute(path: Pages.speakers.path, name: Pages.speakers.nameKey, builder: (context, state) => const SpeakersPage(), routes: [
+        GoRoute(path: Pages.speakers.path, builder: (context, state) => const SpeakersPage(), routes: [
           GoRoute(
             path: '${SpeakerDetails.routeName}/:id',
             name: '${Pages.speakers.nameKey}-${SpeakerDetails.routeNameKey}',
