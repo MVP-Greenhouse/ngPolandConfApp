@@ -27,6 +27,12 @@ class _NgGirlsPageState extends State<NgGirlsPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      appBar: AppBar(
+        title: Text(
+          'ngGirls',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
+      ),
       body: BlocBuilder<NgGirlsCubit, NgGirlsState>(
         bloc: _ngGirlsCubit,
         builder: (context, state) {

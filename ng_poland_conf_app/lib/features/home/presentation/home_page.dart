@@ -31,6 +31,10 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         return CustomScaffold(
           appBar: AppBar(
+            title: Text(
+              'NG & JS Poland',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+            ),
             actions: [
               state.maybeWhen(
                 loaded: (conferences, selectedConference) => CustomDropDown(

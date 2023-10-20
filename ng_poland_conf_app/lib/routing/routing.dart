@@ -10,12 +10,15 @@ import 'package:ng_poland_conf_app/features/speakers/presentation/speakers_page.
 import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/workshops_page.dart';
 
+import '../features/questions/presentation/questions_page.dart';
+
 enum Pages {
   home('/', 'Home'),
   schedule('/schedule', 'Schedule'),
   workshops('/workshops', 'Workshops'),
   nggirls('/nggirls', 'ngGirls'),
   speakers('/speakers', 'Speakers'),
+  questions('/questions', 'Q&A'),
   info('/info', 'Info'),
   about('/about', 'About');
 
@@ -83,6 +86,10 @@ class Routing {
             },
           )
         ]),
+        GoRoute(
+          path: Pages.questions.path,
+          builder: (context, state) => QuestionsPage(),
+        ),
         GoRoute(
           path: Pages.info.path,
           builder: (context, state) => const InfoPage(),

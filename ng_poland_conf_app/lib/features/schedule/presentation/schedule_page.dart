@@ -45,6 +45,12 @@ class _SchedulePageState extends State<SchedulePage> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      appBar: AppBar(
+        title: Text(
+          'Schedule',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
+      ),
       body: BlocBuilder<ScheduleCubit, ScheduleState>(
         bloc: _cubit,
         builder: (context, state) {

@@ -6,8 +6,14 @@ class AuthenticationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const CustomScaffold(
-      body: Text('InfoPage'),
+    return CustomScaffold(
+      appBar: AppBar(
+        title: Text(
+          'Sign in',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
+      ),
+      body: const Text('Auth'),
     );
   }
 }

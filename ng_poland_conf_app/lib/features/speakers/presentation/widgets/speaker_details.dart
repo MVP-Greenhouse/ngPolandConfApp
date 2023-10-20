@@ -27,7 +27,6 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
   @override
   void initState() {
     _speakersCubit = getIt.get<SpeakersCubit>();
-
     _speakersCubit.getListSpeakers();
     super.initState();
   }
@@ -47,13 +46,17 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
 
     return Scaffold(
       appBar: AppBar(
+          title: Text(
+            'Speaker',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+          ),
           leading: IconButton(
-        onPressed: () {
-          GoRouter.of(context).pop();
-        },
-        icon: const Icon(Icons.arrow_back_ios),
-        //replace with our own icon data.
-      )),
+            onPressed: () {
+              GoRouter.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+            //replace with our own icon data.
+          )),
       body: BlocBuilder<SpeakersCubit, SpeakersState>(
           bloc: _speakersCubit,
           builder: (context, state) {

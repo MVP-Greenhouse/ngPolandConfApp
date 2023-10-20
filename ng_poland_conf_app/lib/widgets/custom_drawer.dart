@@ -137,12 +137,13 @@ class CustomDrawer extends StatelessWidget {
       Pages.workshops => FontAwesomeIcons.solidKeyboard,
       Pages.nggirls => FontAwesomeIcons.personDress,
       Pages.speakers => FontAwesomeIcons.microphone,
+      Pages.questions => FontAwesomeIcons.solidComments,
       Pages.info => FontAwesomeIcons.circleInfo,
       Pages.about => FontAwesomeIcons.code,
     };
   }
 
-  ///
+  //
   /// Functions
   ///
 

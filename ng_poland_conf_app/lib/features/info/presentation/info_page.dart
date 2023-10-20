@@ -27,6 +27,12 @@ class _InfoPageState extends State<InfoPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      appBar: AppBar(
+        title: Text(
+          'Info',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
+      ),
       body: BlocBuilder<InfoCubit, InfoState>(
         bloc: _infoCubit,
         builder: (context, state) {

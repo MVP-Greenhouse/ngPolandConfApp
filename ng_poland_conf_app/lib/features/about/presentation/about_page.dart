@@ -30,6 +30,12 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      appBar: AppBar(
+        title: Text(
+          'About',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
+      ),
       body: SingleChildScrollView(
         clipBehavior: Clip.none,
         child: BlocBuilder<ThemeModeCubit, ThemeModeState>(

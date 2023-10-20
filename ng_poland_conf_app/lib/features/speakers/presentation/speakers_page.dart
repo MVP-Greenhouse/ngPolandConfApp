@@ -31,6 +31,12 @@ class _SpeakersPageState extends State<SpeakersPage> {
       bloc: _speakersCubit,
       builder: (context, state) {
         return CustomScaffold(
+          appBar: AppBar(
+            title: Text(
+              'Speakers',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+            ),
+          ),
           body: state.maybeWhen(
             loading: () => const Center(
               child: CircularProgressIndicator(),
