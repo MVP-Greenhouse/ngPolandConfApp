@@ -40,7 +40,7 @@ class ThemeModeLocalDataSourceImpl implements ThemeModeLocalDataSource {
 
     final Box box = Hive.box(_nameBox);
 
-    if (box.get(_nameKey) == null) box.put(_nameKey, ThemeMode.system.name);
+    if (box.get(_nameKey) == null) box.put(_nameKey, ThemeMode.dark.name);
 
     return box;
   }
