@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/features/info/presentation/cubit/info_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
+import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
 
 import 'widgets/info_details.dart';
 
@@ -33,14 +34,16 @@ class _InfoPageState extends State<InfoPage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
-            loaded: (listInfoItems) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
-              child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return InfoDetails(info: listInfoItems[index]);
-                  },
-                  itemCount: listInfoItems.length),
-            ),
+            loaded: (listInfoItems) => listInfoItems.isEmpty
+                ? const EmptyListInformation()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return InfoDetails(info: listInfoItems[index]);
+                        },
+                        itemCount: listInfoItems.length),
+                  ),
             orElse: () => const SizedBox.shrink(),
           );
         },

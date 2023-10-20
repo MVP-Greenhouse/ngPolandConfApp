@@ -20,6 +20,7 @@ class InfoCubit extends Cubit<InfoState> {
   }) : super(const InfoState.initial());
 
   Future<void> getListInfoItems() async {
+    emit(const InfoState.loading());
     final Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) return;

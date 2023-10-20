@@ -20,6 +20,7 @@ class NgGirlsCubit extends Cubit<NgGirlsState> {
   }) : super(const NgGirlsState.initial());
 
   Future<void> getNgGirls() async {
+    emit(const NgGirlsState.loading());
     final Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) return;

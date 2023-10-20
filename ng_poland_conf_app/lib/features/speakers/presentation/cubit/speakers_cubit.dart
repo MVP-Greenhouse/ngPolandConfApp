@@ -20,6 +20,7 @@ class SpeakersCubit extends Cubit<SpeakersState> {
   }) : super(const SpeakersState.initial());
 
   Future<void> getListSpeakers() async {
+    emit(const SpeakersState.loading());
     final Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) return;

@@ -6,6 +6,7 @@ import 'package:ng_poland_conf_app/features/workshops/presentation/cubit/worksho
 import 'package:ng_poland_conf_app/features/workshops/presentation/widgets/workshops_content.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
+import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
 
 import '../../../widgets/confs_bottom_nav_bar.dart';
 
@@ -51,15 +52,17 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
-            loaded: (listWorkshop) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: ListView.builder(
-                itemCount: listWorkshop.length,
-                itemBuilder: (context, index) {
-                  return WorkshopsContent(workshop: listWorkshop[index]);
-                },
-              ),
-            ),
+            loaded: (listWorkshop) => listWorkshop.isEmpty
+                ? const EmptyListInformation()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: ListView.builder(
+                      itemCount: listWorkshop.length,
+                      itemBuilder: (context, index) {
+                        return WorkshopsContent(workshop: listWorkshop[index]);
+                      },
+                    ),
+                  ),
             orElse: SizedBox.shrink,
           );
         },

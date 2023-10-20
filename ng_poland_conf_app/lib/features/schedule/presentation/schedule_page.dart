@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_cubit.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
+import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
 
 import '../../../widgets/confs_bottom_nav_bar.dart';
 
@@ -52,17 +52,19 @@ class _SchedulePageState extends State<SchedulePage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
-            loaded: (listEvents) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
-              child: ListView.builder(
-                  itemCount: listEvents.length,
-                  itemBuilder: (context, index) {
-                    return ScheduleEvent(
-                      listEvents[index],
-                      Theme.of(context).colorScheme.tertiary,
-                    );
-                  }),
-            ),
+            loaded: (listEvents) => listEvents.isEmpty
+                ? const EmptyListInformation()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    child: ListView.builder(
+                        itemCount: listEvents.length,
+                        itemBuilder: (context, index) {
+                          return ScheduleEvent(
+                            listEvents[index],
+                            Theme.of(context).colorScheme.tertiary,
+                          );
+                        }),
+                  ),
             orElse: SizedBox.shrink,
           );
         },
