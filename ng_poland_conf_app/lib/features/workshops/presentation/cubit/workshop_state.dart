@@ -1,14 +1,14 @@
 part of 'workshop_cubit.dart';
 
 @freezed
-class WorkShopState with _$WorkShopState {
-  const factory WorkShopState.initial() = _Initial;
+class WorkshopState with _$WorkshopState {
+  const factory WorkshopState.initial() = _Initial;
 
-  const factory WorkShopState.loading() = _Loading;
+  const factory WorkshopState.loading() = _Loading;
 
-  const factory WorkShopState.loaded({
-    required List<WorkShop> listWorkshop,
+  const factory WorkshopState.loaded({
+    required List<Workshop> listWorkshop,
   }) = _Loaded;
 
-  const factory WorkShopState.error(String error) = _Error;
+  const factory WorkshopState.error(String error) = _Error;
 }

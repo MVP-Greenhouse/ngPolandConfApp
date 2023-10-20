@@ -4,6 +4,8 @@ import 'package:ng_poland_conf_app/features/info/presentation/cubit/info_cubit.d
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
+import 'widgets/info_details.dart';
+
 class InfoPage extends StatefulWidget {
   const InfoPage({super.key});
 
@@ -28,16 +30,18 @@ class _InfoPageState extends State<InfoPage> {
         bloc: _infoCubit,
         builder: (context, state) {
           return state.maybeWhen(
-            loaded: (listInfoItems) => Column(
-              children: [
-                ...listInfoItems
-                    .map(
-                      (infoItem) => Text(infoItem.title),
-                    )
-                    .toList(),
-              ],
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
             ),
-            orElse: () => SizedBox.shrink(),
+            loaded: (listInfoItems) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return InfoDetails(info: listInfoItems[index]);
+                  },
+                  itemCount: listInfoItems.length),
+            ),
+            orElse: () => const SizedBox.shrink(),
           );
         },
       ),

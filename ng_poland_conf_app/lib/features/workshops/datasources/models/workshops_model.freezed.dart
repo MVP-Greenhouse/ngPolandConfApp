@@ -14,15 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-WorkshopsModel _$WorkshopsModelFromJson(Map<String, dynamic> json) {
-  return _WorkshopsModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$WorkshopsModel {
   List<WorkshopModel>? get items => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WorkshopsModelCopyWith<WorkshopsModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -95,14 +90,11 @@ class __$$_WorkshopsModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$_WorkshopsModel extends _WorkshopsModel {
   const _$_WorkshopsModel({required final List<WorkshopModel>? items})
       : _items = items,
         super._();
-
-  factory _$_WorkshopsModel.fromJson(Map<String, dynamic> json) =>
-      _$$_WorkshopsModelFromJson(json);
 
   final List<WorkshopModel>? _items;
   @override
@@ -127,7 +119,6 @@ class _$_WorkshopsModel extends _WorkshopsModel {
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
@@ -137,22 +128,12 @@ class _$_WorkshopsModel extends _WorkshopsModel {
   @pragma('vm:prefer-inline')
   _$$_WorkshopsModelCopyWith<_$_WorkshopsModel> get copyWith =>
       __$$_WorkshopsModelCopyWithImpl<_$_WorkshopsModel>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_WorkshopsModelToJson(
-      this,
-    );
-  }
 }
 
 abstract class _WorkshopsModel extends WorkshopsModel {
   const factory _WorkshopsModel({required final List<WorkshopModel>? items}) =
       _$_WorkshopsModel;
   const _WorkshopsModel._() : super._();
-
-  factory _WorkshopsModel.fromJson(Map<String, dynamic> json) =
-      _$_WorkshopsModel.fromJson;
 
   @override
   List<WorkshopModel>? get items;

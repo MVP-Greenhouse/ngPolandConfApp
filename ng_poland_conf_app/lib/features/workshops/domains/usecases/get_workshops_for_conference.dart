@@ -4,13 +4,13 @@ import 'package:ng_poland_conf_app/features/workshops/domains/entities/workshop.
 import 'package:ng_poland_conf_app/features/workshops/domains/repositories/workshops_repository.dart';
 
 @injectable
-class GetWorkshopsForConference implements UseCase<List<WorkShop>?, Params> {
+class GetWorkshopsForConference implements UseCase<List<Workshop>?, Params> {
   final WorkshopsRepository workshopsRepository;
 
   GetWorkshopsForConference(this.workshopsRepository);
 
   @override
-  Future<List<WorkShop>> call(Params params) {
+  Future<List<Workshop>> call(Params params) {
     return workshopsRepository.getWorkshops(params);
   }
 }

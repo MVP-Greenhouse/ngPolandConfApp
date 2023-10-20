@@ -5,12 +5,16 @@ class CustomScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget body;
   final bool showDrawer;
+  final bool showBottomNavigationBar;
+  final Widget bottomNavigationBar;
 
   const CustomScaffold({
     super.key,
     this.appBar,
     required this.body,
     this.showDrawer = true,
+    this.showBottomNavigationBar = false,
+    this.bottomNavigationBar = const SizedBox.shrink(),
   });
 
   @override
@@ -19,6 +23,7 @@ class CustomScaffold extends StatelessWidget {
       appBar: appBar ?? AppBar(),
       drawer: showDrawer ? const CustomDrawer() : null,
       body: body,
+      bottomNavigationBar: showBottomNavigationBar ? bottomNavigationBar : null,
     );
   }
 }

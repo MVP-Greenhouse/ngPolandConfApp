@@ -11,7 +11,7 @@ class WorkshopsRepositoryImpl implements WorkshopsRepository {
   WorkshopsRepositoryImpl(this.workshopsRemoteDataSource);
 
   @override
-  Future<List<WorkShop>> getWorkshops(Params params) async {
+  Future<List<Workshop>> getWorkshops(Params params) async {
     final workshops = await workshopsRemoteDataSource.getWorkshops(
       eventItemType: params.eventItemType,
       confId: params.confId,

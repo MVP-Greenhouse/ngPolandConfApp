@@ -14,12 +14,9 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-Speaker _$SpeakerFromJson(Map<String, dynamic> json) {
-  return _Speaker.fromJson(json);
-}
-
 /// @nodoc
 mixin _$Speaker {
+  String? get id => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get role => throw _privateConstructorUsedError;
   String? get bio => throw _privateConstructorUsedError;
@@ -32,7 +29,6 @@ mixin _$Speaker {
   String? get urlTwitter => throw _privateConstructorUsedError;
   String? get urlWww => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $SpeakerCopyWith<Speaker> get copyWith => throw _privateConstructorUsedError;
 }
@@ -43,7 +39,8 @@ abstract class $SpeakerCopyWith<$Res> {
       _$SpeakerCopyWithImpl<$Res, Speaker>;
   @useResult
   $Res call(
-      {String? name,
+      {String? id,
+      String? name,
       String? role,
       String? bio,
       String? photoFileUrl,
@@ -69,6 +66,7 @@ class _$SpeakerCopyWithImpl<$Res, $Val extends Speaker>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = freezed,
     Object? role = freezed,
     Object? bio = freezed,
@@ -82,6 +80,10 @@ class _$SpeakerCopyWithImpl<$Res, $Val extends Speaker>
     Object? urlWww = freezed,
   }) {
     return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -138,7 +140,8 @@ abstract class _$$_SpeakerCopyWith<$Res> implements $SpeakerCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? name,
+      {String? id,
+      String? name,
       String? role,
       String? bio,
       String? photoFileUrl,
@@ -161,6 +164,7 @@ class __$$_SpeakerCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = freezed,
     Object? role = freezed,
     Object? bio = freezed,
@@ -174,6 +178,10 @@ class __$$_SpeakerCopyWithImpl<$Res>
     Object? urlWww = freezed,
   }) {
     return _then(_$_Speaker(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -223,10 +231,11 @@ class __$$_SpeakerCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$_Speaker implements _Speaker {
   const _$_Speaker(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.role,
       required this.bio,
       required this.photoFileUrl,
@@ -238,9 +247,8 @@ class _$_Speaker implements _Speaker {
       required this.urlTwitter,
       required this.urlWww});
 
-  factory _$_Speaker.fromJson(Map<String, dynamic> json) =>
-      _$$_SpeakerFromJson(json);
-
+  @override
+  final String? id;
   @override
   final String? name;
   @override
@@ -266,7 +274,7 @@ class _$_Speaker implements _Speaker {
 
   @override
   String toString() {
-    return 'Speaker(name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
+    return 'Speaker(id: $id, name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
   }
 
   @override
@@ -274,6 +282,7 @@ class _$_Speaker implements _Speaker {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Speaker &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.role, role) || other.role == role) &&
             (identical(other.bio, bio) || other.bio == bio) &&
@@ -293,10 +302,10 @@ class _$_Speaker implements _Speaker {
             (identical(other.urlWww, urlWww) || other.urlWww == urlWww));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       name,
       role,
       bio,
@@ -314,18 +323,12 @@ class _$_Speaker implements _Speaker {
   @pragma('vm:prefer-inline')
   _$$_SpeakerCopyWith<_$_Speaker> get copyWith =>
       __$$_SpeakerCopyWithImpl<_$_Speaker>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_SpeakerToJson(
-      this,
-    );
-  }
 }
 
 abstract class _Speaker implements Speaker {
   const factory _Speaker(
-      {required final String? name,
+      {required final String? id,
+      required final String? name,
       required final String? role,
       required final String? bio,
       required final String? photoFileUrl,
@@ -337,8 +340,8 @@ abstract class _Speaker implements Speaker {
       required final String? urlTwitter,
       required final String? urlWww}) = _$_Speaker;
 
-  factory _Speaker.fromJson(Map<String, dynamic> json) = _$_Speaker.fromJson;
-
+  @override
+  String? get id;
   @override
   String? get name;
   @override

@@ -156,7 +156,7 @@ extension GetItInjectableX on _i1.GetIt {
           getAllSpeakerGetAllSpeakersForConference:
               gh<_i35.GetAllSpeakersForConference>(),
         ));
-    gh.factory<_i42.WorkShopCubit>(() => _i42.WorkShopCubit(
+    gh.factory<_i42.WorkshopCubit>(() => _i42.WorkshopCubit(
           conferencesCubit: gh<_i3.ConferencesCubit>(),
           getWorkshopsForConference: gh<_i37.GetWorkshopsForConference>(),
         ));

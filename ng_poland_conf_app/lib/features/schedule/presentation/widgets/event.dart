@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
+
+import '../../../../routing/routing.dart';
+import '../../../speakers/presentation/widgets/speaker_details.dart';
 
 class ScheduleEvent extends StatelessWidget {
   final EventItem eventItem;
@@ -19,7 +23,7 @@ class ScheduleEvent extends StatelessWidget {
     var icon = switch (category) {
       'registration' => FontAwesomeIcons.addressCard,
       'welcome' => FontAwesomeIcons.child,
-      'presentation' => FontAwesomeIcons.microphoneAlt,
+      'presentation' => FontAwesomeIcons.microphone,
       'eating' => FontAwesomeIcons.utensils,
       'award' => FontAwesomeIcons.trophy,
       'break' => FontAwesomeIcons.solidComments,
@@ -39,61 +43,60 @@ class ScheduleEvent extends StatelessWidget {
     final DateTime? endDate = eventItem.endDate;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ListTile(
-        onTap: eventItem.speaker == null
-            ? null
-            : () {
-                // Navigator.of(context).pushNamed(
-                //   Presenter.routeName,
-                //   arguments: {
-                //     'title': widget.eventItem.title,
-                //     'description': widget.eventItem.description,
-                //     'icon': _getIcon(
-                //       widget.eventItem.category,
-                //       _iconsColor,
-                //     ),
-                //     'speaker': widget.eventItem.speaker,
-                //   },
-                // );
-              },
-        leading: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            if (startDate != null)
-              Text(
-                DateFormat.Hm().format(startDate),
-                style: TextStyle(
-                  fontSize: 12,
-                  // color: Theme.of(context).textTheme.bodyText1.color,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        children: [
+          ListTile(
+            onTap: eventItem.speaker == null
+                ? null
+                : () {
+                    context.pushNamed('${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}', pathParameters: {
+                      'id': eventItem.speaker?.id ?? '',
+                    });
+                  },
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                if (startDate != null)
+                  Text(
+                    DateFormat.Hm().format(startDate),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
+                    ),
+                  ),
+                if (endDate != null)
+                  Text(
+                    DateFormat.Hm().format(endDate),
+                    style: const TextStyle(fontSize: 12),
+                  ),
+              ],
+            ),
+            title: Text(
+              eventItem.title,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.8),
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            subtitle: _buildSpeaker(eventItem.speaker),
+            trailing: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Opacity(
+                  opacity: 0.7,
+                  child: _getIcon(eventItem.category),
                 ),
-              ),
-            if (endDate != null)
-              Text(
-                DateFormat.Hm().format(endDate),
-                style: const TextStyle(fontSize: 12),
-              ),
-          ],
-        ),
-        title: Text(
-          eventItem.title,
-          style: TextStyle(
-            // color: Theme.of(context).textTheme.bodyText1.color.withOpacity(0.8),
-            fontSize: 15,
-            fontWeight: FontWeight.w500,
+              ],
+            ),
           ),
-        ),
-        subtitle: _buildSpeaker(eventItem.speaker),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Opacity(
-              opacity: 0.4,
-              child: _getIcon(eventItem.category),
-            )
-          ],
-        ),
+          Divider(
+            color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
+            height: 40,
+          ),
+        ],
       ),
     );
   }
@@ -101,7 +104,6 @@ class ScheduleEvent extends StatelessWidget {
   Widget _buildSpeaker(Speaker? speaker) {
     final String? photoFileUrl = speaker?.photoFileUrl;
     final String? name = speaker?.name;
-
     return speaker == null
         ? const Text('')
         : Padding(
@@ -135,7 +137,7 @@ class ScheduleEvent extends StatelessWidget {
                     if (name != null)
                       Text(
                         name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             // color: _darkMode ? Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7) : Theme.of(context).primaryColor,
                             fontSize: 13),
                       ),

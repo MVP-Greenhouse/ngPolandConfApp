@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/features/nggirls/presentation/cubit/ngGirls_cubit.dart';
@@ -29,14 +30,28 @@ class _NgGirlsPageState extends State<NgGirlsPage> {
         bloc: _ngGirlsCubit,
         builder: (context, state) {
           return state.maybeWhen(
-            loaded: (ngGirls) => Column(
-              children: [
-                Text(ngGirls.title),
-                const SizedBox(
-                  height: 30,
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            loaded: (ngGirls) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(
+                      ngGirls.title,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Text(ngGirls.text, style: Theme.of(context).textTheme.bodySmall),
+                    const SizedBox(
+                      height: 30,
+                    )
+                  ],
                 ),
-                Text(ngGirls.text),
-              ],
+              ),
             ),
             orElse: () => const SizedBox.shrink(),
           );

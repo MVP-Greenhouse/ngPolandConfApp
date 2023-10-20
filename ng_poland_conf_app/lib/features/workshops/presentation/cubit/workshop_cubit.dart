@@ -11,23 +11,26 @@ part 'workshop_state.dart';
 part 'workshop_cubit.freezed.dart';
 
 @injectable
-class WorkShopCubit extends Cubit<WorkShopState> {
+class WorkshopCubit extends Cubit<WorkshopState> {
   final ConferencesCubit conferencesCubit;
   final GetWorkshopsForConference getWorkshopsForConference;
 
-  WorkShopCubit({
+  WorkshopCubit({
     required this.conferencesCubit,
     required this.getWorkshopsForConference,
-  }) : super(const WorkShopState.initial());
+  }) : super(const WorkshopState.initial());
 
   Future<void> getListWorkshop({
     required EventItemType eventItemType,
   }) async {
+    emit(const WorkshopState.loading());
+    // delay for 1s for better UX
+    await Future.delayed(const Duration(milliseconds: 500));
     final Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) return;
 
-    List<WorkShop> listWorkshop = await getWorkshopsForConference.call(
+    List<Workshop> listWorkshop = await getWorkshopsForConference.call(
       Params(
         eventItemType: eventItemType.name,
         confId: conference.confId,
@@ -35,6 +38,6 @@ class WorkShopCubit extends Cubit<WorkShopState> {
       ),
     );
 
-    emit(WorkShopState.loaded(listWorkshop: listWorkshop));
+    emit(WorkshopState.loaded(listWorkshop: listWorkshop));
   }
 }

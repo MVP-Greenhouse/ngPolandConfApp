@@ -14,10 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-WorkshopModel _$WorkshopModelFromJson(Map<String, dynamic> json) {
-  return _WorkshopModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$WorkshopModel {
   String get title => throw _privateConstructorUsedError;
@@ -26,9 +22,9 @@ mixin _$WorkshopModel {
   String get startDate => throw _privateConstructorUsedError;
   String get endDate => throw _privateConstructorUsedError;
   String get locationDescription => throw _privateConstructorUsedError;
+  SpeakerModel get speaker => throw _privateConstructorUsedError;
   int? get pricePln => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WorkshopModelCopyWith<WorkshopModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -47,7 +43,10 @@ abstract class $WorkshopModelCopyWith<$Res> {
       String startDate,
       String endDate,
       String locationDescription,
+      SpeakerModel speaker,
       int? pricePln});
+
+  $SpeakerModelCopyWith<$Res> get speaker;
 }
 
 /// @nodoc
@@ -69,6 +68,7 @@ class _$WorkshopModelCopyWithImpl<$Res, $Val extends WorkshopModel>
     Object? startDate = null,
     Object? endDate = null,
     Object? locationDescription = null,
+    Object? speaker = null,
     Object? pricePln = freezed,
   }) {
     return _then(_value.copyWith(
@@ -96,11 +96,23 @@ class _$WorkshopModelCopyWithImpl<$Res, $Val extends WorkshopModel>
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
               as String,
+      speaker: null == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as SpeakerModel,
       pricePln: freezed == pricePln
           ? _value.pricePln
           : pricePln // ignore: cast_nullable_to_non_nullable
               as int?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SpeakerModelCopyWith<$Res> get speaker {
+    return $SpeakerModelCopyWith<$Res>(_value.speaker, (value) {
+      return _then(_value.copyWith(speaker: value) as $Val);
+    });
   }
 }
 
@@ -119,7 +131,11 @@ abstract class _$$_WorkshopModelCopyWith<$Res>
       String startDate,
       String endDate,
       String locationDescription,
+      SpeakerModel speaker,
       int? pricePln});
+
+  @override
+  $SpeakerModelCopyWith<$Res> get speaker;
 }
 
 /// @nodoc
@@ -139,6 +155,7 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
     Object? startDate = null,
     Object? endDate = null,
     Object? locationDescription = null,
+    Object? speaker = null,
     Object? pricePln = freezed,
   }) {
     return _then(_$_WorkshopModel(
@@ -166,6 +183,10 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
               as String,
+      speaker: null == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as SpeakerModel,
       pricePln: freezed == pricePln
           ? _value.pricePln
           : pricePln // ignore: cast_nullable_to_non_nullable
@@ -175,7 +196,7 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$_WorkshopModel extends _WorkshopModel {
   const _$_WorkshopModel(
       {required this.title,
@@ -184,11 +205,9 @@ class _$_WorkshopModel extends _WorkshopModel {
       required this.startDate,
       required this.endDate,
       required this.locationDescription,
+      required this.speaker,
       required this.pricePln})
       : super._();
-
-  factory _$_WorkshopModel.fromJson(Map<String, dynamic> json) =>
-      _$$_WorkshopModelFromJson(json);
 
   @override
   final String title;
@@ -203,11 +222,13 @@ class _$_WorkshopModel extends _WorkshopModel {
   @override
   final String locationDescription;
   @override
+  final SpeakerModel speaker;
+  @override
   final int? pricePln;
 
   @override
   String toString() {
-    return 'WorkshopModel(title: $title, confId: $confId, description: $description, startDate: $startDate, endDate: $endDate, locationDescription: $locationDescription, pricePln: $pricePln)';
+    return 'WorkshopModel(title: $title, confId: $confId, description: $description, startDate: $startDate, endDate: $endDate, locationDescription: $locationDescription, speaker: $speaker, pricePln: $pricePln)';
   }
 
   @override
@@ -224,27 +245,20 @@ class _$_WorkshopModel extends _WorkshopModel {
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
             (identical(other.locationDescription, locationDescription) ||
                 other.locationDescription == locationDescription) &&
+            (identical(other.speaker, speaker) || other.speaker == speaker) &&
             (identical(other.pricePln, pricePln) ||
                 other.pricePln == pricePln));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, title, confId, description,
-      startDate, endDate, locationDescription, pricePln);
+      startDate, endDate, locationDescription, speaker, pricePln);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$_WorkshopModelCopyWith<_$_WorkshopModel> get copyWith =>
       __$$_WorkshopModelCopyWithImpl<_$_WorkshopModel>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_WorkshopModelToJson(
-      this,
-    );
-  }
 }
 
 abstract class _WorkshopModel extends WorkshopModel {
@@ -255,11 +269,9 @@ abstract class _WorkshopModel extends WorkshopModel {
       required final String startDate,
       required final String endDate,
       required final String locationDescription,
+      required final SpeakerModel speaker,
       required final int? pricePln}) = _$_WorkshopModel;
   const _WorkshopModel._() : super._();
-
-  factory _WorkshopModel.fromJson(Map<String, dynamic> json) =
-      _$_WorkshopModel.fromJson;
 
   @override
   String get title;
@@ -273,6 +285,8 @@ abstract class _WorkshopModel extends WorkshopModel {
   String get endDate;
   @override
   String get locationDescription;
+  @override
+  SpeakerModel get speaker;
   @override
   int? get pricePln;
   @override

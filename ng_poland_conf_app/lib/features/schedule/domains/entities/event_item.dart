@@ -9,6 +9,7 @@ class EventItem with _$EventItem {
   const EventItem._();
 
   const factory EventItem({
+    required String id,
     required String title,
     required String? confId,
     required String? type,

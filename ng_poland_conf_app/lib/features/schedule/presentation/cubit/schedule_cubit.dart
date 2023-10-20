@@ -23,6 +23,9 @@ class ScheduleCubit extends Cubit<ScheduleState> {
   Future<void> getListEvents({
     required EventItemType eventItemType,
   }) async {
+    emit(const ScheduleState.loading());
+    // delay for 1s for better UX
+    await Future.delayed(const Duration(milliseconds: 500));
     final Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) return;

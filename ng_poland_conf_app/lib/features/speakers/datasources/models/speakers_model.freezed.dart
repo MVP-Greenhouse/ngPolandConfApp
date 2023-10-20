@@ -14,15 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-SpeakersModel _$SpeakersModelFromJson(Map<String, dynamic> json) {
-  return _SpeakersModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$SpeakersModel {
   List<SpeakerModel>? get items => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $SpeakersModelCopyWith<SpeakersModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -95,14 +90,11 @@ class __$$_SpeakersModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$_SpeakersModel extends _SpeakersModel {
   const _$_SpeakersModel({required final List<SpeakerModel>? items})
       : _items = items,
         super._();
-
-  factory _$_SpeakersModel.fromJson(Map<String, dynamic> json) =>
-      _$$_SpeakersModelFromJson(json);
 
   final List<SpeakerModel>? _items;
   @override
@@ -127,7 +119,6 @@ class _$_SpeakersModel extends _SpeakersModel {
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
@@ -137,22 +128,12 @@ class _$_SpeakersModel extends _SpeakersModel {
   @pragma('vm:prefer-inline')
   _$$_SpeakersModelCopyWith<_$_SpeakersModel> get copyWith =>
       __$$_SpeakersModelCopyWithImpl<_$_SpeakersModel>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$_SpeakersModelToJson(
-      this,
-    );
-  }
 }
 
 abstract class _SpeakersModel extends SpeakersModel {
   const factory _SpeakersModel({required final List<SpeakerModel>? items}) =
       _$_SpeakersModel;
   const _SpeakersModel._() : super._();
-
-  factory _SpeakersModel.fromJson(Map<String, dynamic> json) =
-      _$_SpeakersModel.fromJson;
 
   @override
   List<SpeakerModel>? get items;

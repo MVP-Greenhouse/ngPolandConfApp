@@ -1,8 +1,11 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/cubit/speakers_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
+
+import '../../../widgets/empty_list_info.dart';
+import 'widgets/speaker_tile.dart';
 
 class SpeakersPage extends StatefulWidget {
   const SpeakersPage({super.key});
@@ -29,15 +32,20 @@ class _SpeakersPageState extends State<SpeakersPage> {
       builder: (context, state) {
         return CustomScaffold(
           body: state.maybeWhen(
-            loaded: (listSpeakers) => Column(
-              children: [
-                ...listSpeakers
-                    .map(
-                      (speaker) => Text(speaker.name ?? ''),
-                    )
-                    .toList(),
-              ],
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
             ),
+            loaded: (listSpeakers) => listSpeakers.isEmpty
+                ? const EmptyListInformation()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24.0),
+                    child: ListView.builder(
+                      itemCount: listSpeakers.length,
+                      itemBuilder: (context, index) {
+                        return SpeakerTile(listSpeakers[index]);
+                      },
+                    ),
+                  ),
             orElse: () => const SizedBox.shrink(),
           ),
         );

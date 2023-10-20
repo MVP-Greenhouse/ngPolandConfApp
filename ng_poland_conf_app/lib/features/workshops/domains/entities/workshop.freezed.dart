@@ -15,24 +15,25 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$WorkShop {
+mixin _$Workshop {
   String get title => throw _privateConstructorUsedError;
   String get confId => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String get startDate => throw _privateConstructorUsedError;
   String get endDate => throw _privateConstructorUsedError;
   String get locationDescription => throw _privateConstructorUsedError;
+  Speaker get speaker => throw _privateConstructorUsedError;
   int? get pricePln => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $WorkShopCopyWith<WorkShop> get copyWith =>
+  $WorkshopCopyWith<Workshop> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WorkShopCopyWith<$Res> {
-  factory $WorkShopCopyWith(WorkShop value, $Res Function(WorkShop) then) =
-      _$WorkShopCopyWithImpl<$Res, WorkShop>;
+abstract class $WorkshopCopyWith<$Res> {
+  factory $WorkshopCopyWith(Workshop value, $Res Function(Workshop) then) =
+      _$WorkshopCopyWithImpl<$Res, Workshop>;
   @useResult
   $Res call(
       {String title,
@@ -41,13 +42,16 @@ abstract class $WorkShopCopyWith<$Res> {
       String startDate,
       String endDate,
       String locationDescription,
+      Speaker speaker,
       int? pricePln});
+
+  $SpeakerCopyWith<$Res> get speaker;
 }
 
 /// @nodoc
-class _$WorkShopCopyWithImpl<$Res, $Val extends WorkShop>
-    implements $WorkShopCopyWith<$Res> {
-  _$WorkShopCopyWithImpl(this._value, this._then);
+class _$WorkshopCopyWithImpl<$Res, $Val extends Workshop>
+    implements $WorkshopCopyWith<$Res> {
+  _$WorkshopCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -63,6 +67,7 @@ class _$WorkShopCopyWithImpl<$Res, $Val extends WorkShop>
     Object? startDate = null,
     Object? endDate = null,
     Object? locationDescription = null,
+    Object? speaker = null,
     Object? pricePln = freezed,
   }) {
     return _then(_value.copyWith(
@@ -90,19 +95,31 @@ class _$WorkShopCopyWithImpl<$Res, $Val extends WorkShop>
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
               as String,
+      speaker: null == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as Speaker,
       pricePln: freezed == pricePln
           ? _value.pricePln
           : pricePln // ignore: cast_nullable_to_non_nullable
               as int?,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SpeakerCopyWith<$Res> get speaker {
+    return $SpeakerCopyWith<$Res>(_value.speaker, (value) {
+      return _then(_value.copyWith(speaker: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
-abstract class _$$_WorkShopCopyWith<$Res> implements $WorkShopCopyWith<$Res> {
-  factory _$$_WorkShopCopyWith(
-          _$_WorkShop value, $Res Function(_$_WorkShop) then) =
-      __$$_WorkShopCopyWithImpl<$Res>;
+abstract class _$$_WorkshopCopyWith<$Res> implements $WorkshopCopyWith<$Res> {
+  factory _$$_WorkshopCopyWith(
+          _$_Workshop value, $Res Function(_$_Workshop) then) =
+      __$$_WorkshopCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -112,15 +129,19 @@ abstract class _$$_WorkShopCopyWith<$Res> implements $WorkShopCopyWith<$Res> {
       String startDate,
       String endDate,
       String locationDescription,
+      Speaker speaker,
       int? pricePln});
+
+  @override
+  $SpeakerCopyWith<$Res> get speaker;
 }
 
 /// @nodoc
-class __$$_WorkShopCopyWithImpl<$Res>
-    extends _$WorkShopCopyWithImpl<$Res, _$_WorkShop>
-    implements _$$_WorkShopCopyWith<$Res> {
-  __$$_WorkShopCopyWithImpl(
-      _$_WorkShop _value, $Res Function(_$_WorkShop) _then)
+class __$$_WorkshopCopyWithImpl<$Res>
+    extends _$WorkshopCopyWithImpl<$Res, _$_Workshop>
+    implements _$$_WorkshopCopyWith<$Res> {
+  __$$_WorkshopCopyWithImpl(
+      _$_Workshop _value, $Res Function(_$_Workshop) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -132,9 +153,10 @@ class __$$_WorkShopCopyWithImpl<$Res>
     Object? startDate = null,
     Object? endDate = null,
     Object? locationDescription = null,
+    Object? speaker = null,
     Object? pricePln = freezed,
   }) {
-    return _then(_$_WorkShop(
+    return _then(_$_Workshop(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -159,6 +181,10 @@ class __$$_WorkShopCopyWithImpl<$Res>
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
               as String,
+      speaker: null == speaker
+          ? _value.speaker
+          : speaker // ignore: cast_nullable_to_non_nullable
+              as Speaker,
       pricePln: freezed == pricePln
           ? _value.pricePln
           : pricePln // ignore: cast_nullable_to_non_nullable
@@ -169,14 +195,15 @@ class __$$_WorkShopCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_WorkShop extends _WorkShop {
-  const _$_WorkShop(
+class _$_Workshop extends _Workshop {
+  const _$_Workshop(
       {required this.title,
       required this.confId,
       required this.description,
       required this.startDate,
       required this.endDate,
       required this.locationDescription,
+      required this.speaker,
       required this.pricePln})
       : super._();
 
@@ -193,18 +220,20 @@ class _$_WorkShop extends _WorkShop {
   @override
   final String locationDescription;
   @override
+  final Speaker speaker;
+  @override
   final int? pricePln;
 
   @override
   String toString() {
-    return 'WorkShop(title: $title, confId: $confId, description: $description, startDate: $startDate, endDate: $endDate, locationDescription: $locationDescription, pricePln: $pricePln)';
+    return 'Workshop(title: $title, confId: $confId, description: $description, startDate: $startDate, endDate: $endDate, locationDescription: $locationDescription, speaker: $speaker, pricePln: $pricePln)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_WorkShop &&
+            other is _$_Workshop &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.confId, confId) || other.confId == confId) &&
             (identical(other.description, description) ||
@@ -214,31 +243,33 @@ class _$_WorkShop extends _WorkShop {
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
             (identical(other.locationDescription, locationDescription) ||
                 other.locationDescription == locationDescription) &&
+            (identical(other.speaker, speaker) || other.speaker == speaker) &&
             (identical(other.pricePln, pricePln) ||
                 other.pricePln == pricePln));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, title, confId, description,
-      startDate, endDate, locationDescription, pricePln);
+      startDate, endDate, locationDescription, speaker, pricePln);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WorkShopCopyWith<_$_WorkShop> get copyWith =>
-      __$$_WorkShopCopyWithImpl<_$_WorkShop>(this, _$identity);
+  _$$_WorkshopCopyWith<_$_Workshop> get copyWith =>
+      __$$_WorkshopCopyWithImpl<_$_Workshop>(this, _$identity);
 }
 
-abstract class _WorkShop extends WorkShop {
-  const factory _WorkShop(
+abstract class _Workshop extends Workshop {
+  const factory _Workshop(
       {required final String title,
       required final String confId,
       required final String description,
       required final String startDate,
       required final String endDate,
       required final String locationDescription,
-      required final int? pricePln}) = _$_WorkShop;
-  const _WorkShop._() : super._();
+      required final Speaker speaker,
+      required final int? pricePln}) = _$_Workshop;
+  const _Workshop._() : super._();
 
   @override
   String get title;
@@ -253,9 +284,11 @@ abstract class _WorkShop extends WorkShop {
   @override
   String get locationDescription;
   @override
+  Speaker get speaker;
+  @override
   int? get pricePln;
   @override
   @JsonKey(ignore: true)
-  _$$_WorkShopCopyWith<_$_WorkShop> get copyWith =>
+  _$$_WorkshopCopyWith<_$_Workshop> get copyWith =>
       throw _privateConstructorUsedError;
 }

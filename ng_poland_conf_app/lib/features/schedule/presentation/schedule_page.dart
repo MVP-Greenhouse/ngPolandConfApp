@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_cubit.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
+
+import '../../../widgets/confs_bottom_nav_bar.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -15,6 +18,7 @@ class SchedulePage extends StatefulWidget {
 
 class _SchedulePageState extends State<SchedulePage> {
   late final ScheduleCubit _cubit;
+  final selectedTabItem = EventItemType.ngPoland;
 
   @override
   void initState() {
@@ -26,6 +30,18 @@ class _SchedulePageState extends State<SchedulePage> {
     super.initState();
   }
 
+  void onEventItemTabChange(int idx) {
+    if (idx == 0) {
+      _cubit.getListEvents(
+        eventItemType: EventItemType.ngPoland,
+      );
+    } else {
+      _cubit.getListEvents(
+        eventItemType: EventItemType.jsPoland,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -33,23 +49,26 @@ class _SchedulePageState extends State<SchedulePage> {
         bloc: _cubit,
         builder: (context, state) {
           return state.maybeWhen(
-            loaded: (listEvents) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ...listEvents
-                    .map(
-                      (eventItem) => ScheduleEvent(
-                        eventItem,
-                        Theme.of(context).colorScheme.secondary,
-                      ),
-                    )
-                    .toList()
-              ],
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            loaded: (listEvents) => Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              child: ListView.builder(
+                  itemCount: listEvents.length,
+                  itemBuilder: (context, index) {
+                    return ScheduleEvent(
+                      listEvents[index],
+                      Theme.of(context).colorScheme.tertiary,
+                    );
+                  }),
             ),
             orElse: SizedBox.shrink,
           );
         },
       ),
+      showBottomNavigationBar: true,
+      bottomNavigationBar: ConfsBottomNavigationBar(onItemTapped: onEventItemTabChange),
     );
   }
 }
