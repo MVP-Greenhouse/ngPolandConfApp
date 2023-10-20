@@ -39,7 +39,7 @@ class WorkshopsModel with _$WorkshopsModel {
           confId: item['fields']['confId'] as String,
           description: item['fields']['description'] as String,
           speaker: SpeakerModel(
-            id: speaker['id'] ?? '',
+            id: item['fields']['instructor']['sys']['id'] ?? '',
             name: speaker['name'] ?? '',
             confIds: [],
             role: speaker['role'] ?? '',

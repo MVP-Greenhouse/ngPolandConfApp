@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
+
+import '../../../../routing/routing.dart';
+import '../../../speakers/presentation/widgets/speaker_details.dart';
 
 class ScheduleEvent extends StatelessWidget {
   final EventItem eventItem;
@@ -46,18 +50,9 @@ class ScheduleEvent extends StatelessWidget {
             onTap: eventItem.speaker == null
                 ? null
                 : () {
-                    // Navigator.of(context).pushNamed(
-                    //   Presenter.routeName,
-                    //   arguments: {
-                    //     'title': widget.eventItem.title,
-                    //     'description': widget.eventItem.description,
-                    //     'icon': _getIcon(
-                    //       widget.eventItem.category,
-                    //       _iconsColor,
-                    //     ),
-                    //     'speaker': widget.eventItem.speaker,
-                    //   },
-                    // );
+                    context.pushNamed('${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}', pathParameters: {
+                      'id': eventItem.speaker?.id ?? '',
+                    });
                   },
             leading: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

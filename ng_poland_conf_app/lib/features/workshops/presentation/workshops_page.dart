@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/cubit/workshop_cubit.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/widgets/workshops_content.dart';

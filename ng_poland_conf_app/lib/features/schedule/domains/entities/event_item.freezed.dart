@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$EventItem {
+  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String? get confId => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
@@ -37,7 +38,8 @@ abstract class $EventItemCopyWith<$Res> {
       _$EventItemCopyWithImpl<$Res, EventItem>;
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       String? confId,
       String? type,
       String? category,
@@ -63,6 +65,7 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? confId = freezed,
     Object? type = freezed,
@@ -74,6 +77,10 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -134,7 +141,8 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       String? confId,
       String? type,
       String? category,
@@ -159,6 +167,7 @@ class __$$_EventItemCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? confId = freezed,
     Object? type = freezed,
@@ -170,6 +179,10 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? speaker = freezed,
   }) {
     return _then(_$_EventItem(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -214,7 +227,8 @@ class __$$_EventItemCopyWithImpl<$Res>
 
 class _$_EventItem extends _EventItem {
   const _$_EventItem(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.confId,
       required this.type,
       required this.category,
@@ -225,6 +239,8 @@ class _$_EventItem extends _EventItem {
       required this.speaker})
       : super._();
 
+  @override
+  final String id;
   @override
   final String title;
   @override
@@ -246,7 +262,7 @@ class _$_EventItem extends _EventItem {
 
   @override
   String toString() {
-    return 'EventItem(title: $title, confId: $confId, type: $type, category: $category, shortDescription: $shortDescription, description: $description, startDate: $startDate, endDate: $endDate, speaker: $speaker)';
+    return 'EventItem(id: $id, title: $title, confId: $confId, type: $type, category: $category, shortDescription: $shortDescription, description: $description, startDate: $startDate, endDate: $endDate, speaker: $speaker)';
   }
 
   @override
@@ -254,6 +270,7 @@ class _$_EventItem extends _EventItem {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EventItem &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.confId, confId) || other.confId == confId) &&
             (identical(other.type, type) || other.type == type) &&
@@ -270,8 +287,8 @@ class _$_EventItem extends _EventItem {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, title, confId, type, category,
-      shortDescription, description, startDate, endDate, speaker);
+  int get hashCode => Object.hash(runtimeType, id, title, confId, type,
+      category, shortDescription, description, startDate, endDate, speaker);
 
   @JsonKey(ignore: true)
   @override
@@ -282,7 +299,8 @@ class _$_EventItem extends _EventItem {
 
 abstract class _EventItem extends EventItem {
   const factory _EventItem(
-      {required final String title,
+      {required final String id,
+      required final String title,
       required final String? confId,
       required final String? type,
       required final String? category,
@@ -293,6 +311,8 @@ abstract class _EventItem extends EventItem {
       required final Speaker? speaker}) = _$_EventItem;
   const _EventItem._() : super._();
 
+  @override
+  String get id;
   @override
   String get title;
   @override

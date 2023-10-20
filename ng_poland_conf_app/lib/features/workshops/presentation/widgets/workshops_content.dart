@@ -1,6 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../routing/routing.dart';
+import '../../../speakers/presentation/widgets/speaker_details.dart';
 import '../../domains/entities/workshop.dart';
 
 class WorkshopsContent extends StatelessWidget {
@@ -23,12 +27,9 @@ class WorkshopsContent extends StatelessWidget {
                 Radius.circular(25),
               ),
               onTap: () {
-                // Navigator.of(context).pushNamed(
-                //   Presenter.routeName,
-                //   arguments: {
-                //     'speaker': _workshopsItems[index].speaker,
-                //   },
-                // );
+                context.pushNamed('${Pages.workshops.nameKey}-${SpeakerDetails.routeNameKey}', pathParameters: {
+                  'id': workshop.speaker.id ?? '',
+                });
               },
               child: CachedNetworkImage(
                 progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset(
@@ -66,18 +67,14 @@ class WorkshopsContent extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: workshop.speaker.name,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).textTheme.titleSmall?.color?.withOpacity(0.7)),
-                        // recognizer: TapGestureRecognizer()
-                        //   ..onTap = () {
-                        //     // Navigator.of(context).pushNamed(
-                        //     //   Presenter.routeName,
-                        //     //   arguments: {
-                        //     //     'speaker': _workshopsItems[index].speaker,
-                        //     //   },
-                        //     // );
-                        //   },
-                      ),
+                          text: workshop.speaker.name,
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).textTheme.titleSmall?.color?.withOpacity(0.7)),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              context.pushNamed('${Pages.workshops.nameKey}-${SpeakerDetails.routeNameKey}', pathParameters: {
+                                'id': workshop.speaker.id ?? '',
+                              });
+                            }),
                     ],
                   ),
                 ),

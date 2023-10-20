@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../injectable.dart';
 import '../../../../widgets/empty_list_info.dart';
+import '../../domains/entities/speaker.dart';
 import '../cubit/speakers_cubit.dart';
 
 class SpeakerDetails extends StatefulWidget {
@@ -13,7 +14,8 @@ class SpeakerDetails extends StatefulWidget {
 
   const SpeakerDetails({super.key, required this.id});
 
-  static const routeName = '/SpeakerDetails';
+  static const routeName = 'deatils';
+  static const routeNameKey = 'SpeakerDetails';
 
   @override
   State<SpeakerDetails> createState() => _SpeakerDetailsState();
@@ -60,8 +62,10 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                 child: CircularProgressIndicator(),
               ),
               loaded: (listSpeakers) {
-                final speaker = listSpeakers.firstWhere((element) => element.id == widget.id);
-                return listSpeakers.isEmpty
+                final speaker = listSpeakers.firstWhere((element) {
+                  return element.id == widget.id;
+                }, orElse: () => Speaker.empty);
+                return speaker.id == Speaker.empty.id
                     ? const EmptyListInformation()
                     : SingleChildScrollView(
                         child: Container(

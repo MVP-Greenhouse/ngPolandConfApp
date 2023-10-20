@@ -9,6 +9,7 @@ class EventItemModel with _$EventItemModel {
   const EventItemModel._();
 
   const factory EventItemModel({
+    required String id,
     required String? title,
     required String? confId,
     required String? type,
@@ -38,6 +39,7 @@ class EventItemModel with _$EventItemModel {
     }
 
     return EventItemModel(
+      id: json['sys']['id'] as String,
       title: json['fields']['title'],
       confId: json['fields']['confId'] as String,
       type: json['fields']['type'] ?? '',
@@ -49,7 +51,7 @@ class EventItemModel with _$EventItemModel {
       speaker: speaker == null
           ? null
           : SpeakerModel(
-              id: speaker['id'] as String,
+              id: json['fields']['presenter']['sys']['id'] as String,
               name: speaker['name'] as String,
               confIds: [],
               role: speaker['role'] ?? '',
@@ -67,6 +69,7 @@ class EventItemModel with _$EventItemModel {
   }
 
   EventItem toEntity() => EventItem(
+        id: id,
         title: title ?? '',
         confId: confId,
         type: type,

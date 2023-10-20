@@ -35,6 +35,7 @@ class EventsModel with _$EventsModel {
 
       eventItems.add(
         EventItemModel(
+          id: item['sys']['id'] as String,
           title: item['fields']['title'],
           confId: item['fields']['confId'] as String,
           type: item['fields']['type'] as String,
@@ -46,7 +47,7 @@ class EventsModel with _$EventsModel {
           speaker: speaker == null
               ? null
               : SpeakerModel(
-                  id: speaker['id'] ?? '',
+                  id: item['fields']['presenter']['sys']['id'] ?? '',
                   name: speaker['name'] ?? '',
                   confIds: [],
                   role: speaker['role'] ?? '',
