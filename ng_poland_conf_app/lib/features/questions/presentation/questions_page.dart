@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class QuestionsPage extends StatefulWidget {
   const QuestionsPage({super.key});
@@ -45,7 +47,7 @@ class _QuestionsPageState extends State<QuestionsPage> {
   }
 
   bool webViewPlatform() {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       return true;
     } else {
       return false;
