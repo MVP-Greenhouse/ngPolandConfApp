@@ -20,7 +20,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _cubit = getIt.get<ConferencesCubit>();
-    getIt.get<ConferencesCubit>().getConferences();
     super.initState();
   }
 

@@ -26,14 +26,17 @@ class WorkshopCubit extends Cubit<WorkshopState> {
     emit(const WorkshopState.loading());
     // delay for 1s for better UX
     await Future.delayed(const Duration(milliseconds: 500));
-    final Conference? conference = conferencesCubit.selectedConference;
+    Conference? conference = conferencesCubit.selectedConference;
 
-    if (conference == null) return;
+    if (conference == null) {
+      await conferencesCubit.getConferences();
+      conference = conferencesCubit.selectedConference;
+    }
 
     List<Workshop> listWorkshop = await getWorkshopsForConference.call(
       Params(
         eventItemType: eventItemType.name,
-        confId: conference.confId,
+        confId: conference!.confId,
         limit: 10,
       ),
     );

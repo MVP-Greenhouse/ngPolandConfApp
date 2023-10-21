@@ -22,6 +22,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final conferencesCubit = getIt.get<ConferencesCubit>();
+    conferencesCubit.getConferences();
     return MultiBlocProvider(
       providers: [
         BlocProvider(

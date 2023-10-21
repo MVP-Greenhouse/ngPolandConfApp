@@ -21,13 +21,16 @@ class InfoCubit extends Cubit<InfoState> {
 
   Future<void> getListInfoItems() async {
     emit(const InfoState.loading());
-    final Conference? conference = conferencesCubit.selectedConference;
+    Conference? conference = conferencesCubit.selectedConference;
 
-    if (conference == null) return;
+    if (conference == null) {
+      await conferencesCubit.getConferences();
+      conference = conferencesCubit.selectedConference;
+    }
 
     List<InfoItem> listInfoItems = await getAllSpeakerGetAllInfoItemsForConference.call(
       Params(
-        confId: conference.confId,
+        confId: conference!.confId,
         limit: 10,
       ),
     );

@@ -21,13 +21,16 @@ class NgGirlsCubit extends Cubit<NgGirlsState> {
 
   Future<void> getNgGirls() async {
     emit(const NgGirlsState.loading());
-    final Conference? conference = conferencesCubit.selectedConference;
+    Conference? conference = conferencesCubit.selectedConference;
 
-    if (conference == null) return;
+    if (conference == null) {
+      await conferencesCubit.getConferences();
+      conference = conferencesCubit.selectedConference;
+    }
 
     NgGirls ngGirls = await getNgGirlsForConference.call(
       Params(
-        confId: conference.confId,
+        confId: conference!.confId,
       ),
     );
 

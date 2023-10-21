@@ -21,13 +21,16 @@ class SpeakersCubit extends Cubit<SpeakersState> {
 
   Future<void> getListSpeakers() async {
     emit(const SpeakersState.loading());
-    final Conference? conference = conferencesCubit.selectedConference;
+    Conference? conference = conferencesCubit.selectedConference;
 
-    if (conference == null) return;
+    if (conference == null) {
+      await conferencesCubit.getConferences();
+      conference = conferencesCubit.selectedConference;
+    }
 
     List<Speaker> listSpeakers = await getAllSpeakerGetAllSpeakersForConference.call(
       Params(
-        confId: conference.confId,
+        confId: conference!.confId,
         limit: 10,
       ),
     );
