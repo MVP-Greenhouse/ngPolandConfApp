@@ -4,6 +4,8 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
+import 'package:ng_poland_conf_app/features/settings/domains/entities/settings.dart';
+import 'package:ng_poland_conf_app/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/theme.dart';
@@ -13,6 +15,7 @@ void main() async {
     Environment.prod,
   );
   await Hive.initFlutter();
+  Hive.registerAdapter(SettingsAdapter());
 
   runApp(const MainApp());
 }
@@ -31,6 +34,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt.get<ThemeModeCubit>()..getThemeMode(),
+        ),
+        BlocProvider(
+          create: (context) => getIt.get<SettingsCubit>()..getAppSettings(),
         ),
       ],
       child: BlocBuilder<ThemeModeCubit, ThemeModeState>(

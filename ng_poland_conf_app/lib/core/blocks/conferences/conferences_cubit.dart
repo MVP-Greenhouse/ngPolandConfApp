@@ -38,7 +38,6 @@ class ConferencesCubit extends Cubit<ConferencesState> with ConferenceTimerMixin
   }
 
   Future<void> getConferences() async {
-    print('getConferences...');
     final Conferences? conferences = await getIt.get<GetAllConferences>().call(
           NoParams(),
         );
@@ -46,7 +45,6 @@ class ConferencesCubit extends Cubit<ConferencesState> with ConferenceTimerMixin
     if (conferences == null) return emit(const ConferencesState.error('error'));
 
     _conferences = conferences;
-    print('getConferences... ${conferences.list.first.confId}');
 
     final Conference newestConference = conferences.list.first;
 

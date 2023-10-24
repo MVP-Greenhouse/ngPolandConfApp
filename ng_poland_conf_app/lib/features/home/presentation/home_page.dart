@@ -7,6 +7,8 @@ import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
+import '../../settings/presentation/connection.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -47,6 +49,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 orElse: () => const SizedBox.shrink(),
               ),
+              const ConnectionStatus(),
             ],
           ),
           body: Container(

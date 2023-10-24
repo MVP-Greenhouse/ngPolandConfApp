@@ -1,18 +1,19 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
+
+part 'settings.freezed.dart';
+part 'settings.g.dart';
 
 @freezed
-class Settings with _$Settings {
-  const Settings._();
+@HiveType(typeId: 0)
+class Settings extends HiveObject with _$Settings {
+  Settings._();
 
-  const factory Settings({
-    required bool isDarkMode,
-    required bool isNotificationEnable,
-    required bool isConnectionEnable,
+  factory Settings({
+    @HiveField(0) required bool isConnectionEnabled,
   }) = _Settings;
 
-  factory Settings.initial() => const Settings(
-        isDarkMode: true,
-        isNotificationEnable: false,
-        isConnectionEnable: false,
+  factory Settings.initial() => Settings(
+        isConnectionEnabled: false,
       );
 }
