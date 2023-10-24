@@ -16,11 +16,17 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$InfoItem {
+  @HiveField(0)
   String get title => throw _privateConstructorUsedError;
+  @HiveField(1)
   int get order => throw _privateConstructorUsedError;
+  @HiveField(2)
   String get icon => throw _privateConstructorUsedError;
+  @HiveField(3)
   String get description => throw _privateConstructorUsedError;
+  @HiveField(4)
   String get confId => throw _privateConstructorUsedError;
+  @HiveField(5)
   String get urlLink => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -34,12 +40,12 @@ abstract class $InfoItemCopyWith<$Res> {
       _$InfoItemCopyWithImpl<$Res, InfoItem>;
   @useResult
   $Res call(
-      {String title,
-      int order,
-      String icon,
-      String description,
-      String confId,
-      String urlLink});
+      {@HiveField(0) String title,
+      @HiveField(1) int order,
+      @HiveField(2) String icon,
+      @HiveField(3) String description,
+      @HiveField(4) String confId,
+      @HiveField(5) String urlLink});
 }
 
 /// @nodoc
@@ -99,12 +105,12 @@ abstract class _$$_InfoItemCopyWith<$Res> implements $InfoItemCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String title,
-      int order,
-      String icon,
-      String description,
-      String confId,
-      String urlLink});
+      {@HiveField(0) String title,
+      @HiveField(1) int order,
+      @HiveField(2) String icon,
+      @HiveField(3) String description,
+      @HiveField(4) String confId,
+      @HiveField(5) String urlLink});
 }
 
 /// @nodoc
@@ -158,24 +164,30 @@ class __$$_InfoItemCopyWithImpl<$Res>
 
 class _$_InfoItem implements _InfoItem {
   const _$_InfoItem(
-      {required this.title,
-      required this.order,
-      required this.icon,
-      required this.description,
-      required this.confId,
-      required this.urlLink});
+      {@HiveField(0) required this.title,
+      @HiveField(1) required this.order,
+      @HiveField(2) required this.icon,
+      @HiveField(3) required this.description,
+      @HiveField(4) required this.confId,
+      @HiveField(5) required this.urlLink});
 
   @override
+  @HiveField(0)
   final String title;
   @override
+  @HiveField(1)
   final int order;
   @override
+  @HiveField(2)
   final String icon;
   @override
+  @HiveField(3)
   final String description;
   @override
+  @HiveField(4)
   final String confId;
   @override
+  @HiveField(5)
   final String urlLink;
 
   @override
@@ -210,24 +222,30 @@ class _$_InfoItem implements _InfoItem {
 
 abstract class _InfoItem implements InfoItem {
   const factory _InfoItem(
-      {required final String title,
-      required final int order,
-      required final String icon,
-      required final String description,
-      required final String confId,
-      required final String urlLink}) = _$_InfoItem;
+      {@HiveField(0) required final String title,
+      @HiveField(1) required final int order,
+      @HiveField(2) required final String icon,
+      @HiveField(3) required final String description,
+      @HiveField(4) required final String confId,
+      @HiveField(5) required final String urlLink}) = _$_InfoItem;
 
   @override
+  @HiveField(0)
   String get title;
   @override
+  @HiveField(1)
   int get order;
   @override
+  @HiveField(2)
   String get icon;
   @override
+  @HiveField(3)
   String get description;
   @override
+  @HiveField(4)
   String get confId;
   @override
+  @HiveField(5)
   String get urlLink;
   @override
   @JsonKey(ignore: true)

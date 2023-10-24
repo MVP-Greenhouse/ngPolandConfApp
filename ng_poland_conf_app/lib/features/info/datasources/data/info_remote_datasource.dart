@@ -15,7 +15,7 @@ abstract class InfoRemoteDataSource {
   ) = _InfoRemoteDataSource;
 
   @GET('&content_type=${EventContentTypes.infoItem}&fields.confId={confId}&limit={limit}&order=fields.order')
-  Future<InfoItemsModel> getAllInfoItems({
+  Future<InfoItemsModel> queryInfoItems({
     @Path() required String confId,
     @Path() required int limit,
   });

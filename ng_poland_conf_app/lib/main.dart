@@ -4,6 +4,10 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
+import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
+import 'package:ng_poland_conf_app/features/home/domains/entities/conference_item.dart';
+import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
+import 'package:ng_poland_conf_app/features/info/domains/entities/info_item.dart';
 import 'package:ng_poland_conf_app/features/settings/domains/entities/settings.dart';
 import 'package:ng_poland_conf_app/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
@@ -16,6 +20,10 @@ void main() async {
   );
   await Hive.initFlutter();
   Hive.registerAdapter(SettingsAdapter());
+  Hive.registerAdapter(ConferenceItemAdapter());
+  Hive.registerAdapter(ConferenceAdapter());
+  Hive.registerAdapter(ConferencesAdapter());
+  Hive.registerAdapter(InfoItemAdapter());
 
   runApp(const MainApp());
 }
@@ -27,6 +35,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final conferencesCubit = getIt.get<ConferencesCubit>();
     conferencesCubit.getConferences();
+    conferencesCubit.queryConferences();
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(

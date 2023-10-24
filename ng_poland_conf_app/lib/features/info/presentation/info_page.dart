@@ -21,6 +21,7 @@ class _InfoPageState extends State<InfoPage> {
   void initState() {
     _infoCubit = getIt.get<InfoCubit>();
     _infoCubit.getListInfoItems();
+    _infoCubit.queryInfoItems();
     super.initState();
   }
 

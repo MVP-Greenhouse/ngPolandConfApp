@@ -16,10 +16,15 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Conference {
+  @HiveField(0)
   String get confId => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get confName => throw _privateConstructorUsedError;
+  @HiveField(2)
   String get description => throw _privateConstructorUsedError;
+  @HiveField(3)
   String? get conferencesStartDate => throw _privateConstructorUsedError;
+  @HiveField(4)
   List<ConferenceItem> get listItems => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -34,11 +39,11 @@ abstract class $ConferenceCopyWith<$Res> {
       _$ConferenceCopyWithImpl<$Res, Conference>;
   @useResult
   $Res call(
-      {String confId,
-      String confName,
-      String description,
-      String? conferencesStartDate,
-      List<ConferenceItem> listItems});
+      {@HiveField(0) String confId,
+      @HiveField(1) String confName,
+      @HiveField(2) String description,
+      @HiveField(3) String? conferencesStartDate,
+      @HiveField(4) List<ConferenceItem> listItems});
 }
 
 /// @nodoc
@@ -94,11 +99,11 @@ abstract class _$$_ConferenceCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String confId,
-      String confName,
-      String description,
-      String? conferencesStartDate,
-      List<ConferenceItem> listItems});
+      {@HiveField(0) String confId,
+      @HiveField(1) String confName,
+      @HiveField(2) String description,
+      @HiveField(3) String? conferencesStartDate,
+      @HiveField(4) List<ConferenceItem> listItems});
 }
 
 /// @nodoc
@@ -147,23 +152,28 @@ class __$$_ConferenceCopyWithImpl<$Res>
 
 class _$_Conference implements _Conference {
   const _$_Conference(
-      {required this.confId,
-      required this.confName,
-      required this.description,
-      this.conferencesStartDate,
-      required final List<ConferenceItem> listItems})
+      {@HiveField(0) required this.confId,
+      @HiveField(1) required this.confName,
+      @HiveField(2) required this.description,
+      @HiveField(3) this.conferencesStartDate,
+      @HiveField(4) required final List<ConferenceItem> listItems})
       : _listItems = listItems;
 
   @override
+  @HiveField(0)
   final String confId;
   @override
+  @HiveField(1)
   final String confName;
   @override
+  @HiveField(2)
   final String description;
   @override
+  @HiveField(3)
   final String? conferencesStartDate;
   final List<ConferenceItem> _listItems;
   @override
+  @HiveField(4)
   List<ConferenceItem> get listItems {
     if (_listItems is EqualUnmodifiableListView) return _listItems;
     // ignore: implicit_dynamic_type
@@ -204,21 +214,27 @@ class _$_Conference implements _Conference {
 
 abstract class _Conference implements Conference {
   const factory _Conference(
-      {required final String confId,
-      required final String confName,
-      required final String description,
-      final String? conferencesStartDate,
-      required final List<ConferenceItem> listItems}) = _$_Conference;
+          {@HiveField(0) required final String confId,
+          @HiveField(1) required final String confName,
+          @HiveField(2) required final String description,
+          @HiveField(3) final String? conferencesStartDate,
+          @HiveField(4) required final List<ConferenceItem> listItems}) =
+      _$_Conference;
 
   @override
+  @HiveField(0)
   String get confId;
   @override
+  @HiveField(1)
   String get confName;
   @override
+  @HiveField(2)
   String get description;
   @override
+  @HiveField(3)
   String? get conferencesStartDate;
   @override
+  @HiveField(4)
   List<ConferenceItem> get listItems;
   @override
   @JsonKey(ignore: true)

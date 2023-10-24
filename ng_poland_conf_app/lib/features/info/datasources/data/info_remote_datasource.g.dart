@@ -19,7 +19,7 @@ class _InfoRemoteDataSource implements InfoRemoteDataSource {
   String? baseUrl;
 
   @override
-  Future<InfoItemsModel> getAllInfoItems({
+  Future<InfoItemsModel> queryInfoItems({
     required confId,
     required limit,
   }) async {

@@ -16,7 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ConferenceItem {
+  @HiveField(0)
   String get name => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get desc => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,7 +32,7 @@ abstract class $ConferenceItemCopyWith<$Res> {
           ConferenceItem value, $Res Function(ConferenceItem) then) =
       _$ConferenceItemCopyWithImpl<$Res, ConferenceItem>;
   @useResult
-  $Res call({String name, String desc});
+  $Res call({@HiveField(0) String name, @HiveField(1) String desc});
 }
 
 /// @nodoc
@@ -70,7 +72,7 @@ abstract class _$$_ConferenceItemCopyWith<$Res>
       __$$_ConferenceItemCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String desc});
+  $Res call({@HiveField(0) String name, @HiveField(1) String desc});
 }
 
 /// @nodoc
@@ -103,11 +105,14 @@ class __$$_ConferenceItemCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_ConferenceItem implements _ConferenceItem {
-  const _$_ConferenceItem({required this.name, required this.desc});
+  const _$_ConferenceItem(
+      {@HiveField(0) required this.name, @HiveField(1) required this.desc});
 
   @override
+  @HiveField(0)
   final String name;
   @override
+  @HiveField(1)
   final String desc;
 
   @override
@@ -136,12 +141,14 @@ class _$_ConferenceItem implements _ConferenceItem {
 
 abstract class _ConferenceItem implements ConferenceItem {
   const factory _ConferenceItem(
-      {required final String name,
-      required final String desc}) = _$_ConferenceItem;
+      {@HiveField(0) required final String name,
+      @HiveField(1) required final String desc}) = _$_ConferenceItem;
 
   @override
+  @HiveField(0)
   String get name;
   @override
+  @HiveField(1)
   String get desc;
   @override
   @JsonKey(ignore: true)

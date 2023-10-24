@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Conferences {
+  @HiveField(0)
   List<Conference> get list => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +30,7 @@ abstract class $ConferencesCopyWith<$Res> {
           Conferences value, $Res Function(Conferences) then) =
       _$ConferencesCopyWithImpl<$Res, Conferences>;
   @useResult
-  $Res call({List<Conference> list});
+  $Res call({@HiveField(0) List<Conference> list});
 }
 
 /// @nodoc
@@ -64,7 +65,7 @@ abstract class _$$_ConferencesCopyWith<$Res>
       __$$_ConferencesCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<Conference> list});
+  $Res call({@HiveField(0) List<Conference> list});
 }
 
 /// @nodoc
@@ -92,10 +93,12 @@ class __$$_ConferencesCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Conferences implements _Conferences {
-  _$_Conferences({required final List<Conference> list}) : _list = list;
+  _$_Conferences({@HiveField(0) required final List<Conference> list})
+      : _list = list;
 
   final List<Conference> _list;
   @override
+  @HiveField(0)
   List<Conference> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
@@ -127,9 +130,11 @@ class _$_Conferences implements _Conferences {
 }
 
 abstract class _Conferences implements Conferences {
-  factory _Conferences({required final List<Conference> list}) = _$_Conferences;
+  factory _Conferences({@HiveField(0) required final List<Conference> list}) =
+      _$_Conferences;
 
   @override
+  @HiveField(0)
   List<Conference> get list;
   @override
   @JsonKey(ignore: true)

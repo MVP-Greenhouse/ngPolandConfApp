@@ -9,77 +9,85 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:dio/dio.dart' as _i16;
+import 'package:dio/dio.dart' as _i18;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import 'config/app_config.dart' as _i15;
-import 'config/raw_config.dart' as _i4;
-import 'config/register_module.dart' as _i48;
+import 'config/app_config.dart' as _i17;
+import 'config/raw_config.dart' as _i6;
+import 'config/register_module.dart' as _i54;
 import 'core/blocks/conferences/conferences_cubit.dart' as _i3;
-import 'core/blocks/themeMode/theme_mode_cubit.dart' as _i10;
+import 'core/blocks/themeMode/theme_mode_cubit.dart' as _i12;
+import 'features/home/datasources/data/conferences_local_datasource.dart'
+    as _i4;
 import 'features/home/datasources/data/conferences_remote_datasource.dart'
-    as _i34;
-import 'features/home/datasources/data/theme_mode_local_datasource.dart'
-    as _i11;
-import 'features/home/datasources/repositories/conferences_repository.dart'
-    as _i36;
-import 'features/home/datasources/repositories/theme_mode_repository.dart'
-    as _i13;
-import 'features/home/domains/repositories/conferences_repository.dart' as _i35;
-import 'features/home/domains/repositories/theme_mode_repository.dart' as _i12;
-import 'features/home/domains/usecases/get_all_conferences.dart' as _i37;
-import 'features/home/domains/usecases/get_theme_mode.dart' as _i18;
-import 'features/home/domains/usecases/update_theme_mode.dart' as _i14;
-import 'features/info/datasources/data/info_remote_datasource.dart' as _i19;
-import 'features/info/datasources/repositories/info_repository.dart' as _i21;
-import 'features/info/domains/repositories/info_repository.dart' as _i20;
-import 'features/info/domains/usecases/get_all_info_items_for_conference.dart'
-    as _i39;
-import 'features/info/presentation/cubit/info_cubit.dart' as _i43;
-import 'features/nggirls/datasources/data/ngGirls_remote_datasource.dart'
-    as _i22;
-import 'features/nggirls/datasources/repositories/ngGirls_repository.dart'
-    as _i24;
-import 'features/nggirls/domains/repositories/ngGirls_repository.dart' as _i23;
-import 'features/nggirls/domains/usecases/get_ngGirls_for_conference.dart'
-    as _i41;
-import 'features/nggirls/presentation/cubit/ngGirls_cubit.dart' as _i44;
-import 'features/schedule/datasources/data/schedule_remote_datasource.dart'
-    as _i25;
-import 'features/schedule/datasources/repositories/schedule_repository.dart'
-    as _i27;
-import 'features/schedule/domains/repositories/schedule_repository.dart'
-    as _i26;
-import 'features/schedule/domains/usecases/get_all_events_for_conference.dart'
     as _i38;
-import 'features/schedule/presentation/cubit/schedule_cubit.dart' as _i45;
-import 'features/settings/datasources/data/repositiories/settings_repository.dart'
-    as _i9;
-import 'features/settings/datasources/data/settings_local_datasource.dart'
-    as _i7;
-import 'features/settings/domains/repositories/settings_repository.dart' as _i8;
-import 'features/settings/domains/usecases/get_settings.dart' as _i17;
-import 'features/settings/presentation/cubit/settings_cubit.dart' as _i6;
-import 'features/speakers/datasources/data/speakers_remote_datasource.dart'
-    as _i28;
-import 'features/speakers/datasources/repositories/speakers_repository.dart'
-    as _i30;
-import 'features/speakers/domains/repositories/speakers_repository.dart'
-    as _i29;
-import 'features/speakers/domains/usecases/get_all_speakers_for_conference.dart'
+import 'features/home/datasources/data/theme_mode_local_datasource.dart'
+    as _i13;
+import 'features/home/datasources/repositories/conferences_repository.dart'
     as _i40;
-import 'features/speakers/presentation/cubit/speakers_cubit.dart' as _i46;
-import 'features/workshops/datasources/data/workshops_remote_datasource.dart'
+import 'features/home/datasources/repositories/theme_mode_repository.dart'
+    as _i15;
+import 'features/home/domains/repositories/conferences_repository.dart' as _i39;
+import 'features/home/domains/repositories/theme_mode_repository.dart' as _i14;
+import 'features/home/domains/usecases/get_all_conferences.dart' as _i41;
+import 'features/home/domains/usecases/get_theme_mode.dart' as _i20;
+import 'features/home/domains/usecases/query_conferences.dart' as _i49;
+import 'features/home/domains/usecases/save_conferences.dart' as _i50;
+import 'features/home/domains/usecases/update_theme_mode.dart' as _i16;
+import 'features/info/datasources/data/info_local_datasource.dart' as _i5;
+import 'features/info/datasources/data/info_remote_datasource.dart' as _i21;
+import 'features/info/datasources/repositories/info_repository.dart' as _i23;
+import 'features/info/domains/repositories/info_repository.dart' as _i22;
+import 'features/info/domains/usecases/get_all_info_items_for_conference.dart'
+    as _i43;
+import 'features/info/domains/usecases/query_info_items.dart' as _i27;
+import 'features/info/domains/usecases/save_info_items.dart' as _i28;
+import 'features/info/presentation/cubit/info_cubit.dart' as _i47;
+import 'features/nggirls/datasources/data/ngGirls_remote_datasource.dart'
+    as _i24;
+import 'features/nggirls/datasources/repositories/ngGirls_repository.dart'
+    as _i26;
+import 'features/nggirls/domains/repositories/ngGirls_repository.dart' as _i25;
+import 'features/nggirls/domains/usecases/get_ngGirls_for_conference.dart'
+    as _i45;
+import 'features/nggirls/presentation/cubit/ngGirls_cubit.dart' as _i48;
+import 'features/schedule/datasources/data/schedule_remote_datasource.dart'
+    as _i29;
+import 'features/schedule/datasources/repositories/schedule_repository.dart'
     as _i31;
-import 'features/workshops/datasources/repositories/workshops_repository.dart'
-    as _i33;
-import 'features/workshops/domains/repositories/workshops_repository.dart'
-    as _i32;
-import 'features/workshops/domains/usecases/get_workshops_for_conference.dart'
+import 'features/schedule/domains/repositories/schedule_repository.dart'
+    as _i30;
+import 'features/schedule/domains/usecases/get_all_events_for_conference.dart'
     as _i42;
-import 'features/workshops/presentation/cubit/workshop_cubit.dart' as _i47;
-import 'routing/routing.dart' as _i5;
+import 'features/schedule/presentation/cubit/schedule_cubit.dart' as _i51;
+import 'features/settings/datasources/data/repositiories/settings_repository.dart'
+    as _i11;
+import 'features/settings/datasources/data/settings_local_datasource.dart'
+    as _i9;
+import 'features/settings/domains/repositories/settings_repository.dart'
+    as _i10;
+import 'features/settings/domains/usecases/get_settings.dart' as _i19;
+import 'features/settings/presentation/cubit/settings_cubit.dart' as _i8;
+import 'features/speakers/datasources/data/speakers_remote_datasource.dart'
+    as _i32;
+import 'features/speakers/datasources/repositories/speakers_repository.dart'
+    as _i34;
+import 'features/speakers/domains/repositories/speakers_repository.dart'
+    as _i33;
+import 'features/speakers/domains/usecases/get_all_speakers_for_conference.dart'
+    as _i44;
+import 'features/speakers/presentation/cubit/speakers_cubit.dart' as _i52;
+import 'features/workshops/datasources/data/workshops_remote_datasource.dart'
+    as _i35;
+import 'features/workshops/datasources/repositories/workshops_repository.dart'
+    as _i37;
+import 'features/workshops/domains/repositories/workshops_repository.dart'
+    as _i36;
+import 'features/workshops/domains/usecases/get_workshops_for_conference.dart'
+    as _i46;
+import 'features/workshops/presentation/cubit/workshop_cubit.dart' as _i53;
+import 'routing/routing.dart' as _i7;
 
 extension GetItInjectableX on _i1.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -94,89 +102,105 @@ extension GetItInjectableX on _i1.GetIt {
     );
     final registerModule = _$RegisterModule();
     gh.singleton<_i3.ConferencesCubit>(_i3.ConferencesCubit());
-    await gh.singletonAsync<_i4.RawConfig>(
+    gh.singleton<_i4.ConferencesLocalDataSource>(
+        _i4.ConferencesLocalDataSourceImpl());
+    gh.singleton<_i5.InfoLocalDataSource>(_i5.InfoLocalDataSourceImpl());
+    await gh.singletonAsync<_i6.RawConfig>(
       () => registerModule.config(),
       preResolve: true,
     );
-    gh.singleton<_i5.Routing>(_i5.Routing());
-    gh.singleton<_i6.SettingsCubit>(_i6.SettingsCubit());
-    gh.singleton<_i7.SettingsLocalDataSource>(
-        _i7.SettingsLocalDataSourceImpl());
-    gh.singleton<_i8.SettingsRepository>(
-        _i9.SettingsImpl(gh<_i7.SettingsLocalDataSource>()));
-    gh.singleton<_i10.ThemeModeCubit>(_i10.ThemeModeCubit());
-    gh.singleton<_i11.ThemeModeLocalDataSource>(
-        _i11.ThemeModeLocalDataSourceImpl());
-    gh.singleton<_i12.ThemeModeRepository>(
-        _i13.ThemeModeImpl(gh<_i11.ThemeModeLocalDataSource>()));
-    gh.factory<_i14.UpdateThemeMode>(
-        () => _i14.UpdateThemeMode(gh<_i12.ThemeModeRepository>()));
-    gh.singleton<_i15.AppConfig>(_i15.AppConfig(gh<_i4.RawConfig>()));
-    gh.singleton<_i16.Dio>(registerModule.dio(gh<_i15.AppConfig>()));
-    gh.factory<_i17.GetSettings>(
-        () => _i17.GetSettings(gh<_i8.SettingsRepository>()));
-    gh.factory<_i18.GetThemeMode>(
-        () => _i18.GetThemeMode(gh<_i12.ThemeModeRepository>()));
-    gh.factory<_i19.InfoRemoteDataSource>(
-        () => _i19.InfoRemoteDataSource(gh<_i16.Dio>()));
-    gh.singleton<_i20.InfoRepository>(
-        _i21.InfoRepositoryImpl(gh<_i19.InfoRemoteDataSource>()));
-    gh.factory<_i22.NgGirlsRemoteDataSource>(
-        () => _i22.NgGirlsRemoteDataSource(gh<_i16.Dio>()));
-    gh.singleton<_i23.NgGirlsRepository>(
-        _i24.NgGirlsImpl(gh<_i22.NgGirlsRemoteDataSource>()));
-    gh.factory<_i25.ScheduleRemoteDataSource>(
-        () => _i25.ScheduleRemoteDataSource(gh<_i16.Dio>()));
-    gh.singleton<_i26.ScheduleRepository>(
-        _i27.ScheduleRepositoryImpl(gh<_i25.ScheduleRemoteDataSource>()));
-    gh.factory<_i28.SpeakersRemoteDataSource>(
-        () => _i28.SpeakersRemoteDataSource(gh<_i16.Dio>()));
-    gh.singleton<_i29.SpeakersRepository>(
-        _i30.SpeakersRepositoryImpl(gh<_i28.SpeakersRemoteDataSource>()));
-    gh.factory<_i31.WorkshopsRemoteDataSource>(
-        () => _i31.WorkshopsRemoteDataSource(gh<_i16.Dio>()));
-    gh.singleton<_i32.WorkshopsRepository>(
-        _i33.WorkshopsRepositoryImpl(gh<_i31.WorkshopsRemoteDataSource>()));
-    gh.factory<_i34.ConferencesRemoteDataSource>(
-        () => _i34.ConferencesRemoteDataSource(gh<_i16.Dio>()));
-    gh.singleton<_i35.ConferencesRepository>(
-        _i36.ConferencesRepositoryImpl(gh<_i34.ConferencesRemoteDataSource>()));
-    gh.factory<_i37.GetAllConferences>(
-        () => _i37.GetAllConferences(gh<_i35.ConferencesRepository>()));
-    gh.factory<_i38.GetAllEventsForConference>(
-        () => _i38.GetAllEventsForConference(gh<_i26.ScheduleRepository>()));
-    gh.factory<_i39.GetAllInfoItemsForConference>(
-        () => _i39.GetAllInfoItemsForConference(gh<_i20.InfoRepository>()));
-    gh.factory<_i40.GetAllSpeakersForConference>(
-        () => _i40.GetAllSpeakersForConference(gh<_i29.SpeakersRepository>()));
-    gh.factory<_i41.GetNgGirlsForConference>(
-        () => _i41.GetNgGirlsForConference(gh<_i23.NgGirlsRepository>()));
-    gh.factory<_i42.GetWorkshopsForConference>(
-        () => _i42.GetWorkshopsForConference(gh<_i32.WorkshopsRepository>()));
-    gh.factory<_i43.InfoCubit>(() => _i43.InfoCubit(
+    gh.singleton<_i7.Routing>(_i7.Routing());
+    gh.singleton<_i8.SettingsCubit>(_i8.SettingsCubit());
+    gh.singleton<_i9.SettingsLocalDataSource>(
+        _i9.SettingsLocalDataSourceImpl());
+    gh.singleton<_i10.SettingsRepository>(
+        _i11.SettingsImpl(gh<_i9.SettingsLocalDataSource>()));
+    gh.singleton<_i12.ThemeModeCubit>(_i12.ThemeModeCubit());
+    gh.singleton<_i13.ThemeModeLocalDataSource>(
+        _i13.ThemeModeLocalDataSourceImpl());
+    gh.singleton<_i14.ThemeModeRepository>(
+        _i15.ThemeModeImpl(gh<_i13.ThemeModeLocalDataSource>()));
+    gh.factory<_i16.UpdateThemeMode>(
+        () => _i16.UpdateThemeMode(gh<_i14.ThemeModeRepository>()));
+    gh.singleton<_i17.AppConfig>(_i17.AppConfig(gh<_i6.RawConfig>()));
+    gh.singleton<_i18.Dio>(registerModule.dio(gh<_i17.AppConfig>()));
+    gh.factory<_i19.GetSettings>(
+        () => _i19.GetSettings(gh<_i10.SettingsRepository>()));
+    gh.factory<_i20.GetThemeMode>(
+        () => _i20.GetThemeMode(gh<_i14.ThemeModeRepository>()));
+    gh.factory<_i21.InfoRemoteDataSource>(
+        () => _i21.InfoRemoteDataSource(gh<_i18.Dio>()));
+    gh.singleton<_i22.InfoRepository>(_i23.InfoRepositoryImpl(
+      gh<_i21.InfoRemoteDataSource>(),
+      gh<_i5.InfoLocalDataSource>(),
+    ));
+    gh.factory<_i24.NgGirlsRemoteDataSource>(
+        () => _i24.NgGirlsRemoteDataSource(gh<_i18.Dio>()));
+    gh.singleton<_i25.NgGirlsRepository>(
+        _i26.NgGirlsImpl(gh<_i24.NgGirlsRemoteDataSource>()));
+    gh.factory<_i27.QueryInfoItems>(
+        () => _i27.QueryInfoItems(gh<_i22.InfoRepository>()));
+    gh.factory<_i28.SaveInfoItems>(
+        () => _i28.SaveInfoItems(gh<_i22.InfoRepository>()));
+    gh.factory<_i29.ScheduleRemoteDataSource>(
+        () => _i29.ScheduleRemoteDataSource(gh<_i18.Dio>()));
+    gh.singleton<_i30.ScheduleRepository>(
+        _i31.ScheduleRepositoryImpl(gh<_i29.ScheduleRemoteDataSource>()));
+    gh.factory<_i32.SpeakersRemoteDataSource>(
+        () => _i32.SpeakersRemoteDataSource(gh<_i18.Dio>()));
+    gh.singleton<_i33.SpeakersRepository>(
+        _i34.SpeakersRepositoryImpl(gh<_i32.SpeakersRemoteDataSource>()));
+    gh.factory<_i35.WorkshopsRemoteDataSource>(
+        () => _i35.WorkshopsRemoteDataSource(gh<_i18.Dio>()));
+    gh.singleton<_i36.WorkshopsRepository>(
+        _i37.WorkshopsRepositoryImpl(gh<_i35.WorkshopsRemoteDataSource>()));
+    gh.factory<_i38.ConferencesRemoteDataSource>(
+        () => _i38.ConferencesRemoteDataSource(gh<_i18.Dio>()));
+    gh.singleton<_i39.ConferencesRepository>(_i40.ConferencesRepositoryImpl(
+      gh<_i38.ConferencesRemoteDataSource>(),
+      gh<_i4.ConferencesLocalDataSource>(),
+    ));
+    gh.factory<_i41.GetAllConferences>(
+        () => _i41.GetAllConferences(gh<_i39.ConferencesRepository>()));
+    gh.factory<_i42.GetAllEventsForConference>(
+        () => _i42.GetAllEventsForConference(gh<_i30.ScheduleRepository>()));
+    gh.factory<_i43.GetAllInfoItemsForConference>(
+        () => _i43.GetAllInfoItemsForConference(gh<_i22.InfoRepository>()));
+    gh.factory<_i44.GetAllSpeakersForConference>(
+        () => _i44.GetAllSpeakersForConference(gh<_i33.SpeakersRepository>()));
+    gh.factory<_i45.GetNgGirlsForConference>(
+        () => _i45.GetNgGirlsForConference(gh<_i25.NgGirlsRepository>()));
+    gh.factory<_i46.GetWorkshopsForConference>(
+        () => _i46.GetWorkshopsForConference(gh<_i36.WorkshopsRepository>()));
+    gh.factory<_i47.InfoCubit>(() => _i47.InfoCubit(
+          gh<_i27.QueryInfoItems>(),
           conferencesCubit: gh<_i3.ConferencesCubit>(),
           getAllSpeakerGetAllInfoItemsForConference:
-              gh<_i39.GetAllInfoItemsForConference>(),
+              gh<_i43.GetAllInfoItemsForConference>(),
         ));
-    gh.factory<_i44.NgGirlsCubit>(() => _i44.NgGirlsCubit(
+    gh.factory<_i48.NgGirlsCubit>(() => _i48.NgGirlsCubit(
           conferencesCubit: gh<_i3.ConferencesCubit>(),
-          getNgGirlsForConference: gh<_i41.GetNgGirlsForConference>(),
+          getNgGirlsForConference: gh<_i45.GetNgGirlsForConference>(),
         ));
-    gh.factory<_i45.ScheduleCubit>(() => _i45.ScheduleCubit(
+    gh.factory<_i49.QueryConferences>(
+        () => _i49.QueryConferences(gh<_i39.ConferencesRepository>()));
+    gh.factory<_i50.SaveConferences>(
+        () => _i50.SaveConferences(gh<_i39.ConferencesRepository>()));
+    gh.factory<_i51.ScheduleCubit>(() => _i51.ScheduleCubit(
           conferencesCubit: gh<_i3.ConferencesCubit>(),
-          getAllEventsForConference: gh<_i38.GetAllEventsForConference>(),
+          getAllEventsForConference: gh<_i42.GetAllEventsForConference>(),
         ));
-    gh.factory<_i46.SpeakersCubit>(() => _i46.SpeakersCubit(
+    gh.factory<_i52.SpeakersCubit>(() => _i52.SpeakersCubit(
           conferencesCubit: gh<_i3.ConferencesCubit>(),
           getAllSpeakerGetAllSpeakersForConference:
-              gh<_i40.GetAllSpeakersForConference>(),
+              gh<_i44.GetAllSpeakersForConference>(),
         ));
-    gh.factory<_i47.WorkshopCubit>(() => _i47.WorkshopCubit(
+    gh.factory<_i53.WorkshopCubit>(() => _i53.WorkshopCubit(
           conferencesCubit: gh<_i3.ConferencesCubit>(),
-          getWorkshopsForConference: gh<_i42.GetWorkshopsForConference>(),
+          getWorkshopsForConference: gh<_i46.GetWorkshopsForConference>(),
         ));
     return this;
   }
 }
 
-class _$RegisterModule extends _i48.RegisterModule {}
+class _$RegisterModule extends _i54.RegisterModule {}

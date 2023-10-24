@@ -4,23 +4,13 @@ import 'package:ng_poland_conf_app/features/info/domains/entities/info_item.dart
 import 'package:ng_poland_conf_app/features/info/domains/repositories/info_repository.dart';
 
 @injectable
-class GetAllInfoItemsForConference implements UseCase<List<InfoItem>?, Params> {
+class GetAllInfoItemsForConference implements UseCase<List<InfoItem>?, NoParams> {
   final InfoRepository infoRepository;
 
   GetAllInfoItemsForConference(this.infoRepository);
 
   @override
-  Future<List<InfoItem>> call(Params params) {
-    return infoRepository.getAllInfoItems(params);
+  Future<List<InfoItem>> call([NoParams? params]) {
+    return infoRepository.getAllInfoItems();
   }
-}
-
-class Params {
-  final String confId;
-  final int limit;
-
-  Params({
-    required this.confId,
-    required this.limit,
-  });
 }

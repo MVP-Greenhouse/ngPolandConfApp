@@ -5,9 +5,12 @@ import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
 import 'package:ng_poland_conf_app/features/home/domains/usecases/get_all_conferences.dart';
+import 'package:ng_poland_conf_app/features/home/domains/usecases/query_conferences.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/conference_timer_mixin.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:collection/collection.dart';
+
+import '../../../features/home/domains/usecases/save_conferences.dart';
 
 part 'conferences_state.dart';
 part 'conferences_cubit.freezed.dart';
@@ -52,12 +55,23 @@ class ConferencesCubit extends Cubit<ConferencesState> with ConferenceTimerMixin
       _setConference(newestConference);
     }
 
+    // await getIt.get<SaveConferences>().call(Params(confs: conferences));
+
     emit(
       ConferencesState.loaded(
         conferences: conferences,
         selectedConference: selectedConference ?? newestConference,
       ),
     );
+  }
+
+  Future<void> queryConferences() async {
+    final Conferences? conferences = await getIt.get<QueryConferences>().call(
+          NoParams(),
+        );
+    if (conferences != null) {
+      await getIt.get<SaveConferences>().call(Params(confs: conferences));
+    }
   }
 
   void _setConference(Conference selectedConference) {
