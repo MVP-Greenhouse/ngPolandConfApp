@@ -45,7 +45,10 @@ class ConferencesCubit extends Cubit<ConferencesState> with ConferenceTimerMixin
           NoParams(),
         );
 
-    if (conferences == null) return emit(const ConferencesState.error('error'));
+    if (conferences == null || conferences.list.isEmpty) {
+      emit(const ConferencesState.error('Error while loading conferences'));
+      return;
+    }
 
     _conferences = conferences;
 
@@ -71,6 +74,7 @@ class ConferencesCubit extends Cubit<ConferencesState> with ConferenceTimerMixin
         );
     if (conferences != null) {
       await getIt.get<SaveConferences>().call(Params(confs: conferences));
+      await getConferences();
     }
   }
 

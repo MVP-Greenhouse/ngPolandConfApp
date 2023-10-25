@@ -16,13 +16,13 @@ part 'info_cubit.freezed.dart';
 @injectable
 class InfoCubit extends Cubit<InfoState> {
   final ConferencesCubit conferencesCubit;
-  final GetAllInfoItemsForConference getAllSpeakerGetAllInfoItemsForConference;
+  final GetAllInfoItemsForConference getAllInfoItems;
   final QueryInfoItems queryAllInfoItems;
 
   InfoCubit(
     this.queryAllInfoItems, {
     required this.conferencesCubit,
-    required this.getAllSpeakerGetAllInfoItemsForConference,
+    required this.getAllInfoItems,
   }) : super(const InfoState.initial());
 
   Future<void> getListInfoItems() async {
@@ -30,20 +30,22 @@ class InfoCubit extends Cubit<InfoState> {
     Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) {
-      await conferencesCubit.getConferences();
+      await conferencesCubit.queryConferences();
       conference = conferencesCubit.selectedConference;
+      return;
     }
 
-    List<InfoItem> listInfoItems = await getAllSpeakerGetAllInfoItemsForConference.call();
+    List<InfoItem> listInfoItems = await getAllInfoItems.call();
 
     emit(InfoState.loaded(listInfoItems: listInfoItems));
   }
 
   Future<void> queryInfoItems() async {
+    emit(const InfoState.loading());
     Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) {
-      await conferencesCubit.getConferences();
+      await conferencesCubit.queryConferences();
       conference = conferencesCubit.selectedConference;
     }
 
@@ -56,8 +58,7 @@ class InfoCubit extends Cubit<InfoState> {
 
     if (listInfoItems.isNotEmpty) {
       await getIt.get<SaveInfoItems>().call(SaveInfoItemsParams(infoItems: listInfoItems));
+      await getListInfoItems();
     }
-
-    // save
   }
 }

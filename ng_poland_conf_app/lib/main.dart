@@ -8,6 +8,7 @@ import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dar
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference_item.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
 import 'package:ng_poland_conf_app/features/info/domains/entities/info_item.dart';
+import 'package:ng_poland_conf_app/features/nggirls/domains/entities/ngGirls.dart';
 import 'package:ng_poland_conf_app/features/settings/domains/entities/settings.dart';
 import 'package:ng_poland_conf_app/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
@@ -24,6 +25,7 @@ void main() async {
   Hive.registerAdapter(ConferenceAdapter());
   Hive.registerAdapter(ConferencesAdapter());
   Hive.registerAdapter(InfoItemAdapter());
+  Hive.registerAdapter(NgGirlsAdapter());
 
   runApp(const MainApp());
 }

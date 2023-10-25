@@ -20,6 +20,7 @@ class _NgGirlsPageState extends State<NgGirlsPage> {
   void initState() {
     _ngGirlsCubit = getIt.get<NgGirlsCubit>();
     _ngGirlsCubit.getNgGirls();
+    _ngGirlsCubit.query();
 
     super.initState();
   }

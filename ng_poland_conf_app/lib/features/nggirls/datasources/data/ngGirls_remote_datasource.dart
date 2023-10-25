@@ -17,7 +17,7 @@ abstract class NgGirlsRemoteDataSource {
   @GET(
     '&content_type=${EventContentTypes.simpleContent}&fields.myId={ngGirlsWorkshopsId}&fields.confId={confId}',
   )
-  Future<NgGirlsModel> getNgGirls({
+  Future<NgGirlsModel> queryNgGirls({
     @Path() required String ngGirlsWorkshopsId,
     @Path() required String confId,
   });

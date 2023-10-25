@@ -16,8 +16,11 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$NgGirls {
+  @HiveField(0)
   String get myId => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get title => throw _privateConstructorUsedError;
+  @HiveField(2)
   String get text => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +32,10 @@ abstract class $NgGirlsCopyWith<$Res> {
   factory $NgGirlsCopyWith(NgGirls value, $Res Function(NgGirls) then) =
       _$NgGirlsCopyWithImpl<$Res, NgGirls>;
   @useResult
-  $Res call({String myId, String title, String text});
+  $Res call(
+      {@HiveField(0) String myId,
+      @HiveField(1) String title,
+      @HiveField(2) String text});
 }
 
 /// @nodoc
@@ -73,7 +79,10 @@ abstract class _$$_NgGirlsCopyWith<$Res> implements $NgGirlsCopyWith<$Res> {
       __$$_NgGirlsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String myId, String title, String text});
+  $Res call(
+      {@HiveField(0) String myId,
+      @HiveField(1) String title,
+      @HiveField(2) String text});
 }
 
 /// @nodoc
@@ -109,16 +118,20 @@ class __$$_NgGirlsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_NgGirls extends _NgGirls {
+class _$_NgGirls implements _NgGirls {
   const _$_NgGirls(
-      {required this.myId, required this.title, required this.text})
-      : super._();
+      {@HiveField(0) required this.myId,
+      @HiveField(1) required this.title,
+      @HiveField(2) required this.text});
 
   @override
+  @HiveField(0)
   final String myId;
   @override
+  @HiveField(1)
   final String title;
   @override
+  @HiveField(2)
   final String text;
 
   @override
@@ -146,18 +159,20 @@ class _$_NgGirls extends _NgGirls {
       __$$_NgGirlsCopyWithImpl<_$_NgGirls>(this, _$identity);
 }
 
-abstract class _NgGirls extends NgGirls {
+abstract class _NgGirls implements NgGirls {
   const factory _NgGirls(
-      {required final String myId,
-      required final String title,
-      required final String text}) = _$_NgGirls;
-  const _NgGirls._() : super._();
+      {@HiveField(0) required final String myId,
+      @HiveField(1) required final String title,
+      @HiveField(2) required final String text}) = _$_NgGirls;
 
   @override
+  @HiveField(0)
   String get myId;
   @override
+  @HiveField(1)
   String get title;
   @override
+  @HiveField(2)
   String get text;
   @override
   @JsonKey(ignore: true)

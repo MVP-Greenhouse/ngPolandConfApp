@@ -19,7 +19,7 @@ class _NgGirlsRemoteDataSource implements NgGirlsRemoteDataSource {
   String? baseUrl;
 
   @override
-  Future<NgGirlsModel> getNgGirls({
+  Future<NgGirlsModel> queryNgGirls({
     required ngGirlsWorkshopsId,
     required confId,
   }) async {
