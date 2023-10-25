@@ -4,6 +4,17 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
+import 'package:ng_poland_conf_app/features/home/datasources/models/conference_home_page_schedule_item_model.dart';
+import 'package:ng_poland_conf_app/features/home/datasources/models/conference_model.dart';
+import 'package:ng_poland_conf_app/features/home/datasources/models/conferences_model.dart';
+import 'package:ng_poland_conf_app/features/info/datasources/models/info_item_model.dart';
+import 'package:ng_poland_conf_app/features/info/datasources/models/info_items_model.dart';
+import 'package:ng_poland_conf_app/features/nggirls/datasources/models/ngGirls_model.dart';
+import 'package:ng_poland_conf_app/features/schedule/datasources/models/event_item_model.dart';
+import 'package:ng_poland_conf_app/features/schedule/datasources/models/events_model.dart';
+import 'package:ng_poland_conf_app/features/speakers/datasources/models/speaker_model.dart';
+import 'package:ng_poland_conf_app/features/workshops/datasources/models/workshop_model.dart';
+import 'package:ng_poland_conf_app/features/workshops/datasources/models/workshops_model.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/theme.dart';
@@ -13,6 +24,19 @@ void main() async {
     Environment.prod,
   );
   await Hive.initFlutter();
+
+  Hive
+    ..registerAdapter(ConferencesModelAdapter()) // typeId: 0
+    ..registerAdapter(ConferenceModelAdapter()) // typeId: 1
+    ..registerAdapter(ConferenceHomePageScheduleItemModelAdapter()) // typeId: 2
+    ..registerAdapter(InfoItemsModelAdapter()) // typeId: 3
+    ..registerAdapter(InfoItemModelAdapter()) // typeId: 4
+    ..registerAdapter(NgGirlsModelAdapter()) // typeId: 5
+    ..registerAdapter(EventsModelAdapter()) // typeId: 6
+    ..registerAdapter(EventItemModelAdapter()) // typeId: 7
+    ..registerAdapter(SpeakerModelAdapter()) // typeId: 8
+    ..registerAdapter(WorkshopModelAdapter()) // typeId: 9
+    ..registerAdapter(WorkshopsModelAdapter()); // typeId: 10
 
   runApp(const MainApp());
 }
@@ -42,10 +66,11 @@ class MainApp extends StatelessWidget {
               theme: ThemeData(
                   useMaterial3: true,
                   colorScheme: lightColorScheme,
-                  appBarTheme: const AppBarTheme(backgroundColor: Color(0xff4f00d0), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
+                  appBarTheme:
+                      const AppBarTheme(backgroundColor: Color(0xff4f00d0), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
                   applyElevationOverlayColor: false,
-                  bottomNavigationBarTheme:
-                      const BottomNavigationBarThemeData(backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
+                  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                      backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
                   buttonTheme: const ButtonThemeData(
                     alignedDropdown: false,
                     colorScheme: lightButtonColorScheme,
@@ -69,10 +94,11 @@ class MainApp extends StatelessWidget {
               darkTheme: ThemeData(
                   useMaterial3: true,
                   colorScheme: darkColorScheme,
-                  appBarTheme: const AppBarTheme(backgroundColor: Color(0xffE91E63), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
+                  appBarTheme:
+                      const AppBarTheme(backgroundColor: Color(0xffE91E63), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
                   applyElevationOverlayColor: false,
-                  bottomNavigationBarTheme:
-                      const BottomNavigationBarThemeData(backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
+                  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                      backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
                   buttonTheme: const ButtonThemeData(
                     alignedDropdown: false,
                     colorScheme: darkButtonColorScheme,

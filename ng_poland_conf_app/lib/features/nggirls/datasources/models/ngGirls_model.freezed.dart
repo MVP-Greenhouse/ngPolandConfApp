@@ -20,9 +20,13 @@ NgGirlsModel _$NgGirlsModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$NgGirlsModel {
+  @HiveField(0)
   String get myId => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get title => throw _privateConstructorUsedError;
+  @HiveField(2)
   String get text => throw _privateConstructorUsedError;
+  @HiveField(3)
   String get confId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,7 +41,11 @@ abstract class $NgGirlsModelCopyWith<$Res> {
           NgGirlsModel value, $Res Function(NgGirlsModel) then) =
       _$NgGirlsModelCopyWithImpl<$Res, NgGirlsModel>;
   @useResult
-  $Res call({String myId, String title, String text, String confId});
+  $Res call(
+      {@HiveField(0) String myId,
+      @HiveField(1) String title,
+      @HiveField(2) String text,
+      @HiveField(3) String confId});
 }
 
 /// @nodoc
@@ -87,7 +95,11 @@ abstract class _$$_NgGirlsModelCopyWith<$Res>
       __$$_NgGirlsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String myId, String title, String text, String confId});
+  $Res call(
+      {@HiveField(0) String myId,
+      @HiveField(1) String title,
+      @HiveField(2) String text,
+      @HiveField(3) String confId});
 }
 
 /// @nodoc
@@ -131,22 +143,26 @@ class __$$_NgGirlsModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_NgGirlsModel extends _NgGirlsModel {
   const _$_NgGirlsModel(
-      {required this.myId,
-      required this.title,
-      required this.text,
-      required this.confId})
+      {@HiveField(0) required this.myId,
+      @HiveField(1) required this.title,
+      @HiveField(2) required this.text,
+      @HiveField(3) required this.confId})
       : super._();
 
   factory _$_NgGirlsModel.fromJson(Map<String, dynamic> json) =>
       _$$_NgGirlsModelFromJson(json);
 
   @override
+  @HiveField(0)
   final String myId;
   @override
+  @HiveField(1)
   final String title;
   @override
+  @HiveField(2)
   final String text;
   @override
+  @HiveField(3)
   final String confId;
 
   @override
@@ -185,22 +201,26 @@ class _$_NgGirlsModel extends _NgGirlsModel {
 
 abstract class _NgGirlsModel extends NgGirlsModel {
   const factory _NgGirlsModel(
-      {required final String myId,
-      required final String title,
-      required final String text,
-      required final String confId}) = _$_NgGirlsModel;
+      {@HiveField(0) required final String myId,
+      @HiveField(1) required final String title,
+      @HiveField(2) required final String text,
+      @HiveField(3) required final String confId}) = _$_NgGirlsModel;
   const _NgGirlsModel._() : super._();
 
   factory _NgGirlsModel.fromJson(Map<String, dynamic> json) =
       _$_NgGirlsModel.fromJson;
 
   @override
+  @HiveField(0)
   String get myId;
   @override
+  @HiveField(1)
   String get title;
   @override
+  @HiveField(2)
   String get text;
   @override
+  @HiveField(3)
   String get confId;
   @override
   @JsonKey(ignore: true)

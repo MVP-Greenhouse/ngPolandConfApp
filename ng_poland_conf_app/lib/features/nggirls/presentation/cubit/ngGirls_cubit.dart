@@ -28,12 +28,17 @@ class NgGirlsCubit extends Cubit<NgGirlsState> {
       conference = conferencesCubit.selectedConference;
     }
 
-    NgGirls ngGirls = await getNgGirlsForConference.call(
-      Params(
-        confId: conference!.confId,
-      ),
-    );
+    try {
+      NgGirls? ngGirls = await getNgGirlsForConference.call(
+        Params(
+          confId: conference!.confId,
+        ),
+      );
+      if (ngGirls == null) return emit(const NgGirlsState.error('Brak danych'));
 
-    emit(NgGirlsState.loaded(ngGirls: ngGirls));
+      emit(NgGirlsState.loaded(ngGirls: ngGirls));
+    } catch (err) {
+      emit(const NgGirlsState.error('Wystąpił nieznany błąd.'));
+    }
   }
 }

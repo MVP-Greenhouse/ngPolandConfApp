@@ -1,24 +1,27 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/speakers/datasources/models/speaker_model.dart';
 
 part 'event_item_model.freezed.dart';
+part 'event_item_model.g.dart';
 
 @freezed
+@HiveType(typeId: 7)
 class EventItemModel with _$EventItemModel {
   const EventItemModel._();
 
   const factory EventItemModel({
-    required String id,
-    required String? title,
-    required String? confId,
-    required String? type,
-    required String? category,
-    required String? shortDescription,
-    required String? description,
-    required String? startDate,
-    required String? endDate,
-    required SpeakerModel? speaker,
+    @HiveField(0) required String id,
+    @HiveField(1) required String? title,
+    @HiveField(2) required String? confId,
+    @HiveField(3) required String? type,
+    @HiveField(4) required String? category,
+    @HiveField(5) required String? shortDescription,
+    @HiveField(6) required String? description,
+    @HiveField(7) required String? startDate,
+    @HiveField(8) required String? endDate,
+    @HiveField(9) required SpeakerModel? speaker,
   }) = _EventItemModel;
 
   factory EventItemModel.fromJson(Map<String, dynamic> json) {

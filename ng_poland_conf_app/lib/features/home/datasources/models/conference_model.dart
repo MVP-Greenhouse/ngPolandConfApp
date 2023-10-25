@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conference_home_page_schedule_item_model.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 
@@ -7,19 +8,21 @@ part 'conference_model.freezed.dart';
 part 'conference_model.g.dart';
 
 @freezed
+@HiveType(typeId: 1)
 class ConferenceModel with _$ConferenceModel {
   const ConferenceModel._();
 
   const factory ConferenceModel({
-    required String confId,
-    required String confName,
-    required String description,
-    String? conferencesStartDate,
+    @HiveField(0) required String confId,
+    @HiveField(1) required String confName,
+    @HiveField(2) required String description,
+    @HiveField(3) String? conferencesStartDate,
     @JsonKey(
       name: 'conferenceHomePageSchedule',
       fromJson: _listItemsFromJson,
     )
-        List<ConferenceHomePageScheduleItemModel>? listItems,
+    @HiveField(4)
+    List<ConferenceHomePageScheduleItemModel>? listItems,
   }) = _ConferenceModel;
 
   factory ConferenceModel.fromJson(Map<String, dynamic> json) => _$ConferenceModelFromJson(json['fields']);

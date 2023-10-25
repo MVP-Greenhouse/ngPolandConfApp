@@ -20,6 +20,7 @@ InfoItemsModel _$InfoItemsModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$InfoItemsModel {
+  @HiveField(0)
   List<InfoItemModel>? get items => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +35,7 @@ abstract class $InfoItemsModelCopyWith<$Res> {
           InfoItemsModel value, $Res Function(InfoItemsModel) then) =
       _$InfoItemsModelCopyWithImpl<$Res, InfoItemsModel>;
   @useResult
-  $Res call({List<InfoItemModel>? items});
+  $Res call({@HiveField(0) List<InfoItemModel>? items});
 }
 
 /// @nodoc
@@ -69,7 +70,7 @@ abstract class _$$_InfoItemsModelCopyWith<$Res>
       __$$_InfoItemsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<InfoItemModel>? items});
+  $Res call({@HiveField(0) List<InfoItemModel>? items});
 }
 
 /// @nodoc
@@ -97,7 +98,8 @@ class __$$_InfoItemsModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_InfoItemsModel extends _InfoItemsModel {
-  const _$_InfoItemsModel({required final List<InfoItemModel>? items})
+  const _$_InfoItemsModel(
+      {@HiveField(0) required final List<InfoItemModel>? items})
       : _items = items,
         super._();
 
@@ -106,6 +108,7 @@ class _$_InfoItemsModel extends _InfoItemsModel {
 
   final List<InfoItemModel>? _items;
   @override
+  @HiveField(0)
   List<InfoItemModel>? get items {
     final value = _items;
     if (value == null) return null;
@@ -147,7 +150,8 @@ class _$_InfoItemsModel extends _InfoItemsModel {
 }
 
 abstract class _InfoItemsModel extends InfoItemsModel {
-  const factory _InfoItemsModel({required final List<InfoItemModel>? items}) =
+  const factory _InfoItemsModel(
+          {@HiveField(0) required final List<InfoItemModel>? items}) =
       _$_InfoItemsModel;
   const _InfoItemsModel._() : super._();
 
@@ -155,6 +159,7 @@ abstract class _InfoItemsModel extends InfoItemsModel {
       _$_InfoItemsModel.fromJson;
 
   @override
+  @HiveField(0)
   List<InfoItemModel>? get items;
   @override
   @JsonKey(ignore: true)

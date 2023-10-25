@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$WorkshopsModel {
+  @HiveField(0)
   List<WorkshopModel>? get items => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +30,7 @@ abstract class $WorkshopsModelCopyWith<$Res> {
           WorkshopsModel value, $Res Function(WorkshopsModel) then) =
       _$WorkshopsModelCopyWithImpl<$Res, WorkshopsModel>;
   @useResult
-  $Res call({List<WorkshopModel>? items});
+  $Res call({@HiveField(0) List<WorkshopModel>? items});
 }
 
 /// @nodoc
@@ -64,7 +65,7 @@ abstract class _$$_WorkshopsModelCopyWith<$Res>
       __$$_WorkshopsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<WorkshopModel>? items});
+  $Res call({@HiveField(0) List<WorkshopModel>? items});
 }
 
 /// @nodoc
@@ -92,12 +93,14 @@ class __$$_WorkshopsModelCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_WorkshopsModel extends _WorkshopsModel {
-  const _$_WorkshopsModel({required final List<WorkshopModel>? items})
+  const _$_WorkshopsModel(
+      {@HiveField(0) required final List<WorkshopModel>? items})
       : _items = items,
         super._();
 
   final List<WorkshopModel>? _items;
   @override
+  @HiveField(0)
   List<WorkshopModel>? get items {
     final value = _items;
     if (value == null) return null;
@@ -131,11 +134,13 @@ class _$_WorkshopsModel extends _WorkshopsModel {
 }
 
 abstract class _WorkshopsModel extends WorkshopsModel {
-  const factory _WorkshopsModel({required final List<WorkshopModel>? items}) =
+  const factory _WorkshopsModel(
+          {@HiveField(0) required final List<WorkshopModel>? items}) =
       _$_WorkshopsModel;
   const _WorkshopsModel._() : super._();
 
   @override
+  @HiveField(0)
   List<WorkshopModel>? get items;
   @override
   @JsonKey(ignore: true)

@@ -9,11 +9,17 @@ class ThemeModeImpl implements ThemeModeRepository {
 
   ThemeModeImpl(this.themeModeLocalDataSource);
 
+  static const ThemeMode defaultThemeMode = ThemeMode.system;
+
   @override
   Future<ThemeMode> getThemeMode() async {
-    ThemeMode themeMode = await themeModeLocalDataSource.getThemeMode();
+    ThemeMode? themeMode = await themeModeLocalDataSource.getThemeMode();
 
-    return themeMode;
+    if (themeMode == null) {
+      await themeModeLocalDataSource.updateThemeMode(themeMode ?? defaultThemeMode);
+    }
+
+    return themeMode ?? defaultThemeMode;
   }
 
   @override

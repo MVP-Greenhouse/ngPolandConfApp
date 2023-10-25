@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$EventsModel {
+  @HiveField(0)
   List<EventItemModel>? get items => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +30,7 @@ abstract class $EventsModelCopyWith<$Res> {
           EventsModel value, $Res Function(EventsModel) then) =
       _$EventsModelCopyWithImpl<$Res, EventsModel>;
   @useResult
-  $Res call({List<EventItemModel>? items});
+  $Res call({@HiveField(0) List<EventItemModel>? items});
 }
 
 /// @nodoc
@@ -64,7 +65,7 @@ abstract class _$$_EventsModelCopyWith<$Res>
       __$$_EventsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<EventItemModel>? items});
+  $Res call({@HiveField(0) List<EventItemModel>? items});
 }
 
 /// @nodoc
@@ -92,12 +93,14 @@ class __$$_EventsModelCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_EventsModel extends _EventsModel {
-  const _$_EventsModel({required final List<EventItemModel>? items})
+  const _$_EventsModel(
+      {@HiveField(0) required final List<EventItemModel>? items})
       : _items = items,
         super._();
 
   final List<EventItemModel>? _items;
   @override
+  @HiveField(0)
   List<EventItemModel>? get items {
     final value = _items;
     if (value == null) return null;
@@ -131,11 +134,13 @@ class _$_EventsModel extends _EventsModel {
 }
 
 abstract class _EventsModel extends EventsModel {
-  const factory _EventsModel({required final List<EventItemModel>? items}) =
+  const factory _EventsModel(
+          {@HiveField(0) required final List<EventItemModel>? items}) =
       _$_EventsModel;
   const _EventsModel._() : super._();
 
   @override
+  @HiveField(0)
   List<EventItemModel>? get items;
   @override
   @JsonKey(ignore: true)

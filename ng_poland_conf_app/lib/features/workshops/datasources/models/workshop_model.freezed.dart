@@ -16,13 +16,21 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$WorkshopModel {
+  @HiveField(0)
   String get title => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get confId => throw _privateConstructorUsedError;
+  @HiveField(2)
   String get description => throw _privateConstructorUsedError;
+  @HiveField(3)
   String get startDate => throw _privateConstructorUsedError;
+  @HiveField(4)
   String get endDate => throw _privateConstructorUsedError;
+  @HiveField(5)
   String get locationDescription => throw _privateConstructorUsedError;
+  @HiveField(6)
   SpeakerModel get speaker => throw _privateConstructorUsedError;
+  @HiveField(7)
   int? get pricePln => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -37,14 +45,14 @@ abstract class $WorkshopModelCopyWith<$Res> {
       _$WorkshopModelCopyWithImpl<$Res, WorkshopModel>;
   @useResult
   $Res call(
-      {String title,
-      String confId,
-      String description,
-      String startDate,
-      String endDate,
-      String locationDescription,
-      SpeakerModel speaker,
-      int? pricePln});
+      {@HiveField(0) String title,
+      @HiveField(1) String confId,
+      @HiveField(2) String description,
+      @HiveField(3) String startDate,
+      @HiveField(4) String endDate,
+      @HiveField(5) String locationDescription,
+      @HiveField(6) SpeakerModel speaker,
+      @HiveField(7) int? pricePln});
 
   $SpeakerModelCopyWith<$Res> get speaker;
 }
@@ -125,14 +133,14 @@ abstract class _$$_WorkshopModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String title,
-      String confId,
-      String description,
-      String startDate,
-      String endDate,
-      String locationDescription,
-      SpeakerModel speaker,
-      int? pricePln});
+      {@HiveField(0) String title,
+      @HiveField(1) String confId,
+      @HiveField(2) String description,
+      @HiveField(3) String startDate,
+      @HiveField(4) String endDate,
+      @HiveField(5) String locationDescription,
+      @HiveField(6) SpeakerModel speaker,
+      @HiveField(7) int? pricePln});
 
   @override
   $SpeakerModelCopyWith<$Res> get speaker;
@@ -199,31 +207,39 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
 
 class _$_WorkshopModel extends _WorkshopModel {
   const _$_WorkshopModel(
-      {required this.title,
-      required this.confId,
-      required this.description,
-      required this.startDate,
-      required this.endDate,
-      required this.locationDescription,
-      required this.speaker,
-      required this.pricePln})
+      {@HiveField(0) required this.title,
+      @HiveField(1) required this.confId,
+      @HiveField(2) required this.description,
+      @HiveField(3) required this.startDate,
+      @HiveField(4) required this.endDate,
+      @HiveField(5) required this.locationDescription,
+      @HiveField(6) required this.speaker,
+      @HiveField(7) required this.pricePln})
       : super._();
 
   @override
+  @HiveField(0)
   final String title;
   @override
+  @HiveField(1)
   final String confId;
   @override
+  @HiveField(2)
   final String description;
   @override
+  @HiveField(3)
   final String startDate;
   @override
+  @HiveField(4)
   final String endDate;
   @override
+  @HiveField(5)
   final String locationDescription;
   @override
+  @HiveField(6)
   final SpeakerModel speaker;
   @override
+  @HiveField(7)
   final int? pricePln;
 
   @override
@@ -263,31 +279,39 @@ class _$_WorkshopModel extends _WorkshopModel {
 
 abstract class _WorkshopModel extends WorkshopModel {
   const factory _WorkshopModel(
-      {required final String title,
-      required final String confId,
-      required final String description,
-      required final String startDate,
-      required final String endDate,
-      required final String locationDescription,
-      required final SpeakerModel speaker,
-      required final int? pricePln}) = _$_WorkshopModel;
+      {@HiveField(0) required final String title,
+      @HiveField(1) required final String confId,
+      @HiveField(2) required final String description,
+      @HiveField(3) required final String startDate,
+      @HiveField(4) required final String endDate,
+      @HiveField(5) required final String locationDescription,
+      @HiveField(6) required final SpeakerModel speaker,
+      @HiveField(7) required final int? pricePln}) = _$_WorkshopModel;
   const _WorkshopModel._() : super._();
 
   @override
+  @HiveField(0)
   String get title;
   @override
+  @HiveField(1)
   String get confId;
   @override
+  @HiveField(2)
   String get description;
   @override
+  @HiveField(3)
   String get startDate;
   @override
+  @HiveField(4)
   String get endDate;
   @override
+  @HiveField(5)
   String get locationDescription;
   @override
+  @HiveField(6)
   SpeakerModel get speaker;
   @override
+  @HiveField(7)
   int? get pricePln;
   @override
   @JsonKey(ignore: true)

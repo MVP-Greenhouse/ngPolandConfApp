@@ -21,7 +21,9 @@ ConferenceHomePageScheduleItemModel
 
 /// @nodoc
 mixin _$ConferenceHomePageScheduleItemModel {
+  @HiveField(0)
   String get name => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get desc => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +41,7 @@ abstract class $ConferenceHomePageScheduleItemModelCopyWith<$Res> {
       _$ConferenceHomePageScheduleItemModelCopyWithImpl<$Res,
           ConferenceHomePageScheduleItemModel>;
   @useResult
-  $Res call({String name, String desc});
+  $Res call({@HiveField(0) String name, @HiveField(1) String desc});
 }
 
 /// @nodoc
@@ -81,7 +83,7 @@ abstract class _$$_ConferenceHomePageScheduleItemModelCopyWith<$Res>
       __$$_ConferenceHomePageScheduleItemModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String desc});
+  $Res call({@HiveField(0) String name, @HiveField(1) String desc});
 }
 
 /// @nodoc
@@ -118,7 +120,7 @@ class __$$_ConferenceHomePageScheduleItemModelCopyWithImpl<$Res>
 class _$_ConferenceHomePageScheduleItemModel
     extends _ConferenceHomePageScheduleItemModel {
   const _$_ConferenceHomePageScheduleItemModel(
-      {required this.name, required this.desc})
+      {@HiveField(0) required this.name, @HiveField(1) required this.desc})
       : super._();
 
   factory _$_ConferenceHomePageScheduleItemModel.fromJson(
@@ -126,8 +128,10 @@ class _$_ConferenceHomePageScheduleItemModel
       _$$_ConferenceHomePageScheduleItemModelFromJson(json);
 
   @override
+  @HiveField(0)
   final String name;
   @override
+  @HiveField(1)
   final String desc;
 
   @override
@@ -167,8 +171,9 @@ class _$_ConferenceHomePageScheduleItemModel
 abstract class _ConferenceHomePageScheduleItemModel
     extends ConferenceHomePageScheduleItemModel {
   const factory _ConferenceHomePageScheduleItemModel(
-      {required final String name,
-      required final String desc}) = _$_ConferenceHomePageScheduleItemModel;
+          {@HiveField(0) required final String name,
+          @HiveField(1) required final String desc}) =
+      _$_ConferenceHomePageScheduleItemModel;
   const _ConferenceHomePageScheduleItemModel._() : super._();
 
   factory _ConferenceHomePageScheduleItemModel.fromJson(
@@ -176,8 +181,10 @@ abstract class _ConferenceHomePageScheduleItemModel
       _$_ConferenceHomePageScheduleItemModel.fromJson;
 
   @override
+  @HiveField(0)
   String get name;
   @override
+  @HiveField(1)
   String get desc;
   @override
   @JsonKey(ignore: true)

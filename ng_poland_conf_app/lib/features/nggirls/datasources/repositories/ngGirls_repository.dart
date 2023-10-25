@@ -1,6 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
+import 'package:ng_poland_conf_app/features/nggirls/datasources/data/ngGirls_local_datasource.dart';
 import 'package:ng_poland_conf_app/features/nggirls/datasources/data/ngGirls_remote_datasource.dart';
+import 'package:ng_poland_conf_app/features/nggirls/datasources/models/ngGirls_model.dart';
 import 'package:ng_poland_conf_app/features/nggirls/domains/entities/ngGirls.dart';
 import 'package:ng_poland_conf_app/features/nggirls/domains/repositories/ngGirls_repository.dart';
 import 'package:ng_poland_conf_app/features/nggirls/domains/usecases/get_ngGirls_for_conference.dart';
@@ -8,16 +10,26 @@ import 'package:ng_poland_conf_app/features/nggirls/domains/usecases/get_ngGirls
 @Singleton(as: NgGirlsRepository)
 class NgGirlsImpl implements NgGirlsRepository {
   final NgGirlsRemoteDataSource ngGirlsRemoteDataSource;
+  final NgGirlsLocalDataSource ngGirlsLocalDataSource;
 
-  NgGirlsImpl(this.ngGirlsRemoteDataSource);
+  NgGirlsImpl(
+    this.ngGirlsRemoteDataSource,
+    this.ngGirlsLocalDataSource,
+  );
 
   @override
-  Future<NgGirls> getNgGirls(Params params) async {
-    final workshops = await ngGirlsRemoteDataSource.getNgGirls(
-      ngGirlsWorkshopsId: SimpleContentId.ngGirlsWorkshops,
-      confId: params.confId,
-    );
+  Future<NgGirls?> getNgGirls(Params params) async {
+    try {
+      final NgGirlsModel workshops = await ngGirlsRemoteDataSource.getNgGirls(
+        ngGirlsWorkshopsId: SimpleContentId.ngGirlsWorkshops,
+        confId: params.confId,
+      );
 
-    return workshops.toEntity();
+      await ngGirlsLocalDataSource.update(workshops);
+      return workshops.toEntity();
+    } catch (err) {
+      NgGirlsModel? ngGirlsFromLocalDataSource = await ngGirlsLocalDataSource.get();
+      return ngGirlsFromLocalDataSource?.toEntity();
+    }
   }
 }
