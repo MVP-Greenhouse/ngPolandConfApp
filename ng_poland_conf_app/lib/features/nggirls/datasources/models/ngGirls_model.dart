@@ -15,7 +15,7 @@ class NgGirlsModel with _$NgGirlsModel {
     @HiveField(1) required String title,
     @HiveField(2) required String text,
     @HiveField(3) required String confId,
-    @HiveField(4) required DateTime lastUpdate,
+    @HiveField(4) DateTime? lastUpdate,
   }) = _NgGirlsModel;
 
   factory NgGirlsModel.fromJson(Map<String, dynamic> json) => _$NgGirlsModelFromJson(json['items'][0]['fields']);

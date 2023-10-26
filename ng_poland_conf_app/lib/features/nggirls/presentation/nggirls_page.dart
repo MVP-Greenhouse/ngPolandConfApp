@@ -40,6 +40,7 @@ class _NgGirlsPageState extends State<NgGirlsPage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
+            error: (error) => const EmptyListInformation(),
             loaded: (ngGirls) => ngGirls.text.isEmpty
                 ? const EmptyListInformation()
                 : Padding(

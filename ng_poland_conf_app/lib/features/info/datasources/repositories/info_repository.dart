@@ -18,8 +18,8 @@ class InfoRepositoryImpl implements InfoRepository {
 
   @override
   Future<List<InfoItem>> getAllInfoItems(Params params) async {
+    final currentInfoItemsModel = await infoLocalDataSource.get();
     try {
-      final currentInfoItemsModel = await infoLocalDataSource.get();
       if (currentInfoItemsModel != null &&
           currentInfoItemsModel.items != null &&
           currentInfoItemsModel.items!.isNotEmpty &&
@@ -38,8 +38,11 @@ class InfoRepositoryImpl implements InfoRepository {
       await infoLocalDataSource.update(infoItems.copyWith(confId: params.confId, lastUpdate: DateTime.now()));
       return infoItems.toEntity();
     } catch (err) {
-      InfoItemsModel? infoItemsFromLocalDataSource = await infoLocalDataSource.get();
-      return infoItemsFromLocalDataSource?.toEntity() ?? [];
+      if (currentInfoItemsModel != null && currentInfoItemsModel.confId == params.confId) {
+        return currentInfoItemsModel.toEntity();
+      } else {
+        return [];
+      }
     }
   }
 }

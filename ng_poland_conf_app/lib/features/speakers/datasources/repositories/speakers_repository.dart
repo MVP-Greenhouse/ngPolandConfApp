@@ -16,8 +16,8 @@ class SpeakersRepositoryImpl implements SpeakersRepository {
 
   @override
   Future<List<Speaker>> getAllSpeakers(Params params) async {
+    final currentSpeakersModel = await speakersLocalDataSource.get();
     try {
-      final currentSpeakersModel = await speakersLocalDataSource.get();
       if (currentSpeakersModel != null &&
           currentSpeakersModel.items != null &&
           currentSpeakersModel.items!.isNotEmpty &&
@@ -32,11 +32,14 @@ class SpeakersRepositoryImpl implements SpeakersRepository {
         limit: params.limit,
       );
 
-      await speakersLocalDataSource.update(allSpeakers.copyWith(confId: params.confId));
+      await speakersLocalDataSource.update(allSpeakers.copyWith(confId: params.confId, lastUpdate: DateTime.now()));
       return allSpeakers.toEntity();
     } catch (e) {
-      SpeakersModel? allSpeakersFromLocalDataSource = await speakersLocalDataSource.get();
-      return allSpeakersFromLocalDataSource?.toEntity() ?? [];
+      if (currentSpeakersModel != null && currentSpeakersModel.confId == params.confId) {
+        return currentSpeakersModel.toEntity();
+      } else {
+        return [];
+      }
     }
   }
 }

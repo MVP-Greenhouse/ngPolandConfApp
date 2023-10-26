@@ -18,8 +18,8 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
 
   @override
   Future<List<EventItem>> getAllEvents(Params params) async {
+    final EventsModel? currentEventsModel = await scheduleLocalDataSource.get(customKey: params.eventItemType);
     try {
-      final EventsModel? currentEventsModel = await scheduleLocalDataSource.get(customKey: params.eventItemType);
       if (currentEventsModel != null &&
           currentEventsModel.items != null &&
           currentEventsModel.items!.isNotEmpty &&
@@ -36,11 +36,14 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
         limit: params.limit,
       );
 
-      await scheduleLocalDataSource.update(listAllEvents.copyWith(confId: params.confId), customKey: params.eventItemType);
+      await scheduleLocalDataSource.update(listAllEvents.copyWith(confId: params.confId, lastUpdate: DateTime.now()), customKey: params.eventItemType);
       return listAllEvents.toEntity();
     } catch (err) {
-      EventsModel? listAllEventsFromLocalDataSource = await scheduleLocalDataSource.get(customKey: params.eventItemType);
-      return listAllEventsFromLocalDataSource?.toEntity() ?? [];
+      if (currentEventsModel != null && currentEventsModel.confId == params.confId) {
+        return currentEventsModel.toEntity();
+      } else {
+        return [];
+      }
     }
   }
 }
