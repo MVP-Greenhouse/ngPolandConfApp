@@ -28,8 +28,8 @@ class SpeakersModel with _$SpeakersModel {
           id: item['sys']['id'] as String,
           name: item['fields']['name'] as String,
           confIds: [], // item['fields']['confIds'] as List<String>,
-          role: item['fields']['role'] as String,
-          bio: item['fields']['bio'] as String,
+          role: item['fields']['role'] as String ?? '',
+          bio: item['fields']['bio'] as String ?? '',
           photoFileUrl: photoFileUrl,
           photoTitle: item['fields']['photoTitle'] ?? '',
           photoDescription: item['fields']['photoDescription'] ?? '',
@@ -42,7 +42,7 @@ class SpeakersModel with _$SpeakersModel {
       );
     }
 
-    return SpeakersModel(items: speakers, lastUpdate: DateTime.now());
+    return SpeakersModel(items: speakers);
 
     // return _$SpeakersModelFromJson(json);
   }

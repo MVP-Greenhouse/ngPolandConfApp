@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/features/info/domains/entities/info_item.dart';
 
@@ -38,7 +37,7 @@ class InfoDetails extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.025,
                 ),
                 Text(
-                  info.description,
+                  info.description ?? '',
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),

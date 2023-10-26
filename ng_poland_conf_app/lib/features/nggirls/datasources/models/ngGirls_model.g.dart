@@ -18,8 +18,8 @@ class NgGirlsModelAdapter extends TypeAdapter<NgGirlsModel> {
     };
     return NgGirlsModel(
       myId: fields[0] as String,
-      title: fields[1] as String,
-      text: fields[2] as String,
+      title: fields[1] as String?,
+      text: fields[2] as String?,
       confId: fields[3] as String,
       lastUpdate: fields[4] as DateTime?,
     );
@@ -59,8 +59,8 @@ class NgGirlsModelAdapter extends TypeAdapter<NgGirlsModel> {
 _$_NgGirlsModel _$$_NgGirlsModelFromJson(Map<String, dynamic> json) =>
     _$_NgGirlsModel(
       myId: json['myId'] as String,
-      title: json['title'] as String,
-      text: json['text'] as String,
+      title: json['title'] as String?,
+      text: json['text'] as String?,
       confId: json['confId'] as String,
       lastUpdate: json['lastUpdate'] == null
           ? null

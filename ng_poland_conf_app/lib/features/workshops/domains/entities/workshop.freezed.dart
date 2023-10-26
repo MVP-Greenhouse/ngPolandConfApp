@@ -18,10 +18,10 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Workshop {
   String get title => throw _privateConstructorUsedError;
   String get confId => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   String get startDate => throw _privateConstructorUsedError;
   String get endDate => throw _privateConstructorUsedError;
-  String get locationDescription => throw _privateConstructorUsedError;
+  String? get locationDescription => throw _privateConstructorUsedError;
   Speaker get speaker => throw _privateConstructorUsedError;
   int? get pricePln => throw _privateConstructorUsedError;
 
@@ -38,10 +38,10 @@ abstract class $WorkshopCopyWith<$Res> {
   $Res call(
       {String title,
       String confId,
-      String description,
+      String? description,
       String startDate,
       String endDate,
-      String locationDescription,
+      String? locationDescription,
       Speaker speaker,
       int? pricePln});
 
@@ -63,10 +63,10 @@ class _$WorkshopCopyWithImpl<$Res, $Val extends Workshop>
   $Res call({
     Object? title = null,
     Object? confId = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? startDate = null,
     Object? endDate = null,
-    Object? locationDescription = null,
+    Object? locationDescription = freezed,
     Object? speaker = null,
     Object? pricePln = freezed,
   }) {
@@ -79,10 +79,10 @@ class _$WorkshopCopyWithImpl<$Res, $Val extends Workshop>
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -91,10 +91,10 @@ class _$WorkshopCopyWithImpl<$Res, $Val extends Workshop>
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as String,
-      locationDescription: null == locationDescription
+      locationDescription: freezed == locationDescription
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       speaker: null == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -125,10 +125,10 @@ abstract class _$$_WorkshopCopyWith<$Res> implements $WorkshopCopyWith<$Res> {
   $Res call(
       {String title,
       String confId,
-      String description,
+      String? description,
       String startDate,
       String endDate,
-      String locationDescription,
+      String? locationDescription,
       Speaker speaker,
       int? pricePln});
 
@@ -149,10 +149,10 @@ class __$$_WorkshopCopyWithImpl<$Res>
   $Res call({
     Object? title = null,
     Object? confId = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? startDate = null,
     Object? endDate = null,
-    Object? locationDescription = null,
+    Object? locationDescription = freezed,
     Object? speaker = null,
     Object? pricePln = freezed,
   }) {
@@ -165,10 +165,10 @@ class __$$_WorkshopCopyWithImpl<$Res>
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -177,10 +177,10 @@ class __$$_WorkshopCopyWithImpl<$Res>
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as String,
-      locationDescription: null == locationDescription
+      locationDescription: freezed == locationDescription
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       speaker: null == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -212,13 +212,13 @@ class _$_Workshop extends _Workshop {
   @override
   final String confId;
   @override
-  final String description;
+  final String? description;
   @override
   final String startDate;
   @override
   final String endDate;
   @override
-  final String locationDescription;
+  final String? locationDescription;
   @override
   final Speaker speaker;
   @override
@@ -263,10 +263,10 @@ abstract class _Workshop extends Workshop {
   const factory _Workshop(
       {required final String title,
       required final String confId,
-      required final String description,
+      required final String? description,
       required final String startDate,
       required final String endDate,
-      required final String locationDescription,
+      required final String? locationDescription,
       required final Speaker speaker,
       required final int? pricePln}) = _$_Workshop;
   const _Workshop._() : super._();
@@ -276,13 +276,13 @@ abstract class _Workshop extends Workshop {
   @override
   String get confId;
   @override
-  String get description;
+  String? get description;
   @override
   String get startDate;
   @override
   String get endDate;
   @override
-  String get locationDescription;
+  String? get locationDescription;
   @override
   Speaker get speaker;
   @override

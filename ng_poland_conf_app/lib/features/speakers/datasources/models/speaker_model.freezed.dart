@@ -23,9 +23,9 @@ mixin _$SpeakerModel {
   @HiveField(2)
   List<String> get confIds => throw _privateConstructorUsedError;
   @HiveField(3)
-  String get role => throw _privateConstructorUsedError;
+  String? get role => throw _privateConstructorUsedError;
   @HiveField(4)
-  String get bio => throw _privateConstructorUsedError;
+  String? get bio => throw _privateConstructorUsedError;
   @HiveField(5)
   String? get photoFileUrl => throw _privateConstructorUsedError;
   @HiveField(6)
@@ -58,8 +58,8 @@ abstract class $SpeakerModelCopyWith<$Res> {
       {@HiveField(0) String id,
       @HiveField(1) String name,
       @HiveField(2) List<String> confIds,
-      @HiveField(3) String role,
-      @HiveField(4) String bio,
+      @HiveField(3) String? role,
+      @HiveField(4) String? bio,
       @HiveField(5) String? photoFileUrl,
       @HiveField(6) String? photoTitle,
       @HiveField(7) String? photoDescription,
@@ -86,8 +86,8 @@ class _$SpeakerModelCopyWithImpl<$Res, $Val extends SpeakerModel>
     Object? id = null,
     Object? name = null,
     Object? confIds = null,
-    Object? role = null,
-    Object? bio = null,
+    Object? role = freezed,
+    Object? bio = freezed,
     Object? photoFileUrl = freezed,
     Object? photoTitle = freezed,
     Object? photoDescription = freezed,
@@ -110,14 +110,14 @@ class _$SpeakerModelCopyWithImpl<$Res, $Val extends SpeakerModel>
           ? _value.confIds
           : confIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      role: null == role
+      role: freezed == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
+              as String?,
+      bio: freezed == bio
           ? _value.bio
           : bio // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       photoFileUrl: freezed == photoFileUrl
           ? _value.photoFileUrl
           : photoFileUrl // ignore: cast_nullable_to_non_nullable
@@ -166,8 +166,8 @@ abstract class _$$_SpeakerModelCopyWith<$Res>
       {@HiveField(0) String id,
       @HiveField(1) String name,
       @HiveField(2) List<String> confIds,
-      @HiveField(3) String role,
-      @HiveField(4) String bio,
+      @HiveField(3) String? role,
+      @HiveField(4) String? bio,
       @HiveField(5) String? photoFileUrl,
       @HiveField(6) String? photoTitle,
       @HiveField(7) String? photoDescription,
@@ -192,8 +192,8 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? confIds = null,
-    Object? role = null,
-    Object? bio = null,
+    Object? role = freezed,
+    Object? bio = freezed,
     Object? photoFileUrl = freezed,
     Object? photoTitle = freezed,
     Object? photoDescription = freezed,
@@ -216,14 +216,14 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
           ? _value._confIds
           : confIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      role: null == role
+      role: freezed == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
+              as String?,
+      bio: freezed == bio
           ? _value.bio
           : bio // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       photoFileUrl: freezed == photoFileUrl
           ? _value.photoFileUrl
           : photoFileUrl // ignore: cast_nullable_to_non_nullable
@@ -297,10 +297,10 @@ class _$_SpeakerModel extends _SpeakerModel {
 
   @override
   @HiveField(3)
-  final String role;
+  final String? role;
   @override
   @HiveField(4)
-  final String bio;
+  final String? bio;
   @override
   @HiveField(5)
   final String? photoFileUrl;
@@ -386,8 +386,8 @@ abstract class _SpeakerModel extends SpeakerModel {
       {@HiveField(0) required final String id,
       @HiveField(1) required final String name,
       @HiveField(2) required final List<String> confIds,
-      @HiveField(3) required final String role,
-      @HiveField(4) required final String bio,
+      @HiveField(3) required final String? role,
+      @HiveField(4) required final String? bio,
       @HiveField(5) required final String? photoFileUrl,
       @HiveField(6) required final String? photoTitle,
       @HiveField(7) required final String? photoDescription,
@@ -409,10 +409,10 @@ abstract class _SpeakerModel extends SpeakerModel {
   List<String> get confIds;
   @override
   @HiveField(3)
-  String get role;
+  String? get role;
   @override
   @HiveField(4)
-  String get bio;
+  String? get bio;
   @override
   @HiveField(5)
   String? get photoFileUrl;

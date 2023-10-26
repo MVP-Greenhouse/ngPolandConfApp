@@ -13,14 +13,14 @@ class EventItemModel with _$EventItemModel {
 
   const factory EventItemModel({
     @HiveField(0) required String id,
-    @HiveField(1) required String? title,
-    @HiveField(2) required String? confId,
-    @HiveField(3) required String? type,
-    @HiveField(4) required String? category,
-    @HiveField(5) required String? shortDescription,
-    @HiveField(6) required String? description,
-    @HiveField(7) required String? startDate,
-    @HiveField(8) required String? endDate,
+    @HiveField(1) required String title,
+    @HiveField(2) required String confId,
+    @HiveField(3) required String type,
+    @HiveField(4) required String category,
+    @HiveField(5) String? shortDescription,
+    @HiveField(6) String? description,
+    @HiveField(7) required String startDate,
+    @HiveField(8) required String endDate,
     @HiveField(9) required SpeakerModel? speaker,
   }) = _EventItemModel;
 
@@ -77,10 +77,10 @@ class EventItemModel with _$EventItemModel {
         confId: confId,
         type: type,
         category: category,
-        shortDescription: shortDescription,
-        description: description,
-        startDate: DateTime.tryParse(startDate ?? ''),
-        endDate: DateTime.tryParse(endDate ?? ''),
+        shortDescription: shortDescription ?? '',
+        description: description ?? '',
+        startDate: DateTime.tryParse(startDate),
+        endDate: DateTime.tryParse(endDate),
         speaker: speaker?.toEntity(),
       );
 }

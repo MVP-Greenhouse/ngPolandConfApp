@@ -19,10 +19,10 @@ class WorkshopModelAdapter extends TypeAdapter<WorkshopModel> {
     return WorkshopModel(
       title: fields[0] as String,
       confId: fields[1] as String,
-      description: fields[2] as String,
+      description: fields[2] as String?,
       startDate: fields[3] as String,
       endDate: fields[4] as String,
-      locationDescription: fields[5] as String,
+      locationDescription: fields[5] as String?,
       speaker: fields[6] as SpeakerModel,
       pricePln: fields[7] as int?,
     );

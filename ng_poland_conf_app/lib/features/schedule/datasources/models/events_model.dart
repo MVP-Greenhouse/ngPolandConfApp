@@ -66,10 +66,7 @@ class EventsModel with _$EventsModel {
       );
     }
 
-    return EventsModel(
-      items: eventItems,
-      lastUpdate: DateTime.now(),
-    );
+    return EventsModel(items: eventItems);
   }
 
   List<EventItem> toEntity() =>

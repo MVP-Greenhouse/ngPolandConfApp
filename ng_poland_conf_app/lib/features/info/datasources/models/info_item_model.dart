@@ -14,9 +14,9 @@ class InfoItemModel with _$InfoItemModel {
     @HiveField(0) required String title,
     @HiveField(1) required int order,
     @HiveField(2) required String icon,
-    @HiveField(3) required String description,
+    @HiveField(3) String? description,
     @HiveField(4) required String confId,
-    @HiveField(5) required String urlLink,
+    @HiveField(5) String? urlLink,
   }) = _InfoItemModel;
 
   factory InfoItemModel.fromJson(Map<String, dynamic> json) => _$InfoItemModelFromJson(json['fields']);
@@ -25,8 +25,8 @@ class InfoItemModel with _$InfoItemModel {
         title: title,
         order: order,
         icon: icon,
-        description: description,
+        description: description ?? '',
         confId: confId,
-        urlLink: urlLink,
+        urlLink: urlLink ?? '',
       );
 }

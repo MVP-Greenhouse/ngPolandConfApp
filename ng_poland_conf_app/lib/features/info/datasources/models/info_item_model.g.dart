@@ -20,9 +20,9 @@ class InfoItemModelAdapter extends TypeAdapter<InfoItemModel> {
       title: fields[0] as String,
       order: fields[1] as int,
       icon: fields[2] as String,
-      description: fields[3] as String,
+      description: fields[3] as String?,
       confId: fields[4] as String,
-      urlLink: fields[5] as String,
+      urlLink: fields[5] as String?,
     );
   }
 
@@ -64,9 +64,9 @@ _$_InfoItemModel _$$_InfoItemModelFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       order: json['order'] as int,
       icon: json['icon'] as String,
-      description: json['description'] as String,
+      description: json['description'] as String?,
       confId: json['confId'] as String,
-      urlLink: json['urlLink'] as String,
+      urlLink: json['urlLink'] as String?,
     );
 
 Map<String, dynamic> _$$_InfoItemModelToJson(_$_InfoItemModel instance) =>

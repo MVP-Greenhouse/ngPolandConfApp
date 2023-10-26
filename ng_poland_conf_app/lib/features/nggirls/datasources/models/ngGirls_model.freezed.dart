@@ -23,9 +23,9 @@ mixin _$NgGirlsModel {
   @HiveField(0)
   String get myId => throw _privateConstructorUsedError;
   @HiveField(1)
-  String get title => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
   @HiveField(2)
-  String get text => throw _privateConstructorUsedError;
+  String? get text => throw _privateConstructorUsedError;
   @HiveField(3)
   String get confId => throw _privateConstructorUsedError;
   @HiveField(4)
@@ -45,8 +45,8 @@ abstract class $NgGirlsModelCopyWith<$Res> {
   @useResult
   $Res call(
       {@HiveField(0) String myId,
-      @HiveField(1) String title,
-      @HiveField(2) String text,
+      @HiveField(1) String? title,
+      @HiveField(2) String? text,
       @HiveField(3) String confId,
       @HiveField(4) DateTime? lastUpdate});
 }
@@ -65,8 +65,8 @@ class _$NgGirlsModelCopyWithImpl<$Res, $Val extends NgGirlsModel>
   @override
   $Res call({
     Object? myId = null,
-    Object? title = null,
-    Object? text = null,
+    Object? title = freezed,
+    Object? text = freezed,
     Object? confId = null,
     Object? lastUpdate = freezed,
   }) {
@@ -75,14 +75,14 @@ class _$NgGirlsModelCopyWithImpl<$Res, $Val extends NgGirlsModel>
           ? _value.myId
           : myId // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      text: null == text
+              as String?,
+      text: freezed == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
@@ -105,8 +105,8 @@ abstract class _$$_NgGirlsModelCopyWith<$Res>
   @useResult
   $Res call(
       {@HiveField(0) String myId,
-      @HiveField(1) String title,
-      @HiveField(2) String text,
+      @HiveField(1) String? title,
+      @HiveField(2) String? text,
       @HiveField(3) String confId,
       @HiveField(4) DateTime? lastUpdate});
 }
@@ -123,8 +123,8 @@ class __$$_NgGirlsModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? myId = null,
-    Object? title = null,
-    Object? text = null,
+    Object? title = freezed,
+    Object? text = freezed,
     Object? confId = null,
     Object? lastUpdate = freezed,
   }) {
@@ -133,14 +133,14 @@ class __$$_NgGirlsModelCopyWithImpl<$Res>
           ? _value.myId
           : myId // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      text: null == text
+              as String?,
+      text: freezed == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
@@ -172,10 +172,10 @@ class _$_NgGirlsModel extends _NgGirlsModel {
   final String myId;
   @override
   @HiveField(1)
-  final String title;
+  final String? title;
   @override
   @HiveField(2)
-  final String text;
+  final String? text;
   @override
   @HiveField(3)
   final String confId;
@@ -223,8 +223,8 @@ class _$_NgGirlsModel extends _NgGirlsModel {
 abstract class _NgGirlsModel extends NgGirlsModel {
   const factory _NgGirlsModel(
       {@HiveField(0) required final String myId,
-      @HiveField(1) required final String title,
-      @HiveField(2) required final String text,
+      @HiveField(1) required final String? title,
+      @HiveField(2) required final String? text,
       @HiveField(3) required final String confId,
       @HiveField(4) final DateTime? lastUpdate}) = _$_NgGirlsModel;
   const _NgGirlsModel._() : super._();
@@ -237,10 +237,10 @@ abstract class _NgGirlsModel extends NgGirlsModel {
   String get myId;
   @override
   @HiveField(1)
-  String get title;
+  String? get title;
   @override
   @HiveField(2)
-  String get text;
+  String? get text;
   @override
   @HiveField(3)
   String get confId;

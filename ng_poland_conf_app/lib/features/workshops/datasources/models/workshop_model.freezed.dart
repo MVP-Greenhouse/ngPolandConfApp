@@ -21,13 +21,13 @@ mixin _$WorkshopModel {
   @HiveField(1)
   String get confId => throw _privateConstructorUsedError;
   @HiveField(2)
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   @HiveField(3)
   String get startDate => throw _privateConstructorUsedError;
   @HiveField(4)
   String get endDate => throw _privateConstructorUsedError;
   @HiveField(5)
-  String get locationDescription => throw _privateConstructorUsedError;
+  String? get locationDescription => throw _privateConstructorUsedError;
   @HiveField(6)
   SpeakerModel get speaker => throw _privateConstructorUsedError;
   @HiveField(7)
@@ -47,10 +47,10 @@ abstract class $WorkshopModelCopyWith<$Res> {
   $Res call(
       {@HiveField(0) String title,
       @HiveField(1) String confId,
-      @HiveField(2) String description,
+      @HiveField(2) String? description,
       @HiveField(3) String startDate,
       @HiveField(4) String endDate,
-      @HiveField(5) String locationDescription,
+      @HiveField(5) String? locationDescription,
       @HiveField(6) SpeakerModel speaker,
       @HiveField(7) int? pricePln});
 
@@ -72,10 +72,10 @@ class _$WorkshopModelCopyWithImpl<$Res, $Val extends WorkshopModel>
   $Res call({
     Object? title = null,
     Object? confId = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? startDate = null,
     Object? endDate = null,
-    Object? locationDescription = null,
+    Object? locationDescription = freezed,
     Object? speaker = null,
     Object? pricePln = freezed,
   }) {
@@ -88,10 +88,10 @@ class _$WorkshopModelCopyWithImpl<$Res, $Val extends WorkshopModel>
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -100,10 +100,10 @@ class _$WorkshopModelCopyWithImpl<$Res, $Val extends WorkshopModel>
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as String,
-      locationDescription: null == locationDescription
+      locationDescription: freezed == locationDescription
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       speaker: null == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -135,10 +135,10 @@ abstract class _$$_WorkshopModelCopyWith<$Res>
   $Res call(
       {@HiveField(0) String title,
       @HiveField(1) String confId,
-      @HiveField(2) String description,
+      @HiveField(2) String? description,
       @HiveField(3) String startDate,
       @HiveField(4) String endDate,
-      @HiveField(5) String locationDescription,
+      @HiveField(5) String? locationDescription,
       @HiveField(6) SpeakerModel speaker,
       @HiveField(7) int? pricePln});
 
@@ -159,10 +159,10 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
   $Res call({
     Object? title = null,
     Object? confId = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? startDate = null,
     Object? endDate = null,
-    Object? locationDescription = null,
+    Object? locationDescription = freezed,
     Object? speaker = null,
     Object? pricePln = freezed,
   }) {
@@ -175,10 +175,10 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
@@ -187,10 +187,10 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
               as String,
-      locationDescription: null == locationDescription
+      locationDescription: freezed == locationDescription
           ? _value.locationDescription
           : locationDescription // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       speaker: null == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -225,7 +225,7 @@ class _$_WorkshopModel extends _WorkshopModel {
   final String confId;
   @override
   @HiveField(2)
-  final String description;
+  final String? description;
   @override
   @HiveField(3)
   final String startDate;
@@ -234,7 +234,7 @@ class _$_WorkshopModel extends _WorkshopModel {
   final String endDate;
   @override
   @HiveField(5)
-  final String locationDescription;
+  final String? locationDescription;
   @override
   @HiveField(6)
   final SpeakerModel speaker;
@@ -281,10 +281,10 @@ abstract class _WorkshopModel extends WorkshopModel {
   const factory _WorkshopModel(
       {@HiveField(0) required final String title,
       @HiveField(1) required final String confId,
-      @HiveField(2) required final String description,
+      @HiveField(2) required final String? description,
       @HiveField(3) required final String startDate,
       @HiveField(4) required final String endDate,
-      @HiveField(5) required final String locationDescription,
+      @HiveField(5) required final String? locationDescription,
       @HiveField(6) required final SpeakerModel speaker,
       @HiveField(7) required final int? pricePln}) = _$_WorkshopModel;
   const _WorkshopModel._() : super._();
@@ -297,7 +297,7 @@ abstract class _WorkshopModel extends WorkshopModel {
   String get confId;
   @override
   @HiveField(2)
-  String get description;
+  String? get description;
   @override
   @HiveField(3)
   String get startDate;
@@ -306,7 +306,7 @@ abstract class _WorkshopModel extends WorkshopModel {
   String get endDate;
   @override
   @HiveField(5)
-  String get locationDescription;
+  String? get locationDescription;
   @override
   @HiveField(6)
   SpeakerModel get speaker;

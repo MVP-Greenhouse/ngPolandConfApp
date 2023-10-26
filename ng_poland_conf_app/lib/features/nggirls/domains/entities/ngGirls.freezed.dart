@@ -17,8 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$NgGirls {
   String get myId => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  String get text => throw _privateConstructorUsedError;
+  String? get title => throw _privateConstructorUsedError;
+  String? get text => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $NgGirlsCopyWith<NgGirls> get copyWith => throw _privateConstructorUsedError;
@@ -29,7 +29,7 @@ abstract class $NgGirlsCopyWith<$Res> {
   factory $NgGirlsCopyWith(NgGirls value, $Res Function(NgGirls) then) =
       _$NgGirlsCopyWithImpl<$Res, NgGirls>;
   @useResult
-  $Res call({String myId, String title, String text});
+  $Res call({String myId, String? title, String? text});
 }
 
 /// @nodoc
@@ -46,22 +46,22 @@ class _$NgGirlsCopyWithImpl<$Res, $Val extends NgGirls>
   @override
   $Res call({
     Object? myId = null,
-    Object? title = null,
-    Object? text = null,
+    Object? title = freezed,
+    Object? text = freezed,
   }) {
     return _then(_value.copyWith(
       myId: null == myId
           ? _value.myId
           : myId // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      text: null == text
+              as String?,
+      text: freezed == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -73,7 +73,7 @@ abstract class _$$_NgGirlsCopyWith<$Res> implements $NgGirlsCopyWith<$Res> {
       __$$_NgGirlsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String myId, String title, String text});
+  $Res call({String myId, String? title, String? text});
 }
 
 /// @nodoc
@@ -87,22 +87,22 @@ class __$$_NgGirlsCopyWithImpl<$Res>
   @override
   $Res call({
     Object? myId = null,
-    Object? title = null,
-    Object? text = null,
+    Object? title = freezed,
+    Object? text = freezed,
   }) {
     return _then(_$_NgGirls(
       myId: null == myId
           ? _value.myId
           : myId // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      text: null == text
+              as String?,
+      text: freezed == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -117,9 +117,9 @@ class _$_NgGirls extends _NgGirls {
   @override
   final String myId;
   @override
-  final String title;
+  final String? title;
   @override
-  final String text;
+  final String? text;
 
   @override
   String toString() {
@@ -149,16 +149,16 @@ class _$_NgGirls extends _NgGirls {
 abstract class _NgGirls extends NgGirls {
   const factory _NgGirls(
       {required final String myId,
-      required final String title,
-      required final String text}) = _$_NgGirls;
+      required final String? title,
+      required final String? text}) = _$_NgGirls;
   const _NgGirls._() : super._();
 
   @override
   String get myId;
   @override
-  String get title;
+  String? get title;
   @override
-  String get text;
+  String? get text;
   @override
   @JsonKey(ignore: true)
   _$$_NgGirlsCopyWith<_$_NgGirls> get copyWith =>

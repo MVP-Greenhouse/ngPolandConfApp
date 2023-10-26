@@ -18,14 +18,14 @@ class EventItemModelAdapter extends TypeAdapter<EventItemModel> {
     };
     return EventItemModel(
       id: fields[0] as String,
-      title: fields[1] as String?,
-      confId: fields[2] as String?,
-      type: fields[3] as String?,
-      category: fields[4] as String?,
+      title: fields[1] as String,
+      confId: fields[2] as String,
+      type: fields[3] as String,
+      category: fields[4] as String,
       shortDescription: fields[5] as String?,
       description: fields[6] as String?,
-      startDate: fields[7] as String?,
-      endDate: fields[8] as String?,
+      startDate: fields[7] as String,
+      endDate: fields[8] as String,
       speaker: fields[9] as SpeakerModel?,
     );
   }

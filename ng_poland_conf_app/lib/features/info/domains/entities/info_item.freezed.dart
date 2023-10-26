@@ -19,9 +19,9 @@ mixin _$InfoItem {
   String get title => throw _privateConstructorUsedError;
   int get order => throw _privateConstructorUsedError;
   String get icon => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   String get confId => throw _privateConstructorUsedError;
-  String get urlLink => throw _privateConstructorUsedError;
+  String? get urlLink => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $InfoItemCopyWith<InfoItem> get copyWith =>
@@ -37,9 +37,9 @@ abstract class $InfoItemCopyWith<$Res> {
       {String title,
       int order,
       String icon,
-      String description,
+      String? description,
       String confId,
-      String urlLink});
+      String? urlLink});
 }
 
 /// @nodoc
@@ -58,9 +58,9 @@ class _$InfoItemCopyWithImpl<$Res, $Val extends InfoItem>
     Object? title = null,
     Object? order = null,
     Object? icon = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? confId = null,
-    Object? urlLink = null,
+    Object? urlLink = freezed,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -75,18 +75,18 @@ class _$InfoItemCopyWithImpl<$Res, $Val extends InfoItem>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
-      urlLink: null == urlLink
+      urlLink: freezed == urlLink
           ? _value.urlLink
           : urlLink // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -102,9 +102,9 @@ abstract class _$$_InfoItemCopyWith<$Res> implements $InfoItemCopyWith<$Res> {
       {String title,
       int order,
       String icon,
-      String description,
+      String? description,
       String confId,
-      String urlLink});
+      String? urlLink});
 }
 
 /// @nodoc
@@ -121,9 +121,9 @@ class __$$_InfoItemCopyWithImpl<$Res>
     Object? title = null,
     Object? order = null,
     Object? icon = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? confId = null,
-    Object? urlLink = null,
+    Object? urlLink = freezed,
   }) {
     return _then(_$_InfoItem(
       title: null == title
@@ -138,18 +138,18 @@ class __$$_InfoItemCopyWithImpl<$Res>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
-      urlLink: null == urlLink
+      urlLink: freezed == urlLink
           ? _value.urlLink
           : urlLink // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -172,11 +172,11 @@ class _$_InfoItem implements _InfoItem {
   @override
   final String icon;
   @override
-  final String description;
+  final String? description;
   @override
   final String confId;
   @override
-  final String urlLink;
+  final String? urlLink;
 
   @override
   String toString() {
@@ -213,9 +213,9 @@ abstract class _InfoItem implements InfoItem {
       {required final String title,
       required final int order,
       required final String icon,
-      required final String description,
+      required final String? description,
       required final String confId,
-      required final String urlLink}) = _$_InfoItem;
+      required final String? urlLink}) = _$_InfoItem;
 
   @override
   String get title;
@@ -224,11 +224,11 @@ abstract class _InfoItem implements InfoItem {
   @override
   String get icon;
   @override
-  String get description;
+  String? get description;
   @override
   String get confId;
   @override
-  String get urlLink;
+  String? get urlLink;
   @override
   @JsonKey(ignore: true)
   _$$_InfoItemCopyWith<_$_InfoItem> get copyWith =>

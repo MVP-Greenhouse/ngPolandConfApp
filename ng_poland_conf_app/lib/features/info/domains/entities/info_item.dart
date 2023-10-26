@@ -8,8 +8,8 @@ class InfoItem with _$InfoItem {
     required String title,
     required int order,
     required String icon,
-    required String description,
+    required String? description,
     required String confId,
-    required String urlLink,
+    required String? urlLink,
   }) = _InfoItem;
 }

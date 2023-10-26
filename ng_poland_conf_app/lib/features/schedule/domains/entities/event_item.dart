@@ -11,9 +11,9 @@ class EventItem with _$EventItem {
   const factory EventItem({
     required String id,
     required String title,
-    required String? confId,
-    required String? type,
-    required String? category,
+    required String confId,
+    required String type,
+    required String category,
     required String? shortDescription,
     required String? description,
     required DateTime? startDate,
