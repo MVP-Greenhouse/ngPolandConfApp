@@ -12,9 +12,7 @@ part 'events_model.g.dart';
 class EventsModel with _$EventsModel {
   const EventsModel._();
 
-  const factory EventsModel({
-    @HiveField(0) required List<EventItemModel>? items,
-  }) = _EventsModel;
+  const factory EventsModel({@HiveField(0) required List<EventItemModel>? items, @HiveField(1) DateTime? lastUpdate, @HiveField(2) confId}) = _EventsModel;
 
   factory EventsModel.fromJson(Map<String, dynamic> json) {
     final List<EventItemModel> eventItems = [];
@@ -70,6 +68,7 @@ class EventsModel with _$EventsModel {
 
     return EventsModel(
       items: eventItems,
+      lastUpdate: DateTime.now(),
     );
   }
 

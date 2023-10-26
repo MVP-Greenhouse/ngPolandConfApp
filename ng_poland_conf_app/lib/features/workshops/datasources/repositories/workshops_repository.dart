@@ -19,13 +19,23 @@ class WorkshopsRepositoryImpl implements WorkshopsRepository {
   @override
   Future<List<Workshop>> getWorkshops(Params params) async {
     try {
+      final WorkshopsModel? currentWorkshopsModel = await workshopsLocalDataSource.get(customKey: params.eventItemType);
+      if (currentWorkshopsModel != null &&
+          currentWorkshopsModel.items != null &&
+          currentWorkshopsModel.items!.isNotEmpty &&
+          currentWorkshopsModel.lastUpdate != null &&
+          currentWorkshopsModel.confId != null &&
+          currentWorkshopsModel.confId == params.confId &&
+          currentWorkshopsModel.lastUpdate!.isAfter(DateTime.now().subtract(const Duration(minutes: 5)))) {
+        return currentWorkshopsModel.toEntity();
+      }
       final WorkshopsModel workshops = await workshopsRemoteDataSource.getWorkshops(
         eventItemType: params.eventItemType,
         confId: params.confId,
         limit: params.limit,
       );
 
-      await workshopsLocalDataSource.update(workshops, customKey: params.eventItemType);
+      await workshopsLocalDataSource.update(workshops.copyWith(confId: params.confId), customKey: params.eventItemType);
       return workshops.toEntity();
     } catch (err) {
       WorkshopsModel? workshopsFromLocalDataSource = await workshopsLocalDataSource.get(customKey: params.eventItemType);

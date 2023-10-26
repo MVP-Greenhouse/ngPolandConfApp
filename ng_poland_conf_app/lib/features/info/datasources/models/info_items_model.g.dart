@@ -18,15 +18,21 @@ class InfoItemsModelAdapter extends TypeAdapter<InfoItemsModel> {
     };
     return InfoItemsModel(
       items: (fields[0] as List?)?.cast<InfoItemModel>(),
+      lastUpdate: fields[1] as DateTime?,
+      confId: fields[2] as dynamic,
     );
   }
 
   @override
   void write(BinaryWriter writer, InfoItemsModel obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.items);
+      ..write(obj.items)
+      ..writeByte(1)
+      ..write(obj.lastUpdate)
+      ..writeByte(2)
+      ..write(obj.confId);
   }
 
   @override
@@ -49,9 +55,15 @@ _$_InfoItemsModel _$$_InfoItemsModelFromJson(Map<String, dynamic> json) =>
       items: (json['items'] as List<dynamic>?)
           ?.map((e) => InfoItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      lastUpdate: json['lastUpdate'] == null
+          ? null
+          : DateTime.parse(json['lastUpdate'] as String),
+      confId: json['confId'],
     );
 
 Map<String, dynamic> _$$_InfoItemsModelToJson(_$_InfoItemsModel instance) =>
     <String, dynamic>{
       'items': instance.items,
+      'lastUpdate': instance.lastUpdate?.toIso8601String(),
+      'confId': instance.confId,
     };

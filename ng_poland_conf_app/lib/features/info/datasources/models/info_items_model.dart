@@ -11,9 +11,7 @@ part 'info_items_model.g.dart';
 class InfoItemsModel with _$InfoItemsModel {
   const InfoItemsModel._();
 
-  const factory InfoItemsModel({
-    @HiveField(0) required List<InfoItemModel>? items,
-  }) = _InfoItemsModel;
+  const factory InfoItemsModel({@HiveField(0) required List<InfoItemModel>? items, @HiveField(1) DateTime? lastUpdate, @HiveField(2) confId}) = _InfoItemsModel;
 
   factory InfoItemsModel.fromJson(Map<String, dynamic> json) => _$InfoItemsModelFromJson(json);
 

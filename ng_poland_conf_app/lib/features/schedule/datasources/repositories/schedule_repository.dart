@@ -19,13 +19,24 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
   @override
   Future<List<EventItem>> getAllEvents(Params params) async {
     try {
+      final EventsModel? currentEventsModel = await scheduleLocalDataSource.get(customKey: params.eventItemType);
+      if (currentEventsModel != null &&
+          currentEventsModel.items != null &&
+          currentEventsModel.items!.isNotEmpty &&
+          currentEventsModel.lastUpdate != null &&
+          currentEventsModel.confId != null &&
+          currentEventsModel.confId == params.confId &&
+          currentEventsModel.lastUpdate!.isAfter(DateTime.now().subtract(const Duration(minutes: 5)))) {
+        return currentEventsModel.toEntity();
+      }
+
       final EventsModel listAllEvents = await scheduleRemoteDataSource.getAllEvents(
         eventItemType: params.eventItemType,
         confId: params.confId,
         limit: params.limit,
       );
 
-      await scheduleLocalDataSource.update(listAllEvents, customKey: params.eventItemType);
+      await scheduleLocalDataSource.update(listAllEvents.copyWith(confId: params.confId), customKey: params.eventItemType);
       return listAllEvents.toEntity();
     } catch (err) {
       EventsModel? listAllEventsFromLocalDataSource = await scheduleLocalDataSource.get(customKey: params.eventItemType);

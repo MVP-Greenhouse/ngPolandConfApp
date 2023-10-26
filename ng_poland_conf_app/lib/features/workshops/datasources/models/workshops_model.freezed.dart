@@ -18,6 +18,10 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$WorkshopsModel {
   @HiveField(0)
   List<WorkshopModel>? get items => throw _privateConstructorUsedError;
+  @HiveField(1)
+  DateTime? get lastUpdate => throw _privateConstructorUsedError;
+  @HiveField(2)
+  dynamic get confId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $WorkshopsModelCopyWith<WorkshopsModel> get copyWith =>
@@ -30,7 +34,10 @@ abstract class $WorkshopsModelCopyWith<$Res> {
           WorkshopsModel value, $Res Function(WorkshopsModel) then) =
       _$WorkshopsModelCopyWithImpl<$Res, WorkshopsModel>;
   @useResult
-  $Res call({@HiveField(0) List<WorkshopModel>? items});
+  $Res call(
+      {@HiveField(0) List<WorkshopModel>? items,
+      @HiveField(1) DateTime? lastUpdate,
+      @HiveField(2) dynamic confId});
 }
 
 /// @nodoc
@@ -47,12 +54,22 @@ class _$WorkshopsModelCopyWithImpl<$Res, $Val extends WorkshopsModel>
   @override
   $Res call({
     Object? items = freezed,
+    Object? lastUpdate = freezed,
+    Object? confId = freezed,
   }) {
     return _then(_value.copyWith(
       items: freezed == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<WorkshopModel>?,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confId: freezed == confId
+          ? _value.confId
+          : confId // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 }
@@ -65,7 +82,10 @@ abstract class _$$_WorkshopsModelCopyWith<$Res>
       __$$_WorkshopsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@HiveField(0) List<WorkshopModel>? items});
+  $Res call(
+      {@HiveField(0) List<WorkshopModel>? items,
+      @HiveField(1) DateTime? lastUpdate,
+      @HiveField(2) dynamic confId});
 }
 
 /// @nodoc
@@ -80,12 +100,19 @@ class __$$_WorkshopsModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? items = freezed,
+    Object? lastUpdate = freezed,
+    Object? confId = freezed,
   }) {
     return _then(_$_WorkshopsModel(
       items: freezed == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
               as List<WorkshopModel>?,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confId: freezed == confId ? _value.confId! : confId,
     ));
   }
 }
@@ -94,7 +121,9 @@ class __$$_WorkshopsModelCopyWithImpl<$Res>
 
 class _$_WorkshopsModel extends _WorkshopsModel {
   const _$_WorkshopsModel(
-      {@HiveField(0) required final List<WorkshopModel>? items})
+      {@HiveField(0) required final List<WorkshopModel>? items,
+      @HiveField(1) this.lastUpdate,
+      @HiveField(2) this.confId})
       : _items = items,
         super._();
 
@@ -110,8 +139,15 @@ class _$_WorkshopsModel extends _WorkshopsModel {
   }
 
   @override
+  @HiveField(1)
+  final DateTime? lastUpdate;
+  @override
+  @HiveField(2)
+  final dynamic confId;
+
+  @override
   String toString() {
-    return 'WorkshopsModel(items: $items)';
+    return 'WorkshopsModel(items: $items, lastUpdate: $lastUpdate, confId: $confId)';
   }
 
   @override
@@ -119,12 +155,18 @@ class _$_WorkshopsModel extends _WorkshopsModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_WorkshopsModel &&
-            const DeepCollectionEquality().equals(other._items, _items));
+            const DeepCollectionEquality().equals(other._items, _items) &&
+            (identical(other.lastUpdate, lastUpdate) ||
+                other.lastUpdate == lastUpdate) &&
+            const DeepCollectionEquality().equals(other.confId, confId));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_items),
+      lastUpdate,
+      const DeepCollectionEquality().hash(confId));
 
   @JsonKey(ignore: true)
   @override
@@ -135,13 +177,20 @@ class _$_WorkshopsModel extends _WorkshopsModel {
 
 abstract class _WorkshopsModel extends WorkshopsModel {
   const factory _WorkshopsModel(
-          {@HiveField(0) required final List<WorkshopModel>? items}) =
-      _$_WorkshopsModel;
+      {@HiveField(0) required final List<WorkshopModel>? items,
+      @HiveField(1) final DateTime? lastUpdate,
+      @HiveField(2) final dynamic confId}) = _$_WorkshopsModel;
   const _WorkshopsModel._() : super._();
 
   @override
   @HiveField(0)
   List<WorkshopModel>? get items;
+  @override
+  @HiveField(1)
+  DateTime? get lastUpdate;
+  @override
+  @HiveField(2)
+  dynamic get confId;
   @override
   @JsonKey(ignore: true)
   _$$_WorkshopsModelCopyWith<_$_WorkshopsModel> get copyWith =>

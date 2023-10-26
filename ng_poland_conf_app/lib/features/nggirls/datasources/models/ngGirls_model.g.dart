@@ -21,13 +21,14 @@ class NgGirlsModelAdapter extends TypeAdapter<NgGirlsModel> {
       title: fields[1] as String,
       text: fields[2] as String,
       confId: fields[3] as String,
+      lastUpdate: fields[4] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, NgGirlsModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.myId)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class NgGirlsModelAdapter extends TypeAdapter<NgGirlsModel> {
       ..writeByte(2)
       ..write(obj.text)
       ..writeByte(3)
-      ..write(obj.confId);
+      ..write(obj.confId)
+      ..writeByte(4)
+      ..write(obj.lastUpdate);
   }
 
   @override
@@ -59,6 +62,7 @@ _$_NgGirlsModel _$$_NgGirlsModelFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       text: json['text'] as String,
       confId: json['confId'] as String,
+      lastUpdate: DateTime.parse(json['lastUpdate'] as String),
     );
 
 Map<String, dynamic> _$$_NgGirlsModelToJson(_$_NgGirlsModel instance) =>
@@ -67,4 +71,5 @@ Map<String, dynamic> _$$_NgGirlsModelToJson(_$_NgGirlsModel instance) =>
       'title': instance.title,
       'text': instance.text,
       'confId': instance.confId,
+      'lastUpdate': instance.lastUpdate.toIso8601String(),
     };

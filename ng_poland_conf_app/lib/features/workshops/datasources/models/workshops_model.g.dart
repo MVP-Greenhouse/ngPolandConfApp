@@ -18,15 +18,21 @@ class WorkshopsModelAdapter extends TypeAdapter<WorkshopsModel> {
     };
     return WorkshopsModel(
       items: (fields[0] as List?)?.cast<WorkshopModel>(),
+      lastUpdate: fields[1] as DateTime?,
+      confId: fields[2] as dynamic,
     );
   }
 
   @override
   void write(BinaryWriter writer, WorkshopsModel obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.items);
+      ..write(obj.items)
+      ..writeByte(1)
+      ..write(obj.lastUpdate)
+      ..writeByte(2)
+      ..write(obj.confId);
   }
 
   @override

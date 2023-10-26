@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
               ),
               AnimatedSize(
                 alignment: Alignment.topCenter,
-                duration: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 300),
                 child: state.maybeWhen(
                   initial: () => Text('The Biggest Angular Conference',
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200))),

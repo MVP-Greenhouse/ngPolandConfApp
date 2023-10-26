@@ -22,6 +22,10 @@ InfoItemsModel _$InfoItemsModelFromJson(Map<String, dynamic> json) {
 mixin _$InfoItemsModel {
   @HiveField(0)
   List<InfoItemModel>? get items => throw _privateConstructorUsedError;
+  @HiveField(1)
+  DateTime? get lastUpdate => throw _privateConstructorUsedError;
+  @HiveField(2)
+  dynamic get confId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +39,10 @@ abstract class $InfoItemsModelCopyWith<$Res> {
           InfoItemsModel value, $Res Function(InfoItemsModel) then) =
       _$InfoItemsModelCopyWithImpl<$Res, InfoItemsModel>;
   @useResult
-  $Res call({@HiveField(0) List<InfoItemModel>? items});
+  $Res call(
+      {@HiveField(0) List<InfoItemModel>? items,
+      @HiveField(1) DateTime? lastUpdate,
+      @HiveField(2) dynamic confId});
 }
 
 /// @nodoc
@@ -52,12 +59,22 @@ class _$InfoItemsModelCopyWithImpl<$Res, $Val extends InfoItemsModel>
   @override
   $Res call({
     Object? items = freezed,
+    Object? lastUpdate = freezed,
+    Object? confId = freezed,
   }) {
     return _then(_value.copyWith(
       items: freezed == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<InfoItemModel>?,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confId: freezed == confId
+          ? _value.confId
+          : confId // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 }
@@ -70,7 +87,10 @@ abstract class _$$_InfoItemsModelCopyWith<$Res>
       __$$_InfoItemsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@HiveField(0) List<InfoItemModel>? items});
+  $Res call(
+      {@HiveField(0) List<InfoItemModel>? items,
+      @HiveField(1) DateTime? lastUpdate,
+      @HiveField(2) dynamic confId});
 }
 
 /// @nodoc
@@ -85,12 +105,19 @@ class __$$_InfoItemsModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? items = freezed,
+    Object? lastUpdate = freezed,
+    Object? confId = freezed,
   }) {
     return _then(_$_InfoItemsModel(
       items: freezed == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
               as List<InfoItemModel>?,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confId: freezed == confId ? _value.confId! : confId,
     ));
   }
 }
@@ -99,7 +126,9 @@ class __$$_InfoItemsModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_InfoItemsModel extends _InfoItemsModel {
   const _$_InfoItemsModel(
-      {@HiveField(0) required final List<InfoItemModel>? items})
+      {@HiveField(0) required final List<InfoItemModel>? items,
+      @HiveField(1) this.lastUpdate,
+      @HiveField(2) this.confId})
       : _items = items,
         super._();
 
@@ -118,8 +147,15 @@ class _$_InfoItemsModel extends _InfoItemsModel {
   }
 
   @override
+  @HiveField(1)
+  final DateTime? lastUpdate;
+  @override
+  @HiveField(2)
+  final dynamic confId;
+
+  @override
   String toString() {
-    return 'InfoItemsModel(items: $items)';
+    return 'InfoItemsModel(items: $items, lastUpdate: $lastUpdate, confId: $confId)';
   }
 
   @override
@@ -127,13 +163,19 @@ class _$_InfoItemsModel extends _InfoItemsModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_InfoItemsModel &&
-            const DeepCollectionEquality().equals(other._items, _items));
+            const DeepCollectionEquality().equals(other._items, _items) &&
+            (identical(other.lastUpdate, lastUpdate) ||
+                other.lastUpdate == lastUpdate) &&
+            const DeepCollectionEquality().equals(other.confId, confId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_items),
+      lastUpdate,
+      const DeepCollectionEquality().hash(confId));
 
   @JsonKey(ignore: true)
   @override
@@ -151,8 +193,9 @@ class _$_InfoItemsModel extends _InfoItemsModel {
 
 abstract class _InfoItemsModel extends InfoItemsModel {
   const factory _InfoItemsModel(
-          {@HiveField(0) required final List<InfoItemModel>? items}) =
-      _$_InfoItemsModel;
+      {@HiveField(0) required final List<InfoItemModel>? items,
+      @HiveField(1) final DateTime? lastUpdate,
+      @HiveField(2) final dynamic confId}) = _$_InfoItemsModel;
   const _InfoItemsModel._() : super._();
 
   factory _InfoItemsModel.fromJson(Map<String, dynamic> json) =
@@ -161,6 +204,12 @@ abstract class _InfoItemsModel extends InfoItemsModel {
   @override
   @HiveField(0)
   List<InfoItemModel>? get items;
+  @override
+  @HiveField(1)
+  DateTime? get lastUpdate;
+  @override
+  @HiveField(2)
+  dynamic get confId;
   @override
   @JsonKey(ignore: true)
   _$$_InfoItemsModelCopyWith<_$_InfoItemsModel> get copyWith =>

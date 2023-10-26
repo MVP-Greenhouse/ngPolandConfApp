@@ -18,15 +18,21 @@ class EventsModelAdapter extends TypeAdapter<EventsModel> {
     };
     return EventsModel(
       items: (fields[0] as List?)?.cast<EventItemModel>(),
+      lastUpdate: fields[1] as DateTime?,
+      confId: fields[2] as dynamic,
     );
   }
 
   @override
   void write(BinaryWriter writer, EventsModel obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.items);
+      ..write(obj.items)
+      ..writeByte(1)
+      ..write(obj.lastUpdate)
+      ..writeByte(2)
+      ..write(obj.confId);
   }
 
   @override

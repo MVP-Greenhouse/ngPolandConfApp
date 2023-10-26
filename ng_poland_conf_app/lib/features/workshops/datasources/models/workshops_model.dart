@@ -13,9 +13,7 @@ part 'workshops_model.g.dart';
 class WorkshopsModel with _$WorkshopsModel {
   const WorkshopsModel._();
 
-  const factory WorkshopsModel({
-    @HiveField(0) required List<WorkshopModel>? items,
-  }) = _WorkshopsModel;
+  const factory WorkshopsModel({@HiveField(0) required List<WorkshopModel>? items, @HiveField(1) DateTime? lastUpdate, @HiveField(2) confId}) = _WorkshopsModel;
 
   factory WorkshopsModel.fromJson(Map<String, dynamic> json) {
     final List<WorkshopModel> workshops = [];
@@ -66,6 +64,7 @@ class WorkshopsModel with _$WorkshopsModel {
 
     return WorkshopsModel(
       items: workshops,
+      lastUpdate: DateTime.now(),
     );
   }
 

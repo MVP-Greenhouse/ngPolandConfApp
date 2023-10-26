@@ -19,12 +19,23 @@ class InfoRepositoryImpl implements InfoRepository {
   @override
   Future<List<InfoItem>> getAllInfoItems(Params params) async {
     try {
+      final currentInfoItemsModel = await infoLocalDataSource.get();
+      if (currentInfoItemsModel != null &&
+          currentInfoItemsModel.items != null &&
+          currentInfoItemsModel.items!.isNotEmpty &&
+          currentInfoItemsModel.lastUpdate != null &&
+          currentInfoItemsModel.confId != null &&
+          currentInfoItemsModel.confId == params.confId &&
+          currentInfoItemsModel.lastUpdate!.isAfter(DateTime.now().subtract(const Duration(minutes: 5)))) {
+        return currentInfoItemsModel.toEntity();
+      }
+
       final InfoItemsModel infoItems = await infoRemoteDataSource.getAllInfoItems(
         confId: params.confId,
         limit: params.limit,
       );
 
-      await infoLocalDataSource.update(infoItems);
+      await infoLocalDataSource.update(infoItems.copyWith(confId: params.confId, lastUpdate: DateTime.now()));
       return infoItems.toEntity();
     } catch (err) {
       InfoItemsModel? infoItemsFromLocalDataSource = await infoLocalDataSource.get();

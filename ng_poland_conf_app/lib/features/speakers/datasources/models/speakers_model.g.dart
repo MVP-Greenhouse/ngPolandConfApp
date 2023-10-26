@@ -18,15 +18,21 @@ class SpeakersModelAdapter extends TypeAdapter<SpeakersModel> {
     };
     return SpeakersModel(
       items: (fields[0] as List?)?.cast<SpeakerModel>(),
+      lastUpdate: fields[1] as DateTime?,
+      confId: fields[2] as dynamic,
     );
   }
 
   @override
   void write(BinaryWriter writer, SpeakersModel obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.items);
+      ..write(obj.items)
+      ..writeByte(1)
+      ..write(obj.lastUpdate)
+      ..writeByte(2)
+      ..write(obj.confId);
   }
 
   @override

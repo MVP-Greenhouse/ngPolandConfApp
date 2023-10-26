@@ -20,12 +20,21 @@ class NgGirlsImpl implements NgGirlsRepository {
   @override
   Future<NgGirls?> getNgGirls(Params params) async {
     try {
+      final NgGirlsModel? currentNgGirlsModel = await ngGirlsLocalDataSource.get();
+
+      if (currentNgGirlsModel != null &&
+          currentNgGirlsModel.myId == SimpleContentId.ngGirlsWorkshops &&
+          currentNgGirlsModel.confId == params.confId &&
+          currentNgGirlsModel.lastUpdate.isAfter(DateTime.now().subtract(const Duration(minutes: 5)))) {
+        return currentNgGirlsModel.toEntity();
+      }
+
       final NgGirlsModel workshops = await ngGirlsRemoteDataSource.getNgGirls(
         ngGirlsWorkshopsId: SimpleContentId.ngGirlsWorkshops,
         confId: params.confId,
       );
 
-      await ngGirlsLocalDataSource.update(workshops);
+      await ngGirlsLocalDataSource.update(workshops.copyWith(lastUpdate: DateTime.now()));
       return workshops.toEntity();
     } catch (err) {
       NgGirlsModel? ngGirlsFromLocalDataSource = await ngGirlsLocalDataSource.get();

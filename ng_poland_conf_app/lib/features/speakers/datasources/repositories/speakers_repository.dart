@@ -17,12 +17,22 @@ class SpeakersRepositoryImpl implements SpeakersRepository {
   @override
   Future<List<Speaker>> getAllSpeakers(Params params) async {
     try {
+      final currentSpeakersModel = await speakersLocalDataSource.get();
+      if (currentSpeakersModel != null &&
+          currentSpeakersModel.items != null &&
+          currentSpeakersModel.items!.isNotEmpty &&
+          currentSpeakersModel.lastUpdate != null &&
+          currentSpeakersModel.confId != null &&
+          currentSpeakersModel.confId == params.confId &&
+          currentSpeakersModel.lastUpdate!.isAfter(DateTime.now().subtract(const Duration(minutes: 5)))) {
+        return currentSpeakersModel.toEntity();
+      }
       final SpeakersModel allSpeakers = await speakersRemoteDataSource.getAllSpeakers(
         confId: params.confId,
         limit: params.limit,
       );
 
-      await speakersLocalDataSource.update(allSpeakers);
+      await speakersLocalDataSource.update(allSpeakers.copyWith(confId: params.confId));
       return allSpeakers.toEntity();
     } catch (e) {
       SpeakersModel? allSpeakersFromLocalDataSource = await speakersLocalDataSource.get();

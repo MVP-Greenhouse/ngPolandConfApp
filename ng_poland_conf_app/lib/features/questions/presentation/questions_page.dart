@@ -33,7 +33,7 @@ class _QuestionsPageState extends State<QuestionsPage> {
             });
           },
           onPageFinished: (url) {
-            Future.delayed(const Duration(milliseconds: 500), () {
+            Future.delayed(const Duration(milliseconds: 300), () {
               setState(() {
                 loadingPercentage = 100;
               });

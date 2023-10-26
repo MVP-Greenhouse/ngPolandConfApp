@@ -15,13 +15,10 @@ class NgGirlsModel with _$NgGirlsModel {
     @HiveField(1) required String title,
     @HiveField(2) required String text,
     @HiveField(3) required String confId,
+    @HiveField(4) required DateTime lastUpdate,
   }) = _NgGirlsModel;
 
   factory NgGirlsModel.fromJson(Map<String, dynamic> json) => _$NgGirlsModelFromJson(json['items'][0]['fields']);
 
-  NgGirls toEntity() => NgGirls(
-        myId: myId,
-        title: title,
-        text: text,
-      );
+  NgGirls toEntity() => NgGirls(myId: myId, title: title, text: text);
 }

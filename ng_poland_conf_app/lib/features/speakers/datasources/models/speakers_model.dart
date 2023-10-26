@@ -11,9 +11,7 @@ part 'speakers_model.g.dart';
 class SpeakersModel with _$SpeakersModel {
   const SpeakersModel._();
 
-  const factory SpeakersModel({
-    @HiveField(0) List<SpeakerModel>? items,
-  }) = _SpeakersModel;
+  const factory SpeakersModel({@HiveField(0) List<SpeakerModel>? items, @HiveField(1) DateTime? lastUpdate, @HiveField(2) confId}) = _SpeakersModel;
 
   factory SpeakersModel.fromJson(Map<String, dynamic> json) {
     final List<SpeakerModel> speakers = [];
@@ -44,9 +42,7 @@ class SpeakersModel with _$SpeakersModel {
       );
     }
 
-    return SpeakersModel(
-      items: speakers,
-    );
+    return SpeakersModel(items: speakers, lastUpdate: DateTime.now());
 
     // return _$SpeakersModelFromJson(json);
   }
