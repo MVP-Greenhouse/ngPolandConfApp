@@ -58,6 +58,7 @@ class _SchedulePageState extends State<SchedulePage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
+            error: (error) => const EmptyListInformation(),
             loaded: (listEvents) => listEvents.isEmpty
                 ? const EmptyListInformation()
                 : Padding(

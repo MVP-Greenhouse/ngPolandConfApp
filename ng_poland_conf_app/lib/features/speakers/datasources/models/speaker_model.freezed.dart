@@ -16,18 +16,31 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SpeakerModel {
+  @HiveField(0)
   String get id => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get name => throw _privateConstructorUsedError;
+  @HiveField(2)
   List<String> get confIds => throw _privateConstructorUsedError;
-  String get role => throw _privateConstructorUsedError;
-  String get bio => throw _privateConstructorUsedError;
+  @HiveField(3)
+  String? get role => throw _privateConstructorUsedError;
+  @HiveField(4)
+  String? get bio => throw _privateConstructorUsedError;
+  @HiveField(5)
   String? get photoFileUrl => throw _privateConstructorUsedError;
+  @HiveField(6)
   String? get photoTitle => throw _privateConstructorUsedError;
+  @HiveField(7)
   String? get photoDescription => throw _privateConstructorUsedError;
+  @HiveField(8)
   String? get email => throw _privateConstructorUsedError;
+  @HiveField(9)
   String? get urlGithub => throw _privateConstructorUsedError;
+  @HiveField(10)
   String? get urlLinkedIn => throw _privateConstructorUsedError;
+  @HiveField(11)
   String? get urlTwitter => throw _privateConstructorUsedError;
+  @HiveField(12)
   String? get urlWww => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -42,19 +55,19 @@ abstract class $SpeakerModelCopyWith<$Res> {
       _$SpeakerModelCopyWithImpl<$Res, SpeakerModel>;
   @useResult
   $Res call(
-      {String id,
-      String name,
-      List<String> confIds,
-      String role,
-      String bio,
-      String? photoFileUrl,
-      String? photoTitle,
-      String? photoDescription,
-      String? email,
-      String? urlGithub,
-      String? urlLinkedIn,
-      String? urlTwitter,
-      String? urlWww});
+      {@HiveField(0) String id,
+      @HiveField(1) String name,
+      @HiveField(2) List<String> confIds,
+      @HiveField(3) String? role,
+      @HiveField(4) String? bio,
+      @HiveField(5) String? photoFileUrl,
+      @HiveField(6) String? photoTitle,
+      @HiveField(7) String? photoDescription,
+      @HiveField(8) String? email,
+      @HiveField(9) String? urlGithub,
+      @HiveField(10) String? urlLinkedIn,
+      @HiveField(11) String? urlTwitter,
+      @HiveField(12) String? urlWww});
 }
 
 /// @nodoc
@@ -73,8 +86,8 @@ class _$SpeakerModelCopyWithImpl<$Res, $Val extends SpeakerModel>
     Object? id = null,
     Object? name = null,
     Object? confIds = null,
-    Object? role = null,
-    Object? bio = null,
+    Object? role = freezed,
+    Object? bio = freezed,
     Object? photoFileUrl = freezed,
     Object? photoTitle = freezed,
     Object? photoDescription = freezed,
@@ -97,14 +110,14 @@ class _$SpeakerModelCopyWithImpl<$Res, $Val extends SpeakerModel>
           ? _value.confIds
           : confIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      role: null == role
+      role: freezed == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
+              as String?,
+      bio: freezed == bio
           ? _value.bio
           : bio // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       photoFileUrl: freezed == photoFileUrl
           ? _value.photoFileUrl
           : photoFileUrl // ignore: cast_nullable_to_non_nullable
@@ -150,19 +163,19 @@ abstract class _$$_SpeakerModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String name,
-      List<String> confIds,
-      String role,
-      String bio,
-      String? photoFileUrl,
-      String? photoTitle,
-      String? photoDescription,
-      String? email,
-      String? urlGithub,
-      String? urlLinkedIn,
-      String? urlTwitter,
-      String? urlWww});
+      {@HiveField(0) String id,
+      @HiveField(1) String name,
+      @HiveField(2) List<String> confIds,
+      @HiveField(3) String? role,
+      @HiveField(4) String? bio,
+      @HiveField(5) String? photoFileUrl,
+      @HiveField(6) String? photoTitle,
+      @HiveField(7) String? photoDescription,
+      @HiveField(8) String? email,
+      @HiveField(9) String? urlGithub,
+      @HiveField(10) String? urlLinkedIn,
+      @HiveField(11) String? urlTwitter,
+      @HiveField(12) String? urlWww});
 }
 
 /// @nodoc
@@ -179,8 +192,8 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? confIds = null,
-    Object? role = null,
-    Object? bio = null,
+    Object? role = freezed,
+    Object? bio = freezed,
     Object? photoFileUrl = freezed,
     Object? photoTitle = freezed,
     Object? photoDescription = freezed,
@@ -203,14 +216,14 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
           ? _value._confIds
           : confIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      role: null == role
+      role: freezed == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
-              as String,
-      bio: null == bio
+              as String?,
+      bio: freezed == bio
           ? _value.bio
           : bio // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       photoFileUrl: freezed == photoFileUrl
           ? _value.photoFileUrl
           : photoFileUrl // ignore: cast_nullable_to_non_nullable
@@ -251,28 +264,31 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
 
 class _$_SpeakerModel extends _SpeakerModel {
   const _$_SpeakerModel(
-      {required this.id,
-      required this.name,
-      required final List<String> confIds,
-      required this.role,
-      required this.bio,
-      required this.photoFileUrl,
-      required this.photoTitle,
-      required this.photoDescription,
-      required this.email,
-      required this.urlGithub,
-      required this.urlLinkedIn,
-      required this.urlTwitter,
-      required this.urlWww})
+      {@HiveField(0) required this.id,
+      @HiveField(1) required this.name,
+      @HiveField(2) required final List<String> confIds,
+      @HiveField(3) required this.role,
+      @HiveField(4) required this.bio,
+      @HiveField(5) required this.photoFileUrl,
+      @HiveField(6) required this.photoTitle,
+      @HiveField(7) required this.photoDescription,
+      @HiveField(8) required this.email,
+      @HiveField(9) required this.urlGithub,
+      @HiveField(10) required this.urlLinkedIn,
+      @HiveField(11) required this.urlTwitter,
+      @HiveField(12) required this.urlWww})
       : _confIds = confIds,
         super._();
 
   @override
+  @HiveField(0)
   final String id;
   @override
+  @HiveField(1)
   final String name;
   final List<String> _confIds;
   @override
+  @HiveField(2)
   List<String> get confIds {
     if (_confIds is EqualUnmodifiableListView) return _confIds;
     // ignore: implicit_dynamic_type
@@ -280,24 +296,34 @@ class _$_SpeakerModel extends _SpeakerModel {
   }
 
   @override
-  final String role;
+  @HiveField(3)
+  final String? role;
   @override
-  final String bio;
+  @HiveField(4)
+  final String? bio;
   @override
+  @HiveField(5)
   final String? photoFileUrl;
   @override
+  @HiveField(6)
   final String? photoTitle;
   @override
+  @HiveField(7)
   final String? photoDescription;
   @override
+  @HiveField(8)
   final String? email;
   @override
+  @HiveField(9)
   final String? urlGithub;
   @override
+  @HiveField(10)
   final String? urlLinkedIn;
   @override
+  @HiveField(11)
   final String? urlTwitter;
   @override
+  @HiveField(12)
   final String? urlWww;
 
   @override
@@ -357,46 +383,59 @@ class _$_SpeakerModel extends _SpeakerModel {
 
 abstract class _SpeakerModel extends SpeakerModel {
   const factory _SpeakerModel(
-      {required final String id,
-      required final String name,
-      required final List<String> confIds,
-      required final String role,
-      required final String bio,
-      required final String? photoFileUrl,
-      required final String? photoTitle,
-      required final String? photoDescription,
-      required final String? email,
-      required final String? urlGithub,
-      required final String? urlLinkedIn,
-      required final String? urlTwitter,
-      required final String? urlWww}) = _$_SpeakerModel;
+      {@HiveField(0) required final String id,
+      @HiveField(1) required final String name,
+      @HiveField(2) required final List<String> confIds,
+      @HiveField(3) required final String? role,
+      @HiveField(4) required final String? bio,
+      @HiveField(5) required final String? photoFileUrl,
+      @HiveField(6) required final String? photoTitle,
+      @HiveField(7) required final String? photoDescription,
+      @HiveField(8) required final String? email,
+      @HiveField(9) required final String? urlGithub,
+      @HiveField(10) required final String? urlLinkedIn,
+      @HiveField(11) required final String? urlTwitter,
+      @HiveField(12) required final String? urlWww}) = _$_SpeakerModel;
   const _SpeakerModel._() : super._();
 
   @override
+  @HiveField(0)
   String get id;
   @override
+  @HiveField(1)
   String get name;
   @override
+  @HiveField(2)
   List<String> get confIds;
   @override
-  String get role;
+  @HiveField(3)
+  String? get role;
   @override
-  String get bio;
+  @HiveField(4)
+  String? get bio;
   @override
+  @HiveField(5)
   String? get photoFileUrl;
   @override
+  @HiveField(6)
   String? get photoTitle;
   @override
+  @HiveField(7)
   String? get photoDescription;
   @override
+  @HiveField(8)
   String? get email;
   @override
+  @HiveField(9)
   String? get urlGithub;
   @override
+  @HiveField(10)
   String? get urlLinkedIn;
   @override
+  @HiveField(11)
   String? get urlTwitter;
   @override
+  @HiveField(12)
   String? get urlWww;
   @override
   @JsonKey(ignore: true)

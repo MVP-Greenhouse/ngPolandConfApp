@@ -20,12 +20,18 @@ InfoItemModel _$InfoItemModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$InfoItemModel {
+  @HiveField(0)
   String get title => throw _privateConstructorUsedError;
+  @HiveField(1)
   int get order => throw _privateConstructorUsedError;
+  @HiveField(2)
   String get icon => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  @HiveField(3)
+  String? get description => throw _privateConstructorUsedError;
+  @HiveField(4)
   String get confId => throw _privateConstructorUsedError;
-  String get urlLink => throw _privateConstructorUsedError;
+  @HiveField(5)
+  String? get urlLink => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,12 +46,12 @@ abstract class $InfoItemModelCopyWith<$Res> {
       _$InfoItemModelCopyWithImpl<$Res, InfoItemModel>;
   @useResult
   $Res call(
-      {String title,
-      int order,
-      String icon,
-      String description,
-      String confId,
-      String urlLink});
+      {@HiveField(0) String title,
+      @HiveField(1) int order,
+      @HiveField(2) String icon,
+      @HiveField(3) String? description,
+      @HiveField(4) String confId,
+      @HiveField(5) String? urlLink});
 }
 
 /// @nodoc
@@ -64,9 +70,9 @@ class _$InfoItemModelCopyWithImpl<$Res, $Val extends InfoItemModel>
     Object? title = null,
     Object? order = null,
     Object? icon = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? confId = null,
-    Object? urlLink = null,
+    Object? urlLink = freezed,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -81,18 +87,18 @@ class _$InfoItemModelCopyWithImpl<$Res, $Val extends InfoItemModel>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
-      urlLink: null == urlLink
+      urlLink: freezed == urlLink
           ? _value.urlLink
           : urlLink // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -106,12 +112,12 @@ abstract class _$$_InfoItemModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String title,
-      int order,
-      String icon,
-      String description,
-      String confId,
-      String urlLink});
+      {@HiveField(0) String title,
+      @HiveField(1) int order,
+      @HiveField(2) String icon,
+      @HiveField(3) String? description,
+      @HiveField(4) String confId,
+      @HiveField(5) String? urlLink});
 }
 
 /// @nodoc
@@ -128,9 +134,9 @@ class __$$_InfoItemModelCopyWithImpl<$Res>
     Object? title = null,
     Object? order = null,
     Object? icon = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? confId = null,
-    Object? urlLink = null,
+    Object? urlLink = freezed,
   }) {
     return _then(_$_InfoItemModel(
       title: null == title
@@ -145,18 +151,18 @@ class __$$_InfoItemModelCopyWithImpl<$Res>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
-      urlLink: null == urlLink
+      urlLink: freezed == urlLink
           ? _value.urlLink
           : urlLink // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -165,29 +171,35 @@ class __$$_InfoItemModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_InfoItemModel extends _InfoItemModel {
   const _$_InfoItemModel(
-      {required this.title,
-      required this.order,
-      required this.icon,
-      required this.description,
-      required this.confId,
-      required this.urlLink})
+      {@HiveField(0) required this.title,
+      @HiveField(1) required this.order,
+      @HiveField(2) required this.icon,
+      @HiveField(3) this.description,
+      @HiveField(4) required this.confId,
+      @HiveField(5) this.urlLink})
       : super._();
 
   factory _$_InfoItemModel.fromJson(Map<String, dynamic> json) =>
       _$$_InfoItemModelFromJson(json);
 
   @override
+  @HiveField(0)
   final String title;
   @override
+  @HiveField(1)
   final int order;
   @override
+  @HiveField(2)
   final String icon;
   @override
-  final String description;
+  @HiveField(3)
+  final String? description;
   @override
+  @HiveField(4)
   final String confId;
   @override
-  final String urlLink;
+  @HiveField(5)
+  final String? urlLink;
 
   @override
   String toString() {
@@ -229,29 +241,35 @@ class _$_InfoItemModel extends _InfoItemModel {
 
 abstract class _InfoItemModel extends InfoItemModel {
   const factory _InfoItemModel(
-      {required final String title,
-      required final int order,
-      required final String icon,
-      required final String description,
-      required final String confId,
-      required final String urlLink}) = _$_InfoItemModel;
+      {@HiveField(0) required final String title,
+      @HiveField(1) required final int order,
+      @HiveField(2) required final String icon,
+      @HiveField(3) final String? description,
+      @HiveField(4) required final String confId,
+      @HiveField(5) final String? urlLink}) = _$_InfoItemModel;
   const _InfoItemModel._() : super._();
 
   factory _InfoItemModel.fromJson(Map<String, dynamic> json) =
       _$_InfoItemModel.fromJson;
 
   @override
+  @HiveField(0)
   String get title;
   @override
+  @HiveField(1)
   int get order;
   @override
+  @HiveField(2)
   String get icon;
   @override
-  String get description;
+  @HiveField(3)
+  String? get description;
   @override
+  @HiveField(4)
   String get confId;
   @override
-  String get urlLink;
+  @HiveField(5)
+  String? get urlLink;
   @override
   @JsonKey(ignore: true)
   _$$_InfoItemModelCopyWith<_$_InfoItemModel> get copyWith =>

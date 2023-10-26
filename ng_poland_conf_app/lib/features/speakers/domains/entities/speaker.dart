@@ -26,12 +26,10 @@ class Speaker with _$Speaker {
       }
     }
 
-    print('speaker from json id ${json['sys']['id']}');
-
     return Speaker(
       id: json['sys']['id'] as String,
-      name: json['fields']['name'] as String,
-      role: json['fields']['role'] as String,
+      name: json['fields']['name'] as String ?? '',
+      role: json['fields']['role'] as String ?? '',
       bio: json['fields']['bio'] as String,
       photoFileUrl: photoFileUrl,
       photoTitle: json['fields']['photoTitle'] ?? '',

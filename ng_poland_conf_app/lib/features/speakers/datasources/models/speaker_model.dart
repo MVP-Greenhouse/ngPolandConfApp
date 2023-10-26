@@ -1,26 +1,29 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
 part 'speaker_model.freezed.dart';
+part 'speaker_model.g.dart';
 
 @freezed
+@HiveType(typeId: 8)
 class SpeakerModel with _$SpeakerModel {
   const SpeakerModel._();
 
   const factory SpeakerModel({
-    required String id,
-    required String name,
-    required List<String> confIds,
-    required String role,
-    required String bio,
-    required String? photoFileUrl,
-    required String? photoTitle,
-    required String? photoDescription,
-    required String? email,
-    required String? urlGithub,
-    required String? urlLinkedIn,
-    required String? urlTwitter,
-    required String? urlWww,
+    @HiveField(0) required String id,
+    @HiveField(1) required String name,
+    @HiveField(2) required List<String> confIds,
+    @HiveField(3) required String? role,
+    @HiveField(4) required String? bio,
+    @HiveField(5) required String? photoFileUrl,
+    @HiveField(6) required String? photoTitle,
+    @HiveField(7) required String? photoDescription,
+    @HiveField(8) required String? email,
+    @HiveField(9) required String? urlGithub,
+    @HiveField(10) required String? urlLinkedIn,
+    @HiveField(11) required String? urlTwitter,
+    @HiveField(12) required String? urlWww,
   }) = _SpeakerModel;
 
   factory SpeakerModel.fromJson(Map<String, dynamic> json) {
@@ -35,8 +38,8 @@ class SpeakerModel with _$SpeakerModel {
       id: json['sys']['id'] as String,
       name: json['fields']['name'] as String,
       confIds: json['fields']['confIds'],
-      role: json['fields']['role'] as String,
-      bio: json['fields']['bio'] as String,
+      role: json['fields']['role'] as String ?? '',
+      bio: json['fields']['bio'] as String ?? '',
       photoFileUrl: photoFileUrl,
       photoTitle: json['fields']['photoTitle'] ?? '',
       photoDescription: json['fields']['photoDescription'] ?? '',
@@ -53,8 +56,8 @@ class SpeakerModel with _$SpeakerModel {
     return Speaker(
       id: id,
       name: name,
-      role: role,
-      bio: bio,
+      role: role ?? '',
+      bio: bio ?? '',
       photoFileUrl: photoFileUrl ?? '',
       photoTitle: photoTitle ?? '',
       photoDescription: photoDescription ?? '',

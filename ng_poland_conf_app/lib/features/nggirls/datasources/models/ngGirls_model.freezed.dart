@@ -20,10 +20,16 @@ NgGirlsModel _$NgGirlsModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$NgGirlsModel {
+  @HiveField(0)
   String get myId => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  String get text => throw _privateConstructorUsedError;
+  @HiveField(1)
+  String? get title => throw _privateConstructorUsedError;
+  @HiveField(2)
+  String? get text => throw _privateConstructorUsedError;
+  @HiveField(3)
   String get confId => throw _privateConstructorUsedError;
+  @HiveField(4)
+  DateTime? get lastUpdate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +43,12 @@ abstract class $NgGirlsModelCopyWith<$Res> {
           NgGirlsModel value, $Res Function(NgGirlsModel) then) =
       _$NgGirlsModelCopyWithImpl<$Res, NgGirlsModel>;
   @useResult
-  $Res call({String myId, String title, String text, String confId});
+  $Res call(
+      {@HiveField(0) String myId,
+      @HiveField(1) String? title,
+      @HiveField(2) String? text,
+      @HiveField(3) String confId,
+      @HiveField(4) DateTime? lastUpdate});
 }
 
 /// @nodoc
@@ -54,27 +65,32 @@ class _$NgGirlsModelCopyWithImpl<$Res, $Val extends NgGirlsModel>
   @override
   $Res call({
     Object? myId = null,
-    Object? title = null,
-    Object? text = null,
+    Object? title = freezed,
+    Object? text = freezed,
     Object? confId = null,
+    Object? lastUpdate = freezed,
   }) {
     return _then(_value.copyWith(
       myId: null == myId
           ? _value.myId
           : myId // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      text: null == text
+              as String?,
+      text: freezed == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -87,7 +103,12 @@ abstract class _$$_NgGirlsModelCopyWith<$Res>
       __$$_NgGirlsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String myId, String title, String text, String confId});
+  $Res call(
+      {@HiveField(0) String myId,
+      @HiveField(1) String? title,
+      @HiveField(2) String? text,
+      @HiveField(3) String confId,
+      @HiveField(4) DateTime? lastUpdate});
 }
 
 /// @nodoc
@@ -102,27 +123,32 @@ class __$$_NgGirlsModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? myId = null,
-    Object? title = null,
-    Object? text = null,
+    Object? title = freezed,
+    Object? text = freezed,
     Object? confId = null,
+    Object? lastUpdate = freezed,
   }) {
     return _then(_$_NgGirlsModel(
       myId: null == myId
           ? _value.myId
           : myId // ignore: cast_nullable_to_non_nullable
               as String,
-      title: null == title
+      title: freezed == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      text: null == text
+              as String?,
+      text: freezed == text
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
               as String,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -131,27 +157,35 @@ class __$$_NgGirlsModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_NgGirlsModel extends _NgGirlsModel {
   const _$_NgGirlsModel(
-      {required this.myId,
-      required this.title,
-      required this.text,
-      required this.confId})
+      {@HiveField(0) required this.myId,
+      @HiveField(1) required this.title,
+      @HiveField(2) required this.text,
+      @HiveField(3) required this.confId,
+      @HiveField(4) this.lastUpdate})
       : super._();
 
   factory _$_NgGirlsModel.fromJson(Map<String, dynamic> json) =>
       _$$_NgGirlsModelFromJson(json);
 
   @override
+  @HiveField(0)
   final String myId;
   @override
-  final String title;
+  @HiveField(1)
+  final String? title;
   @override
-  final String text;
+  @HiveField(2)
+  final String? text;
   @override
+  @HiveField(3)
   final String confId;
+  @override
+  @HiveField(4)
+  final DateTime? lastUpdate;
 
   @override
   String toString() {
-    return 'NgGirlsModel(myId: $myId, title: $title, text: $text, confId: $confId)';
+    return 'NgGirlsModel(myId: $myId, title: $title, text: $text, confId: $confId, lastUpdate: $lastUpdate)';
   }
 
   @override
@@ -162,12 +196,15 @@ class _$_NgGirlsModel extends _NgGirlsModel {
             (identical(other.myId, myId) || other.myId == myId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.text, text) || other.text == text) &&
-            (identical(other.confId, confId) || other.confId == confId));
+            (identical(other.confId, confId) || other.confId == confId) &&
+            (identical(other.lastUpdate, lastUpdate) ||
+                other.lastUpdate == lastUpdate));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, myId, title, text, confId);
+  int get hashCode =>
+      Object.hash(runtimeType, myId, title, text, confId, lastUpdate);
 
   @JsonKey(ignore: true)
   @override
@@ -185,23 +222,31 @@ class _$_NgGirlsModel extends _NgGirlsModel {
 
 abstract class _NgGirlsModel extends NgGirlsModel {
   const factory _NgGirlsModel(
-      {required final String myId,
-      required final String title,
-      required final String text,
-      required final String confId}) = _$_NgGirlsModel;
+      {@HiveField(0) required final String myId,
+      @HiveField(1) required final String? title,
+      @HiveField(2) required final String? text,
+      @HiveField(3) required final String confId,
+      @HiveField(4) final DateTime? lastUpdate}) = _$_NgGirlsModel;
   const _NgGirlsModel._() : super._();
 
   factory _NgGirlsModel.fromJson(Map<String, dynamic> json) =
       _$_NgGirlsModel.fromJson;
 
   @override
+  @HiveField(0)
   String get myId;
   @override
-  String get title;
+  @HiveField(1)
+  String? get title;
   @override
-  String get text;
+  @HiveField(2)
+  String? get text;
   @override
+  @HiveField(3)
   String get confId;
+  @override
+  @HiveField(4)
+  DateTime? get lastUpdate;
   @override
   @JsonKey(ignore: true)
   _$$_NgGirlsModelCopyWith<_$_NgGirlsModel> get copyWith =>

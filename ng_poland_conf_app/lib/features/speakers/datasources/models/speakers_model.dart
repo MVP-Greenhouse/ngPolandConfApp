@@ -1,16 +1,17 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:ng_poland_conf_app/features/speakers/datasources/models/speaker_model.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
 part 'speakers_model.freezed.dart';
+part 'speakers_model.g.dart';
 
 @freezed
+@HiveType(typeId: 11)
 class SpeakersModel with _$SpeakersModel {
   const SpeakersModel._();
 
-  const factory SpeakersModel({
-    required List<SpeakerModel>? items,
-  }) = _SpeakersModel;
+  const factory SpeakersModel({@HiveField(0) List<SpeakerModel>? items, @HiveField(1) DateTime? lastUpdate, @HiveField(2) confId}) = _SpeakersModel;
 
   factory SpeakersModel.fromJson(Map<String, dynamic> json) {
     final List<SpeakerModel> speakers = [];
@@ -27,8 +28,8 @@ class SpeakersModel with _$SpeakersModel {
           id: item['sys']['id'] as String,
           name: item['fields']['name'] as String,
           confIds: [], // item['fields']['confIds'] as List<String>,
-          role: item['fields']['role'] as String,
-          bio: item['fields']['bio'] as String,
+          role: item['fields']['role'] as String ?? '',
+          bio: item['fields']['bio'] as String ?? '',
           photoFileUrl: photoFileUrl,
           photoTitle: item['fields']['photoTitle'] ?? '',
           photoDescription: item['fields']['photoDescription'] ?? '',
@@ -41,9 +42,7 @@ class SpeakersModel with _$SpeakersModel {
       );
     }
 
-    return SpeakersModel(
-      items: speakers,
-    );
+    return SpeakersModel(items: speakers);
 
     // return _$SpeakersModelFromJson(json);
   }

@@ -1,17 +1,18 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:ng_poland_conf_app/features/schedule/datasources/models/event_item_model.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/speakers/datasources/models/speaker_model.dart';
 
 part 'events_model.freezed.dart';
+part 'events_model.g.dart';
 
 @freezed
+@HiveType(typeId: 6)
 class EventsModel with _$EventsModel {
   const EventsModel._();
 
-  const factory EventsModel({
-    required List<EventItemModel>? items,
-  }) = _EventsModel;
+  const factory EventsModel({@HiveField(0) required List<EventItemModel>? items, @HiveField(1) DateTime? lastUpdate, @HiveField(2) confId}) = _EventsModel;
 
   factory EventsModel.fromJson(Map<String, dynamic> json) {
     final List<EventItemModel> eventItems = [];
@@ -65,9 +66,7 @@ class EventsModel with _$EventsModel {
       );
     }
 
-    return EventsModel(
-      items: eventItems,
-    );
+    return EventsModel(items: eventItems);
   }
 
   List<EventItem> toEntity() =>

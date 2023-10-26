@@ -10,10 +10,10 @@ class Workshop with _$Workshop {
   const factory Workshop({
     required String title,
     required String confId,
-    required String description,
+    required String? description,
     required String startDate,
     required String endDate,
-    required String locationDescription,
+    required String? locationDescription,
     required Speaker speaker,
     required int? pricePln,
   }) = _Workshop;

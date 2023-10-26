@@ -16,7 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SpeakersModel {
+  @HiveField(0)
   List<SpeakerModel>? get items => throw _privateConstructorUsedError;
+  @HiveField(1)
+  DateTime? get lastUpdate => throw _privateConstructorUsedError;
+  @HiveField(2)
+  dynamic get confId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SpeakersModelCopyWith<SpeakersModel> get copyWith =>
@@ -29,7 +34,10 @@ abstract class $SpeakersModelCopyWith<$Res> {
           SpeakersModel value, $Res Function(SpeakersModel) then) =
       _$SpeakersModelCopyWithImpl<$Res, SpeakersModel>;
   @useResult
-  $Res call({List<SpeakerModel>? items});
+  $Res call(
+      {@HiveField(0) List<SpeakerModel>? items,
+      @HiveField(1) DateTime? lastUpdate,
+      @HiveField(2) dynamic confId});
 }
 
 /// @nodoc
@@ -46,12 +54,22 @@ class _$SpeakersModelCopyWithImpl<$Res, $Val extends SpeakersModel>
   @override
   $Res call({
     Object? items = freezed,
+    Object? lastUpdate = freezed,
+    Object? confId = freezed,
   }) {
     return _then(_value.copyWith(
       items: freezed == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<SpeakerModel>?,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confId: freezed == confId
+          ? _value.confId
+          : confId // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 }
@@ -64,7 +82,10 @@ abstract class _$$_SpeakersModelCopyWith<$Res>
       __$$_SpeakersModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<SpeakerModel>? items});
+  $Res call(
+      {@HiveField(0) List<SpeakerModel>? items,
+      @HiveField(1) DateTime? lastUpdate,
+      @HiveField(2) dynamic confId});
 }
 
 /// @nodoc
@@ -79,12 +100,19 @@ class __$$_SpeakersModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? items = freezed,
+    Object? lastUpdate = freezed,
+    Object? confId = freezed,
   }) {
     return _then(_$_SpeakersModel(
       items: freezed == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
               as List<SpeakerModel>?,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confId: freezed == confId ? _value.confId! : confId,
     ));
   }
 }
@@ -92,12 +120,16 @@ class __$$_SpeakersModelCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SpeakersModel extends _SpeakersModel {
-  const _$_SpeakersModel({required final List<SpeakerModel>? items})
+  const _$_SpeakersModel(
+      {@HiveField(0) final List<SpeakerModel>? items,
+      @HiveField(1) this.lastUpdate,
+      @HiveField(2) this.confId})
       : _items = items,
         super._();
 
   final List<SpeakerModel>? _items;
   @override
+  @HiveField(0)
   List<SpeakerModel>? get items {
     final value = _items;
     if (value == null) return null;
@@ -107,8 +139,15 @@ class _$_SpeakersModel extends _SpeakersModel {
   }
 
   @override
+  @HiveField(1)
+  final DateTime? lastUpdate;
+  @override
+  @HiveField(2)
+  final dynamic confId;
+
+  @override
   String toString() {
-    return 'SpeakersModel(items: $items)';
+    return 'SpeakersModel(items: $items, lastUpdate: $lastUpdate, confId: $confId)';
   }
 
   @override
@@ -116,12 +155,18 @@ class _$_SpeakersModel extends _SpeakersModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SpeakersModel &&
-            const DeepCollectionEquality().equals(other._items, _items));
+            const DeepCollectionEquality().equals(other._items, _items) &&
+            (identical(other.lastUpdate, lastUpdate) ||
+                other.lastUpdate == lastUpdate) &&
+            const DeepCollectionEquality().equals(other.confId, confId));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_items),
+      lastUpdate,
+      const DeepCollectionEquality().hash(confId));
 
   @JsonKey(ignore: true)
   @override
@@ -131,12 +176,21 @@ class _$_SpeakersModel extends _SpeakersModel {
 }
 
 abstract class _SpeakersModel extends SpeakersModel {
-  const factory _SpeakersModel({required final List<SpeakerModel>? items}) =
-      _$_SpeakersModel;
+  const factory _SpeakersModel(
+      {@HiveField(0) final List<SpeakerModel>? items,
+      @HiveField(1) final DateTime? lastUpdate,
+      @HiveField(2) final dynamic confId}) = _$_SpeakersModel;
   const _SpeakersModel._() : super._();
 
   @override
+  @HiveField(0)
   List<SpeakerModel>? get items;
+  @override
+  @HiveField(1)
+  DateTime? get lastUpdate;
+  @override
+  @HiveField(2)
+  dynamic get confId;
   @override
   @JsonKey(ignore: true)
   _$$_SpeakersModelCopyWith<_$_SpeakersModel> get copyWith =>

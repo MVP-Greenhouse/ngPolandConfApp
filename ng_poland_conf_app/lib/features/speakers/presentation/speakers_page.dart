@@ -41,6 +41,7 @@ class _SpeakersPageState extends State<SpeakersPage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
+            error: (error) => const EmptyListInformation(),
             loaded: (listSpeakers) => listSpeakers.isEmpty
                 ? const EmptyListInformation()
                 : Padding(

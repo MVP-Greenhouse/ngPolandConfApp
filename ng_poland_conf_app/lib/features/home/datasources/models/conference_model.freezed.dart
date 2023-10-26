@@ -20,11 +20,16 @@ ConferenceModel _$ConferenceModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ConferenceModel {
+  @HiveField(0)
   String get confId => throw _privateConstructorUsedError;
+  @HiveField(1)
   String get confName => throw _privateConstructorUsedError;
+  @HiveField(2)
   String get description => throw _privateConstructorUsedError;
+  @HiveField(3)
   String? get conferencesStartDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
+  @HiveField(4)
   List<ConferenceHomePageScheduleItemModel>? get listItems =>
       throw _privateConstructorUsedError;
 
@@ -41,11 +46,12 @@ abstract class $ConferenceModelCopyWith<$Res> {
       _$ConferenceModelCopyWithImpl<$Res, ConferenceModel>;
   @useResult
   $Res call(
-      {String confId,
-      String confName,
-      String description,
-      String? conferencesStartDate,
+      {@HiveField(0) String confId,
+      @HiveField(1) String confName,
+      @HiveField(2) String description,
+      @HiveField(3) String? conferencesStartDate,
       @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
+      @HiveField(4)
       List<ConferenceHomePageScheduleItemModel>? listItems});
 }
 
@@ -102,11 +108,12 @@ abstract class _$$_ConferenceModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String confId,
-      String confName,
-      String description,
-      String? conferencesStartDate,
+      {@HiveField(0) String confId,
+      @HiveField(1) String confName,
+      @HiveField(2) String description,
+      @HiveField(3) String? conferencesStartDate,
       @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
+      @HiveField(4)
       List<ConferenceHomePageScheduleItemModel>? listItems});
 }
 
@@ -156,11 +163,12 @@ class __$$_ConferenceModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ConferenceModel extends _ConferenceModel {
   const _$_ConferenceModel(
-      {required this.confId,
-      required this.confName,
-      required this.description,
-      this.conferencesStartDate,
+      {@HiveField(0) required this.confId,
+      @HiveField(1) required this.confName,
+      @HiveField(2) required this.description,
+      @HiveField(3) this.conferencesStartDate,
       @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
+      @HiveField(4)
       final List<ConferenceHomePageScheduleItemModel>? listItems})
       : _listItems = listItems,
         super._();
@@ -169,16 +177,21 @@ class _$_ConferenceModel extends _ConferenceModel {
       _$$_ConferenceModelFromJson(json);
 
   @override
+  @HiveField(0)
   final String confId;
   @override
+  @HiveField(1)
   final String confName;
   @override
+  @HiveField(2)
   final String description;
   @override
+  @HiveField(3)
   final String? conferencesStartDate;
   final List<ConferenceHomePageScheduleItemModel>? _listItems;
   @override
   @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
+  @HiveField(4)
   List<ConferenceHomePageScheduleItemModel>? get listItems {
     final value = _listItems;
     if (value == null) return null;
@@ -229,12 +242,13 @@ class _$_ConferenceModel extends _ConferenceModel {
 
 abstract class _ConferenceModel extends ConferenceModel {
   const factory _ConferenceModel(
-          {required final String confId,
-          required final String confName,
-          required final String description,
-          final String? conferencesStartDate,
+          {@HiveField(0) required final String confId,
+          @HiveField(1) required final String confName,
+          @HiveField(2) required final String description,
+          @HiveField(3) final String? conferencesStartDate,
           @JsonKey(
               name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
+          @HiveField(4)
           final List<ConferenceHomePageScheduleItemModel>? listItems}) =
       _$_ConferenceModel;
   const _ConferenceModel._() : super._();
@@ -243,15 +257,20 @@ abstract class _ConferenceModel extends ConferenceModel {
       _$_ConferenceModel.fromJson;
 
   @override
+  @HiveField(0)
   String get confId;
   @override
+  @HiveField(1)
   String get confName;
   @override
+  @HiveField(2)
   String get description;
   @override
+  @HiveField(3)
   String? get conferencesStartDate;
   @override
   @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
+  @HiveField(4)
   List<ConferenceHomePageScheduleItemModel>? get listItems;
   @override
   @JsonKey(ignore: true)

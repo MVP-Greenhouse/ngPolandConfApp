@@ -40,7 +40,8 @@ class _NgGirlsPageState extends State<NgGirlsPage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
-            loaded: (ngGirls) => ngGirls.text.isEmpty
+            error: (error) => const EmptyListInformation(),
+            loaded: (ngGirls) => ngGirls.text == null
                 ? const EmptyListInformation()
                 : Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
@@ -48,13 +49,13 @@ class _NgGirlsPageState extends State<NgGirlsPage> {
                       child: Column(
                         children: [
                           Text(
-                            ngGirls.title,
+                            ngGirls.title ?? '',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           const SizedBox(
                             height: 30,
                           ),
-                          Text(ngGirls.text, style: Theme.of(context).textTheme.bodySmall),
+                          Text(ngGirls.text ?? '', style: Theme.of(context).textTheme.bodySmall),
                           const SizedBox(
                             height: 30,
                           )

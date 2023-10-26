@@ -58,6 +58,7 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
+            error: (error) => const EmptyListInformation(),
             loaded: (listWorkshop) => listWorkshop.isEmpty
                 ? const EmptyListInformation()
                 : Padding(

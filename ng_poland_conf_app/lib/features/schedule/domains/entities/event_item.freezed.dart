@@ -18,9 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$EventItem {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String? get confId => throw _privateConstructorUsedError;
-  String? get type => throw _privateConstructorUsedError;
-  String? get category => throw _privateConstructorUsedError;
+  String get confId => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  String get category => throw _privateConstructorUsedError;
   String? get shortDescription => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   DateTime? get startDate => throw _privateConstructorUsedError;
@@ -40,9 +40,9 @@ abstract class $EventItemCopyWith<$Res> {
   $Res call(
       {String id,
       String title,
-      String? confId,
-      String? type,
-      String? category,
+      String confId,
+      String type,
+      String category,
       String? shortDescription,
       String? description,
       DateTime? startDate,
@@ -67,9 +67,9 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? confId = freezed,
-    Object? type = freezed,
-    Object? category = freezed,
+    Object? confId = null,
+    Object? type = null,
+    Object? category = null,
     Object? shortDescription = freezed,
     Object? description = freezed,
     Object? startDate = freezed,
@@ -85,18 +85,18 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      confId: freezed == confId
+      confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: freezed == type
+              as String,
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String?,
-      category: freezed == category
+              as String,
+      category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       shortDescription: freezed == shortDescription
           ? _value.shortDescription
           : shortDescription // ignore: cast_nullable_to_non_nullable
@@ -143,9 +143,9 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
   $Res call(
       {String id,
       String title,
-      String? confId,
-      String? type,
-      String? category,
+      String confId,
+      String type,
+      String category,
       String? shortDescription,
       String? description,
       DateTime? startDate,
@@ -169,9 +169,9 @@ class __$$_EventItemCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? confId = freezed,
-    Object? type = freezed,
-    Object? category = freezed,
+    Object? confId = null,
+    Object? type = null,
+    Object? category = null,
     Object? shortDescription = freezed,
     Object? description = freezed,
     Object? startDate = freezed,
@@ -187,18 +187,18 @@ class __$$_EventItemCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      confId: freezed == confId
+      confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: freezed == type
+              as String,
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String?,
-      category: freezed == category
+              as String,
+      category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       shortDescription: freezed == shortDescription
           ? _value.shortDescription
           : shortDescription // ignore: cast_nullable_to_non_nullable
@@ -244,11 +244,11 @@ class _$_EventItem extends _EventItem {
   @override
   final String title;
   @override
-  final String? confId;
+  final String confId;
   @override
-  final String? type;
+  final String type;
   @override
-  final String? category;
+  final String category;
   @override
   final String? shortDescription;
   @override
@@ -301,9 +301,9 @@ abstract class _EventItem extends EventItem {
   const factory _EventItem(
       {required final String id,
       required final String title,
-      required final String? confId,
-      required final String? type,
-      required final String? category,
+      required final String confId,
+      required final String type,
+      required final String category,
       required final String? shortDescription,
       required final String? description,
       required final DateTime? startDate,
@@ -316,11 +316,11 @@ abstract class _EventItem extends EventItem {
   @override
   String get title;
   @override
-  String? get confId;
+  String get confId;
   @override
-  String? get type;
+  String get type;
   @override
-  String? get category;
+  String get category;
   @override
   String? get shortDescription;
   @override

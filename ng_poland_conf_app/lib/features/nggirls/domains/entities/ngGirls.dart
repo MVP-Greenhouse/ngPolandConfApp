@@ -8,7 +8,7 @@ class NgGirls with _$NgGirls {
 
   const factory NgGirls({
     required String myId,
-    required String title,
-    required String text,
+    required String? title,
+    required String? text,
   }) = _NgGirls;
 }

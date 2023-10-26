@@ -20,6 +20,7 @@ ConferencesModel _$ConferencesModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ConferencesModel {
+  @HiveField(0)
   List<ConferenceModel?>? get items => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +35,7 @@ abstract class $ConferencesModelCopyWith<$Res> {
           ConferencesModel value, $Res Function(ConferencesModel) then) =
       _$ConferencesModelCopyWithImpl<$Res, ConferencesModel>;
   @useResult
-  $Res call({List<ConferenceModel?>? items});
+  $Res call({@HiveField(0) List<ConferenceModel?>? items});
 }
 
 /// @nodoc
@@ -69,7 +70,7 @@ abstract class _$$_ConferencesModelCopyWith<$Res>
       __$$_ConferencesModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<ConferenceModel?>? items});
+  $Res call({@HiveField(0) List<ConferenceModel?>? items});
 }
 
 /// @nodoc
@@ -97,7 +98,7 @@ class __$$_ConferencesModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ConferencesModel extends _ConferencesModel {
-  const _$_ConferencesModel({final List<ConferenceModel?>? items})
+  const _$_ConferencesModel({@HiveField(0) final List<ConferenceModel?>? items})
       : _items = items,
         super._();
 
@@ -106,6 +107,7 @@ class _$_ConferencesModel extends _ConferencesModel {
 
   final List<ConferenceModel?>? _items;
   @override
+  @HiveField(0)
   List<ConferenceModel?>? get items {
     final value = _items;
     if (value == null) return null;
@@ -147,7 +149,8 @@ class _$_ConferencesModel extends _ConferencesModel {
 }
 
 abstract class _ConferencesModel extends ConferencesModel {
-  const factory _ConferencesModel({final List<ConferenceModel?>? items}) =
+  const factory _ConferencesModel(
+          {@HiveField(0) final List<ConferenceModel?>? items}) =
       _$_ConferencesModel;
   const _ConferencesModel._() : super._();
 
@@ -155,6 +158,7 @@ abstract class _ConferencesModel extends ConferencesModel {
       _$_ConferencesModel.fromJson;
 
   @override
+  @HiveField(0)
   List<ConferenceModel?>? get items;
   @override
   @JsonKey(ignore: true)

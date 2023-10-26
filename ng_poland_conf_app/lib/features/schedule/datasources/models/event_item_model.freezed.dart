@@ -16,15 +16,25 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$EventItemModel {
+  @HiveField(0)
   String get id => throw _privateConstructorUsedError;
-  String? get title => throw _privateConstructorUsedError;
-  String? get confId => throw _privateConstructorUsedError;
-  String? get type => throw _privateConstructorUsedError;
-  String? get category => throw _privateConstructorUsedError;
+  @HiveField(1)
+  String get title => throw _privateConstructorUsedError;
+  @HiveField(2)
+  String get confId => throw _privateConstructorUsedError;
+  @HiveField(3)
+  String get type => throw _privateConstructorUsedError;
+  @HiveField(4)
+  String get category => throw _privateConstructorUsedError;
+  @HiveField(5)
   String? get shortDescription => throw _privateConstructorUsedError;
+  @HiveField(6)
   String? get description => throw _privateConstructorUsedError;
-  String? get startDate => throw _privateConstructorUsedError;
-  String? get endDate => throw _privateConstructorUsedError;
+  @HiveField(7)
+  String get startDate => throw _privateConstructorUsedError;
+  @HiveField(8)
+  String get endDate => throw _privateConstructorUsedError;
+  @HiveField(9)
   SpeakerModel? get speaker => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -39,16 +49,16 @@ abstract class $EventItemModelCopyWith<$Res> {
       _$EventItemModelCopyWithImpl<$Res, EventItemModel>;
   @useResult
   $Res call(
-      {String id,
-      String? title,
-      String? confId,
-      String? type,
-      String? category,
-      String? shortDescription,
-      String? description,
-      String? startDate,
-      String? endDate,
-      SpeakerModel? speaker});
+      {@HiveField(0) String id,
+      @HiveField(1) String title,
+      @HiveField(2) String confId,
+      @HiveField(3) String type,
+      @HiveField(4) String category,
+      @HiveField(5) String? shortDescription,
+      @HiveField(6) String? description,
+      @HiveField(7) String startDate,
+      @HiveField(8) String endDate,
+      @HiveField(9) SpeakerModel? speaker});
 
   $SpeakerModelCopyWith<$Res>? get speaker;
 }
@@ -67,14 +77,14 @@ class _$EventItemModelCopyWithImpl<$Res, $Val extends EventItemModel>
   @override
   $Res call({
     Object? id = null,
-    Object? title = freezed,
-    Object? confId = freezed,
-    Object? type = freezed,
-    Object? category = freezed,
+    Object? title = null,
+    Object? confId = null,
+    Object? type = null,
+    Object? category = null,
     Object? shortDescription = freezed,
     Object? description = freezed,
-    Object? startDate = freezed,
-    Object? endDate = freezed,
+    Object? startDate = null,
+    Object? endDate = null,
     Object? speaker = freezed,
   }) {
     return _then(_value.copyWith(
@@ -82,22 +92,22 @@ class _$EventItemModelCopyWithImpl<$Res, $Val extends EventItemModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      title: freezed == title
+      title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      confId: freezed == confId
+              as String,
+      confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: freezed == type
+              as String,
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String?,
-      category: freezed == category
+              as String,
+      category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       shortDescription: freezed == shortDescription
           ? _value.shortDescription
           : shortDescription // ignore: cast_nullable_to_non_nullable
@@ -106,14 +116,14 @@ class _$EventItemModelCopyWithImpl<$Res, $Val extends EventItemModel>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      startDate: freezed == startDate
+      startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
-              as String?,
-      endDate: freezed == endDate
+              as String,
+      endDate: null == endDate
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -143,16 +153,16 @@ abstract class _$$_EventItemModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String? title,
-      String? confId,
-      String? type,
-      String? category,
-      String? shortDescription,
-      String? description,
-      String? startDate,
-      String? endDate,
-      SpeakerModel? speaker});
+      {@HiveField(0) String id,
+      @HiveField(1) String title,
+      @HiveField(2) String confId,
+      @HiveField(3) String type,
+      @HiveField(4) String category,
+      @HiveField(5) String? shortDescription,
+      @HiveField(6) String? description,
+      @HiveField(7) String startDate,
+      @HiveField(8) String endDate,
+      @HiveField(9) SpeakerModel? speaker});
 
   @override
   $SpeakerModelCopyWith<$Res>? get speaker;
@@ -170,14 +180,14 @@ class __$$_EventItemModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? title = freezed,
-    Object? confId = freezed,
-    Object? type = freezed,
-    Object? category = freezed,
+    Object? title = null,
+    Object? confId = null,
+    Object? type = null,
+    Object? category = null,
     Object? shortDescription = freezed,
     Object? description = freezed,
-    Object? startDate = freezed,
-    Object? endDate = freezed,
+    Object? startDate = null,
+    Object? endDate = null,
     Object? speaker = freezed,
   }) {
     return _then(_$_EventItemModel(
@@ -185,22 +195,22 @@ class __$$_EventItemModelCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      title: freezed == title
+      title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      confId: freezed == confId
+              as String,
+      confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: freezed == type
+              as String,
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as String?,
-      category: freezed == category
+              as String,
+      category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       shortDescription: freezed == shortDescription
           ? _value.shortDescription
           : shortDescription // ignore: cast_nullable_to_non_nullable
@@ -209,14 +219,14 @@ class __$$_EventItemModelCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      startDate: freezed == startDate
+      startDate: null == startDate
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
-              as String?,
-      endDate: freezed == endDate
+              as String,
+      endDate: null == endDate
           ? _value.endDate
           : endDate // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       speaker: freezed == speaker
           ? _value.speaker
           : speaker // ignore: cast_nullable_to_non_nullable
@@ -229,37 +239,47 @@ class __$$_EventItemModelCopyWithImpl<$Res>
 
 class _$_EventItemModel extends _EventItemModel {
   const _$_EventItemModel(
-      {required this.id,
-      required this.title,
-      required this.confId,
-      required this.type,
-      required this.category,
-      required this.shortDescription,
-      required this.description,
-      required this.startDate,
-      required this.endDate,
-      required this.speaker})
+      {@HiveField(0) required this.id,
+      @HiveField(1) required this.title,
+      @HiveField(2) required this.confId,
+      @HiveField(3) required this.type,
+      @HiveField(4) required this.category,
+      @HiveField(5) this.shortDescription,
+      @HiveField(6) this.description,
+      @HiveField(7) required this.startDate,
+      @HiveField(8) required this.endDate,
+      @HiveField(9) required this.speaker})
       : super._();
 
   @override
+  @HiveField(0)
   final String id;
   @override
-  final String? title;
+  @HiveField(1)
+  final String title;
   @override
-  final String? confId;
+  @HiveField(2)
+  final String confId;
   @override
-  final String? type;
+  @HiveField(3)
+  final String type;
   @override
-  final String? category;
+  @HiveField(4)
+  final String category;
   @override
+  @HiveField(5)
   final String? shortDescription;
   @override
+  @HiveField(6)
   final String? description;
   @override
-  final String? startDate;
+  @HiveField(7)
+  final String startDate;
   @override
-  final String? endDate;
+  @HiveField(8)
+  final String endDate;
   @override
+  @HiveField(9)
   final SpeakerModel? speaker;
 
   @override
@@ -301,37 +321,47 @@ class _$_EventItemModel extends _EventItemModel {
 
 abstract class _EventItemModel extends EventItemModel {
   const factory _EventItemModel(
-      {required final String id,
-      required final String? title,
-      required final String? confId,
-      required final String? type,
-      required final String? category,
-      required final String? shortDescription,
-      required final String? description,
-      required final String? startDate,
-      required final String? endDate,
-      required final SpeakerModel? speaker}) = _$_EventItemModel;
+      {@HiveField(0) required final String id,
+      @HiveField(1) required final String title,
+      @HiveField(2) required final String confId,
+      @HiveField(3) required final String type,
+      @HiveField(4) required final String category,
+      @HiveField(5) final String? shortDescription,
+      @HiveField(6) final String? description,
+      @HiveField(7) required final String startDate,
+      @HiveField(8) required final String endDate,
+      @HiveField(9) required final SpeakerModel? speaker}) = _$_EventItemModel;
   const _EventItemModel._() : super._();
 
   @override
+  @HiveField(0)
   String get id;
   @override
-  String? get title;
+  @HiveField(1)
+  String get title;
   @override
-  String? get confId;
+  @HiveField(2)
+  String get confId;
   @override
-  String? get type;
+  @HiveField(3)
+  String get type;
   @override
-  String? get category;
+  @HiveField(4)
+  String get category;
   @override
+  @HiveField(5)
   String? get shortDescription;
   @override
+  @HiveField(6)
   String? get description;
   @override
-  String? get startDate;
+  @HiveField(7)
+  String get startDate;
   @override
-  String? get endDate;
+  @HiveField(8)
+  String get endDate;
   @override
+  @HiveField(9)
   SpeakerModel? get speaker;
   @override
   @JsonKey(ignore: true)

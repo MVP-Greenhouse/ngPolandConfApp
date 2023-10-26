@@ -21,7 +21,7 @@ class EmptyListInformation extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(32.0),
                 child: Text(
-                  'Sorry, no results returned.\nPlease check again later.',
+                  'Sorry, no results returned.\nPlease check the Internet connection.',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).textTheme.titleMedium?.color?.withOpacity(0.7)),
                 ),

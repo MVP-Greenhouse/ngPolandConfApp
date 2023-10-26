@@ -85,7 +85,7 @@ class WorkshopsContent extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.025,
           ),
           Text(
-            workshop.description,
+            workshop.description ?? '',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           SizedBox(

@@ -1,23 +1,26 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:ng_poland_conf_app/features/workshops/domains/entities/workshop.dart';
 
 import '../../../speakers/datasources/models/speaker_model.dart';
 
 part 'workshop_model.freezed.dart';
+part 'workshop_model.g.dart';
 
 @freezed
+@HiveType(typeId: 9)
 class WorkshopModel with _$WorkshopModel {
   const WorkshopModel._();
 
   const factory WorkshopModel({
-    required String title,
-    required String confId,
-    required String description,
-    required String startDate,
-    required String endDate,
-    required String locationDescription,
-    required SpeakerModel speaker,
-    required int? pricePln,
+    @HiveField(0) required String title,
+    @HiveField(1) required String confId,
+    @HiveField(2) required String? description,
+    @HiveField(3) required String startDate,
+    @HiveField(4) required String endDate,
+    @HiveField(5) required String? locationDescription,
+    @HiveField(6) required SpeakerModel speaker,
+    @HiveField(7) required int? pricePln,
   }) = _WorkshopModel;
 
   factory WorkshopModel.fromJson(Map<String, dynamic> json) {
@@ -40,7 +43,7 @@ class WorkshopModel with _$WorkshopModel {
     return WorkshopModel(
       title: json['fields']['title'] as String,
       confId: json['fields']['confId'] as String,
-      description: json['fields']['description'] as String,
+      description: json['fields']['description'] as String ?? '',
       speaker: SpeakerModel(
         id: json['fields']['instructor']['sys']['id'] as String,
         name: speaker['name'] as String,
@@ -66,10 +69,10 @@ class WorkshopModel with _$WorkshopModel {
   Workshop toEntity() => Workshop(
         title: title,
         confId: confId,
-        description: description,
+        description: description ?? '',
         startDate: startDate,
         endDate: endDate,
-        locationDescription: locationDescription,
+        locationDescription: locationDescription ?? '',
         pricePln: pricePln,
         speaker: speaker.toEntity(),
       );

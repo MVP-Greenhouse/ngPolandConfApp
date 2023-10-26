@@ -1,18 +1,19 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hive/hive.dart';
 import 'package:ng_poland_conf_app/features/workshops/datasources/models/workshop_model.dart';
 import 'package:ng_poland_conf_app/features/workshops/domains/entities/workshop.dart';
 
 import '../../../speakers/datasources/models/speaker_model.dart';
 
 part 'workshops_model.freezed.dart';
+part 'workshops_model.g.dart';
 
 @freezed
+@HiveType(typeId: 10)
 class WorkshopsModel with _$WorkshopsModel {
   const WorkshopsModel._();
 
-  const factory WorkshopsModel({
-    required List<WorkshopModel>? items,
-  }) = _WorkshopsModel;
+  const factory WorkshopsModel({@HiveField(0) required List<WorkshopModel>? items, @HiveField(1) DateTime? lastUpdate, @HiveField(2) confId}) = _WorkshopsModel;
 
   factory WorkshopsModel.fromJson(Map<String, dynamic> json) {
     final List<WorkshopModel> workshops = [];
@@ -63,6 +64,7 @@ class WorkshopsModel with _$WorkshopsModel {
 
     return WorkshopsModel(
       items: workshops,
+      lastUpdate: DateTime.now(),
     );
   }
 

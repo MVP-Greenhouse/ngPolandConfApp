@@ -24,8 +24,6 @@ class WorkshopCubit extends Cubit<WorkshopState> {
     required EventItemType eventItemType,
   }) async {
     emit(const WorkshopState.loading());
-    // delay for 1s for better UX
-    await Future.delayed(const Duration(milliseconds: 500));
     Conference? conference = conferencesCubit.selectedConference;
 
     if (conference == null) {
@@ -37,7 +35,7 @@ class WorkshopCubit extends Cubit<WorkshopState> {
       Params(
         eventItemType: eventItemType.name,
         confId: conference!.confId,
-        limit: 10,
+        limit: 1000,
       ),
     );
 

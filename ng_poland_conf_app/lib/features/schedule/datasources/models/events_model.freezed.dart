@@ -16,7 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$EventsModel {
+  @HiveField(0)
   List<EventItemModel>? get items => throw _privateConstructorUsedError;
+  @HiveField(1)
+  DateTime? get lastUpdate => throw _privateConstructorUsedError;
+  @HiveField(2)
+  dynamic get confId => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EventsModelCopyWith<EventsModel> get copyWith =>
@@ -29,7 +34,10 @@ abstract class $EventsModelCopyWith<$Res> {
           EventsModel value, $Res Function(EventsModel) then) =
       _$EventsModelCopyWithImpl<$Res, EventsModel>;
   @useResult
-  $Res call({List<EventItemModel>? items});
+  $Res call(
+      {@HiveField(0) List<EventItemModel>? items,
+      @HiveField(1) DateTime? lastUpdate,
+      @HiveField(2) dynamic confId});
 }
 
 /// @nodoc
@@ -46,12 +54,22 @@ class _$EventsModelCopyWithImpl<$Res, $Val extends EventsModel>
   @override
   $Res call({
     Object? items = freezed,
+    Object? lastUpdate = freezed,
+    Object? confId = freezed,
   }) {
     return _then(_value.copyWith(
       items: freezed == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<EventItemModel>?,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confId: freezed == confId
+          ? _value.confId
+          : confId // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 }
@@ -64,7 +82,10 @@ abstract class _$$_EventsModelCopyWith<$Res>
       __$$_EventsModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<EventItemModel>? items});
+  $Res call(
+      {@HiveField(0) List<EventItemModel>? items,
+      @HiveField(1) DateTime? lastUpdate,
+      @HiveField(2) dynamic confId});
 }
 
 /// @nodoc
@@ -79,12 +100,19 @@ class __$$_EventsModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? items = freezed,
+    Object? lastUpdate = freezed,
+    Object? confId = freezed,
   }) {
     return _then(_$_EventsModel(
       items: freezed == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
               as List<EventItemModel>?,
+      lastUpdate: freezed == lastUpdate
+          ? _value.lastUpdate
+          : lastUpdate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      confId: freezed == confId ? _value.confId! : confId,
     ));
   }
 }
@@ -92,12 +120,16 @@ class __$$_EventsModelCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_EventsModel extends _EventsModel {
-  const _$_EventsModel({required final List<EventItemModel>? items})
+  const _$_EventsModel(
+      {@HiveField(0) required final List<EventItemModel>? items,
+      @HiveField(1) this.lastUpdate,
+      @HiveField(2) this.confId})
       : _items = items,
         super._();
 
   final List<EventItemModel>? _items;
   @override
+  @HiveField(0)
   List<EventItemModel>? get items {
     final value = _items;
     if (value == null) return null;
@@ -107,8 +139,15 @@ class _$_EventsModel extends _EventsModel {
   }
 
   @override
+  @HiveField(1)
+  final DateTime? lastUpdate;
+  @override
+  @HiveField(2)
+  final dynamic confId;
+
+  @override
   String toString() {
-    return 'EventsModel(items: $items)';
+    return 'EventsModel(items: $items, lastUpdate: $lastUpdate, confId: $confId)';
   }
 
   @override
@@ -116,12 +155,18 @@ class _$_EventsModel extends _EventsModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EventsModel &&
-            const DeepCollectionEquality().equals(other._items, _items));
+            const DeepCollectionEquality().equals(other._items, _items) &&
+            (identical(other.lastUpdate, lastUpdate) ||
+                other.lastUpdate == lastUpdate) &&
+            const DeepCollectionEquality().equals(other.confId, confId));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_items),
+      lastUpdate,
+      const DeepCollectionEquality().hash(confId));
 
   @JsonKey(ignore: true)
   @override
@@ -131,12 +176,21 @@ class _$_EventsModel extends _EventsModel {
 }
 
 abstract class _EventsModel extends EventsModel {
-  const factory _EventsModel({required final List<EventItemModel>? items}) =
-      _$_EventsModel;
+  const factory _EventsModel(
+      {@HiveField(0) required final List<EventItemModel>? items,
+      @HiveField(1) final DateTime? lastUpdate,
+      @HiveField(2) final dynamic confId}) = _$_EventsModel;
   const _EventsModel._() : super._();
 
   @override
+  @HiveField(0)
   List<EventItemModel>? get items;
+  @override
+  @HiveField(1)
+  DateTime? get lastUpdate;
+  @override
+  @HiveField(2)
+  dynamic get confId;
   @override
   @JsonKey(ignore: true)
   _$$_EventsModelCopyWith<_$_EventsModel> get copyWith =>

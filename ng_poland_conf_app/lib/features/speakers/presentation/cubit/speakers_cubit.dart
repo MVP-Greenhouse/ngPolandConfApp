@@ -31,7 +31,7 @@ class SpeakersCubit extends Cubit<SpeakersState> {
     List<Speaker> listSpeakers = await getAllSpeakerGetAllSpeakersForConference.call(
       Params(
         confId: conference!.confId,
-        limit: 10,
+        limit: 1000,
       ),
     );
 

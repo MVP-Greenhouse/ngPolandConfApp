@@ -10,7 +10,7 @@ class GetNgGirlsForConference implements UseCase<NgGirls?, Params> {
   GetNgGirlsForConference(this.ngGirlsRepository);
 
   @override
-  Future<NgGirls> call(Params params) {
+  Future<NgGirls?> call(Params params) {
     return ngGirlsRepository.getNgGirls(params);
   }
 }

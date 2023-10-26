@@ -40,6 +40,7 @@ class _InfoPageState extends State<InfoPage> {
             loading: () => const Center(
               child: CircularProgressIndicator(),
             ),
+            error: (error) => const EmptyListInformation(),
             loaded: (listInfoItems) => listInfoItems.isEmpty
                 ? const EmptyListInformation()
                 : Padding(
