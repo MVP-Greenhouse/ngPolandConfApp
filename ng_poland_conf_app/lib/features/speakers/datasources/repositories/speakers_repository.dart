@@ -1,22 +1,32 @@
 import 'package:injectable/injectable.dart';
-import 'package:ng_poland_conf_app/features/speakers/datasources/data/speakers_remote_datasource.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/repositories/speakers_repository.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/usecases/get_all_speakers_for_conference.dart';
+
+import '../../domains/entities/speaker.dart';
+import '../../domains/repositories/speakers_repository.dart';
+import '../../domains/usecases/get_all_speakers_for_conference.dart';
+import '../data/speakers_local_datasource.dart';
+import '../data/speakers_remote_datasource.dart';
+import '../models/speakers_model.dart';
 
 @Singleton(as: SpeakersRepository)
 class SpeakersRepositoryImpl implements SpeakersRepository {
   final SpeakersRemoteDataSource speakersRemoteDataSource;
+  final SpeakersLocalDataSource speakersLocalDataSource;
 
-  SpeakersRepositoryImpl(this.speakersRemoteDataSource);
+  SpeakersRepositoryImpl(this.speakersRemoteDataSource, this.speakersLocalDataSource);
 
   @override
   Future<List<Speaker>> getAllSpeakers(Params params) async {
-    final allSpeakers = await speakersRemoteDataSource.getAllSpeakers(
-      confId: params.confId,
-      limit: params.limit,
-    );
+    try {
+      final SpeakersModel allSpeakers = await speakersRemoteDataSource.getAllSpeakers(
+        confId: params.confId,
+        limit: params.limit,
+      );
 
-    return allSpeakers.toEntity();
+      await speakersLocalDataSource.update(allSpeakers);
+      return allSpeakers.toEntity();
+    } catch (e) {
+      SpeakersModel? allSpeakersFromLocalDataSource = await speakersLocalDataSource.get();
+      return allSpeakersFromLocalDataSource?.toEntity() ?? [];
+    }
   }
 }

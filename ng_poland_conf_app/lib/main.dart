@@ -19,6 +19,8 @@ import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/theme.dart';
 
+import 'features/speakers/datasources/models/speakers_model.dart';
+
 void main() async {
   await configureDependencies(
     Environment.prod,
@@ -36,7 +38,8 @@ void main() async {
     ..registerAdapter(EventItemModelAdapter()) // typeId: 7
     ..registerAdapter(SpeakerModelAdapter()) // typeId: 8
     ..registerAdapter(WorkshopModelAdapter()) // typeId: 9
-    ..registerAdapter(WorkshopsModelAdapter()); // typeId: 10
+    ..registerAdapter(WorkshopsModelAdapter()) // typeId: 10
+    ..registerAdapter(SpeakersModelAdapter()); // typeId: 11
 
   runApp(const MainApp());
 }
@@ -66,11 +69,10 @@ class MainApp extends StatelessWidget {
               theme: ThemeData(
                   useMaterial3: true,
                   colorScheme: lightColorScheme,
-                  appBarTheme:
-                      const AppBarTheme(backgroundColor: Color(0xff4f00d0), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
+                  appBarTheme: const AppBarTheme(backgroundColor: Color(0xff4f00d0), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
                   applyElevationOverlayColor: false,
-                  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                      backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
+                  bottomNavigationBarTheme:
+                      const BottomNavigationBarThemeData(backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
                   buttonTheme: const ButtonThemeData(
                     alignedDropdown: false,
                     colorScheme: lightButtonColorScheme,
@@ -94,11 +96,10 @@ class MainApp extends StatelessWidget {
               darkTheme: ThemeData(
                   useMaterial3: true,
                   colorScheme: darkColorScheme,
-                  appBarTheme:
-                      const AppBarTheme(backgroundColor: Color(0xffE91E63), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
+                  appBarTheme: const AppBarTheme(backgroundColor: Color(0xffE91E63), foregroundColor: Color(0xfffdfdfd), shadowColor: Color(0xfffafafb)),
                   applyElevationOverlayColor: false,
-                  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                      backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
+                  bottomNavigationBarTheme:
+                      const BottomNavigationBarThemeData(backgroundColor: Color(0xff4f00d0), selectedItemColor: Color(0xfffdfdfd), unselectedItemColor: Color(0x8a9a7bff)),
                   buttonTheme: const ButtonThemeData(
                     alignedDropdown: false,
                     colorScheme: darkButtonColorScheme,

@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SpeakersModel {
+  @HiveField(0)
   List<SpeakerModel>? get items => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -29,7 +30,7 @@ abstract class $SpeakersModelCopyWith<$Res> {
           SpeakersModel value, $Res Function(SpeakersModel) then) =
       _$SpeakersModelCopyWithImpl<$Res, SpeakersModel>;
   @useResult
-  $Res call({List<SpeakerModel>? items});
+  $Res call({@HiveField(0) List<SpeakerModel>? items});
 }
 
 /// @nodoc
@@ -64,7 +65,7 @@ abstract class _$$_SpeakersModelCopyWith<$Res>
       __$$_SpeakersModelCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<SpeakerModel>? items});
+  $Res call({@HiveField(0) List<SpeakerModel>? items});
 }
 
 /// @nodoc
@@ -92,12 +93,13 @@ class __$$_SpeakersModelCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_SpeakersModel extends _SpeakersModel {
-  const _$_SpeakersModel({required final List<SpeakerModel>? items})
+  const _$_SpeakersModel({@HiveField(0) final List<SpeakerModel>? items})
       : _items = items,
         super._();
 
   final List<SpeakerModel>? _items;
   @override
+  @HiveField(0)
   List<SpeakerModel>? get items {
     final value = _items;
     if (value == null) return null;
@@ -131,11 +133,12 @@ class _$_SpeakersModel extends _SpeakersModel {
 }
 
 abstract class _SpeakersModel extends SpeakersModel {
-  const factory _SpeakersModel({required final List<SpeakerModel>? items}) =
-      _$_SpeakersModel;
+  const factory _SpeakersModel(
+      {@HiveField(0) final List<SpeakerModel>? items}) = _$_SpeakersModel;
   const _SpeakersModel._() : super._();
 
   @override
+  @HiveField(0)
   List<SpeakerModel>? get items;
   @override
   @JsonKey(ignore: true)

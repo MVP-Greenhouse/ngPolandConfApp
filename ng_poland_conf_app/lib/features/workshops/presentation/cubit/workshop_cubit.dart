@@ -37,7 +37,7 @@ class WorkshopCubit extends Cubit<WorkshopState> {
       Params(
         eventItemType: eventItemType.name,
         confId: conference!.confId,
-        limit: 10,
+        limit: 1000,
       ),
     );
 

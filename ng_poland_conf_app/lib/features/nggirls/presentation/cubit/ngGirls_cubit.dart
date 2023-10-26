@@ -34,11 +34,11 @@ class NgGirlsCubit extends Cubit<NgGirlsState> {
           confId: conference!.confId,
         ),
       );
-      if (ngGirls == null) return emit(const NgGirlsState.error('Brak danych'));
+      if (ngGirls == null) return emit(const NgGirlsState.error('No data found'));
 
       emit(NgGirlsState.loaded(ngGirls: ngGirls));
     } catch (err) {
-      emit(const NgGirlsState.error('Wystąpił nieznany błąd.'));
+      emit(const NgGirlsState.error('Unknown error'));
     }
   }
 }

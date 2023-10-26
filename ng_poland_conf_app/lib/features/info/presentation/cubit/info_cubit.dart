@@ -31,7 +31,7 @@ class InfoCubit extends Cubit<InfoState> {
     List<InfoItem> listInfoItems = await getAllSpeakerGetAllInfoItemsForConference.call(
       Params(
         confId: conference!.confId,
-        limit: 10,
+        limit: 1000,
       ),
     );
 
