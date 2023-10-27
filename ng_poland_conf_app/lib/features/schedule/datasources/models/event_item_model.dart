@@ -73,7 +73,7 @@ class EventItemModel with _$EventItemModel {
 
   EventItem toEntity() => EventItem(
         id: id,
-        title: title ?? '',
+        title: title,
         confId: confId,
         type: type,
         category: category,

@@ -20,7 +20,7 @@ mixin ConferenceTimerMixin on Cubit<ConferencesState> {
 
               /// Remove after adding a new conference
               .add(
-                Duration(days: 365),
+                const Duration(days: 365),
               )
               .millisecondsSinceEpoch -
           DateTime.now().millisecondsSinceEpoch,

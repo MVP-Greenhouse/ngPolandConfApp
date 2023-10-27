@@ -1,6 +1,8 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/cubit/workshop_cubit.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/widgets/workshops_content.dart';
@@ -9,6 +11,7 @@ import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
 
 import '../../../widgets/confs_bottom_nav_bar.dart';
+import '../../settings/presentation/connection_status.dart';
 
 class WorkshopsPage extends StatefulWidget {
   const WorkshopsPage({super.key});
@@ -19,6 +22,8 @@ class WorkshopsPage extends StatefulWidget {
 
 class _WorkshopsPageState extends State<WorkshopsPage> {
   late final WorkshopCubit _cubit;
+  ConnectivityResult connectivityResult = ConnectivityResult.none;
+  late StreamSubscription<ConnectivityResult> subscription;
 
   @override
   void initState() {
@@ -28,6 +33,12 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
     );
 
     super.initState();
+
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        connectivityResult = result;
+      });
+    });
   }
 
   void onEventItemTabChange(int idx) {
@@ -43,14 +54,22 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
   }
 
   @override
+  dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: AppBar(
-        title: Text(
-          'Workshops',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
-        ),
-      ),
+          title: Text(
+            'Workshops',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+          ),
+          actions: const [
+            ConnectionStatus(),
+          ]),
       body: BlocBuilder<WorkshopCubit, WorkshopState>(
         bloc: _cubit,
         builder: (context, state) {

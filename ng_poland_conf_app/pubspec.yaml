@@ -33,6 +33,8 @@ dependencies:
   json_annotation: ^4.8.1
   bloc: ^8.1.2
   webview_flutter: ^4.4.1
+  connectivity_plus: ^5.0.1
+  collection: ^1.17.2
 
 dev_dependencies:
   flutter_test:

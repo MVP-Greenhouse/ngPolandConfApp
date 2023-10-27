@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/cubit/speakers_cubit.dart';
@@ -5,6 +8,7 @@ import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
 import '../../../widgets/empty_list_info.dart';
+import '../../settings/presentation/connection_status.dart';
 import 'widgets/speaker_tile.dart';
 
 class SpeakersPage extends StatefulWidget {
@@ -16,6 +20,8 @@ class SpeakersPage extends StatefulWidget {
 
 class _SpeakersPageState extends State<SpeakersPage> {
   late final SpeakersCubit _speakersCubit;
+  ConnectivityResult connectivityResult = ConnectivityResult.none;
+  late StreamSubscription<ConnectivityResult> subscription;
 
   @override
   void initState() {
@@ -23,6 +29,18 @@ class _SpeakersPageState extends State<SpeakersPage> {
 
     _speakersCubit.getListSpeakers();
     super.initState();
+
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        connectivityResult = result;
+      });
+    });
+  }
+
+  @override
+  dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -32,11 +50,13 @@ class _SpeakersPageState extends State<SpeakersPage> {
       builder: (context, state) {
         return CustomScaffold(
           appBar: AppBar(
-            title: Text(
-              'Speakers',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
-            ),
-          ),
+              title: Text(
+                'Speakers',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+              ),
+              actions: const [
+                ConnectionStatus(),
+              ]),
           body: state.maybeWhen(
             loading: () => const Center(
               child: CircularProgressIndicator(),

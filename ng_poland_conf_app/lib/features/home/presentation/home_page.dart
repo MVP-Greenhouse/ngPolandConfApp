@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
@@ -6,6 +9,8 @@ import 'package:ng_poland_conf_app/features/home/presentation/widgets/custom_tim
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
+
+import '../../settings/presentation/connection_status.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,11 +21,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late final ConferencesCubit _cubit;
+  ConnectivityResult connectivityResult = ConnectivityResult.none;
+  late StreamSubscription<ConnectivityResult> subscription;
 
   @override
   void initState() {
     _cubit = getIt.get<ConferencesCubit>();
     super.initState();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        connectivityResult = result;
+      });
+    });
+  }
+
+  @override
+  dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -47,6 +65,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 orElse: () => const SizedBox.shrink(),
               ),
+              const ConnectionStatus(),
             ],
           ),
           body: Container(

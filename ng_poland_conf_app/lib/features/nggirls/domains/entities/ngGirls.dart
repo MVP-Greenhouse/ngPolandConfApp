@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'ngGirls.freezed.dart';

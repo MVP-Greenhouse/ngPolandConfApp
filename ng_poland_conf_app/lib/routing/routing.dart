@@ -88,7 +88,7 @@ class Routing {
         ]),
         GoRoute(
           path: Pages.questions.path,
-          builder: (context, state) => QuestionsPage(),
+          builder: (context, state) => const QuestionsPage(),
         ),
         GoRoute(
           path: Pages.info.path,

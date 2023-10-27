@@ -28,8 +28,8 @@ class Speaker with _$Speaker {
 
     return Speaker(
       id: json['sys']['id'] as String,
-      name: json['fields']['name'] as String ?? '',
-      role: json['fields']['role'] as String ?? '',
+      name: json['fields']['name'] as String,
+      role: json['fields']['role'] as String,
       bio: json['fields']['bio'] as String,
       photoFileUrl: photoFileUrl,
       photoTitle: json['fields']['photoTitle'] ?? '',
