@@ -39,3 +39,7 @@ jobs:
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
       - run: flutter build appbundle
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
+      - run: flutter build ios --release --no-codesign
+        working-directory: ${{ github.workspace }}/ng_poland_conf_app
+      - run: flutter build web
+        working-directory: ${{ github.workspace }}/ng_poland_conf_app
