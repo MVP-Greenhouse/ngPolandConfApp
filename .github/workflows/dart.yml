@@ -4,8 +4,14 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-uses: subosito/flutter-action@v2.11.0
-with:
-    flutter-version: '3.7.7'
-    channel: 'stable'
-run: flutter --version
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.7.7'
+          channel: 'stable'
+      - run: flutter --version
