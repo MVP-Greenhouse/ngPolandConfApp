@@ -24,8 +24,9 @@ jobs:
           channel: 'stable'
       - run: flutter pub get
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
-      - run: flutter test
-        working-directory: ${{ github.workspace }}/ng_poland_conf_app
+      # uncomment when we have tests
+      # - run: flutter test
+      #  working-directory: ${{ github.workspace }}/ng_poland_conf_app
       - run: flutter build apk
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
       - run: flutter build appbundle
