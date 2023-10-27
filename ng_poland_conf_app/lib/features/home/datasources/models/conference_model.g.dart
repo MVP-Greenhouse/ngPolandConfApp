@@ -19,7 +19,7 @@ class ConferenceModelAdapter extends TypeAdapter<ConferenceModel> {
     return ConferenceModel(
       confId: fields[0] as String,
       confName: fields[1] as String,
-      description: fields[2] as String,
+      description: fields[2] as String?,
       conferencesStartDate: fields[3] as String?,
       listItems:
           (fields[4] as List?)?.cast<ConferenceHomePageScheduleItemModel>(),
@@ -61,7 +61,7 @@ _$_ConferenceModel _$$_ConferenceModelFromJson(Map<String, dynamic> json) =>
     _$_ConferenceModel(
       confId: json['confId'] as String,
       confName: json['confName'] as String,
-      description: json['description'] as String,
+      description: json['description'] as String?,
       conferencesStartDate: json['conferencesStartDate'] as String?,
       listItems: _listItemsFromJson(
           json['conferenceHomePageSchedule'] as Map<String, dynamic>?),

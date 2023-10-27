@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Conference {
   String get confId => throw _privateConstructorUsedError;
   String get confName => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   String? get conferencesStartDate => throw _privateConstructorUsedError;
   List<ConferenceItem> get listItems => throw _privateConstructorUsedError;
 
@@ -36,7 +36,7 @@ abstract class $ConferenceCopyWith<$Res> {
   $Res call(
       {String confId,
       String confName,
-      String description,
+      String? description,
       String? conferencesStartDate,
       List<ConferenceItem> listItems});
 }
@@ -56,7 +56,7 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
   $Res call({
     Object? confId = null,
     Object? confName = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? conferencesStartDate = freezed,
     Object? listItems = null,
   }) {
@@ -69,10 +69,10 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
           ? _value.confName
           : confName // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       conferencesStartDate: freezed == conferencesStartDate
           ? _value.conferencesStartDate
           : conferencesStartDate // ignore: cast_nullable_to_non_nullable
@@ -96,7 +96,7 @@ abstract class _$$_ConferenceCopyWith<$Res>
   $Res call(
       {String confId,
       String confName,
-      String description,
+      String? description,
       String? conferencesStartDate,
       List<ConferenceItem> listItems});
 }
@@ -114,7 +114,7 @@ class __$$_ConferenceCopyWithImpl<$Res>
   $Res call({
     Object? confId = null,
     Object? confName = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? conferencesStartDate = freezed,
     Object? listItems = null,
   }) {
@@ -127,10 +127,10 @@ class __$$_ConferenceCopyWithImpl<$Res>
           ? _value.confName
           : confName // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       conferencesStartDate: freezed == conferencesStartDate
           ? _value.conferencesStartDate
           : conferencesStartDate // ignore: cast_nullable_to_non_nullable
@@ -149,7 +149,7 @@ class _$_Conference implements _Conference {
   const _$_Conference(
       {required this.confId,
       required this.confName,
-      required this.description,
+      this.description,
       this.conferencesStartDate,
       required final List<ConferenceItem> listItems})
       : _listItems = listItems;
@@ -159,7 +159,7 @@ class _$_Conference implements _Conference {
   @override
   final String confName;
   @override
-  final String description;
+  final String? description;
   @override
   final String? conferencesStartDate;
   final List<ConferenceItem> _listItems;
@@ -206,7 +206,7 @@ abstract class _Conference implements Conference {
   const factory _Conference(
       {required final String confId,
       required final String confName,
-      required final String description,
+      final String? description,
       final String? conferencesStartDate,
       required final List<ConferenceItem> listItems}) = _$_Conference;
 
@@ -215,7 +215,7 @@ abstract class _Conference implements Conference {
   @override
   String get confName;
   @override
-  String get description;
+  String? get description;
   @override
   String? get conferencesStartDate;
   @override

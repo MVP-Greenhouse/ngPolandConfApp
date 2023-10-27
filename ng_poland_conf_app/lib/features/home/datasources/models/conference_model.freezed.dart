@@ -25,7 +25,7 @@ mixin _$ConferenceModel {
   @HiveField(1)
   String get confName => throw _privateConstructorUsedError;
   @HiveField(2)
-  String get description => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   @HiveField(3)
   String? get conferencesStartDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
@@ -48,7 +48,7 @@ abstract class $ConferenceModelCopyWith<$Res> {
   $Res call(
       {@HiveField(0) String confId,
       @HiveField(1) String confName,
-      @HiveField(2) String description,
+      @HiveField(2) String? description,
       @HiveField(3) String? conferencesStartDate,
       @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
       @HiveField(4)
@@ -70,7 +70,7 @@ class _$ConferenceModelCopyWithImpl<$Res, $Val extends ConferenceModel>
   $Res call({
     Object? confId = null,
     Object? confName = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? conferencesStartDate = freezed,
     Object? listItems = freezed,
   }) {
@@ -83,10 +83,10 @@ class _$ConferenceModelCopyWithImpl<$Res, $Val extends ConferenceModel>
           ? _value.confName
           : confName // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       conferencesStartDate: freezed == conferencesStartDate
           ? _value.conferencesStartDate
           : conferencesStartDate // ignore: cast_nullable_to_non_nullable
@@ -110,7 +110,7 @@ abstract class _$$_ConferenceModelCopyWith<$Res>
   $Res call(
       {@HiveField(0) String confId,
       @HiveField(1) String confName,
-      @HiveField(2) String description,
+      @HiveField(2) String? description,
       @HiveField(3) String? conferencesStartDate,
       @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
       @HiveField(4)
@@ -130,7 +130,7 @@ class __$$_ConferenceModelCopyWithImpl<$Res>
   $Res call({
     Object? confId = null,
     Object? confName = null,
-    Object? description = null,
+    Object? description = freezed,
     Object? conferencesStartDate = freezed,
     Object? listItems = freezed,
   }) {
@@ -143,10 +143,10 @@ class __$$_ConferenceModelCopyWithImpl<$Res>
           ? _value.confName
           : confName // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
+      description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       conferencesStartDate: freezed == conferencesStartDate
           ? _value.conferencesStartDate
           : conferencesStartDate // ignore: cast_nullable_to_non_nullable
@@ -165,7 +165,7 @@ class _$_ConferenceModel extends _ConferenceModel {
   const _$_ConferenceModel(
       {@HiveField(0) required this.confId,
       @HiveField(1) required this.confName,
-      @HiveField(2) required this.description,
+      @HiveField(2) this.description,
       @HiveField(3) this.conferencesStartDate,
       @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
       @HiveField(4)
@@ -184,7 +184,7 @@ class _$_ConferenceModel extends _ConferenceModel {
   final String confName;
   @override
   @HiveField(2)
-  final String description;
+  final String? description;
   @override
   @HiveField(3)
   final String? conferencesStartDate;
@@ -244,7 +244,7 @@ abstract class _ConferenceModel extends ConferenceModel {
   const factory _ConferenceModel(
           {@HiveField(0) required final String confId,
           @HiveField(1) required final String confName,
-          @HiveField(2) required final String description,
+          @HiveField(2) final String? description,
           @HiveField(3) final String? conferencesStartDate,
           @JsonKey(
               name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
@@ -264,7 +264,7 @@ abstract class _ConferenceModel extends ConferenceModel {
   String get confName;
   @override
   @HiveField(2)
-  String get description;
+  String? get description;
   @override
   @HiveField(3)
   String? get conferencesStartDate;

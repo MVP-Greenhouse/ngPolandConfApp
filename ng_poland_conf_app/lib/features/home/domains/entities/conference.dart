@@ -8,7 +8,7 @@ class Conference with _$Conference {
   const factory Conference({
     required String confId,
     required String confName,
-    required String description,
+    String? description,
     String? conferencesStartDate,
     required List<ConferenceItem> listItems,
   }) = _Conference;

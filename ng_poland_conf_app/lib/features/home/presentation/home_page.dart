@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                   initial: () => Text('The Biggest Angular Conference',
                       textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200))),
                   loaded: (conferences, selectedConference) => Text(
-                    selectedConference.description,
+                    selectedConference.description ?? '',
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200)),
                   ),

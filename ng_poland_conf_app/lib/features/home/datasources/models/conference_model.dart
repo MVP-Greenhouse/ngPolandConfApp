@@ -17,7 +17,7 @@ class ConferenceModel with _$ConferenceModel {
   const factory ConferenceModel({
     @HiveField(0) required String confId,
     @HiveField(1) required String confName,
-    @HiveField(2) required String description,
+    @HiveField(2) String? description,
     @HiveField(3) String? conferencesStartDate,
     @JsonKey(
       name: 'conferenceHomePageSchedule',
