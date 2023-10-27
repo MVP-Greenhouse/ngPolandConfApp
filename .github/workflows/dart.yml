@@ -23,6 +23,10 @@ jobs:
         with:
           channel: 'stable'
       - run: flutter pub get
+        working-directory: /ngPolandConfApp/ng_poland_conf_app
       - run: flutter test
+        working-directory: /ngPolandConfApp/ng_poland_conf_app
       - run: flutter build apk
+        working-directory: /ngPolandConfApp/ng_poland_conf_app
       - run: flutter build appbundle
+        working-directory: /ngPolandConfApp/ng_poland_conf_app
