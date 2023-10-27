@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/constants/hive_constants.dart';
 import 'package:ng_poland_conf_app/core/services/hive_service.dart';

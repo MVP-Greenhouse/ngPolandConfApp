@@ -43,7 +43,7 @@ class WorkshopModel with _$WorkshopModel {
     return WorkshopModel(
       title: json['fields']['title'] as String,
       confId: json['fields']['confId'] as String,
-      description: json['fields']['description'] as String ?? '',
+      description: json['fields']['description'] as String,
       speaker: SpeakerModel(
         id: json['fields']['instructor']['sys']['id'] as String,
         name: speaker['name'] as String,

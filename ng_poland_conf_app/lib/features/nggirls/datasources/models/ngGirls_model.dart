@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:ng_poland_conf_app/features/nggirls/domains/entities/ngGirls.dart';
