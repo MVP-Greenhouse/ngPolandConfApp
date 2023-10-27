@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/features/about/domains/entities/author.dart';
@@ -5,8 +8,9 @@ import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/blocks/themeMode/theme_mode_cubit.dart';
+import '../../settings/presentation/connection_status.dart';
 
-class AboutPage extends StatelessWidget {
+class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
 
   static const List<Author> _dataAuthors = [
@@ -28,14 +32,39 @@ class AboutPage extends StatelessWidget {
   ];
 
   @override
+  State<AboutPage> createState() => _AboutPageState();
+}
+
+class _AboutPageState extends State<AboutPage> {
+  ConnectivityResult connectivityResult = ConnectivityResult.none;
+  late StreamSubscription<ConnectivityResult> subscription;
+  @override
+  void initState() {
+    super.initState();
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        connectivityResult = result;
+      });
+    });
+  }
+
+  @override
+  dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: AppBar(
-        title: Text(
-          'About',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
-        ),
-      ),
+          title: Text(
+            'About',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+          ),
+          actions: const [
+            ConnectionStatus(),
+          ]),
       body: SingleChildScrollView(
         clipBehavior: Clip.none,
         child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
@@ -72,7 +101,7 @@ class AboutPage extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.03,
                     ),
                     Column(
-                      children: _dataAuthors
+                      children: AboutPage._dataAuthors
                           .map(
                             (author) => Column(
                               children: [

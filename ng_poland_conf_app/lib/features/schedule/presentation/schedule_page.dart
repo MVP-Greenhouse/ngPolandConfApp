@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
@@ -8,6 +11,7 @@ import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
 
 import '../../../widgets/confs_bottom_nav_bar.dart';
+import '../../settings/presentation/connection_status.dart';
 
 class SchedulePage extends StatefulWidget {
   const SchedulePage({super.key});
@@ -19,6 +23,8 @@ class SchedulePage extends StatefulWidget {
 class _SchedulePageState extends State<SchedulePage> {
   late final ScheduleCubit _cubit;
   final selectedTabItem = EventItemType.ngPoland;
+  ConnectivityResult connectivityResult = ConnectivityResult.none;
+  late StreamSubscription<ConnectivityResult> subscription;
 
   @override
   void initState() {
@@ -28,6 +34,18 @@ class _SchedulePageState extends State<SchedulePage> {
       eventItemType: EventItemType.ngPoland,
     );
     super.initState();
+
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        connectivityResult = result;
+      });
+    });
+  }
+
+  @override
+  dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   void onEventItemTabChange(int idx) {
@@ -50,6 +68,9 @@ class _SchedulePageState extends State<SchedulePage> {
           'Schedule',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
         ),
+        actions: const [
+          ConnectionStatus(),
+        ],
       ),
       body: BlocBuilder<ScheduleCubit, ScheduleState>(
         bloc: _cubit,

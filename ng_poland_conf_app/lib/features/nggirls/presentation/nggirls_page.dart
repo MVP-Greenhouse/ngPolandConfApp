@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +8,8 @@ import 'package:ng_poland_conf_app/features/nggirls/presentation/cubit/ngGirls_c
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
+
+import '../../settings/presentation/connection_status.dart';
 
 class NgGirlsPage extends StatefulWidget {
   const NgGirlsPage({super.key});
@@ -15,6 +20,8 @@ class NgGirlsPage extends StatefulWidget {
 
 class _NgGirlsPageState extends State<NgGirlsPage> {
   late final NgGirlsCubit _ngGirlsCubit;
+  ConnectivityResult connectivityResult = ConnectivityResult.none;
+  late StreamSubscription<ConnectivityResult> subscription;
 
   @override
   void initState() {
@@ -22,17 +29,31 @@ class _NgGirlsPageState extends State<NgGirlsPage> {
     _ngGirlsCubit.getNgGirls();
 
     super.initState();
+
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      setState(() {
+        connectivityResult = result;
+      });
+    });
+  }
+
+  @override
+  dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: AppBar(
-        title: Text(
-          'ngGirls',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
-        ),
-      ),
+          title: Text(
+            'ngGirls',
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+          ),
+          actions: const [
+            ConnectionStatus(),
+          ]),
       body: BlocBuilder<NgGirlsCubit, NgGirlsState>(
         bloc: _ngGirlsCubit,
         builder: (context, state) {
