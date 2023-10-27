@@ -6,7 +6,7 @@ on:
     branches: [ "main" ]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -24,6 +24,14 @@ jobs:
           channel: 'stable'
       - run: flutter pub get
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
+      - name: Create .env file
+        run: |
+          cat > ./.env <<EOF
+          access_token=${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
+          space_id=${{ secrets.CONTENTFUL_SPACE_ID }}
+          api_url=${{ secrets.API_URL }}
+          EOF
+      
       # uncomment when we have tests
       # - run: flutter test
       #  working-directory: ${{ github.workspace }}/ng_poland_conf_app
