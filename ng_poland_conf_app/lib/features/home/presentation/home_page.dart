@@ -87,77 +87,85 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody(BuildContext context, ConferencesState state) {
-    return Center(
-      child: Column(
-        children: [
-          Column(
-            children: [
-              const SizedBox(
-                height: 30.0,
-              ),
-              AnimatedSize(
-                alignment: Alignment.topCenter,
-                duration: const Duration(milliseconds: 300),
-                child: state.maybeWhen(
-                  initial: () => Text('The Biggest Angular Conference',
-                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200))),
-                  loaded: (conferences, selectedConference) => Text(
-                    selectedConference.description ?? '',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200)),
+    return SingleChildScrollView(
+      child: Center(
+        child: SizedBox(
+          height: MediaQuery.of(context).orientation == Orientation.portrait
+              ? MediaQuery.of(context).size.height
+              : MediaQuery.of(context).size.height * 3, // This line makes the widget take 100% height
+          child: SizedBox(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 30.0,
+                ),
+                AnimatedSize(
+                  alignment: Alignment.topCenter,
+                  duration: const Duration(milliseconds: 300),
+                  child: state.maybeWhen(
+                    initial: () => Text('The Biggest Angular Conference',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200))),
+                    loaded: (conferences, selectedConference) => Text(
+                      selectedConference.description ?? '',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200)),
+                    ),
+                    orElse: () => const SizedBox.shrink(),
+                  ),
+                ),
+                const SizedBox(
+                  height: 50.0,
+                ),
+                _buildTimer(),
+                const Divider(
+                  height: 60.0,
+                ),
+                state.maybeWhen(
+                  loaded: (conferences, selectedConference) => Column(
+                    children: selectedConference.listItems
+                        .map(
+                          (e) => Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.calendar_month,
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(150),
+                                    size: 16.0,
+                                  ),
+                                  const SizedBox(
+                                    width: 12.0,
+                                  ),
+                                  Text(e.desc,
+                                      style:
+                                          Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(170), fontSize: 16.0))
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 6.0,
+                              ),
+                              Text(
+                                e.name,
+                                style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
+                              ),
+                              const SizedBox(
+                                height: 18.0,
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList(),
                   ),
                   orElse: () => const SizedBox.shrink(),
                 ),
-              ),
-              const SizedBox(
-                height: 50.0,
-              ),
-              _buildTimer(),
-              const Divider(
-                height: 60.0,
-              ),
-              state.maybeWhen(
-                loaded: (conferences, selectedConference) => Column(
-                  children: selectedConference.listItems
-                      .map(
-                        (e) => Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.calendar_month,
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(150),
-                                  size: 16.0,
-                                ),
-                                const SizedBox(
-                                  width: 12.0,
-                                ),
-                                Text(e.desc,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(170), fontSize: 16.0))
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 6.0,
-                            ),
-                            Text(
-                              e.name,
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
-                            ),
-                            const SizedBox(
-                              height: 18.0,
-                            ),
-                          ],
-                        ),
-                      )
-                      .toList(),
-                ),
-                orElse: () => const SizedBox.shrink(),
-              ),
-            ],
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }
