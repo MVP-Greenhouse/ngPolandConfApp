@@ -14,16 +14,16 @@ class SpeakerModel with _$SpeakerModel {
     @HiveField(0) required String id,
     @HiveField(1) required String name,
     @HiveField(2) required List<String> confIds,
-    @HiveField(3) required String? role,
-    @HiveField(4) required String? bio,
-    @HiveField(5) required String? photoFileUrl,
-    @HiveField(6) required String? photoTitle,
-    @HiveField(7) required String? photoDescription,
-    @HiveField(8) required String? email,
-    @HiveField(9) required String? urlGithub,
-    @HiveField(10) required String? urlLinkedIn,
-    @HiveField(11) required String? urlTwitter,
-    @HiveField(12) required String? urlWww,
+    @HiveField(3) String? role,
+    @HiveField(4) String? bio,
+    @HiveField(5) String? photoFileUrl,
+    @HiveField(6) String? photoTitle,
+    @HiveField(7) String? photoDescription,
+    @HiveField(8) String? email,
+    @HiveField(9) String? urlGithub,
+    @HiveField(10) String? urlLinkedIn,
+    @HiveField(11) String? urlTwitter,
+    @HiveField(12) String? urlWww,
   }) = _SpeakerModel;
 
   factory SpeakerModel.fromJson(Map<String, dynamic> json) {
@@ -36,11 +36,11 @@ class SpeakerModel with _$SpeakerModel {
 
     return SpeakerModel(
       id: json['sys']['id'] as String,
-      name: json['fields']['name'] as String,
-      confIds: json['fields']['confIds'],
-      role: json['fields']['role'] as String,
-      bio: json['fields']['bio'] as String,
-      photoFileUrl: photoFileUrl,
+      name: json['fields']['name'] ?? '',
+      confIds: [],
+      role: json['fields']['role'] ?? '',
+      bio: json['fields']['bio'] ?? '',
+      photoFileUrl: photoFileUrl ?? '',
       photoTitle: json['fields']['photoTitle'] ?? '',
       photoDescription: json['fields']['photoDescription'] ?? '',
       email: json['fields']['email'] ?? '',
@@ -55,7 +55,7 @@ class SpeakerModel with _$SpeakerModel {
   Speaker toEntity() {
     return Speaker(
       id: id,
-      name: name,
+      name: name ?? '',
       role: role ?? '',
       bio: bio ?? '',
       photoFileUrl: photoFileUrl ?? '',

@@ -267,16 +267,16 @@ class _$_SpeakerModel extends _SpeakerModel {
       {@HiveField(0) required this.id,
       @HiveField(1) required this.name,
       @HiveField(2) required final List<String> confIds,
-      @HiveField(3) required this.role,
-      @HiveField(4) required this.bio,
-      @HiveField(5) required this.photoFileUrl,
-      @HiveField(6) required this.photoTitle,
-      @HiveField(7) required this.photoDescription,
-      @HiveField(8) required this.email,
-      @HiveField(9) required this.urlGithub,
-      @HiveField(10) required this.urlLinkedIn,
-      @HiveField(11) required this.urlTwitter,
-      @HiveField(12) required this.urlWww})
+      @HiveField(3) this.role,
+      @HiveField(4) this.bio,
+      @HiveField(5) this.photoFileUrl,
+      @HiveField(6) this.photoTitle,
+      @HiveField(7) this.photoDescription,
+      @HiveField(8) this.email,
+      @HiveField(9) this.urlGithub,
+      @HiveField(10) this.urlLinkedIn,
+      @HiveField(11) this.urlTwitter,
+      @HiveField(12) this.urlWww})
       : _confIds = confIds,
         super._();
 
@@ -386,16 +386,16 @@ abstract class _SpeakerModel extends SpeakerModel {
       {@HiveField(0) required final String id,
       @HiveField(1) required final String name,
       @HiveField(2) required final List<String> confIds,
-      @HiveField(3) required final String? role,
-      @HiveField(4) required final String? bio,
-      @HiveField(5) required final String? photoFileUrl,
-      @HiveField(6) required final String? photoTitle,
-      @HiveField(7) required final String? photoDescription,
-      @HiveField(8) required final String? email,
-      @HiveField(9) required final String? urlGithub,
-      @HiveField(10) required final String? urlLinkedIn,
-      @HiveField(11) required final String? urlTwitter,
-      @HiveField(12) required final String? urlWww}) = _$_SpeakerModel;
+      @HiveField(3) final String? role,
+      @HiveField(4) final String? bio,
+      @HiveField(5) final String? photoFileUrl,
+      @HiveField(6) final String? photoTitle,
+      @HiveField(7) final String? photoDescription,
+      @HiveField(8) final String? email,
+      @HiveField(9) final String? urlGithub,
+      @HiveField(10) final String? urlLinkedIn,
+      @HiveField(11) final String? urlTwitter,
+      @HiveField(12) final String? urlWww}) = _$_SpeakerModel;
   const _SpeakerModel._() : super._();
 
   @override
