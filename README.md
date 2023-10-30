@@ -11,7 +11,8 @@ You can download the app here:
 - iOS: [https://apps.apple.com/app/ngpolandconf/id1441913676](https://apps.apple.com/app/ngpolandconf/id1441913676)
 
 #
-
-[<img src="ng_poland_conf_app/media/screens/home.png">](ng_poland_conf_app/media/screens/home.png)
-[<img src="ng_poland_conf_app/media/screens/dark_theme_drawer.png">](ng_poland_conf_app/media/screens/dark_theme_drawer.png)
-[<img src="ng_poland_conf_app/media/screens/light_theme_drawer.png">](ng_poland_conf_app/media/screens/light_theme_drawer.png)
+![1698697627814](https://github.com/MVP-Greenhouse/ngPolandConfApp/assets/16476508/486f0b45-a7ab-452b-b370-6f1f36ea69a9)
+![1698697627810](https://github.com/MVP-Greenhouse/ngPolandConfApp/assets/16476508/fe8dd277-a621-4f39-97a3-b4ae85c98db3)
+![1698697627806](https://github.com/MVP-Greenhouse/ngPolandConfApp/assets/16476508/253a45a9-a6b7-4953-b451-1c46cc95764c)
+![1698697627802](https://github.com/MVP-Greenhouse/ngPolandConfApp/assets/16476508/4b0db53e-6903-4606-a9c9-10253d3aae70)
+![1698697627796](https://github.com/MVP-Greenhouse/ngPolandConfApp/assets/16476508/fbafcf16-7953-4e3b-a530-74562646275e)
