@@ -16,14 +16,7 @@ mixin ConferenceTimerMixin on Cubit<ConferencesState> {
     }
 
     timeToStartConferenceNotifier.value = Duration(
-      milliseconds: DateTime.parse(conferencesStartDate)
-
-              /// Remove after adding a new conference
-              .add(
-                const Duration(days: 365),
-              )
-              .millisecondsSinceEpoch -
-          DateTime.now().millisecondsSinceEpoch,
+      milliseconds: DateTime.parse(conferencesStartDate).millisecondsSinceEpoch - DateTime.now().millisecondsSinceEpoch,
     ).inSeconds;
 
     _timerToStartConference = Timer.periodic(
