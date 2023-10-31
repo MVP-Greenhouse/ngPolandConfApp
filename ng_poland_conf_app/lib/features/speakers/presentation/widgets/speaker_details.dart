@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injectable.dart';
 import '../../../../widgets/empty_list_info.dart';
@@ -124,7 +125,7 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                             child: TextButton(
                                               style: flatButtonStyle,
                                               onPressed: () {
-                                                // launch(speaker.urlTwitter);
+                                                speaker.urlTwitter != null ? launchUrl(Uri.parse(speaker.urlTwitter as String)) : null;
                                               },
                                               child: const Icon(
                                                 FontAwesomeIcons.twitter,
