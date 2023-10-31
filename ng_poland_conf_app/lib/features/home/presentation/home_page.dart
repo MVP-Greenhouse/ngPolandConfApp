@@ -89,11 +89,9 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBody(BuildContext context, ConferencesState state) {
     return Center(
       child: SizedBox(
-        height: MediaQuery.of(context).orientation == Orientation.portrait
-            ? MediaQuery.of(context).size.height
-            : MediaQuery.of(context).size.height * 3, // This line makes the widget take 100% height
+        height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height : double.infinity, // This line makes the widget take 100% height
         child: SizedBox(
-          child: Column(
+          child: ListView(
             children: [
               const SizedBox(
                 height: 30.0,
