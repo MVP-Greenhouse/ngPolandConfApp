@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +11,7 @@ import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.da
 import '../../../../routing/routing.dart';
 import '../../../speakers/presentation/widgets/speaker_details.dart';
 
-class ScheduleEvent extends StatelessWidget {
+class ScheduleEvent extends StatefulWidget {
   final EventItem eventItem;
   final Color iconColor;
 
@@ -19,6 +21,11 @@ class ScheduleEvent extends StatelessWidget {
     super.key,
   });
 
+  @override
+  State<ScheduleEvent> createState() => _ScheduleEventState();
+}
+
+class _ScheduleEventState extends State<ScheduleEvent> {
   Widget _getIcon(String? category) {
     var icon = switch (category) {
       'registration' => FontAwesomeIcons.addressCard,
@@ -33,68 +40,132 @@ class ScheduleEvent extends StatelessWidget {
 
     return Icon(
       icon,
-      color: iconColor,
+      color: widget.iconColor,
     );
+  }
+
+  late Timer _timer;
+
+  bool _animation = false;
+
+  @override
+  void initState() {
+    _timer = Timer.periodic(
+      const Duration(seconds: 3),
+      (Timer timer) => setState(() {
+        _animation = !_animation;
+      }),
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+
+    super.dispose();
+  }
+
+  bool checkTimeEventToAnimation(
+    DateTime dateNow,
+    String dateStartEvent,
+    String dateEndEvent,
+  ) {
+    return DateTime.parse(dateStartEvent).toLocal().millisecondsSinceEpoch < dateNow.millisecondsSinceEpoch &&
+        dateNow.millisecondsSinceEpoch < DateTime.parse(dateEndEvent).toLocal().millisecondsSinceEpoch;
   }
 
   @override
   Widget build(BuildContext context) {
-    final DateTime? startDate = eventItem.startDate;
-    final DateTime? endDate = eventItem.endDate;
+    final DateTime? startDate = widget.eventItem.startDate;
+    final DateTime? endDate = widget.eventItem.endDate;
+
+    // get theme mode
+    final _darkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          ListTile(
-            onTap: eventItem.speaker == null
-                ? null
-                : () {
-                    context.pushNamed('${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}', pathParameters: {
-                      'id': eventItem.speaker?.id ?? '',
-                    });
-                  },
-            leading: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                if (startDate != null)
-                  Text(
-                    DateFormat.Hm().format(startDate),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).textTheme.bodySmall?.color,
-                    ),
+          checkTimeEventToAnimation(
+            DateTime.now(),
+            widget.eventItem.startDate.toString(),
+            widget.eventItem.endDate.toString(),
+          )
+              ? AnimatedContainer(
+                  duration: const Duration(seconds: 3),
+                  curve: Curves.easeIn,
+                  decoration: BoxDecoration(
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: _animation
+                            ? _darkMode
+                                ? Theme.of(context).colorScheme.secondary.withOpacity(0.8)
+                                : Theme.of(context).colorScheme.secondary.withOpacity(0.4)
+                            : _darkMode
+                                ? Theme.of(context).primaryColor.withOpacity(0.8)
+                                : Theme.of(context).primaryColor.withOpacity(0.4),
+                        blurRadius: 50,
+                        offset: const Offset(0, 0),
+                      ),
+                    ],
                   ),
-                if (endDate != null)
-                  Text(
-                    DateFormat.Hm().format(endDate),
-                    style: const TextStyle(fontSize: 12),
-                  ),
-              ],
-            ),
-            title: Text(
-              eventItem.title,
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.8),
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            subtitle: _buildSpeaker(eventItem.speaker),
-            trailing: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Opacity(
-                  opacity: 0.7,
-                  child: _getIcon(eventItem.category),
-                ),
-              ],
-            ),
-          ),
+                  child: _listElement(context, startDate, endDate),
+                )
+              : _listElement(context, startDate, endDate),
           Divider(
             color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
             height: 40,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _listElement(BuildContext context, DateTime? startDate, DateTime? endDate) {
+    return ListTile(
+      onTap: widget.eventItem.speaker == null
+          ? null
+          : () {
+              context.pushNamed('${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}', pathParameters: {
+                'id': widget.eventItem.speaker?.id ?? '',
+              });
+            },
+      leading: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          if (startDate != null)
+            Text(
+              DateFormat.Hm().format(startDate),
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
+            ),
+          if (endDate != null)
+            Text(
+              DateFormat.Hm().format(endDate),
+              style: const TextStyle(fontSize: 12),
+            ),
+        ],
+      ),
+      title: Text(
+        widget.eventItem.title,
+        style: TextStyle(
+          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.8),
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      subtitle: _buildSpeaker(widget.eventItem.speaker),
+      trailing: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Opacity(
+            opacity: 0.7,
+            child: _getIcon(widget.eventItem.category),
           ),
         ],
       ),
@@ -118,20 +189,17 @@ class ScheduleEvent extends StatelessWidget {
                   spacing: 10,
                   children: [
                     if (photoFileUrl != null)
-                      Hero(
-                        tag: photoFileUrl,
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          child: CachedNetworkImage(
-                            width: 20,
-                            progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
-                            imageUrl: 'http:${speaker.photoFileUrl}',
-                            errorWidget: (context, url, dynamic error) {
-                              return Image.asset('assets/images/person.png');
-                            },
-                          ),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20),
+                        ),
+                        child: CachedNetworkImage(
+                          width: 20,
+                          progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
+                          imageUrl: 'http:${speaker.photoFileUrl}',
+                          errorWidget: (context, url, dynamic error) {
+                            return Image.asset('assets/images/person.png');
+                          },
                         ),
                       ),
                     if (name != null)
