@@ -121,6 +121,7 @@ class MainApp extends StatelessWidget {
                     displaySmall: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                   )),
               themeMode: themeMode,
+              debugShowCheckedModeBanner: false,
             ),
           );
         },
