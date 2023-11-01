@@ -14,6 +14,26 @@
       "filename" : "Default-3.png",
       "idiom" : "universal",
       "scale" : "3x"
+    },
+    {
+      "filename" : "Default-1 1.png",
+      "idiom" : "ipad",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Default-1 2.png",
+      "idiom" : "ipad",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Default-1 3.png",
+      "idiom" : "mac",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Default-1 4.png",
+      "idiom" : "mac",
+      "scale" : "2x"
     }
   ],
   "info" : {
