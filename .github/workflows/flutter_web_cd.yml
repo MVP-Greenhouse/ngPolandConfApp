@@ -24,7 +24,7 @@ jobs:
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
       - name: Create .env file
         run: |
-          cat > ${{ github.workspace }}/ng_poland_conf_app/.env <<EOF
+          cat > ${{ github.workspace }}/ng_poland_conf_app/env <<EOF
           access_token=${{ secrets.CONTENTFUL_ACCESS_TOKEN }}
           space_id=${{ secrets.CONTENTFUL_SPACE_ID }}
           api_url=${{ secrets.API_URL }}
