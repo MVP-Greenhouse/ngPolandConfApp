@@ -35,9 +35,9 @@ jobs:
       #  working-directory: ${{ github.workspace }}/ng_poland_conf_app
       - run: flutter build web
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
-      - run: firebase experiments:enable webframeworks
+      - name: Install firebase and npm packages
+        run: install -g firebase-tools && firebase experiments:enable webframeworks
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
-      - uses: actions/checkout@v3
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
