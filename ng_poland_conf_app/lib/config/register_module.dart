@@ -13,7 +13,7 @@ abstract class RegisterModule {
   @singleton
   @preResolve
   Future<RawConfig> config() async {
-    await dotenv.load();
+    await dotenv.load(fileName: "env");
 
     return RawConfig.from(dotenv.env);
   }

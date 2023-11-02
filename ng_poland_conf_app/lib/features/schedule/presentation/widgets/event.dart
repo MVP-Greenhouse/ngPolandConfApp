@@ -196,7 +196,7 @@ class _ScheduleEventState extends State<ScheduleEvent> {
                         child: CachedNetworkImage(
                           width: 20,
                           progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
-                          imageUrl: 'http:${speaker.photoFileUrl}',
+                          imageUrl: 'https:${speaker.photoFileUrl}',
                           errorWidget: (context, url, dynamic error) {
                             return Image.asset('assets/images/person.png');
                           },

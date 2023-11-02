@@ -98,7 +98,7 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                       Center(
                                         child: CachedNetworkImage(
                                           progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
-                                          imageUrl: 'http:${speaker.photoFileUrl}',
+                                          imageUrl: 'https:${speaker.photoFileUrl}',
                                           errorWidget: (context, url, dynamic error) {
                                             return Image.asset('assets/images/person.png');
                                           },

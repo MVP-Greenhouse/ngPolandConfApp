@@ -37,7 +37,7 @@ class WorkshopsContent extends StatelessWidget {
                   width: 50,
                   height: 50,
                 ),
-                imageUrl: 'http:${workshop.speaker.photoFileUrl}',
+                imageUrl: 'https:${workshop.speaker.photoFileUrl}',
                 errorWidget: (context, url, dynamic error) {
                   return Image.asset('assets/images/person.png', width: 50, height: 50);
                 },
