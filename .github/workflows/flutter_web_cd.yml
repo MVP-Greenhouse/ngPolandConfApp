@@ -45,4 +45,6 @@ jobs:
           channelId: live
           projectId: ngpolandconfapp
           entryPoint: ${{ github.workspace }}/ng_poland_conf_app
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
 
