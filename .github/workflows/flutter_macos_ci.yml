@@ -35,5 +35,5 @@ jobs:
       # uncomment when we have tests
       # - run: flutter test
       #  working-directory: ${{ github.workspace }}/ng_poland_conf_app
-      - run: flutter build macos
+      - run: flutter build macos --debug
         working-directory: ${{ github.workspace }}/ng_poland_conf_app
