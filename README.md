@@ -7,8 +7,10 @@ It is faster, prettier, and more powerful 💪
 If you would like to help us, you're welcome. There will be always something you can work on.
 
 You can download the app here:
-- Android: [https://play.google.com/store/apps/details?id=pl.ngPoland.ngPolandConf](https://play.google.com/store/apps/details?id=pl.ngPoland.ngPolandConf)
-- iOS: [https://apps.apple.com/app/ngpolandconf/id1441913676](https://apps.apple.com/app/ngpolandconf/id1441913676)
+- Android: https://play.google.com/store/apps/details?id=com.mvpgreenhouse.ng_poland_conf_app
+- iOS: https://apps.apple.com/pl/app/ngpolandconfapp/id6470946758
+- macOS: https://apps.apple.com/pl/app/ngpolandconfapp/id6470946758
+- Web: https://ngpolandconfapp.web.app/
 
 #
 <img src="https://github.com/MVP-Greenhouse/ngPolandConfApp/assets/16476508/713a945b-7af4-4423-ba62-2ae6f39f0a39" width="300">
