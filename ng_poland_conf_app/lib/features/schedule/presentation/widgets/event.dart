@@ -81,39 +81,11 @@ class _ScheduleEventState extends State<ScheduleEvent> {
     final DateTime? startDate = widget.eventItem.startDate;
     final DateTime? endDate = widget.eventItem.endDate;
 
-    // get theme mode
-    final _darkMode = Theme.of(context).brightness == Brightness.dark;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          checkTimeEventToAnimation(
-            DateTime.now(),
-            widget.eventItem.startDate.toString(),
-            widget.eventItem.endDate.toString(),
-          )
-              ? AnimatedContainer(
-                  duration: const Duration(seconds: 3),
-                  curve: Curves.easeIn,
-                  decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: _animation
-                            ? _darkMode
-                                ? Theme.of(context).colorScheme.secondary.withOpacity(0.8)
-                                : Theme.of(context).colorScheme.secondary.withOpacity(0.4)
-                            : _darkMode
-                                ? Theme.of(context).primaryColor.withOpacity(0.8)
-                                : Theme.of(context).primaryColor.withOpacity(0.4),
-                        blurRadius: 50,
-                        offset: const Offset(0, 0),
-                      ),
-                    ],
-                  ),
-                  child: _listElement(context, startDate, endDate),
-                )
-              : _listElement(context, startDate, endDate),
+          _listElement(context, startDate, endDate),
           Divider(
             color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
             height: 40,
