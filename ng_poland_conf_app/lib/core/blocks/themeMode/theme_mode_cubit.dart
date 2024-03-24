@@ -26,3 +26,5 @@ class ThemeModeCubit extends Cubit<ThemeModeState> {
     emit(ThemeModeState.loaded(themeMode));
   }
 }
+
+bool get isDarkMode => getIt.get<ThemeModeCubit>().state.isDarkMode;
