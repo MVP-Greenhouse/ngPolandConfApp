@@ -12,7 +12,7 @@ part of 'event_item_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$EventItemModel {
@@ -145,11 +145,11 @@ class _$EventItemModelCopyWithImpl<$Res, $Val extends EventItemModel>
 }
 
 /// @nodoc
-abstract class _$$_EventItemModelCopyWith<$Res>
+abstract class _$$EventItemModelImplCopyWith<$Res>
     implements $EventItemModelCopyWith<$Res> {
-  factory _$$_EventItemModelCopyWith(
-          _$_EventItemModel value, $Res Function(_$_EventItemModel) then) =
-      __$$_EventItemModelCopyWithImpl<$Res>;
+  factory _$$EventItemModelImplCopyWith(_$EventItemModelImpl value,
+          $Res Function(_$EventItemModelImpl) then) =
+      __$$EventItemModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -169,11 +169,11 @@ abstract class _$$_EventItemModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_EventItemModelCopyWithImpl<$Res>
-    extends _$EventItemModelCopyWithImpl<$Res, _$_EventItemModel>
-    implements _$$_EventItemModelCopyWith<$Res> {
-  __$$_EventItemModelCopyWithImpl(
-      _$_EventItemModel _value, $Res Function(_$_EventItemModel) _then)
+class __$$EventItemModelImplCopyWithImpl<$Res>
+    extends _$EventItemModelCopyWithImpl<$Res, _$EventItemModelImpl>
+    implements _$$EventItemModelImplCopyWith<$Res> {
+  __$$EventItemModelImplCopyWithImpl(
+      _$EventItemModelImpl _value, $Res Function(_$EventItemModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -190,7 +190,7 @@ class __$$_EventItemModelCopyWithImpl<$Res>
     Object? endDate = null,
     Object? speaker = freezed,
   }) {
-    return _then(_$_EventItemModel(
+    return _then(_$EventItemModelImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -237,8 +237,8 @@ class __$$_EventItemModelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EventItemModel extends _EventItemModel {
-  const _$_EventItemModel(
+class _$EventItemModelImpl extends _EventItemModel {
+  const _$EventItemModelImpl(
       {@HiveField(0) required this.id,
       @HiveField(1) required this.title,
       @HiveField(2) required this.confId,
@@ -288,10 +288,10 @@ class _$_EventItemModel extends _EventItemModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EventItemModel &&
+            other is _$EventItemModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.confId, confId) || other.confId == confId) &&
@@ -315,22 +315,24 @@ class _$_EventItemModel extends _EventItemModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EventItemModelCopyWith<_$_EventItemModel> get copyWith =>
-      __$$_EventItemModelCopyWithImpl<_$_EventItemModel>(this, _$identity);
+  _$$EventItemModelImplCopyWith<_$EventItemModelImpl> get copyWith =>
+      __$$EventItemModelImplCopyWithImpl<_$EventItemModelImpl>(
+          this, _$identity);
 }
 
 abstract class _EventItemModel extends EventItemModel {
   const factory _EventItemModel(
-      {@HiveField(0) required final String id,
-      @HiveField(1) required final String title,
-      @HiveField(2) required final String confId,
-      @HiveField(3) required final String type,
-      @HiveField(4) required final String category,
-      @HiveField(5) final String? shortDescription,
-      @HiveField(6) final String? description,
-      @HiveField(7) required final String startDate,
-      @HiveField(8) required final String endDate,
-      @HiveField(9) required final SpeakerModel? speaker}) = _$_EventItemModel;
+          {@HiveField(0) required final String id,
+          @HiveField(1) required final String title,
+          @HiveField(2) required final String confId,
+          @HiveField(3) required final String type,
+          @HiveField(4) required final String category,
+          @HiveField(5) final String? shortDescription,
+          @HiveField(6) final String? description,
+          @HiveField(7) required final String startDate,
+          @HiveField(8) required final String endDate,
+          @HiveField(9) required final SpeakerModel? speaker}) =
+      _$EventItemModelImpl;
   const _EventItemModel._() : super._();
 
   @override
@@ -365,6 +367,6 @@ abstract class _EventItemModel extends EventItemModel {
   SpeakerModel? get speaker;
   @override
   @JsonKey(ignore: true)
-  _$$_EventItemModelCopyWith<_$_EventItemModel> get copyWith =>
+  _$$EventItemModelImplCopyWith<_$EventItemModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

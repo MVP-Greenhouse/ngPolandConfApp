@@ -20,6 +20,7 @@ dependencies:
 
   font_awesome_flutter: ^10.5.0
   cached_network_image: ^3.3.0
+  rive: ^0.12.4
 
   hive:
   hive_flutter:
@@ -32,6 +33,7 @@ dependencies:
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.1
   bloc: ^8.1.2
+  bloc_concurrency: ^0.2.4
   webview_flutter: ^4.4.1
   connectivity_plus: ^5.0.1
   collection: ^1.17.2
@@ -55,4 +57,5 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/images/authors/
+    - assets/animations/rive/
     - env

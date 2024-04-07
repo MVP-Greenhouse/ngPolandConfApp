@@ -44,8 +44,9 @@ class ConferencesModelAdapter extends TypeAdapter<ConferencesModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ConferencesModel _$$_ConferencesModelFromJson(Map<String, dynamic> json) =>
-    _$_ConferencesModel(
+_$ConferencesModelImpl _$$ConferencesModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ConferencesModelImpl(
       items: (json['items'] as List<dynamic>?)
           ?.map((e) => e == null
               ? null
@@ -53,7 +54,8 @@ _$_ConferencesModel _$$_ConferencesModelFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$_ConferencesModelToJson(_$_ConferencesModel instance) =>
+Map<String, dynamic> _$$ConferencesModelImplToJson(
+        _$ConferencesModelImpl instance) =>
     <String, dynamic>{
       'items': instance.items,
     };

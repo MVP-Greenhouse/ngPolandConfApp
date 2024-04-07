@@ -12,7 +12,7 @@ part of 'conference.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Conference {
@@ -86,11 +86,11 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
 }
 
 /// @nodoc
-abstract class _$$_ConferenceCopyWith<$Res>
+abstract class _$$ConferenceImplCopyWith<$Res>
     implements $ConferenceCopyWith<$Res> {
-  factory _$$_ConferenceCopyWith(
-          _$_Conference value, $Res Function(_$_Conference) then) =
-      __$$_ConferenceCopyWithImpl<$Res>;
+  factory _$$ConferenceImplCopyWith(
+          _$ConferenceImpl value, $Res Function(_$ConferenceImpl) then) =
+      __$$ConferenceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -102,11 +102,11 @@ abstract class _$$_ConferenceCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ConferenceCopyWithImpl<$Res>
-    extends _$ConferenceCopyWithImpl<$Res, _$_Conference>
-    implements _$$_ConferenceCopyWith<$Res> {
-  __$$_ConferenceCopyWithImpl(
-      _$_Conference _value, $Res Function(_$_Conference) _then)
+class __$$ConferenceImplCopyWithImpl<$Res>
+    extends _$ConferenceCopyWithImpl<$Res, _$ConferenceImpl>
+    implements _$$ConferenceImplCopyWith<$Res> {
+  __$$ConferenceImplCopyWithImpl(
+      _$ConferenceImpl _value, $Res Function(_$ConferenceImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -118,7 +118,7 @@ class __$$_ConferenceCopyWithImpl<$Res>
     Object? conferencesStartDate = freezed,
     Object? listItems = null,
   }) {
-    return _then(_$_Conference(
+    return _then(_$ConferenceImpl(
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
@@ -145,8 +145,8 @@ class __$$_ConferenceCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Conference implements _Conference {
-  const _$_Conference(
+class _$ConferenceImpl implements _Conference {
+  const _$ConferenceImpl(
       {required this.confId,
       required this.confName,
       this.description,
@@ -176,10 +176,10 @@ class _$_Conference implements _Conference {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Conference &&
+            other is _$ConferenceImpl &&
             (identical(other.confId, confId) || other.confId == confId) &&
             (identical(other.confName, confName) ||
                 other.confName == confName) &&
@@ -198,8 +198,8 @@ class _$_Conference implements _Conference {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ConferenceCopyWith<_$_Conference> get copyWith =>
-      __$$_ConferenceCopyWithImpl<_$_Conference>(this, _$identity);
+  _$$ConferenceImplCopyWith<_$ConferenceImpl> get copyWith =>
+      __$$ConferenceImplCopyWithImpl<_$ConferenceImpl>(this, _$identity);
 }
 
 abstract class _Conference implements Conference {
@@ -208,7 +208,7 @@ abstract class _Conference implements Conference {
       required final String confName,
       final String? description,
       final String? conferencesStartDate,
-      required final List<ConferenceItem> listItems}) = _$_Conference;
+      required final List<ConferenceItem> listItems}) = _$ConferenceImpl;
 
   @override
   String get confId;
@@ -222,6 +222,6 @@ abstract class _Conference implements Conference {
   List<ConferenceItem> get listItems;
   @override
   @JsonKey(ignore: true)
-  _$$_ConferenceCopyWith<_$_Conference> get copyWith =>
+  _$$ConferenceImplCopyWith<_$ConferenceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

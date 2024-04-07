@@ -12,7 +12,7 @@ part of 'workshop.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Workshop {
@@ -116,10 +116,11 @@ class _$WorkshopCopyWithImpl<$Res, $Val extends Workshop>
 }
 
 /// @nodoc
-abstract class _$$_WorkshopCopyWith<$Res> implements $WorkshopCopyWith<$Res> {
-  factory _$$_WorkshopCopyWith(
-          _$_Workshop value, $Res Function(_$_Workshop) then) =
-      __$$_WorkshopCopyWithImpl<$Res>;
+abstract class _$$WorkshopImplCopyWith<$Res>
+    implements $WorkshopCopyWith<$Res> {
+  factory _$$WorkshopImplCopyWith(
+          _$WorkshopImpl value, $Res Function(_$WorkshopImpl) then) =
+      __$$WorkshopImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -137,11 +138,11 @@ abstract class _$$_WorkshopCopyWith<$Res> implements $WorkshopCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_WorkshopCopyWithImpl<$Res>
-    extends _$WorkshopCopyWithImpl<$Res, _$_Workshop>
-    implements _$$_WorkshopCopyWith<$Res> {
-  __$$_WorkshopCopyWithImpl(
-      _$_Workshop _value, $Res Function(_$_Workshop) _then)
+class __$$WorkshopImplCopyWithImpl<$Res>
+    extends _$WorkshopCopyWithImpl<$Res, _$WorkshopImpl>
+    implements _$$WorkshopImplCopyWith<$Res> {
+  __$$WorkshopImplCopyWithImpl(
+      _$WorkshopImpl _value, $Res Function(_$WorkshopImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -156,7 +157,7 @@ class __$$_WorkshopCopyWithImpl<$Res>
     Object? speaker = null,
     Object? pricePln = freezed,
   }) {
-    return _then(_$_Workshop(
+    return _then(_$WorkshopImpl(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -195,8 +196,8 @@ class __$$_WorkshopCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Workshop extends _Workshop {
-  const _$_Workshop(
+class _$WorkshopImpl extends _Workshop {
+  const _$WorkshopImpl(
       {required this.title,
       required this.confId,
       required this.description,
@@ -230,10 +231,10 @@ class _$_Workshop extends _Workshop {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Workshop &&
+            other is _$WorkshopImpl &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.confId, confId) || other.confId == confId) &&
             (identical(other.description, description) ||
@@ -255,8 +256,8 @@ class _$_Workshop extends _Workshop {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WorkshopCopyWith<_$_Workshop> get copyWith =>
-      __$$_WorkshopCopyWithImpl<_$_Workshop>(this, _$identity);
+  _$$WorkshopImplCopyWith<_$WorkshopImpl> get copyWith =>
+      __$$WorkshopImplCopyWithImpl<_$WorkshopImpl>(this, _$identity);
 }
 
 abstract class _Workshop extends Workshop {
@@ -268,7 +269,7 @@ abstract class _Workshop extends Workshop {
       required final String endDate,
       required final String? locationDescription,
       required final Speaker speaker,
-      required final int? pricePln}) = _$_Workshop;
+      required final int? pricePln}) = _$WorkshopImpl;
   const _Workshop._() : super._();
 
   @override
@@ -289,6 +290,6 @@ abstract class _Workshop extends Workshop {
   int? get pricePln;
   @override
   @JsonKey(ignore: true)
-  _$$_WorkshopCopyWith<_$_Workshop> get copyWith =>
+  _$$WorkshopImplCopyWith<_$WorkshopImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

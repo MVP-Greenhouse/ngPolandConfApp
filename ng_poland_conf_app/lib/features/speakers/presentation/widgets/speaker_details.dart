@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_rating.dart';
+import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injectable.dart';
@@ -24,9 +27,15 @@ class SpeakerDetails extends StatefulWidget {
 
 class _SpeakerDetailsState extends State<SpeakerDetails> {
   late final SpeakersCubit _speakersCubit;
+  late final RiveFile ratingFile;
 
   @override
   void initState() {
+    rootBundle.load(SpeakerRating.ratingFilePath).then(
+      (data) async {
+        ratingFile = RiveFile.import(data);
+      },
+    );
     _speakersCubit = getIt.get<SpeakersCubit>();
     _speakersCubit.getListSpeakers();
     super.initState();
@@ -116,7 +125,9 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                         height: MediaQuery.of(context).orientation == Orientation.portrait
                                             ? MediaQuery.of(context).size.width * 0.40
                                             : MediaQuery.of(context).size.width * 0.37,
-                                        width: MediaQuery.of(context).orientation == Orientation.portrait ? null : MediaQuery.of(context).size.width * 0.43,
+                                        width: MediaQuery.of(context).orientation == Orientation.portrait
+                                            ? null
+                                            : MediaQuery.of(context).size.width * 0.43,
                                         child: Align(
                                           alignment: Alignment.bottomRight,
                                           child: CircleAvatar(
@@ -151,6 +162,10 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                       ),
                                   textAlign: TextAlign.center,
                                 ),
+                              ),
+                              SpeakerRating(
+                                id: widget.id,
+                                ratingFile: ratingFile,
                               ),
                               Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 16.0),

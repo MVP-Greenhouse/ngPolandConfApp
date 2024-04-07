@@ -12,7 +12,7 @@ part of 'ngGirls.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$NgGirls {
@@ -67,20 +67,21 @@ class _$NgGirlsCopyWithImpl<$Res, $Val extends NgGirls>
 }
 
 /// @nodoc
-abstract class _$$_NgGirlsCopyWith<$Res> implements $NgGirlsCopyWith<$Res> {
-  factory _$$_NgGirlsCopyWith(
-          _$_NgGirls value, $Res Function(_$_NgGirls) then) =
-      __$$_NgGirlsCopyWithImpl<$Res>;
+abstract class _$$NgGirlsImplCopyWith<$Res> implements $NgGirlsCopyWith<$Res> {
+  factory _$$NgGirlsImplCopyWith(
+          _$NgGirlsImpl value, $Res Function(_$NgGirlsImpl) then) =
+      __$$NgGirlsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String myId, String? title, String? text});
 }
 
 /// @nodoc
-class __$$_NgGirlsCopyWithImpl<$Res>
-    extends _$NgGirlsCopyWithImpl<$Res, _$_NgGirls>
-    implements _$$_NgGirlsCopyWith<$Res> {
-  __$$_NgGirlsCopyWithImpl(_$_NgGirls _value, $Res Function(_$_NgGirls) _then)
+class __$$NgGirlsImplCopyWithImpl<$Res>
+    extends _$NgGirlsCopyWithImpl<$Res, _$NgGirlsImpl>
+    implements _$$NgGirlsImplCopyWith<$Res> {
+  __$$NgGirlsImplCopyWithImpl(
+      _$NgGirlsImpl _value, $Res Function(_$NgGirlsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -90,7 +91,7 @@ class __$$_NgGirlsCopyWithImpl<$Res>
     Object? title = freezed,
     Object? text = freezed,
   }) {
-    return _then(_$_NgGirls(
+    return _then(_$NgGirlsImpl(
       myId: null == myId
           ? _value.myId
           : myId // ignore: cast_nullable_to_non_nullable
@@ -109,8 +110,8 @@ class __$$_NgGirlsCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_NgGirls extends _NgGirls {
-  const _$_NgGirls(
+class _$NgGirlsImpl extends _NgGirls {
+  const _$NgGirlsImpl(
       {required this.myId, required this.title, required this.text})
       : super._();
 
@@ -127,10 +128,10 @@ class _$_NgGirls extends _NgGirls {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_NgGirls &&
+            other is _$NgGirlsImpl &&
             (identical(other.myId, myId) || other.myId == myId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.text, text) || other.text == text));
@@ -142,15 +143,15 @@ class _$_NgGirls extends _NgGirls {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NgGirlsCopyWith<_$_NgGirls> get copyWith =>
-      __$$_NgGirlsCopyWithImpl<_$_NgGirls>(this, _$identity);
+  _$$NgGirlsImplCopyWith<_$NgGirlsImpl> get copyWith =>
+      __$$NgGirlsImplCopyWithImpl<_$NgGirlsImpl>(this, _$identity);
 }
 
 abstract class _NgGirls extends NgGirls {
   const factory _NgGirls(
       {required final String myId,
       required final String? title,
-      required final String? text}) = _$_NgGirls;
+      required final String? text}) = _$NgGirlsImpl;
   const _NgGirls._() : super._();
 
   @override
@@ -161,6 +162,6 @@ abstract class _NgGirls extends NgGirls {
   String? get text;
   @override
   @JsonKey(ignore: true)
-  _$$_NgGirlsCopyWith<_$_NgGirls> get copyWith =>
+  _$$NgGirlsImplCopyWith<_$NgGirlsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
