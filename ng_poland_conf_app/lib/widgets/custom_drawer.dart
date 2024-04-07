@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +31,7 @@ class CustomDrawer extends StatelessWidget {
               page,
               currentPage,
             ),
+          _buildLogoutButton(context),
           Divider(
             color: Theme.of(context).colorScheme.primary,
             thickness: 1.0,
@@ -88,6 +90,28 @@ class CustomDrawer extends StatelessWidget {
         context,
         page: page,
       ),
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return ListTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6.0),
+      ),
+      leading: SizedBox(
+        width: 34.0,
+        child: Icon(
+          Icons.logout,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      title: Text(
+        'Logout',
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+      ),
+      onTap: FirebaseAuth.instance.signOut,
     );
   }
 
