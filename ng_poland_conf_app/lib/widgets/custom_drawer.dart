@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
+import 'package:ng_poland_conf_app/core/utils/authentication_utils.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -111,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             ),
       ),
-      onTap: FirebaseAuth.instance.signOut,
+      onTap: AuthenticationUtils.logout,
     );
   }
 
@@ -128,8 +128,10 @@ class CustomDrawer extends StatelessWidget {
       children: [
         Switch(
           thumbColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface),
-          trackColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
-          trackOutlineColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
+          trackColor:
+              MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
+          trackOutlineColor:
+              MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
           value: valueForSwitch,
           onChanged: (val) async {
             ThemeMode? newThemeMode;

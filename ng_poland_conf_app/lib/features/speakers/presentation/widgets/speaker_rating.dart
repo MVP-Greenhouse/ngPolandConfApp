@@ -94,6 +94,7 @@ class _SpeakerRatingState extends State<SpeakerRating> {
           return IgnorePointer(
             ignoring: state.maybeWhen(
               readyToRate: () => false,
+              rated: (_) => false,
               orElse: () => true,
             ),
             child: SizedBox(

@@ -33,12 +33,20 @@ class RateSpeakersRepositoryImpl implements RateSpeakersRepository {
   @override
   Future<int?> getRateForSpeaker(GetRateForSpeakerParams params) async {
     try {
-      final int? rateForSpeaker = await rateSpeakersLocalDataSource.get(
+      final int rateForSpeaker = await rateSpeakersRemoteDataSource.getRateForSpeaker(
+        confId: params.confId,
+        speakerId: params.speakerId,
+      );
+      await rateSpeakersLocalDataSource.update(
+        rateForSpeaker,
         customKey: params.keyForLocalStorage,
       );
       return rateForSpeaker;
     } catch (_) {
-      return null;
+      final int? rateForSpeaker = await rateSpeakersLocalDataSource.get(
+        customKey: params.keyForLocalStorage,
+      );
+      return rateForSpeaker;
     }
   }
 }
