@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'speaker_rating_bloc.dart';
+part of 'event_rating_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,58 +15,58 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$SpeakerRatingEvent {
+mixin _$EventRatingEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() getRateForSpeaker,
-    required TResult Function(int rate) rateSpeaker,
+    required TResult Function() getRateForEvent,
+    required TResult Function(int rate) rateEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRateForSpeaker,
-    TResult? Function(int rate)? rateSpeaker,
+    TResult? Function()? getRateForEvent,
+    TResult? Function(int rate)? rateEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRateForSpeaker,
-    TResult Function(int rate)? rateSpeaker,
+    TResult Function()? getRateForEvent,
+    TResult Function(int rate)? rateEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GetRateForSpeaker value) getRateForSpeaker,
-    required TResult Function(_RateSpeaker value) rateSpeaker,
+    required TResult Function(_GetRateForEvent value) getRateForEvent,
+    required TResult Function(_RateEvent value) rateEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRateForSpeaker value)? getRateForSpeaker,
-    TResult? Function(_RateSpeaker value)? rateSpeaker,
+    TResult? Function(_GetRateForEvent value)? getRateForEvent,
+    TResult? Function(_RateEvent value)? rateEvent,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRateForSpeaker value)? getRateForSpeaker,
-    TResult Function(_RateSpeaker value)? rateSpeaker,
+    TResult Function(_GetRateForEvent value)? getRateForEvent,
+    TResult Function(_RateEvent value)? rateEvent,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SpeakerRatingEventCopyWith<$Res> {
-  factory $SpeakerRatingEventCopyWith(
-          SpeakerRatingEvent value, $Res Function(SpeakerRatingEvent) then) =
-      _$SpeakerRatingEventCopyWithImpl<$Res, SpeakerRatingEvent>;
+abstract class $EventRatingEventCopyWith<$Res> {
+  factory $EventRatingEventCopyWith(
+          EventRatingEvent value, $Res Function(EventRatingEvent) then) =
+      _$EventRatingEventCopyWithImpl<$Res, EventRatingEvent>;
 }
 
 /// @nodoc
-class _$SpeakerRatingEventCopyWithImpl<$Res, $Val extends SpeakerRatingEvent>
-    implements $SpeakerRatingEventCopyWith<$Res> {
-  _$SpeakerRatingEventCopyWithImpl(this._value, this._then);
+class _$EventRatingEventCopyWithImpl<$Res, $Val extends EventRatingEvent>
+    implements $EventRatingEventCopyWith<$Res> {
+  _$EventRatingEventCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -75,35 +75,35 @@ class _$SpeakerRatingEventCopyWithImpl<$Res, $Val extends SpeakerRatingEvent>
 }
 
 /// @nodoc
-abstract class _$$GetRateForSpeakerImplCopyWith<$Res> {
-  factory _$$GetRateForSpeakerImplCopyWith(_$GetRateForSpeakerImpl value,
-          $Res Function(_$GetRateForSpeakerImpl) then) =
-      __$$GetRateForSpeakerImplCopyWithImpl<$Res>;
+abstract class _$$GetRateForEventImplCopyWith<$Res> {
+  factory _$$GetRateForEventImplCopyWith(_$GetRateForEventImpl value,
+          $Res Function(_$GetRateForEventImpl) then) =
+      __$$GetRateForEventImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GetRateForSpeakerImplCopyWithImpl<$Res>
-    extends _$SpeakerRatingEventCopyWithImpl<$Res, _$GetRateForSpeakerImpl>
-    implements _$$GetRateForSpeakerImplCopyWith<$Res> {
-  __$$GetRateForSpeakerImplCopyWithImpl(_$GetRateForSpeakerImpl _value,
-      $Res Function(_$GetRateForSpeakerImpl) _then)
+class __$$GetRateForEventImplCopyWithImpl<$Res>
+    extends _$EventRatingEventCopyWithImpl<$Res, _$GetRateForEventImpl>
+    implements _$$GetRateForEventImplCopyWith<$Res> {
+  __$$GetRateForEventImplCopyWithImpl(
+      _$GetRateForEventImpl _value, $Res Function(_$GetRateForEventImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GetRateForSpeakerImpl implements _GetRateForSpeaker {
-  const _$GetRateForSpeakerImpl();
+class _$GetRateForEventImpl implements _GetRateForEvent {
+  const _$GetRateForEventImpl();
 
   @override
   String toString() {
-    return 'SpeakerRatingEvent.getRateForSpeaker()';
+    return 'EventRatingEvent.getRateForEvent()';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$GetRateForSpeakerImpl);
+        (other.runtimeType == runtimeType && other is _$GetRateForEventImpl);
   }
 
   @override
@@ -112,30 +112,30 @@ class _$GetRateForSpeakerImpl implements _GetRateForSpeaker {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() getRateForSpeaker,
-    required TResult Function(int rate) rateSpeaker,
+    required TResult Function() getRateForEvent,
+    required TResult Function(int rate) rateEvent,
   }) {
-    return getRateForSpeaker();
+    return getRateForEvent();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRateForSpeaker,
-    TResult? Function(int rate)? rateSpeaker,
+    TResult? Function()? getRateForEvent,
+    TResult? Function(int rate)? rateEvent,
   }) {
-    return getRateForSpeaker?.call();
+    return getRateForEvent?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRateForSpeaker,
-    TResult Function(int rate)? rateSpeaker,
+    TResult Function()? getRateForEvent,
+    TResult Function(int rate)? rateEvent,
     required TResult orElse(),
   }) {
-    if (getRateForSpeaker != null) {
-      return getRateForSpeaker();
+    if (getRateForEvent != null) {
+      return getRateForEvent();
     }
     return orElse();
   }
@@ -143,54 +143,54 @@ class _$GetRateForSpeakerImpl implements _GetRateForSpeaker {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GetRateForSpeaker value) getRateForSpeaker,
-    required TResult Function(_RateSpeaker value) rateSpeaker,
+    required TResult Function(_GetRateForEvent value) getRateForEvent,
+    required TResult Function(_RateEvent value) rateEvent,
   }) {
-    return getRateForSpeaker(this);
+    return getRateForEvent(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRateForSpeaker value)? getRateForSpeaker,
-    TResult? Function(_RateSpeaker value)? rateSpeaker,
+    TResult? Function(_GetRateForEvent value)? getRateForEvent,
+    TResult? Function(_RateEvent value)? rateEvent,
   }) {
-    return getRateForSpeaker?.call(this);
+    return getRateForEvent?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRateForSpeaker value)? getRateForSpeaker,
-    TResult Function(_RateSpeaker value)? rateSpeaker,
+    TResult Function(_GetRateForEvent value)? getRateForEvent,
+    TResult Function(_RateEvent value)? rateEvent,
     required TResult orElse(),
   }) {
-    if (getRateForSpeaker != null) {
-      return getRateForSpeaker(this);
+    if (getRateForEvent != null) {
+      return getRateForEvent(this);
     }
     return orElse();
   }
 }
 
-abstract class _GetRateForSpeaker implements SpeakerRatingEvent {
-  const factory _GetRateForSpeaker() = _$GetRateForSpeakerImpl;
+abstract class _GetRateForEvent implements EventRatingEvent {
+  const factory _GetRateForEvent() = _$GetRateForEventImpl;
 }
 
 /// @nodoc
-abstract class _$$RateSpeakerImplCopyWith<$Res> {
-  factory _$$RateSpeakerImplCopyWith(
-          _$RateSpeakerImpl value, $Res Function(_$RateSpeakerImpl) then) =
-      __$$RateSpeakerImplCopyWithImpl<$Res>;
+abstract class _$$RateEventImplCopyWith<$Res> {
+  factory _$$RateEventImplCopyWith(
+          _$RateEventImpl value, $Res Function(_$RateEventImpl) then) =
+      __$$RateEventImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int rate});
 }
 
 /// @nodoc
-class __$$RateSpeakerImplCopyWithImpl<$Res>
-    extends _$SpeakerRatingEventCopyWithImpl<$Res, _$RateSpeakerImpl>
-    implements _$$RateSpeakerImplCopyWith<$Res> {
-  __$$RateSpeakerImplCopyWithImpl(
-      _$RateSpeakerImpl _value, $Res Function(_$RateSpeakerImpl) _then)
+class __$$RateEventImplCopyWithImpl<$Res>
+    extends _$EventRatingEventCopyWithImpl<$Res, _$RateEventImpl>
+    implements _$$RateEventImplCopyWith<$Res> {
+  __$$RateEventImplCopyWithImpl(
+      _$RateEventImpl _value, $Res Function(_$RateEventImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -198,7 +198,7 @@ class __$$RateSpeakerImplCopyWithImpl<$Res>
   $Res call({
     Object? rate = null,
   }) {
-    return _then(_$RateSpeakerImpl(
+    return _then(_$RateEventImpl(
       rate: null == rate
           ? _value.rate
           : rate // ignore: cast_nullable_to_non_nullable
@@ -209,22 +209,22 @@ class __$$RateSpeakerImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RateSpeakerImpl implements _RateSpeaker {
-  const _$RateSpeakerImpl({required this.rate});
+class _$RateEventImpl implements _RateEvent {
+  const _$RateEventImpl({required this.rate});
 
   @override
   final int rate;
 
   @override
   String toString() {
-    return 'SpeakerRatingEvent.rateSpeaker(rate: $rate)';
+    return 'EventRatingEvent.rateEvent(rate: $rate)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$RateSpeakerImpl &&
+            other is _$RateEventImpl &&
             (identical(other.rate, rate) || other.rate == rate));
   }
 
@@ -234,36 +234,36 @@ class _$RateSpeakerImpl implements _RateSpeaker {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$RateSpeakerImplCopyWith<_$RateSpeakerImpl> get copyWith =>
-      __$$RateSpeakerImplCopyWithImpl<_$RateSpeakerImpl>(this, _$identity);
+  _$$RateEventImplCopyWith<_$RateEventImpl> get copyWith =>
+      __$$RateEventImplCopyWithImpl<_$RateEventImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() getRateForSpeaker,
-    required TResult Function(int rate) rateSpeaker,
+    required TResult Function() getRateForEvent,
+    required TResult Function(int rate) rateEvent,
   }) {
-    return rateSpeaker(rate);
+    return rateEvent(rate);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? getRateForSpeaker,
-    TResult? Function(int rate)? rateSpeaker,
+    TResult? Function()? getRateForEvent,
+    TResult? Function(int rate)? rateEvent,
   }) {
-    return rateSpeaker?.call(rate);
+    return rateEvent?.call(rate);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? getRateForSpeaker,
-    TResult Function(int rate)? rateSpeaker,
+    TResult Function()? getRateForEvent,
+    TResult Function(int rate)? rateEvent,
     required TResult orElse(),
   }) {
-    if (rateSpeaker != null) {
-      return rateSpeaker(rate);
+    if (rateEvent != null) {
+      return rateEvent(rate);
     }
     return orElse();
   }
@@ -271,52 +271,52 @@ class _$RateSpeakerImpl implements _RateSpeaker {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GetRateForSpeaker value) getRateForSpeaker,
-    required TResult Function(_RateSpeaker value) rateSpeaker,
+    required TResult Function(_GetRateForEvent value) getRateForEvent,
+    required TResult Function(_RateEvent value) rateEvent,
   }) {
-    return rateSpeaker(this);
+    return rateEvent(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_GetRateForSpeaker value)? getRateForSpeaker,
-    TResult? Function(_RateSpeaker value)? rateSpeaker,
+    TResult? Function(_GetRateForEvent value)? getRateForEvent,
+    TResult? Function(_RateEvent value)? rateEvent,
   }) {
-    return rateSpeaker?.call(this);
+    return rateEvent?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetRateForSpeaker value)? getRateForSpeaker,
-    TResult Function(_RateSpeaker value)? rateSpeaker,
+    TResult Function(_GetRateForEvent value)? getRateForEvent,
+    TResult Function(_RateEvent value)? rateEvent,
     required TResult orElse(),
   }) {
-    if (rateSpeaker != null) {
-      return rateSpeaker(this);
+    if (rateEvent != null) {
+      return rateEvent(this);
     }
     return orElse();
   }
 }
 
-abstract class _RateSpeaker implements SpeakerRatingEvent {
-  const factory _RateSpeaker({required final int rate}) = _$RateSpeakerImpl;
+abstract class _RateEvent implements EventRatingEvent {
+  const factory _RateEvent({required final int rate}) = _$RateEventImpl;
 
   int get rate;
   @JsonKey(ignore: true)
-  _$$RateSpeakerImplCopyWith<_$RateSpeakerImpl> get copyWith =>
+  _$$RateEventImplCopyWith<_$RateEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-mixin _$SpeakerRatingState {
+mixin _$EventRatingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() readyToRate,
-    required TResult Function(int rateForSpeaker) rated,
+    required TResult Function(int rateForEvent) rated,
     required TResult Function() failure,
   }) =>
       throw _privateConstructorUsedError;
@@ -325,7 +325,7 @@ mixin _$SpeakerRatingState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? readyToRate,
-    TResult? Function(int rateForSpeaker)? rated,
+    TResult? Function(int rateForEvent)? rated,
     TResult? Function()? failure,
   }) =>
       throw _privateConstructorUsedError;
@@ -334,7 +334,7 @@ mixin _$SpeakerRatingState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? readyToRate,
-    TResult Function(int rateForSpeaker)? rated,
+    TResult Function(int rateForEvent)? rated,
     TResult Function()? failure,
     required TResult orElse(),
   }) =>
@@ -370,16 +370,16 @@ mixin _$SpeakerRatingState {
 }
 
 /// @nodoc
-abstract class $SpeakerRatingStateCopyWith<$Res> {
-  factory $SpeakerRatingStateCopyWith(
-          SpeakerRatingState value, $Res Function(SpeakerRatingState) then) =
-      _$SpeakerRatingStateCopyWithImpl<$Res, SpeakerRatingState>;
+abstract class $EventRatingStateCopyWith<$Res> {
+  factory $EventRatingStateCopyWith(
+          EventRatingState value, $Res Function(EventRatingState) then) =
+      _$EventRatingStateCopyWithImpl<$Res, EventRatingState>;
 }
 
 /// @nodoc
-class _$SpeakerRatingStateCopyWithImpl<$Res, $Val extends SpeakerRatingState>
-    implements $SpeakerRatingStateCopyWith<$Res> {
-  _$SpeakerRatingStateCopyWithImpl(this._value, this._then);
+class _$EventRatingStateCopyWithImpl<$Res, $Val extends EventRatingState>
+    implements $EventRatingStateCopyWith<$Res> {
+  _$EventRatingStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -396,7 +396,7 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$SpeakerRatingStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$EventRatingStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
@@ -410,7 +410,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'SpeakerRatingState.initial()';
+    return 'EventRatingState.initial()';
   }
 
   @override
@@ -428,7 +428,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() readyToRate,
-    required TResult Function(int rateForSpeaker) rated,
+    required TResult Function(int rateForEvent) rated,
     required TResult Function() failure,
   }) {
     return initial();
@@ -440,7 +440,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? readyToRate,
-    TResult? Function(int rateForSpeaker)? rated,
+    TResult? Function(int rateForEvent)? rated,
     TResult? Function()? failure,
   }) {
     return initial?.call();
@@ -452,7 +452,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? readyToRate,
-    TResult Function(int rateForSpeaker)? rated,
+    TResult Function(int rateForEvent)? rated,
     TResult Function()? failure,
     required TResult orElse(),
   }) {
@@ -503,7 +503,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements SpeakerRatingState {
+abstract class _Initial implements EventRatingState {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -516,7 +516,7 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$SpeakerRatingStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$EventRatingStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
@@ -530,7 +530,7 @@ class _$LoadingImpl implements _Loading {
 
   @override
   String toString() {
-    return 'SpeakerRatingState.loading()';
+    return 'EventRatingState.loading()';
   }
 
   @override
@@ -548,7 +548,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() readyToRate,
-    required TResult Function(int rateForSpeaker) rated,
+    required TResult Function(int rateForEvent) rated,
     required TResult Function() failure,
   }) {
     return loading();
@@ -560,7 +560,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? readyToRate,
-    TResult? Function(int rateForSpeaker)? rated,
+    TResult? Function(int rateForEvent)? rated,
     TResult? Function()? failure,
   }) {
     return loading?.call();
@@ -572,7 +572,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? readyToRate,
-    TResult Function(int rateForSpeaker)? rated,
+    TResult Function(int rateForEvent)? rated,
     TResult Function()? failure,
     required TResult orElse(),
   }) {
@@ -623,7 +623,7 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements SpeakerRatingState {
+abstract class _Loading implements EventRatingState {
   const factory _Loading() = _$LoadingImpl;
 }
 
@@ -636,7 +636,7 @@ abstract class _$$ReadyToRateImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ReadyToRateImplCopyWithImpl<$Res>
-    extends _$SpeakerRatingStateCopyWithImpl<$Res, _$ReadyToRateImpl>
+    extends _$EventRatingStateCopyWithImpl<$Res, _$ReadyToRateImpl>
     implements _$$ReadyToRateImplCopyWith<$Res> {
   __$$ReadyToRateImplCopyWithImpl(
       _$ReadyToRateImpl _value, $Res Function(_$ReadyToRateImpl) _then)
@@ -650,7 +650,7 @@ class _$ReadyToRateImpl implements _ReadyToRate {
 
   @override
   String toString() {
-    return 'SpeakerRatingState.readyToRate()';
+    return 'EventRatingState.readyToRate()';
   }
 
   @override
@@ -668,7 +668,7 @@ class _$ReadyToRateImpl implements _ReadyToRate {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() readyToRate,
-    required TResult Function(int rateForSpeaker) rated,
+    required TResult Function(int rateForEvent) rated,
     required TResult Function() failure,
   }) {
     return readyToRate();
@@ -680,7 +680,7 @@ class _$ReadyToRateImpl implements _ReadyToRate {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? readyToRate,
-    TResult? Function(int rateForSpeaker)? rated,
+    TResult? Function(int rateForEvent)? rated,
     TResult? Function()? failure,
   }) {
     return readyToRate?.call();
@@ -692,7 +692,7 @@ class _$ReadyToRateImpl implements _ReadyToRate {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? readyToRate,
-    TResult Function(int rateForSpeaker)? rated,
+    TResult Function(int rateForEvent)? rated,
     TResult Function()? failure,
     required TResult orElse(),
   }) {
@@ -743,7 +743,7 @@ class _$ReadyToRateImpl implements _ReadyToRate {
   }
 }
 
-abstract class _ReadyToRate implements SpeakerRatingState {
+abstract class _ReadyToRate implements EventRatingState {
   const factory _ReadyToRate() = _$ReadyToRateImpl;
 }
 
@@ -753,12 +753,12 @@ abstract class _$$RatedImplCopyWith<$Res> {
           _$RatedImpl value, $Res Function(_$RatedImpl) then) =
       __$$RatedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({int rateForSpeaker});
+  $Res call({int rateForEvent});
 }
 
 /// @nodoc
 class __$$RatedImplCopyWithImpl<$Res>
-    extends _$SpeakerRatingStateCopyWithImpl<$Res, _$RatedImpl>
+    extends _$EventRatingStateCopyWithImpl<$Res, _$RatedImpl>
     implements _$$RatedImplCopyWith<$Res> {
   __$$RatedImplCopyWithImpl(
       _$RatedImpl _value, $Res Function(_$RatedImpl) _then)
@@ -767,12 +767,12 @@ class __$$RatedImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? rateForSpeaker = null,
+    Object? rateForEvent = null,
   }) {
     return _then(_$RatedImpl(
-      rateForSpeaker: null == rateForSpeaker
-          ? _value.rateForSpeaker
-          : rateForSpeaker // ignore: cast_nullable_to_non_nullable
+      rateForEvent: null == rateForEvent
+          ? _value.rateForEvent
+          : rateForEvent // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -781,14 +781,14 @@ class __$$RatedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$RatedImpl implements _Rated {
-  const _$RatedImpl({required this.rateForSpeaker});
+  const _$RatedImpl({required this.rateForEvent});
 
   @override
-  final int rateForSpeaker;
+  final int rateForEvent;
 
   @override
   String toString() {
-    return 'SpeakerRatingState.rated(rateForSpeaker: $rateForSpeaker)';
+    return 'EventRatingState.rated(rateForEvent: $rateForEvent)';
   }
 
   @override
@@ -796,12 +796,12 @@ class _$RatedImpl implements _Rated {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RatedImpl &&
-            (identical(other.rateForSpeaker, rateForSpeaker) ||
-                other.rateForSpeaker == rateForSpeaker));
+            (identical(other.rateForEvent, rateForEvent) ||
+                other.rateForEvent == rateForEvent));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, rateForSpeaker);
+  int get hashCode => Object.hash(runtimeType, rateForEvent);
 
   @JsonKey(ignore: true)
   @override
@@ -815,10 +815,10 @@ class _$RatedImpl implements _Rated {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() readyToRate,
-    required TResult Function(int rateForSpeaker) rated,
+    required TResult Function(int rateForEvent) rated,
     required TResult Function() failure,
   }) {
-    return rated(rateForSpeaker);
+    return rated(rateForEvent);
   }
 
   @override
@@ -827,10 +827,10 @@ class _$RatedImpl implements _Rated {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? readyToRate,
-    TResult? Function(int rateForSpeaker)? rated,
+    TResult? Function(int rateForEvent)? rated,
     TResult? Function()? failure,
   }) {
-    return rated?.call(rateForSpeaker);
+    return rated?.call(rateForEvent);
   }
 
   @override
@@ -839,12 +839,12 @@ class _$RatedImpl implements _Rated {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? readyToRate,
-    TResult Function(int rateForSpeaker)? rated,
+    TResult Function(int rateForEvent)? rated,
     TResult Function()? failure,
     required TResult orElse(),
   }) {
     if (rated != null) {
-      return rated(rateForSpeaker);
+      return rated(rateForEvent);
     }
     return orElse();
   }
@@ -890,10 +890,10 @@ class _$RatedImpl implements _Rated {
   }
 }
 
-abstract class _Rated implements SpeakerRatingState {
-  const factory _Rated({required final int rateForSpeaker}) = _$RatedImpl;
+abstract class _Rated implements EventRatingState {
+  const factory _Rated({required final int rateForEvent}) = _$RatedImpl;
 
-  int get rateForSpeaker;
+  int get rateForEvent;
   @JsonKey(ignore: true)
   _$$RatedImplCopyWith<_$RatedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -908,7 +908,7 @@ abstract class _$$FailureImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$FailureImplCopyWithImpl<$Res>
-    extends _$SpeakerRatingStateCopyWithImpl<$Res, _$FailureImpl>
+    extends _$EventRatingStateCopyWithImpl<$Res, _$FailureImpl>
     implements _$$FailureImplCopyWith<$Res> {
   __$$FailureImplCopyWithImpl(
       _$FailureImpl _value, $Res Function(_$FailureImpl) _then)
@@ -922,7 +922,7 @@ class _$FailureImpl implements _Failure {
 
   @override
   String toString() {
-    return 'SpeakerRatingState.failure()';
+    return 'EventRatingState.failure()';
   }
 
   @override
@@ -940,7 +940,7 @@ class _$FailureImpl implements _Failure {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function() readyToRate,
-    required TResult Function(int rateForSpeaker) rated,
+    required TResult Function(int rateForEvent) rated,
     required TResult Function() failure,
   }) {
     return failure();
@@ -952,7 +952,7 @@ class _$FailureImpl implements _Failure {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function()? readyToRate,
-    TResult? Function(int rateForSpeaker)? rated,
+    TResult? Function(int rateForEvent)? rated,
     TResult? Function()? failure,
   }) {
     return failure?.call();
@@ -964,7 +964,7 @@ class _$FailureImpl implements _Failure {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function()? readyToRate,
-    TResult Function(int rateForSpeaker)? rated,
+    TResult Function(int rateForEvent)? rated,
     TResult Function()? failure,
     required TResult orElse(),
   }) {
@@ -1015,6 +1015,6 @@ class _$FailureImpl implements _Failure {
   }
 }
 
-abstract class _Failure implements SpeakerRatingState {
+abstract class _Failure implements EventRatingState {
   const factory _Failure() = _$FailureImpl;
 }

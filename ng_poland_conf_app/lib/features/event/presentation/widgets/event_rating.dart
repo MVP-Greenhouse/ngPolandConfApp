@@ -1,33 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/usecases/get_rate_for_speaker.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/usecases/rate_speaker.dart';
-import 'package:ng_poland_conf_app/features/speakers/presentation/bloc/speaker_rating_bloc.dart';
+import 'package:ng_poland_conf_app/features/event/domains/usecases/get_rate_for_event.dart';
+import 'package:ng_poland_conf_app/features/event/domains/usecases/rate_event.dart';
+import 'package:ng_poland_conf_app/features/event/presentation/bloc/event_rating_bloc.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:rive/rive.dart';
 
-class SpeakerRating extends StatefulWidget {
+class EventRating extends StatefulWidget {
   static const String ratingFilePath = 'assets/animations/rive/stars.riv';
 
   final String id;
+  final String eventItemType;
   final RiveFile ratingFile;
 
-  const SpeakerRating({
+  const EventRating({
     super.key,
     required this.id,
+    required this.eventItemType,
     required this.ratingFile,
   });
 
   @override
-  State<SpeakerRating> createState() => _SpeakerRatingState();
+  State<EventRating> createState() => _EventRatingState();
 }
 
-class _SpeakerRatingState extends State<SpeakerRating> {
+class _EventRatingState extends State<EventRating> {
   final String ratingProperties = 'rating';
   final String isLoadingProperties = 'isLoading';
   final String stateMachineName = '5 Star';
-  late final SpeakerRatingBloc _speakerRatingCubit;
+  late final EventRatingBloc _eventRatingCubit;
   late StateMachineController _controller;
   Artboard? _riveArtboard;
   SMINumber? smiNumber;
@@ -36,8 +38,8 @@ class _SpeakerRatingState extends State<SpeakerRating> {
   void onRiveEvent(RiveEvent event) {
     double rating = event.properties[ratingProperties] as double;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _speakerRatingCubit.add(
-        SpeakerRatingEvent.rateSpeaker(
+      _eventRatingCubit.add(
+        EventRatingEvent.rateEvent(
           rate: rating.toInt(),
         ),
       );
@@ -46,13 +48,14 @@ class _SpeakerRatingState extends State<SpeakerRating> {
 
   @override
   void initState() {
-    _speakerRatingCubit = SpeakerRatingBloc(
+    _eventRatingCubit = EventRatingBloc(
       getIt.get<ConferencesCubit>(),
-      getIt.get<GetRateForSpeaker>(),
-      getIt.get<RateSpeaker>(),
+      getIt.get<GetRateForEvent>(),
+      getIt.get<RateEvent>(),
       widget.id,
+      widget.eventItemType,
     )..add(
-        const SpeakerRatingEvent.getRateForSpeaker(),
+        const EventRatingEvent.getRateForEvent(),
       );
     final Artboard artboard = widget.ratingFile.mainArtboard;
     _controller = StateMachineController.fromArtboard(
@@ -77,14 +80,14 @@ class _SpeakerRatingState extends State<SpeakerRating> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _speakerRatingCubit,
-      child: BlocConsumer<SpeakerRatingBloc, SpeakerRatingState>(
+      create: (_) => _eventRatingCubit,
+      child: BlocConsumer<EventRatingBloc, EventRatingState>(
         listener: (context, state) {
           state.whenOrNull(
             readyToRate: () => smiLoading?.value = false,
-            rated: (rateForSpeaker) {
+            rated: (rateForEvent) {
               smiLoading?.value = false;
-              smiNumber?.value = rateForSpeaker.toDouble();
+              smiNumber?.value = rateForEvent.toDouble();
             },
           );
         },
