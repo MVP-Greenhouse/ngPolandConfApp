@@ -12,7 +12,7 @@ part of 'info_item.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$InfoItem {
@@ -92,10 +92,11 @@ class _$InfoItemCopyWithImpl<$Res, $Val extends InfoItem>
 }
 
 /// @nodoc
-abstract class _$$_InfoItemCopyWith<$Res> implements $InfoItemCopyWith<$Res> {
-  factory _$$_InfoItemCopyWith(
-          _$_InfoItem value, $Res Function(_$_InfoItem) then) =
-      __$$_InfoItemCopyWithImpl<$Res>;
+abstract class _$$InfoItemImplCopyWith<$Res>
+    implements $InfoItemCopyWith<$Res> {
+  factory _$$InfoItemImplCopyWith(
+          _$InfoItemImpl value, $Res Function(_$InfoItemImpl) then) =
+      __$$InfoItemImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -108,11 +109,11 @@ abstract class _$$_InfoItemCopyWith<$Res> implements $InfoItemCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_InfoItemCopyWithImpl<$Res>
-    extends _$InfoItemCopyWithImpl<$Res, _$_InfoItem>
-    implements _$$_InfoItemCopyWith<$Res> {
-  __$$_InfoItemCopyWithImpl(
-      _$_InfoItem _value, $Res Function(_$_InfoItem) _then)
+class __$$InfoItemImplCopyWithImpl<$Res>
+    extends _$InfoItemCopyWithImpl<$Res, _$InfoItemImpl>
+    implements _$$InfoItemImplCopyWith<$Res> {
+  __$$InfoItemImplCopyWithImpl(
+      _$InfoItemImpl _value, $Res Function(_$InfoItemImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -125,7 +126,7 @@ class __$$_InfoItemCopyWithImpl<$Res>
     Object? confId = null,
     Object? urlLink = freezed,
   }) {
-    return _then(_$_InfoItem(
+    return _then(_$InfoItemImpl(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -156,8 +157,8 @@ class __$$_InfoItemCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_InfoItem implements _InfoItem {
-  const _$_InfoItem(
+class _$InfoItemImpl implements _InfoItem {
+  const _$InfoItemImpl(
       {required this.title,
       required this.order,
       required this.icon,
@@ -184,10 +185,10 @@ class _$_InfoItem implements _InfoItem {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_InfoItem &&
+            other is _$InfoItemImpl &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.order, order) || other.order == order) &&
             (identical(other.icon, icon) || other.icon == icon) &&
@@ -204,8 +205,8 @@ class _$_InfoItem implements _InfoItem {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_InfoItemCopyWith<_$_InfoItem> get copyWith =>
-      __$$_InfoItemCopyWithImpl<_$_InfoItem>(this, _$identity);
+  _$$InfoItemImplCopyWith<_$InfoItemImpl> get copyWith =>
+      __$$InfoItemImplCopyWithImpl<_$InfoItemImpl>(this, _$identity);
 }
 
 abstract class _InfoItem implements InfoItem {
@@ -215,7 +216,7 @@ abstract class _InfoItem implements InfoItem {
       required final String icon,
       required final String? description,
       required final String confId,
-      required final String? urlLink}) = _$_InfoItem;
+      required final String? urlLink}) = _$InfoItemImpl;
 
   @override
   String get title;
@@ -231,6 +232,6 @@ abstract class _InfoItem implements InfoItem {
   String? get urlLink;
   @override
   @JsonKey(ignore: true)
-  _$$_InfoItemCopyWith<_$_InfoItem> get copyWith =>
+  _$$InfoItemImplCopyWith<_$InfoItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

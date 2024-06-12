@@ -12,7 +12,7 @@ part of 'events_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$EventsModel {
@@ -75,11 +75,11 @@ class _$EventsModelCopyWithImpl<$Res, $Val extends EventsModel>
 }
 
 /// @nodoc
-abstract class _$$_EventsModelCopyWith<$Res>
+abstract class _$$EventsModelImplCopyWith<$Res>
     implements $EventsModelCopyWith<$Res> {
-  factory _$$_EventsModelCopyWith(
-          _$_EventsModel value, $Res Function(_$_EventsModel) then) =
-      __$$_EventsModelCopyWithImpl<$Res>;
+  factory _$$EventsModelImplCopyWith(
+          _$EventsModelImpl value, $Res Function(_$EventsModelImpl) then) =
+      __$$EventsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -89,11 +89,11 @@ abstract class _$$_EventsModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_EventsModelCopyWithImpl<$Res>
-    extends _$EventsModelCopyWithImpl<$Res, _$_EventsModel>
-    implements _$$_EventsModelCopyWith<$Res> {
-  __$$_EventsModelCopyWithImpl(
-      _$_EventsModel _value, $Res Function(_$_EventsModel) _then)
+class __$$EventsModelImplCopyWithImpl<$Res>
+    extends _$EventsModelCopyWithImpl<$Res, _$EventsModelImpl>
+    implements _$$EventsModelImplCopyWith<$Res> {
+  __$$EventsModelImplCopyWithImpl(
+      _$EventsModelImpl _value, $Res Function(_$EventsModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -103,7 +103,7 @@ class __$$_EventsModelCopyWithImpl<$Res>
     Object? lastUpdate = freezed,
     Object? confId = freezed,
   }) {
-    return _then(_$_EventsModel(
+    return _then(_$EventsModelImpl(
       items: freezed == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -119,8 +119,8 @@ class __$$_EventsModelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EventsModel extends _EventsModel {
-  const _$_EventsModel(
+class _$EventsModelImpl extends _EventsModel {
+  const _$EventsModelImpl(
       {@HiveField(0) required final List<EventItemModel>? items,
       @HiveField(1) this.lastUpdate,
       @HiveField(2) this.confId})
@@ -151,10 +151,10 @@ class _$_EventsModel extends _EventsModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EventsModel &&
+            other is _$EventsModelImpl &&
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.lastUpdate, lastUpdate) ||
                 other.lastUpdate == lastUpdate) &&
@@ -171,15 +171,15 @@ class _$_EventsModel extends _EventsModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EventsModelCopyWith<_$_EventsModel> get copyWith =>
-      __$$_EventsModelCopyWithImpl<_$_EventsModel>(this, _$identity);
+  _$$EventsModelImplCopyWith<_$EventsModelImpl> get copyWith =>
+      __$$EventsModelImplCopyWithImpl<_$EventsModelImpl>(this, _$identity);
 }
 
 abstract class _EventsModel extends EventsModel {
   const factory _EventsModel(
       {@HiveField(0) required final List<EventItemModel>? items,
       @HiveField(1) final DateTime? lastUpdate,
-      @HiveField(2) final dynamic confId}) = _$_EventsModel;
+      @HiveField(2) final dynamic confId}) = _$EventsModelImpl;
   const _EventsModel._() : super._();
 
   @override
@@ -193,6 +193,6 @@ abstract class _EventsModel extends EventsModel {
   dynamic get confId;
   @override
   @JsonKey(ignore: true)
-  _$$_EventsModelCopyWith<_$_EventsModel> get copyWith =>
+  _$$EventsModelImplCopyWith<_$EventsModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

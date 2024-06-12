@@ -12,7 +12,7 @@ part of 'ngGirls_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 NgGirlsModel _$NgGirlsModelFromJson(Map<String, dynamic> json) {
   return _NgGirlsModel.fromJson(json);
@@ -96,11 +96,11 @@ class _$NgGirlsModelCopyWithImpl<$Res, $Val extends NgGirlsModel>
 }
 
 /// @nodoc
-abstract class _$$_NgGirlsModelCopyWith<$Res>
+abstract class _$$NgGirlsModelImplCopyWith<$Res>
     implements $NgGirlsModelCopyWith<$Res> {
-  factory _$$_NgGirlsModelCopyWith(
-          _$_NgGirlsModel value, $Res Function(_$_NgGirlsModel) then) =
-      __$$_NgGirlsModelCopyWithImpl<$Res>;
+  factory _$$NgGirlsModelImplCopyWith(
+          _$NgGirlsModelImpl value, $Res Function(_$NgGirlsModelImpl) then) =
+      __$$NgGirlsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -112,11 +112,11 @@ abstract class _$$_NgGirlsModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_NgGirlsModelCopyWithImpl<$Res>
-    extends _$NgGirlsModelCopyWithImpl<$Res, _$_NgGirlsModel>
-    implements _$$_NgGirlsModelCopyWith<$Res> {
-  __$$_NgGirlsModelCopyWithImpl(
-      _$_NgGirlsModel _value, $Res Function(_$_NgGirlsModel) _then)
+class __$$NgGirlsModelImplCopyWithImpl<$Res>
+    extends _$NgGirlsModelCopyWithImpl<$Res, _$NgGirlsModelImpl>
+    implements _$$NgGirlsModelImplCopyWith<$Res> {
+  __$$NgGirlsModelImplCopyWithImpl(
+      _$NgGirlsModelImpl _value, $Res Function(_$NgGirlsModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -128,7 +128,7 @@ class __$$_NgGirlsModelCopyWithImpl<$Res>
     Object? confId = null,
     Object? lastUpdate = freezed,
   }) {
-    return _then(_$_NgGirlsModel(
+    return _then(_$NgGirlsModelImpl(
       myId: null == myId
           ? _value.myId
           : myId // ignore: cast_nullable_to_non_nullable
@@ -155,8 +155,8 @@ class __$$_NgGirlsModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_NgGirlsModel extends _NgGirlsModel {
-  const _$_NgGirlsModel(
+class _$NgGirlsModelImpl extends _NgGirlsModel {
+  const _$NgGirlsModelImpl(
       {@HiveField(0) required this.myId,
       @HiveField(1) required this.title,
       @HiveField(2) required this.text,
@@ -164,8 +164,8 @@ class _$_NgGirlsModel extends _NgGirlsModel {
       @HiveField(4) this.lastUpdate})
       : super._();
 
-  factory _$_NgGirlsModel.fromJson(Map<String, dynamic> json) =>
-      _$$_NgGirlsModelFromJson(json);
+  factory _$NgGirlsModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$NgGirlsModelImplFromJson(json);
 
   @override
   @HiveField(0)
@@ -189,10 +189,10 @@ class _$_NgGirlsModel extends _NgGirlsModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_NgGirlsModel &&
+            other is _$NgGirlsModelImpl &&
             (identical(other.myId, myId) || other.myId == myId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.text, text) || other.text == text) &&
@@ -209,12 +209,12 @@ class _$_NgGirlsModel extends _NgGirlsModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_NgGirlsModelCopyWith<_$_NgGirlsModel> get copyWith =>
-      __$$_NgGirlsModelCopyWithImpl<_$_NgGirlsModel>(this, _$identity);
+  _$$NgGirlsModelImplCopyWith<_$NgGirlsModelImpl> get copyWith =>
+      __$$NgGirlsModelImplCopyWithImpl<_$NgGirlsModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_NgGirlsModelToJson(
+    return _$$NgGirlsModelImplToJson(
       this,
     );
   }
@@ -226,11 +226,11 @@ abstract class _NgGirlsModel extends NgGirlsModel {
       @HiveField(1) required final String? title,
       @HiveField(2) required final String? text,
       @HiveField(3) required final String confId,
-      @HiveField(4) final DateTime? lastUpdate}) = _$_NgGirlsModel;
+      @HiveField(4) final DateTime? lastUpdate}) = _$NgGirlsModelImpl;
   const _NgGirlsModel._() : super._();
 
   factory _NgGirlsModel.fromJson(Map<String, dynamic> json) =
-      _$_NgGirlsModel.fromJson;
+      _$NgGirlsModelImpl.fromJson;
 
   @override
   @HiveField(0)
@@ -249,6 +249,6 @@ abstract class _NgGirlsModel extends NgGirlsModel {
   DateTime? get lastUpdate;
   @override
   @JsonKey(ignore: true)
-  _$$_NgGirlsModelCopyWith<_$_NgGirlsModel> get copyWith =>
+  _$$NgGirlsModelImplCopyWith<_$NgGirlsModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

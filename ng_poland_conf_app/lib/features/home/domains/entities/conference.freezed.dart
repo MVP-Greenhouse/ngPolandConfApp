@@ -12,12 +12,13 @@ part of 'conference.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Conference {
   String get confId => throw _privateConstructorUsedError;
   String get confName => throw _privateConstructorUsedError;
+  bool get isCurrent => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get conferencesStartDate => throw _privateConstructorUsedError;
   List<ConferenceItem> get listItems => throw _privateConstructorUsedError;
@@ -36,6 +37,7 @@ abstract class $ConferenceCopyWith<$Res> {
   $Res call(
       {String confId,
       String confName,
+      bool isCurrent,
       String? description,
       String? conferencesStartDate,
       List<ConferenceItem> listItems});
@@ -56,6 +58,7 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
   $Res call({
     Object? confId = null,
     Object? confName = null,
+    Object? isCurrent = null,
     Object? description = freezed,
     Object? conferencesStartDate = freezed,
     Object? listItems = null,
@@ -69,6 +72,10 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
           ? _value.confName
           : confName // ignore: cast_nullable_to_non_nullable
               as String,
+      isCurrent: null == isCurrent
+          ? _value.isCurrent
+          : isCurrent // ignore: cast_nullable_to_non_nullable
+              as bool,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -86,27 +93,28 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
 }
 
 /// @nodoc
-abstract class _$$_ConferenceCopyWith<$Res>
+abstract class _$$ConferenceImplCopyWith<$Res>
     implements $ConferenceCopyWith<$Res> {
-  factory _$$_ConferenceCopyWith(
-          _$_Conference value, $Res Function(_$_Conference) then) =
-      __$$_ConferenceCopyWithImpl<$Res>;
+  factory _$$ConferenceImplCopyWith(
+          _$ConferenceImpl value, $Res Function(_$ConferenceImpl) then) =
+      __$$ConferenceImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {String confId,
       String confName,
+      bool isCurrent,
       String? description,
       String? conferencesStartDate,
       List<ConferenceItem> listItems});
 }
 
 /// @nodoc
-class __$$_ConferenceCopyWithImpl<$Res>
-    extends _$ConferenceCopyWithImpl<$Res, _$_Conference>
-    implements _$$_ConferenceCopyWith<$Res> {
-  __$$_ConferenceCopyWithImpl(
-      _$_Conference _value, $Res Function(_$_Conference) _then)
+class __$$ConferenceImplCopyWithImpl<$Res>
+    extends _$ConferenceCopyWithImpl<$Res, _$ConferenceImpl>
+    implements _$$ConferenceImplCopyWith<$Res> {
+  __$$ConferenceImplCopyWithImpl(
+      _$ConferenceImpl _value, $Res Function(_$ConferenceImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -114,11 +122,12 @@ class __$$_ConferenceCopyWithImpl<$Res>
   $Res call({
     Object? confId = null,
     Object? confName = null,
+    Object? isCurrent = null,
     Object? description = freezed,
     Object? conferencesStartDate = freezed,
     Object? listItems = null,
   }) {
-    return _then(_$_Conference(
+    return _then(_$ConferenceImpl(
       confId: null == confId
           ? _value.confId
           : confId // ignore: cast_nullable_to_non_nullable
@@ -127,6 +136,10 @@ class __$$_ConferenceCopyWithImpl<$Res>
           ? _value.confName
           : confName // ignore: cast_nullable_to_non_nullable
               as String,
+      isCurrent: null == isCurrent
+          ? _value.isCurrent
+          : isCurrent // ignore: cast_nullable_to_non_nullable
+              as bool,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -145,10 +158,11 @@ class __$$_ConferenceCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Conference implements _Conference {
-  const _$_Conference(
+class _$ConferenceImpl implements _Conference {
+  const _$ConferenceImpl(
       {required this.confId,
       required this.confName,
+      this.isCurrent = false,
       this.description,
       this.conferencesStartDate,
       required final List<ConferenceItem> listItems})
@@ -158,6 +172,9 @@ class _$_Conference implements _Conference {
   final String confId;
   @override
   final String confName;
+  @override
+  @JsonKey()
+  final bool isCurrent;
   @override
   final String? description;
   @override
@@ -172,17 +189,19 @@ class _$_Conference implements _Conference {
 
   @override
   String toString() {
-    return 'Conference(confId: $confId, confName: $confName, description: $description, conferencesStartDate: $conferencesStartDate, listItems: $listItems)';
+    return 'Conference(confId: $confId, confName: $confName, isCurrent: $isCurrent, description: $description, conferencesStartDate: $conferencesStartDate, listItems: $listItems)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Conference &&
+            other is _$ConferenceImpl &&
             (identical(other.confId, confId) || other.confId == confId) &&
             (identical(other.confName, confName) ||
                 other.confName == confName) &&
+            (identical(other.isCurrent, isCurrent) ||
+                other.isCurrent == isCurrent) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.conferencesStartDate, conferencesStartDate) ||
@@ -192,28 +211,37 @@ class _$_Conference implements _Conference {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, confId, confName, description,
-      conferencesStartDate, const DeepCollectionEquality().hash(_listItems));
+  int get hashCode => Object.hash(
+      runtimeType,
+      confId,
+      confName,
+      isCurrent,
+      description,
+      conferencesStartDate,
+      const DeepCollectionEquality().hash(_listItems));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ConferenceCopyWith<_$_Conference> get copyWith =>
-      __$$_ConferenceCopyWithImpl<_$_Conference>(this, _$identity);
+  _$$ConferenceImplCopyWith<_$ConferenceImpl> get copyWith =>
+      __$$ConferenceImplCopyWithImpl<_$ConferenceImpl>(this, _$identity);
 }
 
 abstract class _Conference implements Conference {
   const factory _Conference(
       {required final String confId,
       required final String confName,
+      final bool isCurrent,
       final String? description,
       final String? conferencesStartDate,
-      required final List<ConferenceItem> listItems}) = _$_Conference;
+      required final List<ConferenceItem> listItems}) = _$ConferenceImpl;
 
   @override
   String get confId;
   @override
   String get confName;
+  @override
+  bool get isCurrent;
   @override
   String? get description;
   @override
@@ -222,6 +250,6 @@ abstract class _Conference implements Conference {
   List<ConferenceItem> get listItems;
   @override
   @JsonKey(ignore: true)
-  _$$_ConferenceCopyWith<_$_Conference> get copyWith =>
+  _$$ConferenceImplCopyWith<_$ConferenceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

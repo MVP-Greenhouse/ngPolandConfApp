@@ -12,7 +12,7 @@ part of 'event_item.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$EventItem {
@@ -134,10 +134,11 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
 }
 
 /// @nodoc
-abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
-  factory _$$_EventItemCopyWith(
-          _$_EventItem value, $Res Function(_$_EventItem) then) =
-      __$$_EventItemCopyWithImpl<$Res>;
+abstract class _$$EventItemImplCopyWith<$Res>
+    implements $EventItemCopyWith<$Res> {
+  factory _$$EventItemImplCopyWith(
+          _$EventItemImpl value, $Res Function(_$EventItemImpl) then) =
+      __$$EventItemImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -157,11 +158,11 @@ abstract class _$$_EventItemCopyWith<$Res> implements $EventItemCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_EventItemCopyWithImpl<$Res>
-    extends _$EventItemCopyWithImpl<$Res, _$_EventItem>
-    implements _$$_EventItemCopyWith<$Res> {
-  __$$_EventItemCopyWithImpl(
-      _$_EventItem _value, $Res Function(_$_EventItem) _then)
+class __$$EventItemImplCopyWithImpl<$Res>
+    extends _$EventItemCopyWithImpl<$Res, _$EventItemImpl>
+    implements _$$EventItemImplCopyWith<$Res> {
+  __$$EventItemImplCopyWithImpl(
+      _$EventItemImpl _value, $Res Function(_$EventItemImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -178,7 +179,7 @@ class __$$_EventItemCopyWithImpl<$Res>
     Object? endDate = freezed,
     Object? speaker = freezed,
   }) {
-    return _then(_$_EventItem(
+    return _then(_$EventItemImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -225,8 +226,8 @@ class __$$_EventItemCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_EventItem extends _EventItem {
-  const _$_EventItem(
+class _$EventItemImpl extends _EventItem {
+  const _$EventItemImpl(
       {required this.id,
       required this.title,
       required this.confId,
@@ -266,10 +267,10 @@ class _$_EventItem extends _EventItem {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_EventItem &&
+            other is _$EventItemImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.confId, confId) || other.confId == confId) &&
@@ -293,8 +294,8 @@ class _$_EventItem extends _EventItem {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_EventItemCopyWith<_$_EventItem> get copyWith =>
-      __$$_EventItemCopyWithImpl<_$_EventItem>(this, _$identity);
+  _$$EventItemImplCopyWith<_$EventItemImpl> get copyWith =>
+      __$$EventItemImplCopyWithImpl<_$EventItemImpl>(this, _$identity);
 }
 
 abstract class _EventItem extends EventItem {
@@ -308,7 +309,7 @@ abstract class _EventItem extends EventItem {
       required final String? description,
       required final DateTime? startDate,
       required final DateTime? endDate,
-      required final Speaker? speaker}) = _$_EventItem;
+      required final Speaker? speaker}) = _$EventItemImpl;
   const _EventItem._() : super._();
 
   @override
@@ -333,6 +334,6 @@ abstract class _EventItem extends EventItem {
   Speaker? get speaker;
   @override
   @JsonKey(ignore: true)
-  _$$_EventItemCopyWith<_$_EventItem> get copyWith =>
+  _$$EventItemImplCopyWith<_$EventItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

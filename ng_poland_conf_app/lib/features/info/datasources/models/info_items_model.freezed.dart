@@ -12,7 +12,7 @@ part of 'info_items_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 InfoItemsModel _$InfoItemsModelFromJson(Map<String, dynamic> json) {
   return _InfoItemsModel.fromJson(json);
@@ -80,11 +80,11 @@ class _$InfoItemsModelCopyWithImpl<$Res, $Val extends InfoItemsModel>
 }
 
 /// @nodoc
-abstract class _$$_InfoItemsModelCopyWith<$Res>
+abstract class _$$InfoItemsModelImplCopyWith<$Res>
     implements $InfoItemsModelCopyWith<$Res> {
-  factory _$$_InfoItemsModelCopyWith(
-          _$_InfoItemsModel value, $Res Function(_$_InfoItemsModel) then) =
-      __$$_InfoItemsModelCopyWithImpl<$Res>;
+  factory _$$InfoItemsModelImplCopyWith(_$InfoItemsModelImpl value,
+          $Res Function(_$InfoItemsModelImpl) then) =
+      __$$InfoItemsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -94,11 +94,11 @@ abstract class _$$_InfoItemsModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_InfoItemsModelCopyWithImpl<$Res>
-    extends _$InfoItemsModelCopyWithImpl<$Res, _$_InfoItemsModel>
-    implements _$$_InfoItemsModelCopyWith<$Res> {
-  __$$_InfoItemsModelCopyWithImpl(
-      _$_InfoItemsModel _value, $Res Function(_$_InfoItemsModel) _then)
+class __$$InfoItemsModelImplCopyWithImpl<$Res>
+    extends _$InfoItemsModelCopyWithImpl<$Res, _$InfoItemsModelImpl>
+    implements _$$InfoItemsModelImplCopyWith<$Res> {
+  __$$InfoItemsModelImplCopyWithImpl(
+      _$InfoItemsModelImpl _value, $Res Function(_$InfoItemsModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -108,7 +108,7 @@ class __$$_InfoItemsModelCopyWithImpl<$Res>
     Object? lastUpdate = freezed,
     Object? confId = freezed,
   }) {
-    return _then(_$_InfoItemsModel(
+    return _then(_$InfoItemsModelImpl(
       items: freezed == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -124,16 +124,16 @@ class __$$_InfoItemsModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_InfoItemsModel extends _InfoItemsModel {
-  const _$_InfoItemsModel(
+class _$InfoItemsModelImpl extends _InfoItemsModel {
+  const _$InfoItemsModelImpl(
       {@HiveField(0) required final List<InfoItemModel>? items,
       @HiveField(1) this.lastUpdate,
       @HiveField(2) this.confId})
       : _items = items,
         super._();
 
-  factory _$_InfoItemsModel.fromJson(Map<String, dynamic> json) =>
-      _$$_InfoItemsModelFromJson(json);
+  factory _$InfoItemsModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$InfoItemsModelImplFromJson(json);
 
   final List<InfoItemModel>? _items;
   @override
@@ -159,10 +159,10 @@ class _$_InfoItemsModel extends _InfoItemsModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_InfoItemsModel &&
+            other is _$InfoItemsModelImpl &&
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.lastUpdate, lastUpdate) ||
                 other.lastUpdate == lastUpdate) &&
@@ -180,12 +180,13 @@ class _$_InfoItemsModel extends _InfoItemsModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_InfoItemsModelCopyWith<_$_InfoItemsModel> get copyWith =>
-      __$$_InfoItemsModelCopyWithImpl<_$_InfoItemsModel>(this, _$identity);
+  _$$InfoItemsModelImplCopyWith<_$InfoItemsModelImpl> get copyWith =>
+      __$$InfoItemsModelImplCopyWithImpl<_$InfoItemsModelImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_InfoItemsModelToJson(
+    return _$$InfoItemsModelImplToJson(
       this,
     );
   }
@@ -195,11 +196,11 @@ abstract class _InfoItemsModel extends InfoItemsModel {
   const factory _InfoItemsModel(
       {@HiveField(0) required final List<InfoItemModel>? items,
       @HiveField(1) final DateTime? lastUpdate,
-      @HiveField(2) final dynamic confId}) = _$_InfoItemsModel;
+      @HiveField(2) final dynamic confId}) = _$InfoItemsModelImpl;
   const _InfoItemsModel._() : super._();
 
   factory _InfoItemsModel.fromJson(Map<String, dynamic> json) =
-      _$_InfoItemsModel.fromJson;
+      _$InfoItemsModelImpl.fromJson;
 
   @override
   @HiveField(0)
@@ -212,6 +213,6 @@ abstract class _InfoItemsModel extends InfoItemsModel {
   dynamic get confId;
   @override
   @JsonKey(ignore: true)
-  _$$_InfoItemsModelCopyWith<_$_InfoItemsModel> get copyWith =>
+  _$$InfoItemsModelImplCopyWith<_$InfoItemsModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

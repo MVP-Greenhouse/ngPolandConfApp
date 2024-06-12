@@ -12,7 +12,7 @@ part of 'speakers_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$SpeakersModel {
@@ -75,11 +75,11 @@ class _$SpeakersModelCopyWithImpl<$Res, $Val extends SpeakersModel>
 }
 
 /// @nodoc
-abstract class _$$_SpeakersModelCopyWith<$Res>
+abstract class _$$SpeakersModelImplCopyWith<$Res>
     implements $SpeakersModelCopyWith<$Res> {
-  factory _$$_SpeakersModelCopyWith(
-          _$_SpeakersModel value, $Res Function(_$_SpeakersModel) then) =
-      __$$_SpeakersModelCopyWithImpl<$Res>;
+  factory _$$SpeakersModelImplCopyWith(
+          _$SpeakersModelImpl value, $Res Function(_$SpeakersModelImpl) then) =
+      __$$SpeakersModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -89,11 +89,11 @@ abstract class _$$_SpeakersModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SpeakersModelCopyWithImpl<$Res>
-    extends _$SpeakersModelCopyWithImpl<$Res, _$_SpeakersModel>
-    implements _$$_SpeakersModelCopyWith<$Res> {
-  __$$_SpeakersModelCopyWithImpl(
-      _$_SpeakersModel _value, $Res Function(_$_SpeakersModel) _then)
+class __$$SpeakersModelImplCopyWithImpl<$Res>
+    extends _$SpeakersModelCopyWithImpl<$Res, _$SpeakersModelImpl>
+    implements _$$SpeakersModelImplCopyWith<$Res> {
+  __$$SpeakersModelImplCopyWithImpl(
+      _$SpeakersModelImpl _value, $Res Function(_$SpeakersModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -103,7 +103,7 @@ class __$$_SpeakersModelCopyWithImpl<$Res>
     Object? lastUpdate = freezed,
     Object? confId = freezed,
   }) {
-    return _then(_$_SpeakersModel(
+    return _then(_$SpeakersModelImpl(
       items: freezed == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -119,8 +119,8 @@ class __$$_SpeakersModelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SpeakersModel extends _SpeakersModel {
-  const _$_SpeakersModel(
+class _$SpeakersModelImpl extends _SpeakersModel {
+  const _$SpeakersModelImpl(
       {@HiveField(0) final List<SpeakerModel>? items,
       @HiveField(1) this.lastUpdate,
       @HiveField(2) this.confId})
@@ -151,10 +151,10 @@ class _$_SpeakersModel extends _SpeakersModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SpeakersModel &&
+            other is _$SpeakersModelImpl &&
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.lastUpdate, lastUpdate) ||
                 other.lastUpdate == lastUpdate) &&
@@ -171,15 +171,15 @@ class _$_SpeakersModel extends _SpeakersModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SpeakersModelCopyWith<_$_SpeakersModel> get copyWith =>
-      __$$_SpeakersModelCopyWithImpl<_$_SpeakersModel>(this, _$identity);
+  _$$SpeakersModelImplCopyWith<_$SpeakersModelImpl> get copyWith =>
+      __$$SpeakersModelImplCopyWithImpl<_$SpeakersModelImpl>(this, _$identity);
 }
 
 abstract class _SpeakersModel extends SpeakersModel {
   const factory _SpeakersModel(
       {@HiveField(0) final List<SpeakerModel>? items,
       @HiveField(1) final DateTime? lastUpdate,
-      @HiveField(2) final dynamic confId}) = _$_SpeakersModel;
+      @HiveField(2) final dynamic confId}) = _$SpeakersModelImpl;
   const _SpeakersModel._() : super._();
 
   @override
@@ -193,6 +193,6 @@ abstract class _SpeakersModel extends SpeakersModel {
   dynamic get confId;
   @override
   @JsonKey(ignore: true)
-  _$$_SpeakersModelCopyWith<_$_SpeakersModel> get copyWith =>
+  _$$SpeakersModelImplCopyWith<_$SpeakersModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

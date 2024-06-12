@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/about/presentation/about_page.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/authentication_page.dart';
+import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/home_page.dart';
 import 'package:ng_poland_conf_app/features/info/presentation/info_page.dart';
 import 'package:ng_poland_conf_app/features/nggirls/presentation/nggirls_page.dart';
@@ -67,6 +68,18 @@ class Routing {
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(path: Pages.schedule.path, builder: (context, state) => const SchedulePage(), routes: [
+          GoRoute(
+            path: 'schedule/${EventPage.routeName}/:eventId/:eventItemType',
+            name: '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
+            builder: (context, state) {
+              final eventId = state.pathParameters['eventId'];
+              final eventItemType = state.pathParameters['eventItemType'];
+              return EventPage(
+                eventId: eventId!,
+                eventItemType: eventItemType!,
+              );
+            },
+          ),
           GoRoute(
             path: 'speaker/${SpeakerDetails.routeName}/:id',
             name: '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',

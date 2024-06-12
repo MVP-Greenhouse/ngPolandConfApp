@@ -12,7 +12,7 @@ part of 'speaker.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Speaker {
@@ -133,10 +133,10 @@ class _$SpeakerCopyWithImpl<$Res, $Val extends Speaker>
 }
 
 /// @nodoc
-abstract class _$$_SpeakerCopyWith<$Res> implements $SpeakerCopyWith<$Res> {
-  factory _$$_SpeakerCopyWith(
-          _$_Speaker value, $Res Function(_$_Speaker) then) =
-      __$$_SpeakerCopyWithImpl<$Res>;
+abstract class _$$SpeakerImplCopyWith<$Res> implements $SpeakerCopyWith<$Res> {
+  factory _$$SpeakerImplCopyWith(
+          _$SpeakerImpl value, $Res Function(_$SpeakerImpl) then) =
+      __$$SpeakerImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -155,10 +155,11 @@ abstract class _$$_SpeakerCopyWith<$Res> implements $SpeakerCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_SpeakerCopyWithImpl<$Res>
-    extends _$SpeakerCopyWithImpl<$Res, _$_Speaker>
-    implements _$$_SpeakerCopyWith<$Res> {
-  __$$_SpeakerCopyWithImpl(_$_Speaker _value, $Res Function(_$_Speaker) _then)
+class __$$SpeakerImplCopyWithImpl<$Res>
+    extends _$SpeakerCopyWithImpl<$Res, _$SpeakerImpl>
+    implements _$$SpeakerImplCopyWith<$Res> {
+  __$$SpeakerImplCopyWithImpl(
+      _$SpeakerImpl _value, $Res Function(_$SpeakerImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -177,7 +178,7 @@ class __$$_SpeakerCopyWithImpl<$Res>
     Object? urlTwitter = freezed,
     Object? urlWww = freezed,
   }) {
-    return _then(_$_Speaker(
+    return _then(_$SpeakerImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -232,8 +233,8 @@ class __$$_SpeakerCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Speaker implements _Speaker {
-  const _$_Speaker(
+class _$SpeakerImpl implements _Speaker {
+  const _$SpeakerImpl(
       {required this.id,
       required this.name,
       required this.role,
@@ -278,10 +279,10 @@ class _$_Speaker implements _Speaker {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Speaker &&
+            other is _$SpeakerImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.role, role) || other.role == role) &&
@@ -321,8 +322,8 @@ class _$_Speaker implements _Speaker {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SpeakerCopyWith<_$_Speaker> get copyWith =>
-      __$$_SpeakerCopyWithImpl<_$_Speaker>(this, _$identity);
+  _$$SpeakerImplCopyWith<_$SpeakerImpl> get copyWith =>
+      __$$SpeakerImplCopyWithImpl<_$SpeakerImpl>(this, _$identity);
 }
 
 abstract class _Speaker implements Speaker {
@@ -338,7 +339,7 @@ abstract class _Speaker implements Speaker {
       required final String? urlGithub,
       required final String? urlLinkedIn,
       required final String? urlTwitter,
-      required final String? urlWww}) = _$_Speaker;
+      required final String? urlWww}) = _$SpeakerImpl;
 
   @override
   String? get id;
@@ -366,6 +367,6 @@ abstract class _Speaker implements Speaker {
   String? get urlWww;
   @override
   @JsonKey(ignore: true)
-  _$$_SpeakerCopyWith<_$_Speaker> get copyWith =>
+  _$$SpeakerImplCopyWith<_$SpeakerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

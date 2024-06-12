@@ -8,6 +8,7 @@ class Conference with _$Conference {
   const factory Conference({
     required String confId,
     required String confName,
+    @Default(false) bool isCurrent,
     String? description,
     String? conferencesStartDate,
     required List<ConferenceItem> listItems,
