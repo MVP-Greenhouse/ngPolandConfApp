@@ -12,7 +12,7 @@ part of 'author.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Author {
@@ -67,19 +67,21 @@ class _$AuthorCopyWithImpl<$Res, $Val extends Author>
 }
 
 /// @nodoc
-abstract class _$$_AuthorCopyWith<$Res> implements $AuthorCopyWith<$Res> {
-  factory _$$_AuthorCopyWith(_$_Author value, $Res Function(_$_Author) then) =
-      __$$_AuthorCopyWithImpl<$Res>;
+abstract class _$$AuthorImplCopyWith<$Res> implements $AuthorCopyWith<$Res> {
+  factory _$$AuthorImplCopyWith(
+          _$AuthorImpl value, $Res Function(_$AuthorImpl) then) =
+      __$$AuthorImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String name, String image, String twitterUrl});
 }
 
 /// @nodoc
-class __$$_AuthorCopyWithImpl<$Res>
-    extends _$AuthorCopyWithImpl<$Res, _$_Author>
-    implements _$$_AuthorCopyWith<$Res> {
-  __$$_AuthorCopyWithImpl(_$_Author _value, $Res Function(_$_Author) _then)
+class __$$AuthorImplCopyWithImpl<$Res>
+    extends _$AuthorCopyWithImpl<$Res, _$AuthorImpl>
+    implements _$$AuthorImplCopyWith<$Res> {
+  __$$AuthorImplCopyWithImpl(
+      _$AuthorImpl _value, $Res Function(_$AuthorImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -89,7 +91,7 @@ class __$$_AuthorCopyWithImpl<$Res>
     Object? image = null,
     Object? twitterUrl = null,
   }) {
-    return _then(_$_Author(
+    return _then(_$AuthorImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -108,8 +110,8 @@ class __$$_AuthorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Author implements _Author {
-  const _$_Author(
+class _$AuthorImpl implements _Author {
+  const _$AuthorImpl(
       {required this.name, required this.image, required this.twitterUrl});
 
   @override
@@ -125,10 +127,10 @@ class _$_Author implements _Author {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Author &&
+            other is _$AuthorImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.twitterUrl, twitterUrl) ||
@@ -141,15 +143,15 @@ class _$_Author implements _Author {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AuthorCopyWith<_$_Author> get copyWith =>
-      __$$_AuthorCopyWithImpl<_$_Author>(this, _$identity);
+  _$$AuthorImplCopyWith<_$AuthorImpl> get copyWith =>
+      __$$AuthorImplCopyWithImpl<_$AuthorImpl>(this, _$identity);
 }
 
 abstract class _Author implements Author {
   const factory _Author(
       {required final String name,
       required final String image,
-      required final String twitterUrl}) = _$_Author;
+      required final String twitterUrl}) = _$AuthorImpl;
 
   @override
   String get name;
@@ -159,6 +161,6 @@ abstract class _Author implements Author {
   String get twitterUrl;
   @override
   @JsonKey(ignore: true)
-  _$$_AuthorCopyWith<_$_Author> get copyWith =>
+  _$$AuthorImplCopyWith<_$AuthorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

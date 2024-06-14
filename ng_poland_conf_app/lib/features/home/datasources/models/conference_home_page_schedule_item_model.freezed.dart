@@ -12,7 +12,7 @@ part of 'conference_home_page_schedule_item_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 ConferenceHomePageScheduleItemModel
     _$ConferenceHomePageScheduleItemModelFromJson(Map<String, dynamic> json) {
@@ -75,25 +75,25 @@ class _$ConferenceHomePageScheduleItemModelCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_ConferenceHomePageScheduleItemModelCopyWith<$Res>
+abstract class _$$ConferenceHomePageScheduleItemModelImplCopyWith<$Res>
     implements $ConferenceHomePageScheduleItemModelCopyWith<$Res> {
-  factory _$$_ConferenceHomePageScheduleItemModelCopyWith(
-          _$_ConferenceHomePageScheduleItemModel value,
-          $Res Function(_$_ConferenceHomePageScheduleItemModel) then) =
-      __$$_ConferenceHomePageScheduleItemModelCopyWithImpl<$Res>;
+  factory _$$ConferenceHomePageScheduleItemModelImplCopyWith(
+          _$ConferenceHomePageScheduleItemModelImpl value,
+          $Res Function(_$ConferenceHomePageScheduleItemModelImpl) then) =
+      __$$ConferenceHomePageScheduleItemModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({@HiveField(0) String name, @HiveField(1) String desc});
 }
 
 /// @nodoc
-class __$$_ConferenceHomePageScheduleItemModelCopyWithImpl<$Res>
+class __$$ConferenceHomePageScheduleItemModelImplCopyWithImpl<$Res>
     extends _$ConferenceHomePageScheduleItemModelCopyWithImpl<$Res,
-        _$_ConferenceHomePageScheduleItemModel>
-    implements _$$_ConferenceHomePageScheduleItemModelCopyWith<$Res> {
-  __$$_ConferenceHomePageScheduleItemModelCopyWithImpl(
-      _$_ConferenceHomePageScheduleItemModel _value,
-      $Res Function(_$_ConferenceHomePageScheduleItemModel) _then)
+        _$ConferenceHomePageScheduleItemModelImpl>
+    implements _$$ConferenceHomePageScheduleItemModelImplCopyWith<$Res> {
+  __$$ConferenceHomePageScheduleItemModelImplCopyWithImpl(
+      _$ConferenceHomePageScheduleItemModelImpl _value,
+      $Res Function(_$ConferenceHomePageScheduleItemModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -102,7 +102,7 @@ class __$$_ConferenceHomePageScheduleItemModelCopyWithImpl<$Res>
     Object? name = null,
     Object? desc = null,
   }) {
-    return _then(_$_ConferenceHomePageScheduleItemModel(
+    return _then(_$ConferenceHomePageScheduleItemModelImpl(
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -117,15 +117,15 @@ class __$$_ConferenceHomePageScheduleItemModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ConferenceHomePageScheduleItemModel
+class _$ConferenceHomePageScheduleItemModelImpl
     extends _ConferenceHomePageScheduleItemModel {
-  const _$_ConferenceHomePageScheduleItemModel(
+  const _$ConferenceHomePageScheduleItemModelImpl(
       {@HiveField(0) required this.name, @HiveField(1) required this.desc})
       : super._();
 
-  factory _$_ConferenceHomePageScheduleItemModel.fromJson(
+  factory _$ConferenceHomePageScheduleItemModelImpl.fromJson(
           Map<String, dynamic> json) =>
-      _$$_ConferenceHomePageScheduleItemModelFromJson(json);
+      _$$ConferenceHomePageScheduleItemModelImplFromJson(json);
 
   @override
   @HiveField(0)
@@ -140,10 +140,10 @@ class _$_ConferenceHomePageScheduleItemModel
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ConferenceHomePageScheduleItemModel &&
+            other is _$ConferenceHomePageScheduleItemModelImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.desc, desc) || other.desc == desc));
   }
@@ -155,14 +155,14 @@ class _$_ConferenceHomePageScheduleItemModel
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ConferenceHomePageScheduleItemModelCopyWith<
-          _$_ConferenceHomePageScheduleItemModel>
-      get copyWith => __$$_ConferenceHomePageScheduleItemModelCopyWithImpl<
-          _$_ConferenceHomePageScheduleItemModel>(this, _$identity);
+  _$$ConferenceHomePageScheduleItemModelImplCopyWith<
+          _$ConferenceHomePageScheduleItemModelImpl>
+      get copyWith => __$$ConferenceHomePageScheduleItemModelImplCopyWithImpl<
+          _$ConferenceHomePageScheduleItemModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ConferenceHomePageScheduleItemModelToJson(
+    return _$$ConferenceHomePageScheduleItemModelImplToJson(
       this,
     );
   }
@@ -173,12 +173,12 @@ abstract class _ConferenceHomePageScheduleItemModel
   const factory _ConferenceHomePageScheduleItemModel(
           {@HiveField(0) required final String name,
           @HiveField(1) required final String desc}) =
-      _$_ConferenceHomePageScheduleItemModel;
+      _$ConferenceHomePageScheduleItemModelImpl;
   const _ConferenceHomePageScheduleItemModel._() : super._();
 
   factory _ConferenceHomePageScheduleItemModel.fromJson(
           Map<String, dynamic> json) =
-      _$_ConferenceHomePageScheduleItemModel.fromJson;
+      _$ConferenceHomePageScheduleItemModelImpl.fromJson;
 
   @override
   @HiveField(0)
@@ -188,7 +188,7 @@ abstract class _ConferenceHomePageScheduleItemModel
   String get desc;
   @override
   @JsonKey(ignore: true)
-  _$$_ConferenceHomePageScheduleItemModelCopyWith<
-          _$_ConferenceHomePageScheduleItemModel>
+  _$$ConferenceHomePageScheduleItemModelImplCopyWith<
+          _$ConferenceHomePageScheduleItemModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

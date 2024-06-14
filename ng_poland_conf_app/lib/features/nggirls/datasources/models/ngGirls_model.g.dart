@@ -56,8 +56,8 @@ class NgGirlsModelAdapter extends TypeAdapter<NgGirlsModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_NgGirlsModel _$$_NgGirlsModelFromJson(Map<String, dynamic> json) =>
-    _$_NgGirlsModel(
+_$NgGirlsModelImpl _$$NgGirlsModelImplFromJson(Map<String, dynamic> json) =>
+    _$NgGirlsModelImpl(
       myId: json['myId'] as String,
       title: json['title'] as String?,
       text: json['text'] as String?,
@@ -67,7 +67,7 @@ _$_NgGirlsModel _$$_NgGirlsModelFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['lastUpdate'] as String),
     );
 
-Map<String, dynamic> _$$_NgGirlsModelToJson(_$_NgGirlsModel instance) =>
+Map<String, dynamic> _$$NgGirlsModelImplToJson(_$NgGirlsModelImpl instance) =>
     <String, dynamic>{
       'myId': instance.myId,
       'title': instance.title,

@@ -25,13 +25,14 @@ class _SchedulePageState extends State<SchedulePage> {
   final selectedTabItem = EventItemType.ngPoland;
   ConnectivityResult connectivityResult = ConnectivityResult.none;
   late StreamSubscription<ConnectivityResult> subscription;
+  EventItemType _eventItemType = EventItemType.ngPoland;
 
   @override
   void initState() {
     _cubit = getIt.get<ScheduleCubit>();
 
     _cubit.getListEvents(
-      eventItemType: EventItemType.ngPoland,
+      eventItemType: _eventItemType,
     );
     super.initState();
 
@@ -50,14 +51,13 @@ class _SchedulePageState extends State<SchedulePage> {
 
   void onEventItemTabChange(int idx) {
     if (idx == 0) {
-      _cubit.getListEvents(
-        eventItemType: EventItemType.ngPoland,
-      );
+      _eventItemType = EventItemType.ngPoland;
     } else {
-      _cubit.getListEvents(
-        eventItemType: EventItemType.jsPoland,
-      );
+      _eventItemType = EventItemType.jsPoland;
     }
+    _cubit.getListEvents(
+      eventItemType: _eventItemType,
+    );
   }
 
   @override
@@ -89,6 +89,7 @@ class _SchedulePageState extends State<SchedulePage> {
                         itemBuilder: (context, index) {
                           return ScheduleEvent(
                             listEvents[index],
+                            _eventItemType,
                             Theme.of(context).colorScheme.tertiary,
                           );
                         }),

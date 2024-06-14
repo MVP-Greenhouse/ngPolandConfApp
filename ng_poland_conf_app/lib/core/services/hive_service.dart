@@ -26,7 +26,7 @@ class HiveService {
   static Future<bool> clear<T>(String nameBox) async {
     try {
       final Box<T> box = await _getBox<T>(nameBox);
-      box.clear();
+      await box.clear();
       return true;
     } catch (err) {
       return false;

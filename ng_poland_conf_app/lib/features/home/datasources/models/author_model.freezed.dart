@@ -12,7 +12,7 @@ part of 'author_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AuthorModel {
@@ -69,22 +69,22 @@ class _$AuthorModelCopyWithImpl<$Res, $Val extends AuthorModel>
 }
 
 /// @nodoc
-abstract class _$$_AuthorModelCopyWith<$Res>
+abstract class _$$AuthorModelImplCopyWith<$Res>
     implements $AuthorModelCopyWith<$Res> {
-  factory _$$_AuthorModelCopyWith(
-          _$_AuthorModel value, $Res Function(_$_AuthorModel) then) =
-      __$$_AuthorModelCopyWithImpl<$Res>;
+  factory _$$AuthorModelImplCopyWith(
+          _$AuthorModelImpl value, $Res Function(_$AuthorModelImpl) then) =
+      __$$AuthorModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({String? name, String? image, String? twitterUrl});
 }
 
 /// @nodoc
-class __$$_AuthorModelCopyWithImpl<$Res>
-    extends _$AuthorModelCopyWithImpl<$Res, _$_AuthorModel>
-    implements _$$_AuthorModelCopyWith<$Res> {
-  __$$_AuthorModelCopyWithImpl(
-      _$_AuthorModel _value, $Res Function(_$_AuthorModel) _then)
+class __$$AuthorModelImplCopyWithImpl<$Res>
+    extends _$AuthorModelCopyWithImpl<$Res, _$AuthorModelImpl>
+    implements _$$AuthorModelImplCopyWith<$Res> {
+  __$$AuthorModelImplCopyWithImpl(
+      _$AuthorModelImpl _value, $Res Function(_$AuthorModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -94,7 +94,7 @@ class __$$_AuthorModelCopyWithImpl<$Res>
     Object? image = freezed,
     Object? twitterUrl = freezed,
   }) {
-    return _then(_$_AuthorModel(
+    return _then(_$AuthorModelImpl(
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -113,8 +113,8 @@ class __$$_AuthorModelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AuthorModel implements _AuthorModel {
-  const _$_AuthorModel({this.name, this.image, this.twitterUrl});
+class _$AuthorModelImpl implements _AuthorModel {
+  const _$AuthorModelImpl({this.name, this.image, this.twitterUrl});
 
   @override
   final String? name;
@@ -129,10 +129,10 @@ class _$_AuthorModel implements _AuthorModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AuthorModel &&
+            other is _$AuthorModelImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.image, image) || other.image == image) &&
             (identical(other.twitterUrl, twitterUrl) ||
@@ -145,15 +145,15 @@ class _$_AuthorModel implements _AuthorModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AuthorModelCopyWith<_$_AuthorModel> get copyWith =>
-      __$$_AuthorModelCopyWithImpl<_$_AuthorModel>(this, _$identity);
+  _$$AuthorModelImplCopyWith<_$AuthorModelImpl> get copyWith =>
+      __$$AuthorModelImplCopyWithImpl<_$AuthorModelImpl>(this, _$identity);
 }
 
 abstract class _AuthorModel implements AuthorModel {
   const factory _AuthorModel(
       {final String? name,
       final String? image,
-      final String? twitterUrl}) = _$_AuthorModel;
+      final String? twitterUrl}) = _$AuthorModelImpl;
 
   @override
   String? get name;
@@ -163,6 +163,6 @@ abstract class _AuthorModel implements AuthorModel {
   String? get twitterUrl;
   @override
   @JsonKey(ignore: true)
-  _$$_AuthorModelCopyWith<_$_AuthorModel> get copyWith =>
+  _$$AuthorModelImplCopyWith<_$AuthorModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

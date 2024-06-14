@@ -12,7 +12,7 @@ part of 'conferences.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$Conferences {
@@ -57,22 +57,22 @@ class _$ConferencesCopyWithImpl<$Res, $Val extends Conferences>
 }
 
 /// @nodoc
-abstract class _$$_ConferencesCopyWith<$Res>
+abstract class _$$ConferencesImplCopyWith<$Res>
     implements $ConferencesCopyWith<$Res> {
-  factory _$$_ConferencesCopyWith(
-          _$_Conferences value, $Res Function(_$_Conferences) then) =
-      __$$_ConferencesCopyWithImpl<$Res>;
+  factory _$$ConferencesImplCopyWith(
+          _$ConferencesImpl value, $Res Function(_$ConferencesImpl) then) =
+      __$$ConferencesImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<Conference> list});
 }
 
 /// @nodoc
-class __$$_ConferencesCopyWithImpl<$Res>
-    extends _$ConferencesCopyWithImpl<$Res, _$_Conferences>
-    implements _$$_ConferencesCopyWith<$Res> {
-  __$$_ConferencesCopyWithImpl(
-      _$_Conferences _value, $Res Function(_$_Conferences) _then)
+class __$$ConferencesImplCopyWithImpl<$Res>
+    extends _$ConferencesCopyWithImpl<$Res, _$ConferencesImpl>
+    implements _$$ConferencesImplCopyWith<$Res> {
+  __$$ConferencesImplCopyWithImpl(
+      _$ConferencesImpl _value, $Res Function(_$ConferencesImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -80,7 +80,7 @@ class __$$_ConferencesCopyWithImpl<$Res>
   $Res call({
     Object? list = null,
   }) {
-    return _then(_$_Conferences(
+    return _then(_$ConferencesImpl(
       list: null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -91,8 +91,8 @@ class __$$_ConferencesCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Conferences implements _Conferences {
-  _$_Conferences({required final List<Conference> list}) : _list = list;
+class _$ConferencesImpl implements _Conferences {
+  _$ConferencesImpl({required final List<Conference> list}) : _list = list;
 
   final List<Conference> _list;
   @override
@@ -108,10 +108,10 @@ class _$_Conferences implements _Conferences {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Conferences &&
+            other is _$ConferencesImpl &&
             const DeepCollectionEquality().equals(other._list, _list));
   }
 
@@ -122,17 +122,18 @@ class _$_Conferences implements _Conferences {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ConferencesCopyWith<_$_Conferences> get copyWith =>
-      __$$_ConferencesCopyWithImpl<_$_Conferences>(this, _$identity);
+  _$$ConferencesImplCopyWith<_$ConferencesImpl> get copyWith =>
+      __$$ConferencesImplCopyWithImpl<_$ConferencesImpl>(this, _$identity);
 }
 
 abstract class _Conferences implements Conferences {
-  factory _Conferences({required final List<Conference> list}) = _$_Conferences;
+  factory _Conferences({required final List<Conference> list}) =
+      _$ConferencesImpl;
 
   @override
   List<Conference> get list;
   @override
   @JsonKey(ignore: true)
-  _$$_ConferencesCopyWith<_$_Conferences> get copyWith =>
+  _$$ConferencesImplCopyWith<_$ConferencesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

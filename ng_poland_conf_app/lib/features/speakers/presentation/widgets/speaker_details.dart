@@ -116,7 +116,9 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                         height: MediaQuery.of(context).orientation == Orientation.portrait
                                             ? MediaQuery.of(context).size.width * 0.40
                                             : MediaQuery.of(context).size.width * 0.37,
-                                        width: MediaQuery.of(context).orientation == Orientation.portrait ? null : MediaQuery.of(context).size.width * 0.43,
+                                        width: MediaQuery.of(context).orientation == Orientation.portrait
+                                            ? null
+                                            : MediaQuery.of(context).size.width * 0.43,
                                         child: Align(
                                           alignment: Alignment.bottomRight,
                                           child: CircleAvatar(

@@ -12,7 +12,7 @@ part of 'workshop_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$WorkshopModel {
@@ -125,11 +125,11 @@ class _$WorkshopModelCopyWithImpl<$Res, $Val extends WorkshopModel>
 }
 
 /// @nodoc
-abstract class _$$_WorkshopModelCopyWith<$Res>
+abstract class _$$WorkshopModelImplCopyWith<$Res>
     implements $WorkshopModelCopyWith<$Res> {
-  factory _$$_WorkshopModelCopyWith(
-          _$_WorkshopModel value, $Res Function(_$_WorkshopModel) then) =
-      __$$_WorkshopModelCopyWithImpl<$Res>;
+  factory _$$WorkshopModelImplCopyWith(
+          _$WorkshopModelImpl value, $Res Function(_$WorkshopModelImpl) then) =
+      __$$WorkshopModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -147,11 +147,11 @@ abstract class _$$_WorkshopModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_WorkshopModelCopyWithImpl<$Res>
-    extends _$WorkshopModelCopyWithImpl<$Res, _$_WorkshopModel>
-    implements _$$_WorkshopModelCopyWith<$Res> {
-  __$$_WorkshopModelCopyWithImpl(
-      _$_WorkshopModel _value, $Res Function(_$_WorkshopModel) _then)
+class __$$WorkshopModelImplCopyWithImpl<$Res>
+    extends _$WorkshopModelCopyWithImpl<$Res, _$WorkshopModelImpl>
+    implements _$$WorkshopModelImplCopyWith<$Res> {
+  __$$WorkshopModelImplCopyWithImpl(
+      _$WorkshopModelImpl _value, $Res Function(_$WorkshopModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -166,7 +166,7 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
     Object? speaker = null,
     Object? pricePln = freezed,
   }) {
-    return _then(_$_WorkshopModel(
+    return _then(_$WorkshopModelImpl(
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -205,8 +205,8 @@ class __$$_WorkshopModelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_WorkshopModel extends _WorkshopModel {
-  const _$_WorkshopModel(
+class _$WorkshopModelImpl extends _WorkshopModel {
+  const _$WorkshopModelImpl(
       {@HiveField(0) required this.title,
       @HiveField(1) required this.confId,
       @HiveField(2) required this.description,
@@ -248,10 +248,10 @@ class _$_WorkshopModel extends _WorkshopModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_WorkshopModel &&
+            other is _$WorkshopModelImpl &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.confId, confId) || other.confId == confId) &&
             (identical(other.description, description) ||
@@ -273,8 +273,8 @@ class _$_WorkshopModel extends _WorkshopModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_WorkshopModelCopyWith<_$_WorkshopModel> get copyWith =>
-      __$$_WorkshopModelCopyWithImpl<_$_WorkshopModel>(this, _$identity);
+  _$$WorkshopModelImplCopyWith<_$WorkshopModelImpl> get copyWith =>
+      __$$WorkshopModelImplCopyWithImpl<_$WorkshopModelImpl>(this, _$identity);
 }
 
 abstract class _WorkshopModel extends WorkshopModel {
@@ -286,7 +286,7 @@ abstract class _WorkshopModel extends WorkshopModel {
       @HiveField(4) required final String endDate,
       @HiveField(5) required final String? locationDescription,
       @HiveField(6) required final SpeakerModel speaker,
-      @HiveField(7) required final int? pricePln}) = _$_WorkshopModel;
+      @HiveField(7) required final int? pricePln}) = _$WorkshopModelImpl;
   const _WorkshopModel._() : super._();
 
   @override
@@ -315,6 +315,6 @@ abstract class _WorkshopModel extends WorkshopModel {
   int? get pricePln;
   @override
   @JsonKey(ignore: true)
-  _$$_WorkshopModelCopyWith<_$_WorkshopModel> get copyWith =>
+  _$$WorkshopModelImplCopyWith<_$WorkshopModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

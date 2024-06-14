@@ -1,8 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/constants/hive_constants.dart';
 import 'package:ng_poland_conf_app/core/services/hive_service.dart';
-
-import '../models/speakers_model.dart';
+import 'package:ng_poland_conf_app/features/speakers/datasources/models/speakers_model.dart';
 
 abstract class SpeakersLocalDataSource implements HiveLocalDataSource<SpeakersModel?> {}
 

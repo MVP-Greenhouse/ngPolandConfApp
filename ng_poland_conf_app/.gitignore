@@ -48,3 +48,4 @@ env
 .firebase/
 .firebase
 .firebase/ngpolandconfapp
+/android/app/google-services.json
