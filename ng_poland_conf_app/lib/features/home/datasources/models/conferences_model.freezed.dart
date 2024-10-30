@@ -12,7 +12,7 @@ part of 'conferences_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 ConferencesModel _$ConferencesModelFromJson(Map<String, dynamic> json) {
   return _ConferencesModel.fromJson(json);
@@ -63,22 +63,22 @@ class _$ConferencesModelCopyWithImpl<$Res, $Val extends ConferencesModel>
 }
 
 /// @nodoc
-abstract class _$$_ConferencesModelCopyWith<$Res>
+abstract class _$$ConferencesModelImplCopyWith<$Res>
     implements $ConferencesModelCopyWith<$Res> {
-  factory _$$_ConferencesModelCopyWith(
-          _$_ConferencesModel value, $Res Function(_$_ConferencesModel) then) =
-      __$$_ConferencesModelCopyWithImpl<$Res>;
+  factory _$$ConferencesModelImplCopyWith(_$ConferencesModelImpl value,
+          $Res Function(_$ConferencesModelImpl) then) =
+      __$$ConferencesModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({@HiveField(0) List<ConferenceModel?>? items});
 }
 
 /// @nodoc
-class __$$_ConferencesModelCopyWithImpl<$Res>
-    extends _$ConferencesModelCopyWithImpl<$Res, _$_ConferencesModel>
-    implements _$$_ConferencesModelCopyWith<$Res> {
-  __$$_ConferencesModelCopyWithImpl(
-      _$_ConferencesModel _value, $Res Function(_$_ConferencesModel) _then)
+class __$$ConferencesModelImplCopyWithImpl<$Res>
+    extends _$ConferencesModelCopyWithImpl<$Res, _$ConferencesModelImpl>
+    implements _$$ConferencesModelImplCopyWith<$Res> {
+  __$$ConferencesModelImplCopyWithImpl(_$ConferencesModelImpl _value,
+      $Res Function(_$ConferencesModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -86,7 +86,7 @@ class __$$_ConferencesModelCopyWithImpl<$Res>
   $Res call({
     Object? items = freezed,
   }) {
-    return _then(_$_ConferencesModel(
+    return _then(_$ConferencesModelImpl(
       items: freezed == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -97,13 +97,14 @@ class __$$_ConferencesModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ConferencesModel extends _ConferencesModel {
-  const _$_ConferencesModel({@HiveField(0) final List<ConferenceModel?>? items})
+class _$ConferencesModelImpl extends _ConferencesModel {
+  const _$ConferencesModelImpl(
+      {@HiveField(0) final List<ConferenceModel?>? items})
       : _items = items,
         super._();
 
-  factory _$_ConferencesModel.fromJson(Map<String, dynamic> json) =>
-      _$$_ConferencesModelFromJson(json);
+  factory _$ConferencesModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ConferencesModelImplFromJson(json);
 
   final List<ConferenceModel?>? _items;
   @override
@@ -122,10 +123,10 @@ class _$_ConferencesModel extends _ConferencesModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ConferencesModel &&
+            other is _$ConferencesModelImpl &&
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
@@ -137,12 +138,13 @@ class _$_ConferencesModel extends _ConferencesModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ConferencesModelCopyWith<_$_ConferencesModel> get copyWith =>
-      __$$_ConferencesModelCopyWithImpl<_$_ConferencesModel>(this, _$identity);
+  _$$ConferencesModelImplCopyWith<_$ConferencesModelImpl> get copyWith =>
+      __$$ConferencesModelImplCopyWithImpl<_$ConferencesModelImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ConferencesModelToJson(
+    return _$$ConferencesModelImplToJson(
       this,
     );
   }
@@ -151,17 +153,17 @@ class _$_ConferencesModel extends _ConferencesModel {
 abstract class _ConferencesModel extends ConferencesModel {
   const factory _ConferencesModel(
           {@HiveField(0) final List<ConferenceModel?>? items}) =
-      _$_ConferencesModel;
+      _$ConferencesModelImpl;
   const _ConferencesModel._() : super._();
 
   factory _ConferencesModel.fromJson(Map<String, dynamic> json) =
-      _$_ConferencesModel.fromJson;
+      _$ConferencesModelImpl.fromJson;
 
   @override
   @HiveField(0)
   List<ConferenceModel?>? get items;
   @override
   @JsonKey(ignore: true)
-  _$$_ConferencesModelCopyWith<_$_ConferencesModel> get copyWith =>
+  _$$ConferencesModelImplCopyWith<_$ConferencesModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

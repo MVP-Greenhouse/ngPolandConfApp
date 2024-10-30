@@ -59,17 +59,17 @@ class InfoItemModelAdapter extends TypeAdapter<InfoItemModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_InfoItemModel _$$_InfoItemModelFromJson(Map<String, dynamic> json) =>
-    _$_InfoItemModel(
+_$InfoItemModelImpl _$$InfoItemModelImplFromJson(Map<String, dynamic> json) =>
+    _$InfoItemModelImpl(
       title: json['title'] as String,
-      order: json['order'] as int,
+      order: (json['order'] as num).toInt(),
       icon: json['icon'] as String,
       description: json['description'] as String?,
       confId: json['confId'] as String,
       urlLink: json['urlLink'] as String?,
     );
 
-Map<String, dynamic> _$$_InfoItemModelToJson(_$_InfoItemModel instance) =>
+Map<String, dynamic> _$$InfoItemModelImplToJson(_$InfoItemModelImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
       'order': instance.order,

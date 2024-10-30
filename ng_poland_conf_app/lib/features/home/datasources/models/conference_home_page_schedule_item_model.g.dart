@@ -48,16 +48,16 @@ class ConferenceHomePageScheduleItemModelAdapter
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ConferenceHomePageScheduleItemModel
-    _$$_ConferenceHomePageScheduleItemModelFromJson(
+_$ConferenceHomePageScheduleItemModelImpl
+    _$$ConferenceHomePageScheduleItemModelImplFromJson(
             Map<String, dynamic> json) =>
-        _$_ConferenceHomePageScheduleItemModel(
+        _$ConferenceHomePageScheduleItemModelImpl(
           name: json['name'] as String,
           desc: json['desc'] as String,
         );
 
-Map<String, dynamic> _$$_ConferenceHomePageScheduleItemModelToJson(
-        _$_ConferenceHomePageScheduleItemModel instance) =>
+Map<String, dynamic> _$$ConferenceHomePageScheduleItemModelImplToJson(
+        _$ConferenceHomePageScheduleItemModelImpl instance) =>
     <String, dynamic>{
       'name': instance.name,
       'desc': instance.desc,

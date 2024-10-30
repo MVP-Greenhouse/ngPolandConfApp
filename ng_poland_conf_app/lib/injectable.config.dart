@@ -4,8 +4,7 @@
 // InjectableConfigGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_lambdas
-// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: type=lint
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
@@ -96,69 +95,71 @@ extension GetItInjectableX on _i1.GetIt {
       environmentFilter,
     );
     final registerModule = _$RegisterModule();
-    gh.singleton<_i3.ConferencesCubit>(_i3.ConferencesCubit());
+    gh.singleton<_i3.ConferencesCubit>(() => _i3.ConferencesCubit());
     gh.singleton<_i4.ConferencesLocalDataSource>(
-        _i4.ConferencesLocalDataSourceImpl());
-    gh.singleton<_i5.InfoLocalDataSource>(_i5.InfoLocalDataSourceImpl());
-    gh.singleton<_i6.NgGirlsLocalDataSource>(_i6.NgGirlsLocalDataSourceImpl());
+        () => _i4.ConferencesLocalDataSourceImpl());
+    gh.singleton<_i5.InfoLocalDataSource>(() => _i5.InfoLocalDataSourceImpl());
+    gh.singleton<_i6.NgGirlsLocalDataSource>(
+        () => _i6.NgGirlsLocalDataSourceImpl());
     await gh.singletonAsync<_i7.RawConfig>(
       () => registerModule.config(),
       preResolve: true,
     );
-    gh.singleton<_i8.Routing>(_i8.Routing());
+    gh.singleton<_i8.Routing>(() => _i8.Routing());
     gh.singleton<_i9.ScheduleLocalDataSource>(
-        _i9.ScheduleLocalDataSourceImpl());
+        () => _i9.ScheduleLocalDataSourceImpl());
     gh.singleton<_i10.SpeakersLocalDataSource>(
-        _i10.SpeakersLocalDataSourceImpl());
-    gh.singleton<_i11.ThemeModeCubit>(_i11.ThemeModeCubit());
+        () => _i10.SpeakersLocalDataSourceImpl());
+    gh.singleton<_i11.ThemeModeCubit>(() => _i11.ThemeModeCubit());
     gh.singleton<_i12.ThemeModeLocalDataSource>(
-        _i12.ThemeModeLocalDataSourceImpl());
+        () => _i12.ThemeModeLocalDataSourceImpl());
     gh.singleton<_i13.ThemeModeRepository>(
-        _i14.ThemeModeImpl(gh<_i12.ThemeModeLocalDataSource>()));
+        () => _i14.ThemeModeImpl(gh<_i12.ThemeModeLocalDataSource>()));
     gh.factory<_i15.UpdateThemeMode>(
         () => _i15.UpdateThemeMode(gh<_i13.ThemeModeRepository>()));
     gh.singleton<_i16.WorkshopsLocalDataSource>(
-        _i16.WorkshopsLocalDataSourceImpl());
-    gh.singleton<_i17.AppConfig>(_i17.AppConfig(gh<_i7.RawConfig>()));
-    gh.singleton<_i18.Dio>(registerModule.dio(gh<_i17.AppConfig>()));
+        () => _i16.WorkshopsLocalDataSourceImpl());
+    gh.singleton<_i17.AppConfig>(() => _i17.AppConfig(gh<_i7.RawConfig>()));
+    gh.singleton<_i18.Dio>(() => registerModule.dio(gh<_i17.AppConfig>()));
     gh.factory<_i19.GetThemeMode>(
         () => _i19.GetThemeMode(gh<_i13.ThemeModeRepository>()));
     gh.factory<_i20.InfoRemoteDataSource>(
         () => _i20.InfoRemoteDataSource(gh<_i18.Dio>()));
-    gh.singleton<_i21.InfoRepository>(_i22.InfoRepositoryImpl(
-      gh<_i20.InfoRemoteDataSource>(),
-      gh<_i5.InfoLocalDataSource>(),
-    ));
+    gh.singleton<_i21.InfoRepository>(() => _i22.InfoRepositoryImpl(
+          gh<_i20.InfoRemoteDataSource>(),
+          gh<_i5.InfoLocalDataSource>(),
+        ));
     gh.factory<_i23.NgGirlsRemoteDataSource>(
         () => _i23.NgGirlsRemoteDataSource(gh<_i18.Dio>()));
-    gh.singleton<_i24.NgGirlsRepository>(_i25.NgGirlsImpl(
-      gh<_i23.NgGirlsRemoteDataSource>(),
-      gh<_i6.NgGirlsLocalDataSource>(),
-    ));
+    gh.singleton<_i24.NgGirlsRepository>(() => _i25.NgGirlsImpl(
+          gh<_i23.NgGirlsRemoteDataSource>(),
+          gh<_i6.NgGirlsLocalDataSource>(),
+        ));
     gh.factory<_i26.ScheduleRemoteDataSource>(
         () => _i26.ScheduleRemoteDataSource(gh<_i18.Dio>()));
-    gh.singleton<_i27.ScheduleRepository>(_i28.ScheduleRepositoryImpl(
-      gh<_i26.ScheduleRemoteDataSource>(),
-      gh<_i9.ScheduleLocalDataSource>(),
-    ));
+    gh.singleton<_i27.ScheduleRepository>(() => _i28.ScheduleRepositoryImpl(
+          gh<_i26.ScheduleRemoteDataSource>(),
+          gh<_i9.ScheduleLocalDataSource>(),
+        ));
     gh.factory<_i29.SpeakersRemoteDataSource>(
         () => _i29.SpeakersRemoteDataSource(gh<_i18.Dio>()));
-    gh.singleton<_i30.SpeakersRepository>(_i31.SpeakersRepositoryImpl(
-      gh<_i29.SpeakersRemoteDataSource>(),
-      gh<_i10.SpeakersLocalDataSource>(),
-    ));
+    gh.singleton<_i30.SpeakersRepository>(() => _i31.SpeakersRepositoryImpl(
+          gh<_i29.SpeakersRemoteDataSource>(),
+          gh<_i10.SpeakersLocalDataSource>(),
+        ));
     gh.factory<_i32.WorkshopsRemoteDataSource>(
         () => _i32.WorkshopsRemoteDataSource(gh<_i18.Dio>()));
-    gh.singleton<_i33.WorkshopsRepository>(_i34.WorkshopsRepositoryImpl(
-      gh<_i32.WorkshopsRemoteDataSource>(),
-      gh<_i16.WorkshopsLocalDataSource>(),
-    ));
+    gh.singleton<_i33.WorkshopsRepository>(() => _i34.WorkshopsRepositoryImpl(
+          gh<_i32.WorkshopsRemoteDataSource>(),
+          gh<_i16.WorkshopsLocalDataSource>(),
+        ));
     gh.factory<_i35.ConferencesRemoteDataSource>(
         () => _i35.ConferencesRemoteDataSource(gh<_i18.Dio>()));
-    gh.singleton<_i36.ConferencesRepository>(_i37.ConferencesRepositoryImpl(
-      gh<_i35.ConferencesRemoteDataSource>(),
-      gh<_i4.ConferencesLocalDataSource>(),
-    ));
+    gh.singleton<_i36.ConferencesRepository>(
+        () => _i37.ConferencesRepositoryImpl(
+              gh<_i35.ConferencesRemoteDataSource>(),
+              gh<_i4.ConferencesLocalDataSource>(),
+            ));
     gh.factory<_i38.GetAllConferences>(
         () => _i38.GetAllConferences(gh<_i36.ConferencesRepository>()));
     gh.factory<_i39.GetAllEventsForConference>(

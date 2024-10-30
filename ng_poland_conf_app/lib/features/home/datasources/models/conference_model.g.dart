@@ -57,8 +57,9 @@ class ConferenceModelAdapter extends TypeAdapter<ConferenceModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ConferenceModel _$$_ConferenceModelFromJson(Map<String, dynamic> json) =>
-    _$_ConferenceModel(
+_$ConferenceModelImpl _$$ConferenceModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ConferenceModelImpl(
       confId: json['confId'] as String,
       confName: json['confName'] as String,
       description: json['description'] as String?,
@@ -67,7 +68,8 @@ _$_ConferenceModel _$$_ConferenceModelFromJson(Map<String, dynamic> json) =>
           json['conferenceHomePageSchedule'] as Map<String, dynamic>?),
     );
 
-Map<String, dynamic> _$$_ConferenceModelToJson(_$_ConferenceModel instance) =>
+Map<String, dynamic> _$$ConferenceModelImplToJson(
+        _$ConferenceModelImpl instance) =>
     <String, dynamic>{
       'confId': instance.confId,
       'confName': instance.confName,

@@ -12,7 +12,7 @@ part of 'speaker_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$SpeakerModel {
@@ -155,11 +155,11 @@ class _$SpeakerModelCopyWithImpl<$Res, $Val extends SpeakerModel>
 }
 
 /// @nodoc
-abstract class _$$_SpeakerModelCopyWith<$Res>
+abstract class _$$SpeakerModelImplCopyWith<$Res>
     implements $SpeakerModelCopyWith<$Res> {
-  factory _$$_SpeakerModelCopyWith(
-          _$_SpeakerModel value, $Res Function(_$_SpeakerModel) then) =
-      __$$_SpeakerModelCopyWithImpl<$Res>;
+  factory _$$SpeakerModelImplCopyWith(
+          _$SpeakerModelImpl value, $Res Function(_$SpeakerModelImpl) then) =
+      __$$SpeakerModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -179,11 +179,11 @@ abstract class _$$_SpeakerModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SpeakerModelCopyWithImpl<$Res>
-    extends _$SpeakerModelCopyWithImpl<$Res, _$_SpeakerModel>
-    implements _$$_SpeakerModelCopyWith<$Res> {
-  __$$_SpeakerModelCopyWithImpl(
-      _$_SpeakerModel _value, $Res Function(_$_SpeakerModel) _then)
+class __$$SpeakerModelImplCopyWithImpl<$Res>
+    extends _$SpeakerModelCopyWithImpl<$Res, _$SpeakerModelImpl>
+    implements _$$SpeakerModelImplCopyWith<$Res> {
+  __$$SpeakerModelImplCopyWithImpl(
+      _$SpeakerModelImpl _value, $Res Function(_$SpeakerModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -203,7 +203,7 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
     Object? urlTwitter = freezed,
     Object? urlWww = freezed,
   }) {
-    return _then(_$_SpeakerModel(
+    return _then(_$SpeakerModelImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -262,8 +262,8 @@ class __$$_SpeakerModelCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_SpeakerModel extends _SpeakerModel {
-  const _$_SpeakerModel(
+class _$SpeakerModelImpl extends _SpeakerModel {
+  const _$SpeakerModelImpl(
       {@HiveField(0) required this.id,
       @HiveField(1) required this.name,
       @HiveField(2) required final List<String> confIds,
@@ -332,10 +332,10 @@ class _$_SpeakerModel extends _SpeakerModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SpeakerModel &&
+            other is _$SpeakerModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             const DeepCollectionEquality().equals(other._confIds, _confIds) &&
@@ -377,8 +377,8 @@ class _$_SpeakerModel extends _SpeakerModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SpeakerModelCopyWith<_$_SpeakerModel> get copyWith =>
-      __$$_SpeakerModelCopyWithImpl<_$_SpeakerModel>(this, _$identity);
+  _$$SpeakerModelImplCopyWith<_$SpeakerModelImpl> get copyWith =>
+      __$$SpeakerModelImplCopyWithImpl<_$SpeakerModelImpl>(this, _$identity);
 }
 
 abstract class _SpeakerModel extends SpeakerModel {
@@ -395,7 +395,7 @@ abstract class _SpeakerModel extends SpeakerModel {
       @HiveField(9) final String? urlGithub,
       @HiveField(10) final String? urlLinkedIn,
       @HiveField(11) final String? urlTwitter,
-      @HiveField(12) final String? urlWww}) = _$_SpeakerModel;
+      @HiveField(12) final String? urlWww}) = _$SpeakerModelImpl;
   const _SpeakerModel._() : super._();
 
   @override
@@ -439,6 +439,6 @@ abstract class _SpeakerModel extends SpeakerModel {
   String? get urlWww;
   @override
   @JsonKey(ignore: true)
-  _$$_SpeakerModelCopyWith<_$_SpeakerModel> get copyWith =>
+  _$$SpeakerModelImplCopyWith<_$SpeakerModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
