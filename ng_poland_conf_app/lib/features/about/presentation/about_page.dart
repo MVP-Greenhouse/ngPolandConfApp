@@ -152,7 +152,7 @@ class _AboutPageState extends State<AboutPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 32.0),
                       child: Text(
-                        'Version: 20231101.1',
+                        'Version: 20241106.1',
                         style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimary.withAlpha(150)),
                         textAlign: TextAlign.center,
                       ),
