@@ -81,7 +81,7 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(24.0),
-                                child: Text(
+                                child: SelectableText(
                                   speaker.name as String,
                                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                                         color: Theme.of(context).colorScheme.tertiary,
@@ -144,7 +144,7 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                child: Text(
+                                child: SelectableText(
                                   speaker.role ?? '',
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                         color: Theme.of(context).colorScheme.onBackground.withOpacity(0.9),
@@ -159,7 +159,7 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                   child: speaker.bio != null
                                       ? Container(
                                           alignment: Alignment.centerLeft,
-                                          child: Text(speaker.bio ?? '', style: Theme.of(context).textTheme.bodySmall),
+                                          child: SelectableText(speaker.bio ?? '', style: Theme.of(context).textTheme.bodySmall),
                                         )
                                       : Container(
                                           padding: const EdgeInsets.only(top: 40, bottom: 20),
