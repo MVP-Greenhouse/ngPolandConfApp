@@ -1,8 +1,6 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/about/domains/entities/author.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -35,25 +33,7 @@ class AboutPage extends StatefulWidget {
   State<AboutPage> createState() => _AboutPageState();
 }
 
-class _AboutPageState extends State<AboutPage> {
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-  late StreamSubscription<ConnectivityResult> subscription;
-  @override
-  void initState() {
-    super.initState();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        connectivityResult = result;
-      });
-    });
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
-  }
-
+class _AboutPageState extends State<AboutPage> with ConnectivityMixin {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -93,7 +73,9 @@ class _AboutPageState extends State<AboutPage> {
                         'Authors:',
                         textAlign: TextAlign.left,
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: themeMode == ThemeMode.light ? Theme.of(context).colorScheme.secondary : Theme.of(context).colorScheme.primary.withAlpha(200),
+                            color: themeMode == ThemeMode.light
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).colorScheme.primary.withAlpha(200),
                             fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -116,10 +98,8 @@ class _AboutPageState extends State<AboutPage> {
                                   ),
                                   title: Text(
                                     author.name,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .labelLarge
-                                        ?.copyWith(color: themeMode == ThemeMode.light ? const Color(0xff3F51B5) : const Color(0xff82B1FF), fontSize: 15.0),
+                                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                                        color: themeMode == ThemeMode.light ? const Color(0xff3F51B5) : const Color(0xff82B1FF), fontSize: 15.0),
                                   ),
                                 ),
                                 SizedBox(

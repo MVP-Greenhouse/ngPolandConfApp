@@ -62,7 +62,7 @@ class InfoItemModelAdapter extends TypeAdapter<InfoItemModel> {
 _$InfoItemModelImpl _$$InfoItemModelImplFromJson(Map<String, dynamic> json) =>
     _$InfoItemModelImpl(
       title: json['title'] as String,
-      order: json['order'] as int,
+      order: (json['order'] as num).toInt(),
       icon: json['icon'] as String,
       description: json['description'] as String?,
       confId: json['confId'] as String,

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -18,20 +18,14 @@ class QuestionsPage extends StatefulWidget {
   State<QuestionsPage> createState() => _QuestionsPageState();
 }
 
-class _QuestionsPageState extends State<QuestionsPage> {
+class _QuestionsPageState extends State<QuestionsPage> with ConnectivityMixin {
   late final WebViewController controller;
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-  late StreamSubscription<ConnectivityResult> subscription;
 
   var loadingPercentage = 0;
   @override
   void initState() {
     super.initState();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        connectivityResult = result;
-      });
-    });
+
     if (webViewPlatform()) {
       controller = WebViewController()
         ..setNavigationDelegate(NavigationDelegate(
@@ -57,12 +51,6 @@ class _QuestionsPageState extends State<QuestionsPage> {
           Uri.parse('https://myconf.dev/'),
         );
     }
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   bool webViewPlatform() {

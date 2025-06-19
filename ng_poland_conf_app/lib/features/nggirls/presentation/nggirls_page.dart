@@ -1,8 +1,6 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/nggirls/presentation/cubit/ngGirls_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
@@ -17,10 +15,8 @@ class NgGirlsPage extends StatefulWidget {
   State<NgGirlsPage> createState() => _NgGirlsPageState();
 }
 
-class _NgGirlsPageState extends State<NgGirlsPage> {
+class _NgGirlsPageState extends State<NgGirlsPage> with ConnectivityMixin {
   late final NgGirlsCubit _ngGirlsCubit;
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-  late StreamSubscription<ConnectivityResult> subscription;
 
   @override
   void initState() {
@@ -28,18 +24,6 @@ class _NgGirlsPageState extends State<NgGirlsPage> {
     _ngGirlsCubit.getNgGirls();
 
     super.initState();
-
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        connectivityResult = result;
-      });
-    });
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   @override

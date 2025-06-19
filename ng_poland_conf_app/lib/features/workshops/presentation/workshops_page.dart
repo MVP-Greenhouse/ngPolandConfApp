@@ -1,9 +1,7 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/cubit/workshop_cubit.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/widgets/workshops_content.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
@@ -20,10 +18,8 @@ class WorkshopsPage extends StatefulWidget {
   State<WorkshopsPage> createState() => _WorkshopsPageState();
 }
 
-class _WorkshopsPageState extends State<WorkshopsPage> {
+class _WorkshopsPageState extends State<WorkshopsPage> with ConnectivityMixin {
   late final WorkshopCubit _cubit;
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-  late StreamSubscription<ConnectivityResult> subscription;
 
   @override
   void initState() {
@@ -33,12 +29,6 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
     );
 
     super.initState();
-
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        connectivityResult = result;
-      });
-    });
   }
 
   void onEventItemTabChange(int idx) {
@@ -51,12 +41,6 @@ class _WorkshopsPageState extends State<WorkshopsPage> {
         eventItemType: EventItemType.jsPoland,
       );
     }
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   @override
