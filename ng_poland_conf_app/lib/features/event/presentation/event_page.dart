@@ -1,19 +1,17 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_cubit.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/widgets/event_rating.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' as rive;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../settings/presentation/connection_status.dart';
@@ -35,17 +33,15 @@ class EventPage extends StatefulWidget {
   State<EventPage> createState() => _EventPageState();
 }
 
-class _EventPageState extends State<EventPage> {
+class _EventPageState extends State<EventPage> with ConnectivityMixin {
   late final EventCubit _eventCubit;
-  late final RiveFile ratingFile;
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-  late StreamSubscription<ConnectivityResult> subscription;
+  late final rive.RiveFile ratingFile;
 
   @override
   void initState() {
     rootBundle.load(EventRating.ratingFilePath).then(
       (data) async {
-        ratingFile = RiveFile.import(data);
+        ratingFile = rive.RiveFile.import(data);
       },
     );
     _eventCubit = getIt.get<EventCubit>()
@@ -55,18 +51,6 @@ class _EventPageState extends State<EventPage> {
       );
 
     super.initState();
-
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        connectivityResult = result;
-      });
-    });
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   @override

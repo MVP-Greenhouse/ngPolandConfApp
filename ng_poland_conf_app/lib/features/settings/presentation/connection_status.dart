@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 
 class ConnectionStatus extends StatefulWidget {
   const ConnectionStatus({Key? key}) : super(key: key);
@@ -9,8 +9,7 @@ class ConnectionStatus extends StatefulWidget {
   State<ConnectionStatus> createState() => _ConnectionStatusState();
 }
 
-class _ConnectionStatusState extends State<ConnectionStatus> {
-  late StreamSubscription subscription;
+class _ConnectionStatusState extends State<ConnectionStatus> with ConnectivityMixin {
   bool hasConnection = false;
 
   @override
@@ -21,17 +20,6 @@ class _ConnectionStatusState extends State<ConnectionStatus> {
         hasConnection = status != ConnectivityResult.none;
       });
     });
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        hasConnection = result != ConnectivityResult.none;
-      });
-    });
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   @override
