@@ -39,6 +39,9 @@ class _ScheduleEventState extends State<ScheduleEvent> {
       'award' => FontAwesomeIcons.trophy,
       'break' => FontAwesomeIcons.solidComments,
       'final' => FontAwesomeIcons.doorOpen,
+      'movie' => FontAwesomeIcons.video,
+      'party' => FontAwesomeIcons.champagneGlasses,
+      'qa' => FontAwesomeIcons.circleQuestion,
       _ => null,
     };
 

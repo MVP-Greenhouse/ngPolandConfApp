@@ -48,7 +48,7 @@ class _QuestionsPageState extends State<QuestionsPage> with ConnectivityMixin {
           },
         ))
         ..loadRequest(
-          Uri.parse('https://myconf.dev/'),
+          Uri.parse('https://ngask.dev/'),
         );
     }
   }
@@ -72,7 +72,7 @@ class _QuestionsPageState extends State<QuestionsPage> with ConnectivityMixin {
               color: Theme.of(context).colorScheme.inversePrimary,
             ),
             onPressed: () {
-              launchUrl(Uri.parse('https://myconf.dev/'));
+              launchUrl(Uri.parse('https://ngask.dev/'));
             },
           ),
           const ConnectionStatus(),
@@ -119,7 +119,7 @@ class _QuestionsPageState extends State<QuestionsPage> with ConnectivityMixin {
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         onPressed: () {
-                          launchUrl(Uri.parse('https://myconf.dev/'));
+                          launchUrl(Uri.parse('https://ngask.dev/'));
                         },
                       ),
                     ],

@@ -102,8 +102,8 @@ class __$$InitialImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InitialImpl extends _Initial {
-  const _$InitialImpl() : super._();
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
 
   @override
   String toString() {
@@ -192,9 +192,8 @@ class _$InitialImpl extends _Initial {
   }
 }
 
-abstract class _Initial extends ConferencesState {
+abstract class _Initial implements ConferencesState {
   const factory _Initial() = _$InitialImpl;
-  const _Initial._() : super._();
 }
 
 /// @nodoc
@@ -254,10 +253,9 @@ class __$$LoadedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadedImpl extends _Loaded {
+class _$LoadedImpl implements _Loaded {
   const _$LoadedImpl(
-      {required this.conferences, required this.selectedConference})
-      : super._();
+      {required this.conferences, required this.selectedConference});
 
   @override
   final Conferences conferences;
@@ -366,6 +364,7 @@ abstract class _Loaded extends ConferencesState {
   const factory _Loaded(
       {required final Conferences conferences,
       required final Conference selectedConference}) = _$LoadedImpl;
+
   const _Loaded._() : super._();
 
   Conferences get conferences;
@@ -408,8 +407,8 @@ class __$$ErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ErrorImpl extends _Error {
-  const _$ErrorImpl(this.error) : super._();
+class _$ErrorImpl implements _Error {
+  const _$ErrorImpl(this.error);
 
   @override
   final String error;
@@ -509,9 +508,8 @@ class _$ErrorImpl extends _Error {
   }
 }
 
-abstract class _Error extends ConferencesState {
+abstract class _Error implements ConferencesState {
   const factory _Error(final String error) = _$ErrorImpl;
-  const _Error._() : super._();
 
   String get error;
   @JsonKey(ignore: true)

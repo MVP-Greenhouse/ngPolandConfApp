@@ -36,7 +36,7 @@ class InfoDetails extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.025,
                 ),
-                Text(
+                SelectableText(
                   info.description ?? '',
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,

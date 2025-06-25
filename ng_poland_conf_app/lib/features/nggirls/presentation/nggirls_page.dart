@@ -59,7 +59,7 @@ class _NgGirlsPageState extends State<NgGirlsPage> with ConnectivityMixin {
                           const SizedBox(
                             height: 30,
                           ),
-                          Text(ngGirls.text ?? '', style: Theme.of(context).textTheme.bodySmall),
+                          SelectableText(ngGirls.text ?? '', style: Theme.of(context).textTheme.bodySmall),
                           const SizedBox(
                             height: 30,
                           )

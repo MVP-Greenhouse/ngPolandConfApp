@@ -53,7 +53,7 @@ class WorkshopsContent extends StatelessWidget {
                 ),
               ),
             ),
-            title: Text(
+            title: SelectableText(
               workshop.title,
               style: Theme.of(context).textTheme.titleMedium,
             ),
@@ -84,7 +84,7 @@ class WorkshopsContent extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.025,
           ),
-          Text(
+          SelectableText(
             workshop.description ?? '',
             style: Theme.of(context).textTheme.bodySmall,
           ),

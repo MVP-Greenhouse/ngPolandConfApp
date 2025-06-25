@@ -92,8 +92,9 @@ class __$$InitialImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$InitialImpl extends _Initial {
-  const _$InitialImpl() : super._();
+class _$InitialImpl implements _Initial {
+  const _$InitialImpl();
+
 
   @override
   String toString() {
@@ -172,9 +173,8 @@ class _$InitialImpl extends _Initial {
   }
 }
 
-abstract class _Initial extends ThemeModeState {
+abstract class _Initial implements ThemeModeState {
   const factory _Initial() = _$InitialImpl;
-  const _Initial._() : super._();
 }
 
 /// @nodoc
@@ -210,8 +210,8 @@ class __$$LoadedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadedImpl extends _Loaded {
-  const _$LoadedImpl(this.themeMode) : super._();
+class _$LoadedImpl implements _Loaded {
+  const _$LoadedImpl(this.themeMode);
 
   @override
   final ThemeMode themeMode;
@@ -302,9 +302,8 @@ class _$LoadedImpl extends _Loaded {
   }
 }
 
-abstract class _Loaded extends ThemeModeState {
+abstract class _Loaded implements ThemeModeState {
   const factory _Loaded(final ThemeMode themeMode) = _$LoadedImpl;
-  const _Loaded._() : super._();
 
   ThemeMode get themeMode;
   @JsonKey(ignore: true)
