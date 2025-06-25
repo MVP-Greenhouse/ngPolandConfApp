@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Conference {
   String get confId => throw _privateConstructorUsedError;
   String get confName => throw _privateConstructorUsedError;
+  bool get isCurrent => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get conferencesStartDate => throw _privateConstructorUsedError;
   List<ConferenceItem> get listItems => throw _privateConstructorUsedError;
@@ -36,6 +37,7 @@ abstract class $ConferenceCopyWith<$Res> {
   $Res call(
       {String confId,
       String confName,
+      bool isCurrent,
       String? description,
       String? conferencesStartDate,
       List<ConferenceItem> listItems});
@@ -56,6 +58,7 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
   $Res call({
     Object? confId = null,
     Object? confName = null,
+    Object? isCurrent = null,
     Object? description = freezed,
     Object? conferencesStartDate = freezed,
     Object? listItems = null,
@@ -69,6 +72,10 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
           ? _value.confName
           : confName // ignore: cast_nullable_to_non_nullable
               as String,
+      isCurrent: null == isCurrent
+          ? _value.isCurrent
+          : isCurrent // ignore: cast_nullable_to_non_nullable
+              as bool,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -96,6 +103,7 @@ abstract class _$$ConferenceImplCopyWith<$Res>
   $Res call(
       {String confId,
       String confName,
+      bool isCurrent,
       String? description,
       String? conferencesStartDate,
       List<ConferenceItem> listItems});
@@ -114,6 +122,7 @@ class __$$ConferenceImplCopyWithImpl<$Res>
   $Res call({
     Object? confId = null,
     Object? confName = null,
+    Object? isCurrent = null,
     Object? description = freezed,
     Object? conferencesStartDate = freezed,
     Object? listItems = null,
@@ -127,6 +136,10 @@ class __$$ConferenceImplCopyWithImpl<$Res>
           ? _value.confName
           : confName // ignore: cast_nullable_to_non_nullable
               as String,
+      isCurrent: null == isCurrent
+          ? _value.isCurrent
+          : isCurrent // ignore: cast_nullable_to_non_nullable
+              as bool,
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -149,6 +162,7 @@ class _$ConferenceImpl implements _Conference {
   const _$ConferenceImpl(
       {required this.confId,
       required this.confName,
+      this.isCurrent = false,
       this.description,
       this.conferencesStartDate,
       required final List<ConferenceItem> listItems})
@@ -158,6 +172,9 @@ class _$ConferenceImpl implements _Conference {
   final String confId;
   @override
   final String confName;
+  @override
+  @JsonKey()
+  final bool isCurrent;
   @override
   final String? description;
   @override
@@ -172,7 +189,7 @@ class _$ConferenceImpl implements _Conference {
 
   @override
   String toString() {
-    return 'Conference(confId: $confId, confName: $confName, description: $description, conferencesStartDate: $conferencesStartDate, listItems: $listItems)';
+    return 'Conference(confId: $confId, confName: $confName, isCurrent: $isCurrent, description: $description, conferencesStartDate: $conferencesStartDate, listItems: $listItems)';
   }
 
   @override
@@ -183,6 +200,8 @@ class _$ConferenceImpl implements _Conference {
             (identical(other.confId, confId) || other.confId == confId) &&
             (identical(other.confName, confName) ||
                 other.confName == confName) &&
+            (identical(other.isCurrent, isCurrent) ||
+                other.isCurrent == isCurrent) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.conferencesStartDate, conferencesStartDate) ||
@@ -192,8 +211,14 @@ class _$ConferenceImpl implements _Conference {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, confId, confName, description,
-      conferencesStartDate, const DeepCollectionEquality().hash(_listItems));
+  int get hashCode => Object.hash(
+      runtimeType,
+      confId,
+      confName,
+      isCurrent,
+      description,
+      conferencesStartDate,
+      const DeepCollectionEquality().hash(_listItems));
 
   @JsonKey(ignore: true)
   @override
@@ -206,6 +231,7 @@ abstract class _Conference implements Conference {
   const factory _Conference(
       {required final String confId,
       required final String confName,
+      final bool isCurrent,
       final String? description,
       final String? conferencesStartDate,
       required final List<ConferenceItem> listItems}) = _$ConferenceImpl;
@@ -214,6 +240,8 @@ abstract class _Conference implements Conference {
   String get confId;
   @override
   String get confName;
+  @override
+  bool get isCurrent;
   @override
   String? get description;
   @override

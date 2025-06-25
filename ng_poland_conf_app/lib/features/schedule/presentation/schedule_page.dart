@@ -1,9 +1,7 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_cubit.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
@@ -20,44 +18,30 @@ class SchedulePage extends StatefulWidget {
   State<SchedulePage> createState() => _SchedulePageState();
 }
 
-class _SchedulePageState extends State<SchedulePage> {
+class _SchedulePageState extends State<SchedulePage> with ConnectivityMixin {
   late final ScheduleCubit _cubit;
   final selectedTabItem = EventItemType.ngPoland;
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-  late StreamSubscription<ConnectivityResult> subscription;
+  EventItemType _eventItemType = EventItemType.ngPoland;
 
   @override
   void initState() {
     _cubit = getIt.get<ScheduleCubit>();
 
     _cubit.getListEvents(
-      eventItemType: EventItemType.ngPoland,
+      eventItemType: _eventItemType,
     );
     super.initState();
-
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        connectivityResult = result;
-      });
-    });
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   void onEventItemTabChange(int idx) {
     if (idx == 0) {
-      _cubit.getListEvents(
-        eventItemType: EventItemType.ngPoland,
-      );
+      _eventItemType = EventItemType.ngPoland;
     } else {
-      _cubit.getListEvents(
-        eventItemType: EventItemType.jsPoland,
-      );
+      _eventItemType = EventItemType.jsPoland;
     }
+    _cubit.getListEvents(
+      eventItemType: _eventItemType,
+    );
   }
 
   @override
@@ -89,6 +73,7 @@ class _SchedulePageState extends State<SchedulePage> {
                         itemBuilder: (context, index) {
                           return ScheduleEvent(
                             listEvents[index],
+                            _eventItemType,
                             Theme.of(context).colorScheme.tertiary,
                           );
                         }),

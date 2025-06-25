@@ -95,6 +95,7 @@ class __$$InitialImplCopyWithImpl<$Res>
 class _$InitialImpl implements _Initial {
   const _$InitialImpl();
 
+
   @override
   String toString() {
     return 'ThemeModeState.initial()';

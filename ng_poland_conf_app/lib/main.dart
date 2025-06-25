@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -21,7 +23,9 @@ import 'package:ng_poland_conf_app/theme/theme.dart';
 
 import 'features/speakers/datasources/models/speakers_model.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await configureDependencies(
     Environment.prod,
   );
@@ -40,6 +44,8 @@ void main() async {
     ..registerAdapter(WorkshopModelAdapter()) // typeId: 9
     ..registerAdapter(WorkshopsModelAdapter()) // typeId: 10
     ..registerAdapter(SpeakersModelAdapter()); // typeId: 11
+
+  FirebaseAuth.instance.authStateChanges().listen((_) => getIt.get<Routing>().router.refresh());
 
   runApp(const MainApp());
 }

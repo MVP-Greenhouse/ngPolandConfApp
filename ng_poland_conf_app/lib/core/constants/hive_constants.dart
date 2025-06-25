@@ -10,4 +10,5 @@ class HiveConstantsForBoxes {
   static const String eventItem = 'eventItem';
   static const String workshops = 'workshops';
   static const String speakers = 'speakers';
+  static const String rateEvent = 'rateEvent';
 }

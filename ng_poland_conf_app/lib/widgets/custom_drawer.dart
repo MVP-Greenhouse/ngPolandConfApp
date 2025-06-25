@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
+import 'package:ng_poland_conf_app/core/utils/authentication_utils.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,7 @@ class CustomDrawer extends StatelessWidget {
               page,
               currentPage,
             ),
+          _buildLogoutButton(context),
           Divider(
             color: Theme.of(context).colorScheme.primary,
             thickness: 1.0,
@@ -91,6 +93,28 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
+  Widget _buildLogoutButton(BuildContext context) {
+    return ListTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(6.0),
+      ),
+      leading: SizedBox(
+        width: 34.0,
+        child: Icon(
+          Icons.logout,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      title: Text(
+        'Logout',
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+      ),
+      onTap: AuthenticationUtils.logout,
+    );
+  }
+
   Widget _buildDarkModeSwitch(
     BuildContext context, {
     required ThemeMode themeMode,
@@ -104,8 +128,10 @@ class CustomDrawer extends StatelessWidget {
       children: [
         Switch(
           thumbColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface),
-          trackColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
-          trackOutlineColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
+          trackColor:
+              MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
+          trackOutlineColor:
+              MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
           value: valueForSwitch,
           onChanged: (val) async {
             ThemeMode? newThemeMode;

@@ -1,10 +1,10 @@
 import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/features/speakers/datasources/data/local/speakers_local_datasource.dart';
+import 'package:ng_poland_conf_app/features/speakers/datasources/data/remote/speakers_remote_datasource.dart';
 
 import '../../domains/entities/speaker.dart';
 import '../../domains/repositories/speakers_repository.dart';
 import '../../domains/usecases/get_all_speakers_for_conference.dart';
-import '../data/speakers_local_datasource.dart';
-import '../data/speakers_remote_datasource.dart';
 import '../models/speakers_model.dart';
 
 @Singleton(as: SpeakersRepository)

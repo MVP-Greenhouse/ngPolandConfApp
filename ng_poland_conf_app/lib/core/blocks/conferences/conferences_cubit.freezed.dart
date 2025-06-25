@@ -360,10 +360,12 @@ class _$LoadedImpl implements _Loaded {
   }
 }
 
-abstract class _Loaded implements ConferencesState {
+abstract class _Loaded extends ConferencesState {
   const factory _Loaded(
       {required final Conferences conferences,
       required final Conference selectedConference}) = _$LoadedImpl;
+
+  const _Loaded._() : super._();
 
   Conferences get conferences;
   Conference get selectedConference;

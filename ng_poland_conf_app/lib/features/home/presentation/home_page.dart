@@ -1,10 +1,8 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/constants/app_dimensions.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/widgets/custom_timer.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
@@ -19,26 +17,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with ConnectivityMixin {
   late final ConferencesCubit _cubit;
-  ConnectivityResult connectivityResult = ConnectivityResult.none;
-  late StreamSubscription<ConnectivityResult> subscription;
 
   @override
   void initState() {
     _cubit = getIt.get<ConferencesCubit>();
     super.initState();
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      setState(() {
-        connectivityResult = result;
-      });
-    });
-  }
-
-  @override
-  dispose() {
-    subscription.cancel();
-    super.dispose();
   }
 
   @override
@@ -89,7 +74,9 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBody(BuildContext context, ConferencesState state) {
     return Center(
       child: SizedBox(
-        height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height : double.infinity, // This line makes the widget take 100% height
+        height: MediaQuery.of(context).orientation == Orientation.portrait
+            ? MediaQuery.of(context).size.height
+            : double.infinity, // This line makes the widget take 100% height
         child: SizedBox(
           child: ListView(
             children: [
@@ -101,7 +88,9 @@ class _HomePageState extends State<HomePage> {
                 duration: const Duration(milliseconds: 300),
                 child: state.maybeWhen(
                   initial: () => Text('The Biggest Angular Conference',
-                      textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200))),
+                      textAlign: TextAlign.center,
+                      style:
+                          Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(200))),
                   loaded: (conferences, selectedConference) => Text(
                     selectedConference.description ?? '',
                     textAlign: TextAlign.center,
@@ -137,8 +126,10 @@ class _HomePageState extends State<HomePage> {
                                   width: 12.0,
                                 ),
                                 Text(e.desc,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(170), fontSize: 16.0))
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(170), fontSize: 16.0))
                               ],
                             ),
                             const SizedBox(

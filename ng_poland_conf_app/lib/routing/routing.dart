@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/about/presentation/about_page.dart';
+import 'package:ng_poland_conf_app/features/authentication/presentation/authentication_page.dart';
+import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/home_page.dart';
 import 'package:ng_poland_conf_app/features/info/presentation/info_page.dart';
 import 'package:ng_poland_conf_app/features/nggirls/presentation/nggirls_page.dart';
@@ -44,12 +47,39 @@ class Routing {
   Routing() {
     navigatorKey = GlobalKey<NavigatorState>();
     router = GoRouter(
+      redirect: (_, state) {
+        bool authentication = FirebaseAuth.instance.currentUser == null;
+        if (authentication) {
+          return AuthenticationPage.path;
+        } else {
+          if (state.fullPath?.contains(AuthenticationPage.path) ?? true) {
+            return Pages.home.path;
+          }
+          return state.path;
+        }
+      },
       routes: [
+        GoRoute(
+          path: AuthenticationPage.path,
+          builder: (context, state) => const AuthenticationPage(),
+        ),
         GoRoute(
           path: Pages.home.path,
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(path: Pages.schedule.path, builder: (context, state) => const SchedulePage(), routes: [
+          GoRoute(
+            path: 'schedule/${EventPage.routeName}/:eventId/:eventItemType',
+            name: '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
+            builder: (context, state) {
+              final eventId = state.pathParameters['eventId'];
+              final eventItemType = state.pathParameters['eventItemType'];
+              return EventPage(
+                eventId: eventId!,
+                eventItemType: eventItemType!,
+              );
+            },
+          ),
           GoRoute(
             path: 'speaker/${SpeakerDetails.routeName}/:id',
             name: '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',
