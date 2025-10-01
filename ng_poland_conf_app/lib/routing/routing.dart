@@ -48,15 +48,16 @@ class Routing {
     navigatorKey = GlobalKey<NavigatorState>();
     router = GoRouter(
       redirect: (_, state) {
-        bool authentication = FirebaseAuth.instance.currentUser == null;
-        if (authentication) {
-          return AuthenticationPage.path;
-        } else {
-          if (state.fullPath?.contains(AuthenticationPage.path) ?? true) {
-            return Pages.home.path;
-          }
-          return state.path;
-        }
+        return state.path;
+        // bool authentication = FirebaseAuth.instance.currentUser == null;
+        // if (authentication) {
+        //   return AuthenticationPage.path;
+        // } else {
+        //   if (state.fullPath?.contains(AuthenticationPage.path) ?? true) {
+        //     return Pages.home.path;
+        //   }
+        //   return state.path;
+        // }
       },
       routes: [
         GoRoute(

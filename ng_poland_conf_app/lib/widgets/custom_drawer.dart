@@ -31,7 +31,7 @@ class CustomDrawer extends StatelessWidget {
               page,
               currentPage,
             ),
-          _buildLogoutButton(context),
+          // _buildLogoutButton(context),
           Divider(
             color: Theme.of(context).colorScheme.primary,
             thickness: 1.0,
