@@ -29,7 +29,9 @@ mixin _$Speaker {
   String? get urlTwitter => throw _privateConstructorUsedError;
   String? get urlWww => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Speaker
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SpeakerCopyWith<Speaker> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -63,6 +65,8 @@ class _$SpeakerCopyWithImpl<$Res, $Val extends Speaker>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Speaker
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -162,6 +166,8 @@ class __$$SpeakerImplCopyWithImpl<$Res>
       _$SpeakerImpl _value, $Res Function(_$SpeakerImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Speaker
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -319,7 +325,9 @@ class _$SpeakerImpl implements _Speaker {
       urlTwitter,
       urlWww);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Speaker
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SpeakerImplCopyWith<_$SpeakerImpl> get copyWith =>
@@ -365,8 +373,11 @@ abstract class _Speaker implements Speaker {
   String? get urlTwitter;
   @override
   String? get urlWww;
+
+  /// Create a copy of Speaker
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SpeakerImplCopyWith<_$SpeakerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

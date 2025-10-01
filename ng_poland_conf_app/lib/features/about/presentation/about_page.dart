@@ -88,7 +88,7 @@ class _AboutPageState extends State<AboutPage> with ConnectivityMixin {
                             (author) => Column(
                               children: [
                                 ListTile(
-                                  onTap: () => launchUrl(Uri.parse(author.twitterUrl)),
+                                  onTap: () => launchUrl(Uri.parse(author.linkedinUrl)),
                                   leading: ClipRRect(
                                     borderRadius: BorderRadius.circular(50.0),
                                     child: Image.asset(

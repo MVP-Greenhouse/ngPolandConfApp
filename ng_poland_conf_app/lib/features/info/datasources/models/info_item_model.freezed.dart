@@ -33,8 +33,12 @@ mixin _$InfoItemModel {
   @HiveField(5)
   String? get urlLink => throw _privateConstructorUsedError;
 
+  /// Serializes this InfoItemModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of InfoItemModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $InfoItemModelCopyWith<InfoItemModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -64,6 +68,8 @@ class _$InfoItemModelCopyWithImpl<$Res, $Val extends InfoItemModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of InfoItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -128,6 +134,8 @@ class __$$InfoItemModelImplCopyWithImpl<$Res>
       _$InfoItemModelImpl _value, $Res Function(_$InfoItemModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of InfoItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -220,12 +228,14 @@ class _$InfoItemModelImpl extends _InfoItemModel {
             (identical(other.urlLink, urlLink) || other.urlLink == urlLink));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, title, order, icon, description, confId, urlLink);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InfoItemModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InfoItemModelImplCopyWith<_$InfoItemModelImpl> get copyWith =>
@@ -270,8 +280,11 @@ abstract class _InfoItemModel extends InfoItemModel {
   @override
   @HiveField(5)
   String? get urlLink;
+
+  /// Create a copy of InfoItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InfoItemModelImplCopyWith<_$InfoItemModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

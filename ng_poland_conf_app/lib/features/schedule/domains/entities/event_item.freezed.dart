@@ -27,7 +27,9 @@ mixin _$EventItem {
   DateTime? get endDate => throw _privateConstructorUsedError;
   Speaker? get speaker => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EventItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EventItemCopyWith<EventItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -62,6 +64,8 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of EventItem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,6 +124,8 @@ class _$EventItemCopyWithImpl<$Res, $Val extends EventItem>
     ) as $Val);
   }
 
+  /// Create a copy of EventItem
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $SpeakerCopyWith<$Res>? get speaker {
@@ -165,6 +171,8 @@ class __$$EventItemImplCopyWithImpl<$Res>
       _$EventItemImpl _value, $Res Function(_$EventItemImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EventItem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -291,7 +299,9 @@ class _$EventItemImpl extends _EventItem {
   int get hashCode => Object.hash(runtimeType, id, title, confId, type,
       category, shortDescription, description, startDate, endDate, speaker);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EventItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EventItemImplCopyWith<_$EventItemImpl> get copyWith =>
@@ -332,8 +342,11 @@ abstract class _EventItem extends EventItem {
   DateTime? get endDate;
   @override
   Speaker? get speaker;
+
+  /// Create a copy of EventItem
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EventItemImplCopyWith<_$EventItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

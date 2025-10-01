@@ -20,7 +20,9 @@ mixin _$AuthorModel {
   String? get image => throw _privateConstructorUsedError;
   String? get twitterUrl => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthorModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AuthorModelCopyWith<AuthorModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -44,6 +46,8 @@ class _$AuthorModelCopyWithImpl<$Res, $Val extends AuthorModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AuthorModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -87,6 +91,8 @@ class __$$AuthorModelImplCopyWithImpl<$Res>
       _$AuthorModelImpl _value, $Res Function(_$AuthorModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthorModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -142,7 +148,9 @@ class _$AuthorModelImpl implements _AuthorModel {
   @override
   int get hashCode => Object.hash(runtimeType, name, image, twitterUrl);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthorModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AuthorModelImplCopyWith<_$AuthorModelImpl> get copyWith =>
@@ -161,8 +169,11 @@ abstract class _AuthorModel implements AuthorModel {
   String? get image;
   @override
   String? get twitterUrl;
+
+  /// Create a copy of AuthorModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AuthorModelImplCopyWith<_$AuthorModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

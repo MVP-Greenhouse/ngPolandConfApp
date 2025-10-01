@@ -18,7 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Conferences {
   List<Conference> get list => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Conferences
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ConferencesCopyWith<Conferences> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,6 +44,8 @@ class _$ConferencesCopyWithImpl<$Res, $Val extends Conferences>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Conferences
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -75,6 +79,8 @@ class __$$ConferencesImplCopyWithImpl<$Res>
       _$ConferencesImpl _value, $Res Function(_$ConferencesImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Conferences
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -119,7 +125,9 @@ class _$ConferencesImpl implements _Conferences {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Conferences
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ConferencesImplCopyWith<_$ConferencesImpl> get copyWith =>
@@ -132,8 +140,11 @@ abstract class _Conferences implements Conferences {
 
   @override
   List<Conference> get list;
+
+  /// Create a copy of Conferences
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ConferencesImplCopyWith<_$ConferencesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
