@@ -33,7 +33,9 @@ mixin _$WorkshopModel {
   @HiveField(7)
   int? get pricePln => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WorkshopModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $WorkshopModelCopyWith<WorkshopModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -67,6 +69,8 @@ class _$WorkshopModelCopyWithImpl<$Res, $Val extends WorkshopModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of WorkshopModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -115,6 +119,8 @@ class _$WorkshopModelCopyWithImpl<$Res, $Val extends WorkshopModel>
     ) as $Val);
   }
 
+  /// Create a copy of WorkshopModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $SpeakerModelCopyWith<$Res> get speaker {
@@ -154,6 +160,8 @@ class __$$WorkshopModelImplCopyWithImpl<$Res>
       _$WorkshopModelImpl _value, $Res Function(_$WorkshopModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WorkshopModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -270,7 +278,9 @@ class _$WorkshopModelImpl extends _WorkshopModel {
   int get hashCode => Object.hash(runtimeType, title, confId, description,
       startDate, endDate, locationDescription, speaker, pricePln);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WorkshopModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WorkshopModelImplCopyWith<_$WorkshopModelImpl> get copyWith =>
@@ -313,8 +323,11 @@ abstract class _WorkshopModel extends WorkshopModel {
   @override
   @HiveField(7)
   int? get pricePln;
+
+  /// Create a copy of WorkshopModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WorkshopModelImplCopyWith<_$WorkshopModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

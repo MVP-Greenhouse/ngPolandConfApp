@@ -72,6 +72,9 @@ class _$ThemeModeStateCopyWithImpl<$Res, $Val extends ThemeModeState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ThemeModeState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -88,6 +91,9 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ThemeModeState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -194,6 +200,8 @@ class __$$LoadedImplCopyWithImpl<$Res>
       _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ThemeModeState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -233,7 +241,9 @@ class _$LoadedImpl extends _Loaded {
   @override
   int get hashCode => Object.hash(runtimeType, themeMode);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ThemeModeState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
@@ -307,7 +317,10 @@ abstract class _Loaded extends ThemeModeState {
   const _Loaded._() : super._();
 
   ThemeMode get themeMode;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ThemeModeState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

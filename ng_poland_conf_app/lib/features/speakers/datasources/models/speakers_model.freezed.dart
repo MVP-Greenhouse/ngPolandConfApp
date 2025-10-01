@@ -23,7 +23,9 @@ mixin _$SpeakersModel {
   @HiveField(2)
   dynamic get confId => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SpeakersModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SpeakersModelCopyWith<SpeakersModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +52,8 @@ class _$SpeakersModelCopyWithImpl<$Res, $Val extends SpeakersModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SpeakersModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -96,6 +100,8 @@ class __$$SpeakersModelImplCopyWithImpl<$Res>
       _$SpeakersModelImpl _value, $Res Function(_$SpeakersModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SpeakersModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -168,7 +174,9 @@ class _$SpeakersModelImpl extends _SpeakersModel {
       lastUpdate,
       const DeepCollectionEquality().hash(confId));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SpeakersModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SpeakersModelImplCopyWith<_$SpeakersModelImpl> get copyWith =>
@@ -191,8 +199,11 @@ abstract class _SpeakersModel extends SpeakersModel {
   @override
   @HiveField(2)
   dynamic get confId;
+
+  /// Create a copy of SpeakersModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SpeakersModelImplCopyWith<_$SpeakersModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

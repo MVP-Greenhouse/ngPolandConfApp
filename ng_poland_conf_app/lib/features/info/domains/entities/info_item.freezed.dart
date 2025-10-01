@@ -23,7 +23,9 @@ mixin _$InfoItem {
   String get confId => throw _privateConstructorUsedError;
   String? get urlLink => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InfoItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $InfoItemCopyWith<InfoItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +54,8 @@ class _$InfoItemCopyWithImpl<$Res, $Val extends InfoItem>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of InfoItem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -116,6 +120,8 @@ class __$$InfoItemImplCopyWithImpl<$Res>
       _$InfoItemImpl _value, $Res Function(_$InfoItemImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of InfoItem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -202,7 +208,9 @@ class _$InfoItemImpl implements _InfoItem {
   int get hashCode => Object.hash(
       runtimeType, title, order, icon, description, confId, urlLink);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InfoItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InfoItemImplCopyWith<_$InfoItemImpl> get copyWith =>
@@ -230,8 +238,11 @@ abstract class _InfoItem implements InfoItem {
   String get confId;
   @override
   String? get urlLink;
+
+  /// Create a copy of InfoItem
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InfoItemImplCopyWith<_$InfoItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
