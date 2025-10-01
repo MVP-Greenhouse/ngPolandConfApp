@@ -1,5 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:ng_poland_conf_app/features/info/domains/entities/info_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InfoDetails extends StatelessWidget {
   final InfoItem info;
@@ -41,6 +44,26 @@ class InfoDetails extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),
+                info.urlLink != null
+                    ? RichText(
+                        text: TextSpan(
+                          text: 'More Info: ',
+                          style: Theme.of(context).textTheme.bodySmall,
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'here',
+                              style: const TextStyle(
+                                color: Colors.blue,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  launch(info.urlLink!);
+                                },
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container()
               ],
             ),
           ),

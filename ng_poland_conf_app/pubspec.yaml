@@ -44,6 +44,7 @@ dependencies:
   connectivity_plus: ^6.1.4
   collection: ^1.17.2
   dartz: ^0.10.1
+  flutter_html: ^3.0.0
 
 dev_dependencies:
   flutter_test:

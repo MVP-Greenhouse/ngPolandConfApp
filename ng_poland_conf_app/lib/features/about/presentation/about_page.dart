@@ -15,17 +15,17 @@ class AboutPage extends StatefulWidget {
     Author(
       name: 'Daniel Michalak',
       image: 'danielmichalak',
-      twitterUrl: 'https://twitter.com/MichalakDaniel2',
+      linkedinUrl: 'https://www.linkedin.com/in/daniel-michalak-0219981b2/',
     ),
     Author(
       name: 'Sebastian Denis',
       image: 'sebastiandenis',
-      twitterUrl: 'https://twitter.com/SebekD',
+      linkedinUrl: 'https://www.linkedin.com/in/sebastian-denis-0a1782153/',
     ),
     Author(
       name: 'Dariusz Kalbarczyk',
       image: 'dariuszkalbarczyk',
-      twitterUrl: 'https://twitter.com/ngKalbarczyk',
+      linkedinUrl: 'https://www.linkedin.com/in/ngkalbarczyk/',
     ),
   ];
 
@@ -132,7 +132,7 @@ class _AboutPageState extends State<AboutPage> with ConnectivityMixin {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 32.0),
                       child: Text(
-                        'Version: 20231101.1',
+                        'Version: 20251001.1',
                         style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimary.withAlpha(150)),
                         textAlign: TextAlign.center,
                       ),
