@@ -82,6 +82,9 @@ class _$ConferencesStateCopyWithImpl<$Res, $Val extends ConferencesState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -98,12 +101,15 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$InitialImpl implements _Initial {
-  const _$InitialImpl();
+class _$InitialImpl extends _Initial {
+  const _$InitialImpl() : super._();
 
   @override
   String toString() {
@@ -192,8 +198,9 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements ConferencesState {
+abstract class _Initial extends ConferencesState {
   const factory _Initial() = _$InitialImpl;
+  const _Initial._() : super._();
 }
 
 /// @nodoc
@@ -216,6 +223,8 @@ class __$$LoadedImplCopyWithImpl<$Res>
       _$LoadedImpl _value, $Res Function(_$LoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -234,6 +243,8 @@ class __$$LoadedImplCopyWithImpl<$Res>
     ));
   }
 
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ConferencesCopyWith<$Res> get conferences {
@@ -242,6 +253,8 @@ class __$$LoadedImplCopyWithImpl<$Res>
     });
   }
 
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ConferenceCopyWith<$Res> get selectedConference {
@@ -253,9 +266,10 @@ class __$$LoadedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadedImpl implements _Loaded {
+class _$LoadedImpl extends _Loaded {
   const _$LoadedImpl(
-      {required this.conferences, required this.selectedConference});
+      {required this.conferences, required this.selectedConference})
+      : super._();
 
   @override
   final Conferences conferences;
@@ -281,7 +295,9 @@ class _$LoadedImpl implements _Loaded {
   @override
   int get hashCode => Object.hash(runtimeType, conferences, selectedConference);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
@@ -364,12 +380,14 @@ abstract class _Loaded extends ConferencesState {
   const factory _Loaded(
       {required final Conferences conferences,
       required final Conference selectedConference}) = _$LoadedImpl;
-
   const _Loaded._() : super._();
 
   Conferences get conferences;
   Conference get selectedConference;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -391,6 +409,8 @@ class __$$ErrorImplCopyWithImpl<$Res>
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -407,8 +427,8 @@ class __$$ErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ErrorImpl implements _Error {
-  const _$ErrorImpl(this.error);
+class _$ErrorImpl extends _Error {
+  const _$ErrorImpl(this.error) : super._();
 
   @override
   final String error;
@@ -429,7 +449,9 @@ class _$ErrorImpl implements _Error {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
@@ -508,11 +530,15 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements ConferencesState {
+abstract class _Error extends ConferencesState {
   const factory _Error(final String error) = _$ErrorImpl;
+  const _Error._() : super._();
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ConferencesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

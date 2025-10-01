@@ -20,7 +20,9 @@ mixin _$NgGirls {
   String? get title => throw _privateConstructorUsedError;
   String? get text => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NgGirls
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NgGirlsCopyWith<NgGirls> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -42,6 +44,8 @@ class _$NgGirlsCopyWithImpl<$Res, $Val extends NgGirls>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of NgGirls
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -84,6 +88,8 @@ class __$$NgGirlsImplCopyWithImpl<$Res>
       _$NgGirlsImpl _value, $Res Function(_$NgGirlsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of NgGirls
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -140,7 +146,9 @@ class _$NgGirlsImpl extends _NgGirls {
   @override
   int get hashCode => Object.hash(runtimeType, myId, title, text);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NgGirls
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NgGirlsImplCopyWith<_$NgGirlsImpl> get copyWith =>
@@ -160,8 +168,11 @@ abstract class _NgGirls extends NgGirls {
   String? get title;
   @override
   String? get text;
+
+  /// Create a copy of NgGirls
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NgGirlsImplCopyWith<_$NgGirlsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

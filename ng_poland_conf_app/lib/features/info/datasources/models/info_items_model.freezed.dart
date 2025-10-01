@@ -27,8 +27,12 @@ mixin _$InfoItemsModel {
   @HiveField(2)
   dynamic get confId => throw _privateConstructorUsedError;
 
+  /// Serializes this InfoItemsModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of InfoItemsModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $InfoItemsModelCopyWith<InfoItemsModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +59,8 @@ class _$InfoItemsModelCopyWithImpl<$Res, $Val extends InfoItemsModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of InfoItemsModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -101,6 +107,8 @@ class __$$InfoItemsModelImplCopyWithImpl<$Res>
       _$InfoItemsModelImpl _value, $Res Function(_$InfoItemsModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of InfoItemsModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -169,7 +177,7 @@ class _$InfoItemsModelImpl extends _InfoItemsModel {
             const DeepCollectionEquality().equals(other.confId, confId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -177,7 +185,9 @@ class _$InfoItemsModelImpl extends _InfoItemsModel {
       lastUpdate,
       const DeepCollectionEquality().hash(confId));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of InfoItemsModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InfoItemsModelImplCopyWith<_$InfoItemsModelImpl> get copyWith =>
@@ -211,8 +221,11 @@ abstract class _InfoItemsModel extends InfoItemsModel {
   @override
   @HiveField(2)
   dynamic get confId;
+
+  /// Create a copy of InfoItemsModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InfoItemsModelImplCopyWith<_$InfoItemsModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

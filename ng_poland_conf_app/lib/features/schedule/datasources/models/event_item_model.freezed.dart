@@ -37,7 +37,9 @@ mixin _$EventItemModel {
   @HiveField(9)
   SpeakerModel? get speaker => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EventItemModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EventItemModelCopyWith<EventItemModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -73,6 +75,8 @@ class _$EventItemModelCopyWithImpl<$Res, $Val extends EventItemModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of EventItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -131,6 +135,8 @@ class _$EventItemModelCopyWithImpl<$Res, $Val extends EventItemModel>
     ) as $Val);
   }
 
+  /// Create a copy of EventItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $SpeakerModelCopyWith<$Res>? get speaker {
@@ -176,6 +182,8 @@ class __$$EventItemModelImplCopyWithImpl<$Res>
       _$EventItemModelImpl _value, $Res Function(_$EventItemModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EventItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -312,7 +320,9 @@ class _$EventItemModelImpl extends _EventItemModel {
   int get hashCode => Object.hash(runtimeType, id, title, confId, type,
       category, shortDescription, description, startDate, endDate, speaker);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EventItemModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EventItemModelImplCopyWith<_$EventItemModelImpl> get copyWith =>
@@ -365,8 +375,11 @@ abstract class _EventItemModel extends EventItemModel {
   @override
   @HiveField(9)
   SpeakerModel? get speaker;
+
+  /// Create a copy of EventItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EventItemModelImplCopyWith<_$EventItemModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

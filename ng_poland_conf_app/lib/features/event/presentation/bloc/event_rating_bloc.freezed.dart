@@ -72,6 +72,9 @@ class _$EventRatingEventCopyWithImpl<$Res, $Val extends EventRatingEvent>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of EventRatingEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -88,6 +91,9 @@ class __$$GetRateForEventImplCopyWithImpl<$Res>
   __$$GetRateForEventImplCopyWithImpl(
       _$GetRateForEventImpl _value, $Res Function(_$GetRateForEventImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EventRatingEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -193,6 +199,8 @@ class __$$RateEventImplCopyWithImpl<$Res>
       _$RateEventImpl _value, $Res Function(_$RateEventImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EventRatingEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -231,7 +239,9 @@ class _$RateEventImpl implements _RateEvent {
   @override
   int get hashCode => Object.hash(runtimeType, rate);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EventRatingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RateEventImplCopyWith<_$RateEventImpl> get copyWith =>
@@ -304,7 +314,10 @@ abstract class _RateEvent implements EventRatingEvent {
   const factory _RateEvent({required final int rate}) = _$RateEventImpl;
 
   int get rate;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EventRatingEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RateEventImplCopyWith<_$RateEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -385,6 +398,9 @@ class _$EventRatingStateCopyWithImpl<$Res, $Val extends EventRatingState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of EventRatingState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -401,6 +417,9 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EventRatingState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -521,6 +540,9 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EventRatingState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -641,6 +663,9 @@ class __$$ReadyToRateImplCopyWithImpl<$Res>
   __$$ReadyToRateImplCopyWithImpl(
       _$ReadyToRateImpl _value, $Res Function(_$ReadyToRateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EventRatingState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -764,6 +789,8 @@ class __$$RatedImplCopyWithImpl<$Res>
       _$RatedImpl _value, $Res Function(_$RatedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EventRatingState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -803,7 +830,9 @@ class _$RatedImpl implements _Rated {
   @override
   int get hashCode => Object.hash(runtimeType, rateForEvent);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EventRatingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RatedImplCopyWith<_$RatedImpl> get copyWith =>
@@ -894,7 +923,10 @@ abstract class _Rated implements EventRatingState {
   const factory _Rated({required final int rateForEvent}) = _$RatedImpl;
 
   int get rateForEvent;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EventRatingState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RatedImplCopyWith<_$RatedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -913,6 +945,9 @@ class __$$FailureImplCopyWithImpl<$Res>
   __$$FailureImplCopyWithImpl(
       _$FailureImpl _value, $Res Function(_$FailureImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EventRatingState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

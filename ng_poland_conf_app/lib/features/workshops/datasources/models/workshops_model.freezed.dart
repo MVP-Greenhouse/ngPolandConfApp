@@ -23,7 +23,9 @@ mixin _$WorkshopsModel {
   @HiveField(2)
   dynamic get confId => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WorkshopsModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $WorkshopsModelCopyWith<WorkshopsModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +52,8 @@ class _$WorkshopsModelCopyWithImpl<$Res, $Val extends WorkshopsModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of WorkshopsModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -96,6 +100,8 @@ class __$$WorkshopsModelImplCopyWithImpl<$Res>
       _$WorkshopsModelImpl _value, $Res Function(_$WorkshopsModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WorkshopsModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -168,7 +174,9 @@ class _$WorkshopsModelImpl extends _WorkshopsModel {
       lastUpdate,
       const DeepCollectionEquality().hash(confId));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WorkshopsModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WorkshopsModelImplCopyWith<_$WorkshopsModelImpl> get copyWith =>
@@ -192,8 +200,11 @@ abstract class _WorkshopsModel extends WorkshopsModel {
   @override
   @HiveField(2)
   dynamic get confId;
+
+  /// Create a copy of WorkshopsModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WorkshopsModelImplCopyWith<_$WorkshopsModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

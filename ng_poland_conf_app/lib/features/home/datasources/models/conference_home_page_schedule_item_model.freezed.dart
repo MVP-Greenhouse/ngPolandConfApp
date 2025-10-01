@@ -26,8 +26,12 @@ mixin _$ConferenceHomePageScheduleItemModel {
   @HiveField(1)
   String get desc => throw _privateConstructorUsedError;
 
+  /// Serializes this ConferenceHomePageScheduleItemModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ConferenceHomePageScheduleItemModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ConferenceHomePageScheduleItemModelCopyWith<
           ConferenceHomePageScheduleItemModel>
       get copyWith => throw _privateConstructorUsedError;
@@ -55,6 +59,8 @@ class _$ConferenceHomePageScheduleItemModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ConferenceHomePageScheduleItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -96,6 +102,8 @@ class __$$ConferenceHomePageScheduleItemModelImplCopyWithImpl<$Res>
       $Res Function(_$ConferenceHomePageScheduleItemModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ConferenceHomePageScheduleItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -148,11 +156,13 @@ class _$ConferenceHomePageScheduleItemModelImpl
             (identical(other.desc, desc) || other.desc == desc));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, name, desc);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ConferenceHomePageScheduleItemModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ConferenceHomePageScheduleItemModelImplCopyWith<
@@ -186,8 +196,11 @@ abstract class _ConferenceHomePageScheduleItemModel
   @override
   @HiveField(1)
   String get desc;
+
+  /// Create a copy of ConferenceHomePageScheduleItemModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ConferenceHomePageScheduleItemModelImplCopyWith<
           _$ConferenceHomePageScheduleItemModelImpl>
       get copyWith => throw _privateConstructorUsedError;

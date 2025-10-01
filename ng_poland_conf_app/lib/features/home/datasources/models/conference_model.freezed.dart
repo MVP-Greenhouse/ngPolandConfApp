@@ -33,8 +33,12 @@ mixin _$ConferenceModel {
   List<ConferenceHomePageScheduleItemModel>? get listItems =>
       throw _privateConstructorUsedError;
 
+  /// Serializes this ConferenceModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ConferenceModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ConferenceModelCopyWith<ConferenceModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -65,6 +69,8 @@ class _$ConferenceModelCopyWithImpl<$Res, $Val extends ConferenceModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ConferenceModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -125,6 +131,8 @@ class __$$ConferenceModelImplCopyWithImpl<$Res>
       _$ConferenceModelImpl _value, $Res Function(_$ConferenceModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ConferenceModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -221,12 +229,14 @@ class _$ConferenceModelImpl extends _ConferenceModel {
                 .equals(other._listItems, _listItems));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, confId, confName, description,
       conferencesStartDate, const DeepCollectionEquality().hash(_listItems));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ConferenceModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ConferenceModelImplCopyWith<_$ConferenceModelImpl> get copyWith =>
@@ -273,8 +283,11 @@ abstract class _ConferenceModel extends ConferenceModel {
   @JsonKey(name: 'conferenceHomePageSchedule', fromJson: _listItemsFromJson)
   @HiveField(4)
   List<ConferenceHomePageScheduleItemModel>? get listItems;
+
+  /// Create a copy of ConferenceModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ConferenceModelImplCopyWith<_$ConferenceModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

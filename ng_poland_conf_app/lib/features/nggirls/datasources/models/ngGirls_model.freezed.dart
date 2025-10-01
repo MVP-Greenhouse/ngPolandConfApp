@@ -31,8 +31,12 @@ mixin _$NgGirlsModel {
   @HiveField(4)
   DateTime? get lastUpdate => throw _privateConstructorUsedError;
 
+  /// Serializes this NgGirlsModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of NgGirlsModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $NgGirlsModelCopyWith<NgGirlsModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -61,6 +65,8 @@ class _$NgGirlsModelCopyWithImpl<$Res, $Val extends NgGirlsModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of NgGirlsModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -119,6 +125,8 @@ class __$$NgGirlsModelImplCopyWithImpl<$Res>
       _$NgGirlsModelImpl _value, $Res Function(_$NgGirlsModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of NgGirlsModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -201,12 +209,14 @@ class _$NgGirlsModelImpl extends _NgGirlsModel {
                 other.lastUpdate == lastUpdate));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, myId, title, text, confId, lastUpdate);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of NgGirlsModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$NgGirlsModelImplCopyWith<_$NgGirlsModelImpl> get copyWith =>
@@ -247,8 +257,11 @@ abstract class _NgGirlsModel extends NgGirlsModel {
   @override
   @HiveField(4)
   DateTime? get lastUpdate;
+
+  /// Create a copy of NgGirlsModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$NgGirlsModelImplCopyWith<_$NgGirlsModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

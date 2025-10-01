@@ -19,7 +19,9 @@ mixin _$ConferenceItem {
   String get name => throw _privateConstructorUsedError;
   String get desc => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ConferenceItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ConferenceItemCopyWith<ConferenceItem> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -43,6 +45,8 @@ class _$ConferenceItemCopyWithImpl<$Res, $Val extends ConferenceItem>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ConferenceItem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -81,6 +85,8 @@ class __$$ConferenceItemImplCopyWithImpl<$Res>
       _$ConferenceItemImpl _value, $Res Function(_$ConferenceItemImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ConferenceItem
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -127,7 +133,9 @@ class _$ConferenceItemImpl implements _ConferenceItem {
   @override
   int get hashCode => Object.hash(runtimeType, name, desc);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ConferenceItem
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ConferenceItemImplCopyWith<_$ConferenceItemImpl> get copyWith =>
@@ -144,8 +152,11 @@ abstract class _ConferenceItem implements ConferenceItem {
   String get name;
   @override
   String get desc;
+
+  /// Create a copy of ConferenceItem
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ConferenceItemImplCopyWith<_$ConferenceItemImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

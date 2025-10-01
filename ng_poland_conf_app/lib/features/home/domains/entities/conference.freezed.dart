@@ -23,7 +23,9 @@ mixin _$Conference {
   String? get conferencesStartDate => throw _privateConstructorUsedError;
   List<ConferenceItem> get listItems => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Conference
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ConferenceCopyWith<Conference> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -53,6 +55,8 @@ class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Conference
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -117,6 +121,8 @@ class __$$ConferenceImplCopyWithImpl<$Res>
       _$ConferenceImpl _value, $Res Function(_$ConferenceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Conference
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -220,7 +226,9 @@ class _$ConferenceImpl implements _Conference {
       conferencesStartDate,
       const DeepCollectionEquality().hash(_listItems));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Conference
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ConferenceImplCopyWith<_$ConferenceImpl> get copyWith =>
@@ -248,8 +256,11 @@ abstract class _Conference implements Conference {
   String? get conferencesStartDate;
   @override
   List<ConferenceItem> get listItems;
+
+  /// Create a copy of Conference
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ConferenceImplCopyWith<_$ConferenceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
