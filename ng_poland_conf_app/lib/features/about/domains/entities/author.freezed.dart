@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$Author {
   String get name => throw _privateConstructorUsedError;
   String get image => throw _privateConstructorUsedError;
-  String get twitterUrl => throw _privateConstructorUsedError;
+  String get linkedinUrl => throw _privateConstructorUsedError;
 
   /// Create a copy of Author
   /// with the given fields replaced by the non-null parameter values.
@@ -31,7 +31,7 @@ abstract class $AuthorCopyWith<$Res> {
   factory $AuthorCopyWith(Author value, $Res Function(Author) then) =
       _$AuthorCopyWithImpl<$Res, Author>;
   @useResult
-  $Res call({String name, String image, String twitterUrl});
+  $Res call({String name, String image, String linkedinUrl});
 }
 
 /// @nodoc
@@ -51,7 +51,7 @@ class _$AuthorCopyWithImpl<$Res, $Val extends Author>
   $Res call({
     Object? name = null,
     Object? image = null,
-    Object? twitterUrl = null,
+    Object? linkedinUrl = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -62,9 +62,9 @@ class _$AuthorCopyWithImpl<$Res, $Val extends Author>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String,
-      twitterUrl: null == twitterUrl
-          ? _value.twitterUrl
-          : twitterUrl // ignore: cast_nullable_to_non_nullable
+      linkedinUrl: null == linkedinUrl
+          ? _value.linkedinUrl
+          : linkedinUrl // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -77,7 +77,7 @@ abstract class _$$AuthorImplCopyWith<$Res> implements $AuthorCopyWith<$Res> {
       __$$AuthorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String image, String twitterUrl});
+  $Res call({String name, String image, String linkedinUrl});
 }
 
 /// @nodoc
@@ -95,7 +95,7 @@ class __$$AuthorImplCopyWithImpl<$Res>
   $Res call({
     Object? name = null,
     Object? image = null,
-    Object? twitterUrl = null,
+    Object? linkedinUrl = null,
   }) {
     return _then(_$AuthorImpl(
       name: null == name
@@ -106,9 +106,9 @@ class __$$AuthorImplCopyWithImpl<$Res>
           ? _value.image
           : image // ignore: cast_nullable_to_non_nullable
               as String,
-      twitterUrl: null == twitterUrl
-          ? _value.twitterUrl
-          : twitterUrl // ignore: cast_nullable_to_non_nullable
+      linkedinUrl: null == linkedinUrl
+          ? _value.linkedinUrl
+          : linkedinUrl // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -118,18 +118,18 @@ class __$$AuthorImplCopyWithImpl<$Res>
 
 class _$AuthorImpl implements _Author {
   const _$AuthorImpl(
-      {required this.name, required this.image, required this.twitterUrl});
+      {required this.name, required this.image, required this.linkedinUrl});
 
   @override
   final String name;
   @override
   final String image;
   @override
-  final String twitterUrl;
+  final String linkedinUrl;
 
   @override
   String toString() {
-    return 'Author(name: $name, image: $image, twitterUrl: $twitterUrl)';
+    return 'Author(name: $name, image: $image, linkedinUrl: $linkedinUrl)';
   }
 
   @override
@@ -139,12 +139,12 @@ class _$AuthorImpl implements _Author {
             other is _$AuthorImpl &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.image, image) || other.image == image) &&
-            (identical(other.twitterUrl, twitterUrl) ||
-                other.twitterUrl == twitterUrl));
+            (identical(other.linkedinUrl, linkedinUrl) ||
+                other.linkedinUrl == linkedinUrl));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, name, image, twitterUrl);
+  int get hashCode => Object.hash(runtimeType, name, image, linkedinUrl);
 
   /// Create a copy of Author
   /// with the given fields replaced by the non-null parameter values.
@@ -159,14 +159,14 @@ abstract class _Author implements Author {
   const factory _Author(
       {required final String name,
       required final String image,
-      required final String twitterUrl}) = _$AuthorImpl;
+      required final String linkedinUrl}) = _$AuthorImpl;
 
   @override
   String get name;
   @override
   String get image;
   @override
-  String get twitterUrl;
+  String get linkedinUrl;
 
   /// Create a copy of Author
   /// with the given fields replaced by the non-null parameter values.
