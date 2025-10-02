@@ -18,7 +18,9 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
 
   @override
   Future<List<EventItem>> getAllEvents(Params params) async {
-    final EventsModel? currentEventsModel = await scheduleLocalDataSource.get(customKey: params.eventItemType);
+    final EventsModel? currentEventsModel = await scheduleLocalDataSource.get(
+      customKey: params.customKey,
+    );
     try {
       if (currentEventsModel != null &&
           currentEventsModel.items != null &&
@@ -36,7 +38,10 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
         limit: params.limit,
       );
 
-      await scheduleLocalDataSource.update(listAllEvents.copyWith(confId: params.confId, lastUpdate: DateTime.now()), customKey: params.eventItemType);
+      await scheduleLocalDataSource.update(
+        listAllEvents.copyWith(confId: params.confId, lastUpdate: DateTime.now()),
+        customKey: params.customKey,
+      );
       return listAllEvents.toEntity();
     } catch (err) {
       if (currentEventsModel != null && currentEventsModel.confId == params.confId) {

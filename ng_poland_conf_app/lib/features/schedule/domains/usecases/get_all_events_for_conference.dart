@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/repositories/schedule_repository.dart';
@@ -19,6 +20,8 @@ class Params {
   final String eventItemType;
   final String confId;
   final int limit;
+
+  String get customKey => EventContentTypes.eventItem + eventItemType + confId;
 
   Params({
     required this.eventItemType,

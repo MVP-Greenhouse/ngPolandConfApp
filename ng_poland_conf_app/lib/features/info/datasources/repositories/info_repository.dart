@@ -18,7 +18,9 @@ class InfoRepositoryImpl implements InfoRepository {
 
   @override
   Future<List<InfoItem>> getAllInfoItems(Params params) async {
-    final currentInfoItemsModel = await infoLocalDataSource.get();
+    final currentInfoItemsModel = await infoLocalDataSource.get(
+      customKey: params.customKey,
+    );
     try {
       if (currentInfoItemsModel != null &&
           currentInfoItemsModel.items != null &&
@@ -35,7 +37,10 @@ class InfoRepositoryImpl implements InfoRepository {
         limit: params.limit,
       );
 
-      await infoLocalDataSource.update(infoItems.copyWith(confId: params.confId, lastUpdate: DateTime.now()));
+      await infoLocalDataSource.update(
+        infoItems.copyWith(confId: params.confId, lastUpdate: DateTime.now()),
+        customKey: params.customKey,
+      );
       return infoItems.toEntity();
     } catch (err) {
       if (currentInfoItemsModel != null && currentInfoItemsModel.confId == params.confId) {

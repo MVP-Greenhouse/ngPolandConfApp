@@ -25,6 +25,15 @@ class SpeakerDetails extends StatefulWidget {
 class _SpeakerDetailsState extends State<SpeakerDetails> {
   late final SpeakersCubit _speakersCubit;
 
+  ButtonStyle get _flatButtonStyle => TextButton.styleFrom(
+        foregroundColor: Colors.black87,
+        minimumSize: const Size(50, 50),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100.0),
+        ),
+      );
+
   @override
   void initState() {
     _speakersCubit = getIt.get<SpeakersCubit>();
@@ -34,15 +43,6 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final flatButtonStyle = TextButton.styleFrom(
-      foregroundColor: Colors.black87,
-      minimumSize: const Size(50, 50),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(100.0),
-      ),
-    );
-
     // Speaker _speaker = _data['speaker'] as Speaker;
 
     return Scaffold(
@@ -112,32 +112,8 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: MediaQuery.of(context).orientation == Orientation.portrait
-                                            ? MediaQuery.of(context).size.width * 0.40
-                                            : MediaQuery.of(context).size.width * 0.37,
-                                        width: MediaQuery.of(context).orientation == Orientation.portrait
-                                            ? null
-                                            : MediaQuery.of(context).size.width * 0.43,
-                                        child: Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: CircleAvatar(
-                                            radius: 25,
-                                            backgroundColor: Colors.white,
-                                            child: TextButton(
-                                              style: flatButtonStyle,
-                                              onPressed: () {
-                                                speaker.urlTwitter != null ? launchUrl(Uri.parse(speaker.urlTwitter as String)) : null;
-                                              },
-                                              child: const Icon(
-                                                FontAwesomeIcons.twitter,
-                                                color: Colors.blue,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                      _buildTwitterButton(speaker.urlTwitter),
+                                    ].nonNulls.toList(),
                                   ),
                                 ),
                               ),
@@ -181,6 +157,31 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
               orElse: () => const SizedBox.shrink(),
             );
           }),
+    );
+  }
+
+  Widget? _buildTwitterButton(String? urlTwitter) {
+    if (urlTwitter == null || urlTwitter.isEmpty) return null;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final orientation = MediaQuery.orientationOf(context);
+    return SizedBox(
+      height: orientation == Orientation.portrait ? screenWidth * 0.40 : screenWidth * 0.37,
+      width: orientation == Orientation.portrait ? null : screenWidth * 0.43,
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: CircleAvatar(
+          radius: 25,
+          backgroundColor: Colors.white,
+          child: TextButton(
+            style: _flatButtonStyle,
+            onPressed: () => launchUrl(Uri.parse(urlTwitter)),
+            child: const Icon(
+              FontAwesomeIcons.twitter,
+              color: Colors.blue,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

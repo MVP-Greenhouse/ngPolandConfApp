@@ -18,7 +18,9 @@ class WorkshopsRepositoryImpl implements WorkshopsRepository {
 
   @override
   Future<List<Workshop>> getWorkshops(Params params) async {
-    final WorkshopsModel? currentWorkshopsModel = await workshopsLocalDataSource.get(customKey: params.eventItemType);
+    final WorkshopsModel? currentWorkshopsModel = await workshopsLocalDataSource.get(
+      customKey: params.customKey,
+    );
     try {
       if (currentWorkshopsModel != null &&
           currentWorkshopsModel.items != null &&
@@ -35,7 +37,10 @@ class WorkshopsRepositoryImpl implements WorkshopsRepository {
         limit: params.limit,
       );
 
-      await workshopsLocalDataSource.update(workshops.copyWith(confId: params.confId, lastUpdate: DateTime.now()), customKey: params.eventItemType);
+      await workshopsLocalDataSource.update(
+        workshops.copyWith(confId: params.confId, lastUpdate: DateTime.now()),
+        customKey: params.customKey,
+      );
       return workshops.toEntity();
     } catch (err) {
       if (currentWorkshopsModel != null && currentWorkshopsModel.confId == params.confId) {

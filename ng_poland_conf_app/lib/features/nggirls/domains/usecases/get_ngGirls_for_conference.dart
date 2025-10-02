@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
 import 'package:ng_poland_conf_app/features/nggirls/domains/entities/ngGirls.dart';
 import 'package:ng_poland_conf_app/features/nggirls/domains/repositories/ngGirls_repository.dart';
@@ -19,6 +20,8 @@ class GetNgGirlsForConference implements UseCase<NgGirls?, Params> {
 
 class Params {
   final String confId;
+
+  String get customKey => EventContentTypes.simpleContent + SimpleContentId.ngGirlsWorkshops + confId;
 
   Params({
     required this.confId,

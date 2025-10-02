@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_cubit.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/widgets/event_rating.dart';
@@ -107,17 +106,17 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
             textAlign: TextAlign.center,
           ),
         ),
-        BlocBuilder<ConferencesCubit, ConferencesState>(
-          builder: (context, state) {
-            return state.isCurrent
-                ? EventRating(
-                    id: widget.eventId,
-                    ratingFile: ratingFile,
-                    eventItemType: widget.eventItemType,
-                  )
-                : const SizedBox.shrink();
-          },
-        ),
+        // BlocBuilder<ConferencesCubit, ConferencesState>(
+        //   builder: (context, state) {
+        //     return state.isCurrent
+        //         ? EventRating(
+        //             id: widget.eventId,
+        //             ratingFile: ratingFile,
+        //             eventItemType: widget.eventItemType,
+        //           )
+        //         : const SizedBox.shrink();
+        //   },
+        // ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Container(

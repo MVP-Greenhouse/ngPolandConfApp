@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
 import 'package:ng_poland_conf_app/features/info/domains/entities/info_item.dart';
 import 'package:ng_poland_conf_app/features/info/domains/repositories/info_repository.dart';
@@ -18,6 +19,8 @@ class GetAllInfoItemsForConference implements UseCase<List<InfoItem>?, Params> {
 class Params {
   final String confId;
   final int limit;
+
+  String get customKey => EventContentTypes.infoItem + confId;
 
   Params({
     required this.confId,

@@ -21,7 +21,9 @@ class NgGirlsImpl implements NgGirlsRepository {
 
   @override
   Future<NgGirls?> getNgGirls(Params params) async {
-    final NgGirlsModel? currentNgGirlsModel = await ngGirlsLocalDataSource.get();
+    final NgGirlsModel? currentNgGirlsModel = await ngGirlsLocalDataSource.get(
+      customKey: params.confId,
+    );
     try {
       if (currentNgGirlsModel != null &&
           currentNgGirlsModel.myId == SimpleContentId.ngGirlsWorkshops &&
@@ -36,7 +38,10 @@ class NgGirlsImpl implements NgGirlsRepository {
         confId: params.confId,
       );
 
-      await ngGirlsLocalDataSource.update(workshops.copyWith(lastUpdate: DateTime.now(), confId: params.confId));
+      await ngGirlsLocalDataSource.update(
+        workshops.copyWith(lastUpdate: DateTime.now(), confId: params.confId),
+        customKey: params.customKey,
+      );
       return workshops.toEntity();
     } catch (err) {
       if (currentNgGirlsModel != null && currentNgGirlsModel.confId == params.confId) {
