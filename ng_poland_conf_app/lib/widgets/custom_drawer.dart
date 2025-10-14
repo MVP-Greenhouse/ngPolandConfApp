@@ -23,6 +23,9 @@ class CustomDrawer extends StatelessWidget {
         ),
         children: <Widget>[
           DrawerHeader(
+            padding: EdgeInsets.symmetric(
+              vertical: 8.0,
+            ),
             child: Image.asset('assets/images/logo.png'),
           ),
           for (Pages page in Pages.values)

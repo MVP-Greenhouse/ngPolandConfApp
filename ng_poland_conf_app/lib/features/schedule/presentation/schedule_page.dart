@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_cubit.dart';
-import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
+import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/schedule_events_list.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
@@ -33,12 +33,8 @@ class _SchedulePageState extends State<SchedulePage> with ConnectivityMixin {
     super.initState();
   }
 
-  void onEventItemTabChange(int idx) {
-    if (idx == 0) {
-      _eventItemType = EventItemType.ngPoland;
-    } else {
-      _eventItemType = EventItemType.jsPoland;
-    }
+  void onEventItemTabChange(EventItemType type) {
+    _eventItemType = type;
     _cubit.getListEvents(
       eventItemType: _eventItemType,
     );
@@ -66,24 +62,18 @@ class _SchedulePageState extends State<SchedulePage> with ConnectivityMixin {
             error: (error) => const EmptyListInformation(),
             loaded: (listEvents) => listEvents.isEmpty
                 ? const EmptyListInformation()
-                : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24.0),
-                    child: ListView.builder(
-                        itemCount: listEvents.length,
-                        itemBuilder: (context, index) {
-                          return ScheduleEvent(
-                            listEvents[index],
-                            _eventItemType,
-                            Theme.of(context).colorScheme.tertiary,
-                          );
-                        }),
+                : ScheduleEventsList(
+                    listEvents: listEvents,
+                    eventItemType: _eventItemType,
                   ),
             orElse: SizedBox.shrink,
           );
         },
       ),
       showBottomNavigationBar: true,
-      bottomNavigationBar: ConfsBottomNavigationBar(onItemTapped: onEventItemTabChange),
+      bottomNavigationBar: ConfsBottomNavigationBar(
+        onItemTapped: onEventItemTabChange,
+      ),
     );
   }
 }

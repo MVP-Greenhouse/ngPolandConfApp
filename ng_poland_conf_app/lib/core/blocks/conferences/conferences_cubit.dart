@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
