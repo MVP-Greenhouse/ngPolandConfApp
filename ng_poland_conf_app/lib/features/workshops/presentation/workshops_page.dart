@@ -31,16 +31,10 @@ class _WorkshopsPageState extends State<WorkshopsPage> with ConnectivityMixin {
     super.initState();
   }
 
-  void onEventItemTabChange(int idx) {
-    if (idx == 0) {
-      _cubit.getListWorkshop(
-        eventItemType: EventItemType.ngPoland,
-      );
-    } else {
-      _cubit.getListWorkshop(
-        eventItemType: EventItemType.jsPoland,
-      );
-    }
+  void onEventItemTabChange(EventItemType type) {
+    _cubit.getListWorkshop(
+      eventItemType: type,
+    );
   }
 
   @override

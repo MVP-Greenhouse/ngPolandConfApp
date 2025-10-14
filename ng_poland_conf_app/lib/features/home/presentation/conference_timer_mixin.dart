@@ -16,7 +16,7 @@ mixin ConferenceTimerMixin on Cubit<ConferencesState> {
     }
 
     timeToStartConferenceNotifier.value = Duration(
-      milliseconds: DateTime.parse(conferencesStartDate).millisecondsSinceEpoch - DateTime.now().millisecondsSinceEpoch,
+      milliseconds: DateTime.parse(conferencesStartDate).toUtc().millisecondsSinceEpoch - DateTime.now().toUtc().millisecondsSinceEpoch,
     ).inSeconds;
 
     _timerToStartConference = Timer.periodic(

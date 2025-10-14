@@ -1,13 +1,14 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/highlight_shadow.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
 import '../../../../routing/routing.dart';
@@ -17,19 +18,24 @@ class ScheduleEvent extends StatefulWidget {
   final EventItem eventItem;
   final EventItemType eventItemType;
   final Color iconColor;
+  final bool isActiveEvent;
 
-  const ScheduleEvent(
-    this.eventItem,
-    this.eventItemType,
-    this.iconColor, {
+  const ScheduleEvent({
     super.key,
+    required this.eventItem,
+    required this.eventItemType,
+    required this.iconColor,
+    required this.isActiveEvent,
   });
 
   @override
   State<ScheduleEvent> createState() => _ScheduleEventState();
 }
 
-class _ScheduleEventState extends State<ScheduleEvent> {
+class _ScheduleEventState extends State<ScheduleEvent> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => widget.isActiveEvent;
+
   Widget _getIcon(String? category) {
     var icon = switch (category) {
       'registration' => FontAwesomeIcons.addressCard,
@@ -51,40 +57,10 @@ class _ScheduleEventState extends State<ScheduleEvent> {
     );
   }
 
-  late Timer _timer;
-
-  bool _animation = false;
-
-  @override
-  void initState() {
-    _timer = Timer.periodic(
-      const Duration(seconds: 3),
-      (Timer timer) => setState(() {
-        _animation = !_animation;
-      }),
-    );
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-
-    super.dispose();
-  }
-
-  bool checkTimeEventToAnimation(
-    DateTime dateNow,
-    String dateStartEvent,
-    String dateEndEvent,
-  ) {
-    return DateTime.parse(dateStartEvent).toLocal().millisecondsSinceEpoch < dateNow.millisecondsSinceEpoch &&
-        dateNow.millisecondsSinceEpoch < DateTime.parse(dateEndEvent).toLocal().millisecondsSinceEpoch;
-  }
-
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final DateTime? startDate = widget.eventItem.startDate;
     final DateTime? endDate = widget.eventItem.endDate;
 
@@ -92,7 +68,15 @@ class _ScheduleEventState extends State<ScheduleEvent> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          _listElement(context, startDate, endDate),
+          BlocBuilder<ThemeModeCubit, ThemeModeState>(
+            builder: (_, state) {
+              return HighlightShadow(
+                isDarkMode: state.isDarkMode,
+                animate: widget.isActiveEvent,
+                child: _listElement(context, startDate, endDate),
+              );
+            },
+          ),
           Divider(
             color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
             height: 40,

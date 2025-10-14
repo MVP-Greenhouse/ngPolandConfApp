@@ -11,6 +11,29 @@ class EventContentTypes {
 enum EventItemType {
   ngPoland,
   jsPoland,
+  aiPoland;
+
+  String get imagePath {
+    switch (this) {
+      case EventItemType.aiPoland:
+        return 'assets/images/aipolandlogo.png';
+      case EventItemType.ngPoland:
+        return 'assets/images/ngpolandlogo.png';
+      case EventItemType.jsPoland:
+        return 'assets/images/jspolandlogo.png';
+    }
+  }
+
+  String get label {
+    switch (this) {
+      case EventItemType.aiPoland:
+        return 'AI POLAND';
+      case EventItemType.ngPoland:
+        return 'NG POLAND';
+      case EventItemType.jsPoland:
+        return 'JS POLAND';
+    }
+  }
 }
 
 class SimpleContentId {
