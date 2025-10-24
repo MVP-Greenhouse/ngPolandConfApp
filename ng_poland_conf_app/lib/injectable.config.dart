@@ -118,12 +118,12 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final registerModule = _$RegisterModule();
+    gh.singleton<_i399.ThemeModeCubit>(() => _i399.ThemeModeCubit());
+    gh.singleton<_i933.ConferencesCubit>(() => _i933.ConferencesCubit());
     await gh.singletonAsync<_i242.RawConfig>(
       () => registerModule.config(),
       preResolve: true,
     );
-    gh.singleton<_i933.ConferencesCubit>(() => _i933.ConferencesCubit());
-    gh.singleton<_i399.ThemeModeCubit>(() => _i399.ThemeModeCubit());
     gh.singleton<_i883.Routing>(() => _i883.Routing());
     gh.singleton<_i234.RateEventLocalDataSource>(
         () => _i234.RateEventLocalDataSourceImpl());
@@ -150,31 +150,31 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i429.RateEventRemoteDataSource>(),
           gh<_i234.RateEventLocalDataSource>(),
         ));
-    gh.factory<_i241.SignInAppleUseCase>(
-        () => _i241.SignInAppleUseCase(gh<_i38.AuthenticationRepository>()));
     gh.factory<_i631.SignInGoogleUseCase>(
         () => _i631.SignInGoogleUseCase(gh<_i38.AuthenticationRepository>()));
+    gh.factory<_i241.SignInAppleUseCase>(
+        () => _i241.SignInAppleUseCase(gh<_i38.AuthenticationRepository>()));
     gh.singleton<_i361.Dio>(() => registerModule.dio(gh<_i297.AppConfig>()));
     gh.factory<_i48.AuthenticationCubit>(() => _i48.AuthenticationCubit(
           gh<_i241.SignInAppleUseCase>(),
           gh<_i631.SignInGoogleUseCase>(),
         ));
-    gh.factory<_i473.GetRateForEvent>(
-        () => _i473.GetRateForEvent(gh<_i563.RateEventRepository>()));
     gh.factory<_i589.RateEvent>(
         () => _i589.RateEvent(gh<_i563.RateEventRepository>()));
+    gh.factory<_i473.GetRateForEvent>(
+        () => _i473.GetRateForEvent(gh<_i563.RateEventRepository>()));
     gh.factory<_i800.ConferencesRemoteDataSource>(
         () => _i800.ConferencesRemoteDataSource(gh<_i361.Dio>()));
-    gh.factory<_i369.InfoRemoteDataSource>(
-        () => _i369.InfoRemoteDataSource(gh<_i361.Dio>()));
-    gh.factory<_i818.NgGirlsRemoteDataSource>(
-        () => _i818.NgGirlsRemoteDataSource(gh<_i361.Dio>()));
+    gh.factory<_i545.WorkshopsRemoteDataSource>(
+        () => _i545.WorkshopsRemoteDataSource(gh<_i361.Dio>()));
     gh.factory<_i221.ScheduleRemoteDataSource>(
         () => _i221.ScheduleRemoteDataSource(gh<_i361.Dio>()));
     gh.factory<_i332.SpeakersRemoteDataSource>(
         () => _i332.SpeakersRemoteDataSource(gh<_i361.Dio>()));
-    gh.factory<_i545.WorkshopsRemoteDataSource>(
-        () => _i545.WorkshopsRemoteDataSource(gh<_i361.Dio>()));
+    gh.factory<_i369.InfoRemoteDataSource>(
+        () => _i369.InfoRemoteDataSource(gh<_i361.Dio>()));
+    gh.factory<_i818.NgGirlsRemoteDataSource>(
+        () => _i818.NgGirlsRemoteDataSource(gh<_i361.Dio>()));
     gh.singleton<_i343.WorkshopsRepository>(() => _i704.WorkshopsRepositoryImpl(
           gh<_i545.WorkshopsRemoteDataSource>(),
           gh<_i636.WorkshopsLocalDataSource>(),
@@ -193,18 +193,18 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i800.ConferencesRemoteDataSource>(),
               gh<_i924.ConferencesLocalDataSource>(),
             ));
-    gh.factory<_i189.GetThemeMode>(
-        () => _i189.GetThemeMode(gh<_i905.ThemeModeRepository>()));
     gh.factory<_i184.UpdateThemeMode>(
         () => _i184.UpdateThemeMode(gh<_i905.ThemeModeRepository>()));
+    gh.factory<_i189.GetThemeMode>(
+        () => _i189.GetThemeMode(gh<_i905.ThemeModeRepository>()));
     gh.singleton<_i458.ScheduleRepository>(() => _i732.ScheduleRepositoryImpl(
           gh<_i221.ScheduleRemoteDataSource>(),
           gh<_i878.ScheduleLocalDataSource>(),
         ));
-    gh.factory<_i231.GetEvent>(
-        () => _i231.GetEvent(gh<_i458.ScheduleRepository>()));
     gh.factory<_i797.GetAllEventsForConference>(
         () => _i797.GetAllEventsForConference(gh<_i458.ScheduleRepository>()));
+    gh.factory<_i231.GetEvent>(
+        () => _i231.GetEvent(gh<_i458.ScheduleRepository>()));
     gh.singleton<_i600.InfoRepository>(() => _i123.InfoRepositoryImpl(
           gh<_i369.InfoRemoteDataSource>(),
           gh<_i1041.InfoLocalDataSource>(),
