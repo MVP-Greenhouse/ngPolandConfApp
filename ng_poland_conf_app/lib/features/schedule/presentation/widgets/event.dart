@@ -12,6 +12,7 @@ import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/highli
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
 import '../../../../routing/routing.dart';
+import '../../../../widgets/simple_cross_origin_image.dart';
 import '../../../speakers/presentation/widgets/speaker_details.dart';
 
 class ScheduleEvent extends StatefulWidget {
@@ -32,7 +33,8 @@ class ScheduleEvent extends StatefulWidget {
   State<ScheduleEvent> createState() => _ScheduleEventState();
 }
 
-class _ScheduleEventState extends State<ScheduleEvent> with AutomaticKeepAliveClientMixin {
+class _ScheduleEventState extends State<ScheduleEvent>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => widget.isActiveEvent;
 
@@ -86,7 +88,8 @@ class _ScheduleEventState extends State<ScheduleEvent> with AutomaticKeepAliveCl
     );
   }
 
-  Widget _listElement(BuildContext context, DateTime? startDate, DateTime? endDate) {
+  Widget _listElement(
+      BuildContext context, DateTime? startDate, DateTime? endDate) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -119,7 +122,8 @@ class _ScheduleEventState extends State<ScheduleEvent> with AutomaticKeepAliveCl
         child: Text(
           widget.eventItem.title,
           style: TextStyle(
-            color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.8),
+            color:
+                Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.8),
             fontSize: 15,
             fontWeight: FontWeight.w500,
           ),
@@ -167,13 +171,10 @@ class _ScheduleEventState extends State<ScheduleEvent> with AutomaticKeepAliveCl
                           borderRadius: const BorderRadius.all(
                             Radius.circular(20),
                           ),
-                          child: CachedNetworkImage(
-                            width: 20,
-                            progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
+                          child: SimpleCrossOriginImage(
                             imageUrl: 'https:${speaker.photoFileUrl}',
-                            errorWidget: (context, url, dynamic error) {
-                              return Image.asset('assets/images/person.png');
-                            },
+                            width: 20,
+                            placeholderAsset: 'assets/images/person.png',
                           ),
                         ),
                       if (name != null)

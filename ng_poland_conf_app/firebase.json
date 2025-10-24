@@ -1,13 +1,52 @@
 {
-  "hosting": {
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "europe-west1"
+    "hosting": {
+        "source": ".",
+        "ignore": [
+            "firebase.json",
+            "**/.*",
+            "**/node_modules/**"
+        ],
+        "frameworksBackend": {
+            "region": "europe-west1"
+        }
+    },
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "ngpolandconfapp",
+                    "appId": "1:416351507920:android:27d98bf1f4acd702ed95d5",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "ios": {
+                "default": {
+                    "projectId": "ngpolandconfapp",
+                    "appId": "1:416351507920:ios:2a24ee768f0dfbe0ed95d5",
+                    "uploadDebugSymbols": false,
+                    "fileOutput": "ios/Runner/GoogleService-Info.plist"
+                }
+            },
+            "macos": {
+                "default": {
+                    "projectId": "ngpolandconfapp",
+                    "appId": "1:416351507920:ios:2a24ee768f0dfbe0ed95d5",
+                    "uploadDebugSymbols": false,
+                    "fileOutput": "macos/Runner/GoogleService-Info.plist"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "ngpolandconfapp",
+                    "configurations": {
+                        "android": "1:416351507920:android:27d98bf1f4acd702ed95d5",
+                        "ios": "1:416351507920:ios:2a24ee768f0dfbe0ed95d5",
+                        "macos": "1:416351507920:ios:2a24ee768f0dfbe0ed95d5",
+                        "web": "1:416351507920:web:7f0f314250c20dbeed95d5",
+                        "windows": "1:416351507920:web:9c1db2912bb02feced95d5"
+                    }
+                }
+            }
+        }
     }
-  }
 }

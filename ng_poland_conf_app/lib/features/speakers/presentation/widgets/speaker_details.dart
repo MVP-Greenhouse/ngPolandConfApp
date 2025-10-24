@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injectable.dart';
+import '../../../../widgets/cross_origin_image.dart';
 import '../../../../widgets/empty_list_info.dart';
 import '../../domains/entities/speaker.dart';
 import '../cubit/speakers_cubit.dart';
@@ -49,7 +49,10 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
       appBar: AppBar(
           title: Text(
             'Speaker',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
           ),
           leading: IconButton(
             onPressed: () {
@@ -83,33 +86,33 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                 padding: const EdgeInsets.all(24.0),
                                 child: SelectableText(
                                   speaker.name as String,
-                                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                        color: Theme.of(context).colorScheme.tertiary,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary,
                                       ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0),
                                 child: SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.5,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
                                   child: Stack(
                                     children: [
                                       Center(
-                                        child: CachedNetworkImage(
-                                          progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
-                                          imageUrl: 'https:${speaker.photoFileUrl}',
-                                          errorWidget: (context, url, dynamic error) {
-                                            return Image.asset('assets/images/person.png');
-                                          },
-                                          imageBuilder: (context, imageProvider) => SizedBox(
-                                            width: MediaQuery.of(context).size.width * 0.4,
-                                            height: MediaQuery.of(context).size.width * 0.4,
-                                            child: CircleAvatar(
-                                              radius: 25,
-                                              backgroundImage: imageProvider,
-                                            ),
-                                          ),
+                                        child: CrossOriginImage(
+                                          imageUrl:
+                                              'https:${speaker.photoFileUrl}',
+                                          placeholderAsset:
+                                              'assets/images/person.png',
+                                          sizeFactor:
+                                              0.4, // Passing the required 0.4 factor
                                         ),
                                       ),
                                       _buildTwitterButton(speaker.urlTwitter),
@@ -118,33 +121,53 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                 ),
                               ),
                               SizedBox(
-                                height: MediaQuery.of(context).size.height * 0.02,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.02,
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
                                 child: SelectableText(
                                   speaker.role ?? '',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.9),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground
+                                            .withOpacity(0.9),
                                       ),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
                                 child: Container(
                                   alignment: Alignment.centerLeft,
                                   child: speaker.bio != null
                                       ? Container(
                                           alignment: Alignment.centerLeft,
-                                          child: SelectableText(speaker.bio ?? '', style: Theme.of(context).textTheme.bodySmall),
+                                          child: SelectableText(
+                                              speaker.bio ?? '',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall),
                                         )
                                       : Container(
-                                          padding: const EdgeInsets.only(top: 40, bottom: 20),
-                                          height: MediaQuery.of(context).size.height * 0.2,
+                                          padding: const EdgeInsets.only(
+                                              top: 40, bottom: 20),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.2,
                                           width: double.infinity,
                                           child: const FittedBox(
-                                            child: Opacity(opacity: 0.1, child: Icon(Icons.question_mark)),
+                                            child: Opacity(
+                                                opacity: 0.1,
+                                                child:
+                                                    Icon(Icons.question_mark)),
                                           ),
                                         ),
                                 ),
@@ -165,7 +188,9 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
     final screenWidth = MediaQuery.sizeOf(context).width;
     final orientation = MediaQuery.orientationOf(context);
     return SizedBox(
-      height: orientation == Orientation.portrait ? screenWidth * 0.40 : screenWidth * 0.37,
+      height: orientation == Orientation.portrait
+          ? screenWidth * 0.40
+          : screenWidth * 0.37,
       width: orientation == Orientation.portrait ? null : screenWidth * 0.43,
       child: Align(
         alignment: Alignment.bottomRight,

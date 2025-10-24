@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
 import '../../../../routing/routing.dart';
+import '../../../../widgets/fixed_size_cross_origin_image.dart';
 import '../../domains/entities/speaker.dart';
 
 class SpeakerTile extends StatelessWidget {
@@ -18,30 +19,20 @@ class SpeakerTile extends StatelessWidget {
         children: [
           ListTile(
             onTap: () {
-              context.pushNamed('${Pages.speakers.nameKey}-${SpeakerDetails.routeNameKey}', pathParameters: {
-                'id': speaker.id ?? '',
-              });
+              context.pushNamed(
+                  '${Pages.speakers.nameKey}-${SpeakerDetails.routeNameKey}',
+                  pathParameters: {
+                    'id': speaker.id ?? '',
+                  });
             },
             leading: InkWell(
               borderRadius: const BorderRadius.all(
                 Radius.circular(25),
               ),
-              child: CachedNetworkImage(
-                progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
+              child: FixedSizeCrossOriginImage(
                 imageUrl: 'https:${speaker.photoFileUrl}',
-                errorWidget: (context, url, dynamic error) {
-                  return Image.asset('assets/images/person.png');
-                },
-                imageBuilder: (context, imageProvider) => Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: imageProvider,
-                    ),
-                  ),
-                ),
+                size: 50.0, // Setting the fixed size
+                placeholderAsset: 'assets/images/person.png',
               ),
             ),
             title: Text(
@@ -54,7 +45,11 @@ class SpeakerTile extends StatelessWidget {
                 Text(
                   speaker.role ?? '',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: Theme.of(context).textTheme.titleSmall?.color?.withOpacity(0.7),
+                        color: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.color
+                            ?.withOpacity(0.7),
                       ),
                 ),
               ],

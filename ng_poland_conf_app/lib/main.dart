@@ -21,10 +21,13 @@ import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/theme.dart';
 import 'features/speakers/datasources/models/speakers_model.dart';
+import 'firebase_options.dart'; // Import the generated file
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await Hive.initFlutter();
 
   Hive

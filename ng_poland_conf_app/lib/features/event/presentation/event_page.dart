@@ -13,6 +13,7 @@ import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:rive/rive.dart' as rive;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../widgets/cross_origin_image.dart';
 import '../../settings/presentation/connection_status.dart';
 
 class EventPage extends StatefulWidget {
@@ -59,7 +60,10 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
       appBar: AppBar(
         title: Text(
           'Event',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
         ),
         actions: const [
           ConnectionStatus(),
@@ -101,7 +105,10 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
           child: Text(
             eventItem.title,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onBackground.withOpacity(0.9),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onBackground
+                      .withOpacity(0.9),
                 ),
             textAlign: TextAlign.center,
           ),
@@ -124,14 +131,16 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
             child: eventItem.description != null
                 ? Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(eventItem.description ?? '', style: Theme.of(context).textTheme.bodySmall),
+                    child: Text(eventItem.description ?? '',
+                        style: Theme.of(context).textTheme.bodySmall),
                   )
                 : Container(
                     padding: const EdgeInsets.only(top: 40, bottom: 20),
                     height: MediaQuery.of(context).size.height * 0.2,
                     width: double.infinity,
                     child: const FittedBox(
-                      child: Opacity(opacity: 0.1, child: Icon(Icons.question_mark)),
+                      child: Opacity(
+                          opacity: 0.1, child: Icon(Icons.question_mark)),
                     ),
                   ),
           ),
@@ -172,36 +181,32 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
             child: Stack(
               children: [
                 Center(
-                  child: CachedNetworkImage(
-                    progressIndicatorBuilder: (context, url, downloadProgress) => Image.asset('assets/images/person.png'),
+                  child: CrossOriginImage(
                     imageUrl: 'https:${speaker.photoFileUrl}',
-                    errorWidget: (context, url, dynamic error) {
-                      return Image.asset('assets/images/person.png');
-                    },
-                    imageBuilder: (context, imageProvider) => SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.width * 0.3,
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundImage: imageProvider,
-                      ),
-                    ),
+                    placeholderAsset: 'assets/images/person.png',
+                    sizeFactor: 0.2,
                   ),
                 ),
                 Container(
                   alignment: Alignment.bottomRight,
                   margin: const EdgeInsets.only(right: 20.0),
-                  height: MediaQuery.of(context).orientation == Orientation.portrait
-                      ? MediaQuery.of(context).size.width * 0.30
-                      : MediaQuery.of(context).size.width * 0.37,
-                  width: MediaQuery.of(context).orientation == Orientation.portrait ? null : MediaQuery.of(context).size.width * 0.33,
+                  height:
+                      MediaQuery.of(context).orientation == Orientation.portrait
+                          ? MediaQuery.of(context).size.width * 0.30
+                          : MediaQuery.of(context).size.width * 0.37,
+                  width:
+                      MediaQuery.of(context).orientation == Orientation.portrait
+                          ? null
+                          : MediaQuery.of(context).size.width * 0.33,
                   child: CircleAvatar(
                     radius: 25,
                     backgroundColor: Colors.white,
                     child: TextButton(
                       style: flatButtonStyle,
                       onPressed: () {
-                        speaker.urlTwitter != null ? launchUrl(Uri.parse(speaker.urlTwitter as String)) : null;
+                        speaker.urlTwitter != null
+                            ? launchUrl(Uri.parse(speaker.urlTwitter as String))
+                            : null;
                       },
                       child: const Icon(
                         FontAwesomeIcons.twitter,
