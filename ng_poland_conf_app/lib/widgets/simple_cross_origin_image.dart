@@ -5,7 +5,7 @@
 // Reverting to the simpler custom widget structure for minimal styling:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:html' as html;
+import 'package:ng_poland_conf_app/image_helper.dart';
 
 class SimpleCrossOriginImage extends StatelessWidget {
   final String imageUrl;
@@ -40,14 +40,8 @@ class SimpleCrossOriginImage extends StatelessWidget {
       // --- Loading and CORS Fix ---
       loadingBuilder: (context, child, loadingProgress) {
         if (loadingProgress == null) {
-          // --- CRUCIAL WEB FIX ---
           if (kIsWeb) {
-            // After the image loads, apply the crossOrigin attribute
-            html.document
-                .querySelectorAll('img[src="$imageUrl"]')
-                .forEach((element) {
-              (element as html.ImageElement).crossOrigin = 'anonymous';
-            });
+            applyCrossOriginFix(imageUrl);
           }
           return child;
         }

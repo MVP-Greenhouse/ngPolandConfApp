@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:html' as html;
+import 'package:ng_poland_conf_app/image_helper.dart';
 
 class FixedSizeCrossOriginImage extends StatelessWidget {
   final String imageUrl;
@@ -34,13 +34,8 @@ class FixedSizeCrossOriginImage extends StatelessWidget {
         // --- Loading and CORS Fix ---
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
-            // CRUCIAL WEB FIX
             if (kIsWeb) {
-              html.document
-                  .querySelectorAll('img[src="$imageUrl"]')
-                  .forEach((element) {
-                (element as html.ImageElement).crossOrigin = 'anonymous';
-              });
+              applyCrossOriginFix(imageUrl);
             }
 
             // Replicates the imageBuilder circular styling

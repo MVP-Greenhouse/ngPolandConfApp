@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:html' as html;
+import 'package:ng_poland_conf_app/image_helper.dart';
 
 class CrossOriginImage extends StatelessWidget {
   final String imageUrl;
@@ -36,14 +36,8 @@ class CrossOriginImage extends StatelessWidget {
         // --- Loading and CORS Fix ---
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
-            // --- CRUCIAL WEB FIX ---
             if (kIsWeb) {
-              // After the image loads, apply the crossOrigin attribute
-              html.document
-                  .querySelectorAll('img[src="$imageUrl"]')
-                  .forEach((element) {
-                (element as html.ImageElement).crossOrigin = 'anonymous';
-              });
+              applyCrossOriginFix(imageUrl);
             }
 
             // Replicates the imageBuilder logic using CircleAvatar
