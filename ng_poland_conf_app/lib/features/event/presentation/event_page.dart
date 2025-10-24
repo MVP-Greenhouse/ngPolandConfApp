@@ -10,9 +10,8 @@ import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
-import 'package:rive/rive.dart' as rive;
 import 'package:url_launcher/url_launcher.dart';
-
+// import 'package:rive/rive.dart';
 import '../../../widgets/cross_origin_image.dart';
 import '../../settings/presentation/connection_status.dart';
 
@@ -35,13 +34,13 @@ class EventPage extends StatefulWidget {
 
 class _EventPageState extends State<EventPage> with ConnectivityMixin {
   late final EventCubit _eventCubit;
-  late final rive.RiveFile ratingFile;
+  // late final File? ratingFile;
 
   @override
   void initState() {
     rootBundle.load(EventRating.ratingFilePath).then(
       (data) async {
-        ratingFile = rive.RiveFile.import(data);
+        //   ratingFile = rive.RiveFile.import(data); // TODO: fix Rive 0.14 migration
       },
     );
     _eventCubit = getIt.get<EventCubit>()

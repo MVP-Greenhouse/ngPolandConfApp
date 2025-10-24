@@ -1,7 +1,7 @@
 name: ng_poland_conf_app
 description: NG an JS Poland Conference official app.
 publish_to: "none"
-version: 1.0.8+10
+version: 1.2.0+13
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -37,7 +37,7 @@ dependencies:
   # UI
   font_awesome_flutter: 10.8.0
   cached_network_image: 3.4.1
-  rive: 0.13.20
+  # rive: 0.14.0-dev.12 // TODO: fix Rive 0.14 migration
   webview_flutter: 4.9.0
   connectivity_plus: 6.1.4
 
