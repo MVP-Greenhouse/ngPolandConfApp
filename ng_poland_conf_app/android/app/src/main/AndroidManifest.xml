@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="ng_poland_conf_app"
+        android:label="ngPolandConfApp"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
