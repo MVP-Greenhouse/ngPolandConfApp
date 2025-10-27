@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/image_helper.dart';
@@ -16,8 +19,26 @@ class FixedSizeCrossOriginImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      return CachedNetworkImage(
+        imageUrl: imageUrl,
+        progressIndicatorBuilder: (_, __, ___) => Image.asset(placeholderAsset),
+        errorWidget: (_, __, ___) {
+          return Image.asset(placeholderAsset);
+        },
+        imageBuilder: (_, imageProvider) => Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              image: imageProvider,
+            ),
+          ),
+        ),
+      );
+    }
     final imageProvider = NetworkImage(imageUrl);
-
     return SizedBox(
       width: size,
       height: size,
