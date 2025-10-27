@@ -34,7 +34,11 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
         return CustomScaffold(
           appBar: AppBar(
             title: Text(
-              'NG & JS Poland',
+              _getTitleForConference(
+                state.mapOrNull(
+                  loaded: (value) => value.selectedConference.confId,
+                ),
+              ),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
             ),
             actions: [
@@ -154,6 +158,19 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
         ),
       ),
     );
+  }
+
+  String _getTitleForConference(String? confId) {
+    final defaultTitle = 'NG & JS Poland';
+    try {
+      if (confId == null || confId.isEmpty) return defaultTitle;
+      final int confIdInt = int.parse(confId);
+      if (confIdInt < 2025) return defaultTitle;
+
+      return 'NG & JS & AI Poland';
+    } catch (_) {
+      return defaultTitle;
+    }
   }
 
   Widget _buildTimer() {

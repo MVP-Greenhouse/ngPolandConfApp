@@ -3,6 +3,9 @@
 // that accepts width and height, or just a single size parameter for simplicity.
 
 // Reverting to the simpler custom widget structure for minimal styling:
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/image_helper.dart';
@@ -23,8 +26,14 @@ class SimpleCrossOriginImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isAndroid || Platform.isIOS) {
+      return CachedNetworkImage(
+        progressIndicatorBuilder: (_, __, ___) => Image.asset(placeholderAsset),
+        width: width,
+        imageUrl: imageUrl,
+      );
+    }
     final imageProvider = NetworkImage(imageUrl);
-
     return Image(
       image: imageProvider,
       width: width,
@@ -33,8 +42,7 @@ class SimpleCrossOriginImage extends StatelessWidget {
 
       // --- Error Handling ---
       errorBuilder: (context, error, stackTrace) {
-        return Image.asset(placeholderAsset,
-            width: width, height: height ?? width);
+        return Image.asset(placeholderAsset, width: width, height: height ?? width);
       },
 
       // --- Loading and CORS Fix ---
