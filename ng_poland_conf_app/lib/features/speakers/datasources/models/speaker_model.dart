@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
 part 'speaker_model.freezed.dart';
@@ -7,7 +7,7 @@ part 'speaker_model.g.dart';
 
 @freezed
 @HiveType(typeId: 8)
-class SpeakerModel with _$SpeakerModel {
+abstract class SpeakerModel with _$SpeakerModel {
   const SpeakerModel._();
 
   const factory SpeakerModel({

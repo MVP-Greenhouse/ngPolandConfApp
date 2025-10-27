@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_ce_flutter/adapters.dart';
 import 'package:ng_poland_conf_app/features/workshops/domains/entities/workshop.dart';
 
 import '../../../speakers/datasources/models/speaker_model.dart';
@@ -9,7 +9,7 @@ part 'workshop_model.g.dart';
 
 @freezed
 @HiveType(typeId: 9)
-class WorkshopModel with _$WorkshopModel {
+abstract class WorkshopModel with _$WorkshopModel {
   const WorkshopModel._();
 
   const factory WorkshopModel({
@@ -67,13 +67,13 @@ class WorkshopModel with _$WorkshopModel {
   }
 
   Workshop toEntity() => Workshop(
-        title: title,
-        confId: confId,
-        description: description ?? '',
-        startDate: startDate,
-        endDate: endDate,
-        locationDescription: locationDescription ?? '',
-        pricePln: pricePln,
-        speaker: speaker.toEntity(),
-      );
+    title: title,
+    confId: confId,
+    description: description ?? '',
+    startDate: startDate,
+    endDate: endDate,
+    locationDescription: locationDescription ?? '',
+    pricePln: pricePln,
+    speaker: speaker.toEntity(),
+  );
 }

@@ -5,7 +5,7 @@ import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.da
 part 'event_item.freezed.dart';
 
 @freezed
-class EventItem with _$EventItem {
+abstract class EventItem with _$EventItem {
   const EventItem._();
 
   const factory EventItem({

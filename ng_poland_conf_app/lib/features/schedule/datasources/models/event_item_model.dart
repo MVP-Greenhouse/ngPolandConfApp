@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/speakers/datasources/models/speaker_model.dart';
 
@@ -8,7 +8,7 @@ part 'event_item_model.g.dart';
 
 @freezed
 @HiveType(typeId: 7)
-class EventItemModel with _$EventItemModel {
+abstract class EventItemModel with _$EventItemModel {
   const EventItemModel._();
 
   const factory EventItemModel({
@@ -72,15 +72,15 @@ class EventItemModel with _$EventItemModel {
   }
 
   EventItem toEntity() => EventItem(
-        id: id,
-        title: title,
-        confId: confId,
-        type: type,
-        category: category,
-        shortDescription: shortDescription ?? '',
-        description: description ?? '',
-        startDate: DateTime.tryParse(startDate),
-        endDate: DateTime.tryParse(endDate),
-        speaker: speaker?.toEntity(),
-      );
+    id: id,
+    title: title,
+    confId: confId,
+    type: type,
+    category: category,
+    shortDescription: shortDescription ?? '',
+    description: description ?? '',
+    startDate: DateTime.tryParse(startDate),
+    endDate: DateTime.tryParse(endDate),
+    speaker: speaker?.toEntity(),
+  );
 }

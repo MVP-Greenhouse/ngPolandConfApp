@@ -8,7 +8,7 @@ part of 'ngGirls_model.dart';
 
 class NgGirlsModelAdapter extends TypeAdapter<NgGirlsModel> {
   @override
-  final int typeId = 5;
+  final typeId = 5;
 
   @override
   NgGirlsModel read(BinaryReader reader) {
@@ -56,8 +56,8 @@ class NgGirlsModelAdapter extends TypeAdapter<NgGirlsModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$NgGirlsModelImpl _$$NgGirlsModelImplFromJson(Map<String, dynamic> json) =>
-    _$NgGirlsModelImpl(
+_NgGirlsModel _$NgGirlsModelFromJson(Map<String, dynamic> json) =>
+    _NgGirlsModel(
       myId: json['myId'] as String,
       title: json['title'] as String?,
       text: json['text'] as String?,
@@ -67,7 +67,7 @@ _$NgGirlsModelImpl _$$NgGirlsModelImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['lastUpdate'] as String),
     );
 
-Map<String, dynamic> _$$NgGirlsModelImplToJson(_$NgGirlsModelImpl instance) =>
+Map<String, dynamic> _$NgGirlsModelToJson(_NgGirlsModel instance) =>
     <String, dynamic>{
       'myId': instance.myId,
       'title': instance.title,

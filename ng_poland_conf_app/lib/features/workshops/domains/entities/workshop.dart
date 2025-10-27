@@ -4,7 +4,7 @@ import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.da
 part 'workshop.freezed.dart';
 
 @freezed
-class Workshop with _$Workshop {
+abstract class Workshop with _$Workshop {
   const Workshop._();
 
   const factory Workshop({

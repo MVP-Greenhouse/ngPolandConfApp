@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 // **************************************************************************
 // InjectableConfigGenerator
@@ -107,152 +108,207 @@ import 'features/workshops/presentation/cubit/workshop_cubit.dart' as _i236;
 import 'routing/routing.dart' as _i883;
 
 extension GetItInjectableX on _i174.GetIt {
-// initializes the registration of main-scope dependencies inside of GetIt
+  // initializes the registration of main-scope dependencies inside of GetIt
   Future<_i174.GetIt> init({
     String? environment,
     _i526.EnvironmentFilter? environmentFilter,
   }) async {
-    final gh = _i526.GetItHelper(
-      this,
-      environment,
-      environmentFilter,
-    );
+    final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
-    gh.singleton<_i399.ThemeModeCubit>(() => _i399.ThemeModeCubit());
-    gh.singleton<_i933.ConferencesCubit>(() => _i933.ConferencesCubit());
     await gh.singletonAsync<_i242.RawConfig>(
       () => registerModule.config(),
       preResolve: true,
     );
+    gh.singleton<_i933.ConferencesCubit>(() => _i933.ConferencesCubit());
+    gh.singleton<_i399.ThemeModeCubit>(() => _i399.ThemeModeCubit());
     gh.singleton<_i883.Routing>(() => _i883.Routing());
     gh.singleton<_i234.RateEventLocalDataSource>(
-        () => _i234.RateEventLocalDataSourceImpl());
+      () => _i234.RateEventLocalDataSourceImpl(),
+    );
     gh.singleton<_i924.ConferencesLocalDataSource>(
-        () => _i924.ConferencesLocalDataSourceImpl());
+      () => _i924.ConferencesLocalDataSourceImpl(),
+    );
     gh.singleton<_i1041.InfoLocalDataSource>(
-        () => _i1041.InfoLocalDataSourceImpl());
+      () => _i1041.InfoLocalDataSourceImpl(),
+    );
     gh.singleton<_i71.SpeakersLocalDataSource>(
-        () => _i71.SpeakersLocalDataSourceImpl());
+      () => _i71.SpeakersLocalDataSourceImpl(),
+    );
     gh.singleton<_i38.AuthenticationRepository>(
-        () => const _i113.AuthenticationRepositoryImpl());
+      () => const _i113.AuthenticationRepositoryImpl(),
+    );
     gh.singleton<_i429.RateEventRemoteDataSource>(
-        () => _i429.RateEventRemoteDataSourceImpl());
+      () => _i429.RateEventRemoteDataSourceImpl(),
+    );
     gh.singleton<_i214.NgGirlsLocalDataSource>(
-        () => _i214.NgGirlsLocalDataSourceImpl());
+      () => _i214.NgGirlsLocalDataSourceImpl(),
+    );
     gh.singleton<_i636.WorkshopsLocalDataSource>(
-        () => _i636.WorkshopsLocalDataSourceImpl());
+      () => _i636.WorkshopsLocalDataSourceImpl(),
+    );
     gh.singleton<_i397.ThemeModeLocalDataSource>(
-        () => _i397.ThemeModeLocalDataSourceImpl());
+      () => _i397.ThemeModeLocalDataSourceImpl(),
+    );
     gh.singleton<_i878.ScheduleLocalDataSource>(
-        () => _i878.ScheduleLocalDataSourceImpl());
+      () => _i878.ScheduleLocalDataSourceImpl(),
+    );
     gh.singleton<_i297.AppConfig>(() => _i297.AppConfig(gh<_i242.RawConfig>()));
-    gh.singleton<_i563.RateEventRepository>(() => _i608.RateEventRepositoryImpl(
-          gh<_i429.RateEventRemoteDataSource>(),
-          gh<_i234.RateEventLocalDataSource>(),
-        ));
-    gh.factory<_i631.SignInGoogleUseCase>(
-        () => _i631.SignInGoogleUseCase(gh<_i38.AuthenticationRepository>()));
+    gh.singleton<_i563.RateEventRepository>(
+      () => _i608.RateEventRepositoryImpl(
+        gh<_i429.RateEventRemoteDataSource>(),
+        gh<_i234.RateEventLocalDataSource>(),
+      ),
+    );
     gh.factory<_i241.SignInAppleUseCase>(
-        () => _i241.SignInAppleUseCase(gh<_i38.AuthenticationRepository>()));
+      () => _i241.SignInAppleUseCase(gh<_i38.AuthenticationRepository>()),
+    );
+    gh.factory<_i631.SignInGoogleUseCase>(
+      () => _i631.SignInGoogleUseCase(gh<_i38.AuthenticationRepository>()),
+    );
     gh.singleton<_i361.Dio>(() => registerModule.dio(gh<_i297.AppConfig>()));
-    gh.factory<_i48.AuthenticationCubit>(() => _i48.AuthenticationCubit(
-          gh<_i241.SignInAppleUseCase>(),
-          gh<_i631.SignInGoogleUseCase>(),
-        ));
-    gh.factory<_i589.RateEvent>(
-        () => _i589.RateEvent(gh<_i563.RateEventRepository>()));
+    gh.factory<_i48.AuthenticationCubit>(
+      () => _i48.AuthenticationCubit(
+        gh<_i241.SignInAppleUseCase>(),
+        gh<_i631.SignInGoogleUseCase>(),
+      ),
+    );
     gh.factory<_i473.GetRateForEvent>(
-        () => _i473.GetRateForEvent(gh<_i563.RateEventRepository>()));
+      () => _i473.GetRateForEvent(gh<_i563.RateEventRepository>()),
+    );
+    gh.factory<_i589.RateEvent>(
+      () => _i589.RateEvent(gh<_i563.RateEventRepository>()),
+    );
     gh.factory<_i800.ConferencesRemoteDataSource>(
-        () => _i800.ConferencesRemoteDataSource(gh<_i361.Dio>()));
-    gh.factory<_i545.WorkshopsRemoteDataSource>(
-        () => _i545.WorkshopsRemoteDataSource(gh<_i361.Dio>()));
-    gh.factory<_i221.ScheduleRemoteDataSource>(
-        () => _i221.ScheduleRemoteDataSource(gh<_i361.Dio>()));
-    gh.factory<_i332.SpeakersRemoteDataSource>(
-        () => _i332.SpeakersRemoteDataSource(gh<_i361.Dio>()));
+      () => _i800.ConferencesRemoteDataSource(gh<_i361.Dio>()),
+    );
     gh.factory<_i369.InfoRemoteDataSource>(
-        () => _i369.InfoRemoteDataSource(gh<_i361.Dio>()));
+      () => _i369.InfoRemoteDataSource(gh<_i361.Dio>()),
+    );
     gh.factory<_i818.NgGirlsRemoteDataSource>(
-        () => _i818.NgGirlsRemoteDataSource(gh<_i361.Dio>()));
-    gh.singleton<_i343.WorkshopsRepository>(() => _i704.WorkshopsRepositoryImpl(
-          gh<_i545.WorkshopsRemoteDataSource>(),
-          gh<_i636.WorkshopsLocalDataSource>(),
-        ));
+      () => _i818.NgGirlsRemoteDataSource(gh<_i361.Dio>()),
+    );
+    gh.factory<_i221.ScheduleRemoteDataSource>(
+      () => _i221.ScheduleRemoteDataSource(gh<_i361.Dio>()),
+    );
+    gh.factory<_i332.SpeakersRemoteDataSource>(
+      () => _i332.SpeakersRemoteDataSource(gh<_i361.Dio>()),
+    );
+    gh.factory<_i545.WorkshopsRemoteDataSource>(
+      () => _i545.WorkshopsRemoteDataSource(gh<_i361.Dio>()),
+    );
+    gh.singleton<_i343.WorkshopsRepository>(
+      () => _i704.WorkshopsRepositoryImpl(
+        gh<_i545.WorkshopsRemoteDataSource>(),
+        gh<_i636.WorkshopsLocalDataSource>(),
+      ),
+    );
     gh.singleton<_i905.ThemeModeRepository>(
-        () => _i877.ThemeModeImpl(gh<_i397.ThemeModeLocalDataSource>()));
-    gh.factory<_i730.EventRatingBloc>(() => _i730.EventRatingBloc(
-          gh<_i933.ConferencesCubit>(),
-          gh<_i473.GetRateForEvent>(),
-          gh<_i589.RateEvent>(),
-          gh<String>(),
-          gh<String>(),
-        ));
+      () => _i877.ThemeModeImpl(gh<_i397.ThemeModeLocalDataSource>()),
+    );
+    gh.factory<_i730.EventRatingBloc>(
+      () => _i730.EventRatingBloc(
+        gh<_i933.ConferencesCubit>(),
+        gh<_i473.GetRateForEvent>(),
+        gh<_i589.RateEvent>(),
+        gh<String>(),
+        gh<String>(),
+      ),
+    );
     gh.singleton<_i958.ConferencesRepository>(
-        () => _i912.ConferencesRepositoryImpl(
-              gh<_i800.ConferencesRemoteDataSource>(),
-              gh<_i924.ConferencesLocalDataSource>(),
-            ));
-    gh.factory<_i184.UpdateThemeMode>(
-        () => _i184.UpdateThemeMode(gh<_i905.ThemeModeRepository>()));
+      () => _i912.ConferencesRepositoryImpl(
+        gh<_i800.ConferencesRemoteDataSource>(),
+        gh<_i924.ConferencesLocalDataSource>(),
+      ),
+    );
     gh.factory<_i189.GetThemeMode>(
-        () => _i189.GetThemeMode(gh<_i905.ThemeModeRepository>()));
-    gh.singleton<_i458.ScheduleRepository>(() => _i732.ScheduleRepositoryImpl(
-          gh<_i221.ScheduleRemoteDataSource>(),
-          gh<_i878.ScheduleLocalDataSource>(),
-        ));
-    gh.factory<_i797.GetAllEventsForConference>(
-        () => _i797.GetAllEventsForConference(gh<_i458.ScheduleRepository>()));
+      () => _i189.GetThemeMode(gh<_i905.ThemeModeRepository>()),
+    );
+    gh.factory<_i184.UpdateThemeMode>(
+      () => _i184.UpdateThemeMode(gh<_i905.ThemeModeRepository>()),
+    );
+    gh.singleton<_i458.ScheduleRepository>(
+      () => _i732.ScheduleRepositoryImpl(
+        gh<_i221.ScheduleRemoteDataSource>(),
+        gh<_i878.ScheduleLocalDataSource>(),
+      ),
+    );
     gh.factory<_i231.GetEvent>(
-        () => _i231.GetEvent(gh<_i458.ScheduleRepository>()));
-    gh.singleton<_i600.InfoRepository>(() => _i123.InfoRepositoryImpl(
-          gh<_i369.InfoRemoteDataSource>(),
-          gh<_i1041.InfoLocalDataSource>(),
-        ));
-    gh.singleton<_i33.NgGirlsRepository>(() => _i472.NgGirlsImpl(
-          gh<_i818.NgGirlsRemoteDataSource>(),
-          gh<_i214.NgGirlsLocalDataSource>(),
-        ));
+      () => _i231.GetEvent(gh<_i458.ScheduleRepository>()),
+    );
+    gh.factory<_i797.GetAllEventsForConference>(
+      () => _i797.GetAllEventsForConference(gh<_i458.ScheduleRepository>()),
+    );
+    gh.singleton<_i600.InfoRepository>(
+      () => _i123.InfoRepositoryImpl(
+        gh<_i369.InfoRemoteDataSource>(),
+        gh<_i1041.InfoLocalDataSource>(),
+      ),
+    );
+    gh.singleton<_i33.NgGirlsRepository>(
+      () => _i472.NgGirlsImpl(
+        gh<_i818.NgGirlsRemoteDataSource>(),
+        gh<_i214.NgGirlsLocalDataSource>(),
+      ),
+    );
     gh.factory<_i343.GetWorkshopsForConference>(
-        () => _i343.GetWorkshopsForConference(gh<_i343.WorkshopsRepository>()));
+      () => _i343.GetWorkshopsForConference(gh<_i343.WorkshopsRepository>()),
+    );
     gh.factory<_i359.GetAllConferences>(
-        () => _i359.GetAllConferences(gh<_i958.ConferencesRepository>()));
-    gh.singleton<_i1005.SpeakersRepository>(() => _i927.SpeakersRepositoryImpl(
-          gh<_i332.SpeakersRemoteDataSource>(),
-          gh<_i71.SpeakersLocalDataSource>(),
-        ));
-    gh.factory<_i224.EventCubit>(() => _i224.EventCubit(
-          conferencesCubit: gh<_i933.ConferencesCubit>(),
-          getEvent: gh<_i231.GetEvent>(),
-        ));
-    gh.factory<_i236.WorkshopCubit>(() => _i236.WorkshopCubit(
-          conferencesCubit: gh<_i933.ConferencesCubit>(),
-          getWorkshopsForConference: gh<_i343.GetWorkshopsForConference>(),
-        ));
+      () => _i359.GetAllConferences(gh<_i958.ConferencesRepository>()),
+    );
+    gh.singleton<_i1005.SpeakersRepository>(
+      () => _i927.SpeakersRepositoryImpl(
+        gh<_i332.SpeakersRemoteDataSource>(),
+        gh<_i71.SpeakersLocalDataSource>(),
+      ),
+    );
+    gh.factory<_i224.EventCubit>(
+      () => _i224.EventCubit(
+        conferencesCubit: gh<_i933.ConferencesCubit>(),
+        getEvent: gh<_i231.GetEvent>(),
+      ),
+    );
+    gh.factory<_i236.WorkshopCubit>(
+      () => _i236.WorkshopCubit(
+        conferencesCubit: gh<_i933.ConferencesCubit>(),
+        getWorkshopsForConference: gh<_i343.GetWorkshopsForConference>(),
+      ),
+    );
     gh.factory<_i816.GetAllInfoItemsForConference>(
-        () => _i816.GetAllInfoItemsForConference(gh<_i600.InfoRepository>()));
-    gh.factory<_i800.InfoCubit>(() => _i800.InfoCubit(
-          conferencesCubit: gh<_i933.ConferencesCubit>(),
-          getAllSpeakerGetAllInfoItemsForConference:
-              gh<_i816.GetAllInfoItemsForConference>(),
-        ));
-    gh.factory<_i211.ScheduleCubit>(() => _i211.ScheduleCubit(
-          conferencesCubit: gh<_i933.ConferencesCubit>(),
-          getAllEventsForConference: gh<_i797.GetAllEventsForConference>(),
-        ));
-    gh.factory<_i350.GetAllSpeakersForConference>(() =>
-        _i350.GetAllSpeakersForConference(gh<_i1005.SpeakersRepository>()));
+      () => _i816.GetAllInfoItemsForConference(gh<_i600.InfoRepository>()),
+    );
+    gh.factory<_i800.InfoCubit>(
+      () => _i800.InfoCubit(
+        conferencesCubit: gh<_i933.ConferencesCubit>(),
+        getAllSpeakerGetAllInfoItemsForConference:
+            gh<_i816.GetAllInfoItemsForConference>(),
+      ),
+    );
+    gh.factory<_i211.ScheduleCubit>(
+      () => _i211.ScheduleCubit(
+        conferencesCubit: gh<_i933.ConferencesCubit>(),
+        getAllEventsForConference: gh<_i797.GetAllEventsForConference>(),
+      ),
+    );
+    gh.factory<_i350.GetAllSpeakersForConference>(
+      () => _i350.GetAllSpeakersForConference(gh<_i1005.SpeakersRepository>()),
+    );
     gh.factory<_i642.GetNgGirlsForConference>(
-        () => _i642.GetNgGirlsForConference(gh<_i33.NgGirlsRepository>()));
-    gh.factory<_i685.NgGirlsCubit>(() => _i685.NgGirlsCubit(
-          conferencesCubit: gh<_i933.ConferencesCubit>(),
-          getNgGirlsForConference: gh<_i642.GetNgGirlsForConference>(),
-        ));
-    gh.factory<_i181.SpeakersCubit>(() => _i181.SpeakersCubit(
-          conferencesCubit: gh<_i933.ConferencesCubit>(),
-          getAllSpeakerGetAllSpeakersForConference:
-              gh<_i350.GetAllSpeakersForConference>(),
-        ));
+      () => _i642.GetNgGirlsForConference(gh<_i33.NgGirlsRepository>()),
+    );
+    gh.factory<_i685.NgGirlsCubit>(
+      () => _i685.NgGirlsCubit(
+        conferencesCubit: gh<_i933.ConferencesCubit>(),
+        getNgGirlsForConference: gh<_i642.GetNgGirlsForConference>(),
+      ),
+    );
+    gh.factory<_i181.SpeakersCubit>(
+      () => _i181.SpeakersCubit(
+        conferencesCubit: gh<_i933.ConferencesCubit>(),
+        getAllSpeakerGetAllSpeakersForConference:
+            gh<_i350.GetAllSpeakersForConference>(),
+      ),
+    );
     return this;
   }
 }

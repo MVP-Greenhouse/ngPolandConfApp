@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'ngGirls.freezed.dart';
 
 @freezed
-class NgGirls with _$NgGirls {
+abstract class NgGirls with _$NgGirls {
   const NgGirls._();
 
   const factory NgGirls({

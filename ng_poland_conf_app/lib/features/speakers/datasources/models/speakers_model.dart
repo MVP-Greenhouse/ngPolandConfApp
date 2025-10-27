@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:ng_poland_conf_app/features/speakers/datasources/models/speaker_model.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
@@ -8,10 +8,14 @@ part 'speakers_model.g.dart';
 
 @freezed
 @HiveType(typeId: 11)
-class SpeakersModel with _$SpeakersModel {
+abstract class SpeakersModel with _$SpeakersModel {
   const SpeakersModel._();
 
-  const factory SpeakersModel({@HiveField(0) List<SpeakerModel>? items, @HiveField(1) DateTime? lastUpdate, @HiveField(2) confId}) = _SpeakersModel;
+  const factory SpeakersModel({
+    @HiveField(0) List<SpeakerModel>? items,
+    @HiveField(1) DateTime? lastUpdate,
+    @HiveField(2) confId,
+  }) = _SpeakersModel;
 
   factory SpeakersModel.fromJson(Map<String, dynamic> json) {
     final List<SpeakerModel> speakers = [];
@@ -48,10 +52,5 @@ class SpeakersModel with _$SpeakersModel {
   }
 
   List<Speaker> toEntity() =>
-      items
-          ?.map(
-            (speakerModel) => speakerModel.toEntity(),
-          )
-          .toList() ??
-      [];
+      items?.map((speakerModel) => speakerModel.toEntity()).toList() ?? [];
 }
