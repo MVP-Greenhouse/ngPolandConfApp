@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,375 +9,296 @@ part of 'speaker.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$Speaker {
-  String? get id => throw _privateConstructorUsedError;
-  String? get name => throw _privateConstructorUsedError;
-  String? get role => throw _privateConstructorUsedError;
-  String? get bio => throw _privateConstructorUsedError;
-  String? get photoFileUrl => throw _privateConstructorUsedError;
-  String? get photoTitle => throw _privateConstructorUsedError;
-  String? get photoDescription => throw _privateConstructorUsedError;
-  String? get email => throw _privateConstructorUsedError;
-  String? get urlGithub => throw _privateConstructorUsedError;
-  String? get urlLinkedIn => throw _privateConstructorUsedError;
-  String? get urlTwitter => throw _privateConstructorUsedError;
-  String? get urlWww => throw _privateConstructorUsedError;
 
-  /// Create a copy of Speaker
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $SpeakerCopyWith<Speaker> get copyWith => throw _privateConstructorUsedError;
+ String? get id; String? get name; String? get role; String? get bio; String? get photoFileUrl; String? get photoTitle; String? get photoDescription; String? get email; String? get urlGithub; String? get urlLinkedIn; String? get urlTwitter; String? get urlWww;
+/// Create a copy of Speaker
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$SpeakerCopyWith<Speaker> get copyWith => _$SpeakerCopyWithImpl<Speaker>(this as Speaker, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Speaker&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.role, role) || other.role == role)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.photoFileUrl, photoFileUrl) || other.photoFileUrl == photoFileUrl)&&(identical(other.photoTitle, photoTitle) || other.photoTitle == photoTitle)&&(identical(other.photoDescription, photoDescription) || other.photoDescription == photoDescription)&&(identical(other.email, email) || other.email == email)&&(identical(other.urlGithub, urlGithub) || other.urlGithub == urlGithub)&&(identical(other.urlLinkedIn, urlLinkedIn) || other.urlLinkedIn == urlLinkedIn)&&(identical(other.urlTwitter, urlTwitter) || other.urlTwitter == urlTwitter)&&(identical(other.urlWww, urlWww) || other.urlWww == urlWww));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,id,name,role,bio,photoFileUrl,photoTitle,photoDescription,email,urlGithub,urlLinkedIn,urlTwitter,urlWww);
+
+@override
+String toString() {
+  return 'Speaker(id: $id, name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $SpeakerCopyWith<$Res> {
-  factory $SpeakerCopyWith(Speaker value, $Res Function(Speaker) then) =
-      _$SpeakerCopyWithImpl<$Res, Speaker>;
-  @useResult
-  $Res call(
-      {String? id,
-      String? name,
-      String? role,
-      String? bio,
-      String? photoFileUrl,
-      String? photoTitle,
-      String? photoDescription,
-      String? email,
-      String? urlGithub,
-      String? urlLinkedIn,
-      String? urlTwitter,
-      String? urlWww});
-}
+abstract mixin class $SpeakerCopyWith<$Res>  {
+  factory $SpeakerCopyWith(Speaker value, $Res Function(Speaker) _then) = _$SpeakerCopyWithImpl;
+@useResult
+$Res call({
+ String? id, String? name, String? role, String? bio, String? photoFileUrl, String? photoTitle, String? photoDescription, String? email, String? urlGithub, String? urlLinkedIn, String? urlTwitter, String? urlWww
+});
 
+
+
+
+}
 /// @nodoc
-class _$SpeakerCopyWithImpl<$Res, $Val extends Speaker>
+class _$SpeakerCopyWithImpl<$Res>
     implements $SpeakerCopyWith<$Res> {
-  _$SpeakerCopyWithImpl(this._value, this._then);
+  _$SpeakerCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Speaker _self;
+  final $Res Function(Speaker) _then;
 
-  /// Create a copy of Speaker
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? name = freezed,
-    Object? role = freezed,
-    Object? bio = freezed,
-    Object? photoFileUrl = freezed,
-    Object? photoTitle = freezed,
-    Object? photoDescription = freezed,
-    Object? email = freezed,
-    Object? urlGithub = freezed,
-    Object? urlLinkedIn = freezed,
-    Object? urlTwitter = freezed,
-    Object? urlWww = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      role: freezed == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as String?,
-      bio: freezed == bio
-          ? _value.bio
-          : bio // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoFileUrl: freezed == photoFileUrl
-          ? _value.photoFileUrl
-          : photoFileUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoTitle: freezed == photoTitle
-          ? _value.photoTitle
-          : photoTitle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoDescription: freezed == photoDescription
-          ? _value.photoDescription
-          : photoDescription // ignore: cast_nullable_to_non_nullable
-              as String?,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      urlGithub: freezed == urlGithub
-          ? _value.urlGithub
-          : urlGithub // ignore: cast_nullable_to_non_nullable
-              as String?,
-      urlLinkedIn: freezed == urlLinkedIn
-          ? _value.urlLinkedIn
-          : urlLinkedIn // ignore: cast_nullable_to_non_nullable
-              as String?,
-      urlTwitter: freezed == urlTwitter
-          ? _value.urlTwitter
-          : urlTwitter // ignore: cast_nullable_to_non_nullable
-              as String?,
-      urlWww: freezed == urlWww
-          ? _value.urlWww
-          : urlWww // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
-  }
+/// Create a copy of Speaker
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? role = freezed,Object? bio = freezed,Object? photoFileUrl = freezed,Object? photoTitle = freezed,Object? photoDescription = freezed,Object? email = freezed,Object? urlGithub = freezed,Object? urlLinkedIn = freezed,Object? urlTwitter = freezed,Object? urlWww = freezed,}) {
+  return _then(_self.copyWith(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String?,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,photoFileUrl: freezed == photoFileUrl ? _self.photoFileUrl : photoFileUrl // ignore: cast_nullable_to_non_nullable
+as String?,photoTitle: freezed == photoTitle ? _self.photoTitle : photoTitle // ignore: cast_nullable_to_non_nullable
+as String?,photoDescription: freezed == photoDescription ? _self.photoDescription : photoDescription // ignore: cast_nullable_to_non_nullable
+as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,urlGithub: freezed == urlGithub ? _self.urlGithub : urlGithub // ignore: cast_nullable_to_non_nullable
+as String?,urlLinkedIn: freezed == urlLinkedIn ? _self.urlLinkedIn : urlLinkedIn // ignore: cast_nullable_to_non_nullable
+as String?,urlTwitter: freezed == urlTwitter ? _self.urlTwitter : urlTwitter // ignore: cast_nullable_to_non_nullable
+as String?,urlWww: freezed == urlWww ? _self.urlWww : urlWww // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
 }
 
-/// @nodoc
-abstract class _$$SpeakerImplCopyWith<$Res> implements $SpeakerCopyWith<$Res> {
-  factory _$$SpeakerImplCopyWith(
-          _$SpeakerImpl value, $Res Function(_$SpeakerImpl) then) =
-      __$$SpeakerImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String? id,
-      String? name,
-      String? role,
-      String? bio,
-      String? photoFileUrl,
-      String? photoTitle,
-      String? photoDescription,
-      String? email,
-      String? urlGithub,
-      String? urlLinkedIn,
-      String? urlTwitter,
-      String? urlWww});
 }
 
-/// @nodoc
-class __$$SpeakerImplCopyWithImpl<$Res>
-    extends _$SpeakerCopyWithImpl<$Res, _$SpeakerImpl>
-    implements _$$SpeakerImplCopyWith<$Res> {
-  __$$SpeakerImplCopyWithImpl(
-      _$SpeakerImpl _value, $Res Function(_$SpeakerImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of Speaker
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? name = freezed,
-    Object? role = freezed,
-    Object? bio = freezed,
-    Object? photoFileUrl = freezed,
-    Object? photoTitle = freezed,
-    Object? photoDescription = freezed,
-    Object? email = freezed,
-    Object? urlGithub = freezed,
-    Object? urlLinkedIn = freezed,
-    Object? urlTwitter = freezed,
-    Object? urlWww = freezed,
-  }) {
-    return _then(_$SpeakerImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String?,
-      role: freezed == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as String?,
-      bio: freezed == bio
-          ? _value.bio
-          : bio // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoFileUrl: freezed == photoFileUrl
-          ? _value.photoFileUrl
-          : photoFileUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoTitle: freezed == photoTitle
-          ? _value.photoTitle
-          : photoTitle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      photoDescription: freezed == photoDescription
-          ? _value.photoDescription
-          : photoDescription // ignore: cast_nullable_to_non_nullable
-              as String?,
-      email: freezed == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String?,
-      urlGithub: freezed == urlGithub
-          ? _value.urlGithub
-          : urlGithub // ignore: cast_nullable_to_non_nullable
-              as String?,
-      urlLinkedIn: freezed == urlLinkedIn
-          ? _value.urlLinkedIn
-          : urlLinkedIn // ignore: cast_nullable_to_non_nullable
-              as String?,
-      urlTwitter: freezed == urlTwitter
-          ? _value.urlTwitter
-          : urlTwitter // ignore: cast_nullable_to_non_nullable
-              as String?,
-      urlWww: freezed == urlWww
-          ? _value.urlWww
-          : urlWww // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
+/// Adds pattern-matching-related methods to [Speaker].
+extension SpeakerPatterns on Speaker {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Speaker value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Speaker() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Speaker value)  $default,){
+final _that = this;
+switch (_that) {
+case _Speaker():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Speaker value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Speaker() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Speaker() when $default != null:
+return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww)  $default,) {final _that = this;
+switch (_that) {
+case _Speaker():
+return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww)?  $default,) {final _that = this;
+switch (_that) {
+case _Speaker() when $default != null:
+return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 
-class _$SpeakerImpl implements _Speaker {
-  const _$SpeakerImpl(
-      {required this.id,
-      required this.name,
-      required this.role,
-      required this.bio,
-      required this.photoFileUrl,
-      required this.photoTitle,
-      required this.photoDescription,
-      required this.email,
-      required this.urlGithub,
-      required this.urlLinkedIn,
-      required this.urlTwitter,
-      required this.urlWww});
 
-  @override
-  final String? id;
-  @override
-  final String? name;
-  @override
-  final String? role;
-  @override
-  final String? bio;
-  @override
-  final String? photoFileUrl;
-  @override
-  final String? photoTitle;
-  @override
-  final String? photoDescription;
-  @override
-  final String? email;
-  @override
-  final String? urlGithub;
-  @override
-  final String? urlLinkedIn;
-  @override
-  final String? urlTwitter;
-  @override
-  final String? urlWww;
+class _Speaker implements Speaker {
+  const _Speaker({required this.id, required this.name, required this.role, required this.bio, required this.photoFileUrl, required this.photoTitle, required this.photoDescription, required this.email, required this.urlGithub, required this.urlLinkedIn, required this.urlTwitter, required this.urlWww});
+  
 
-  @override
-  String toString() {
-    return 'Speaker(id: $id, name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
-  }
+@override final  String? id;
+@override final  String? name;
+@override final  String? role;
+@override final  String? bio;
+@override final  String? photoFileUrl;
+@override final  String? photoTitle;
+@override final  String? photoDescription;
+@override final  String? email;
+@override final  String? urlGithub;
+@override final  String? urlLinkedIn;
+@override final  String? urlTwitter;
+@override final  String? urlWww;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$SpeakerImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.role, role) || other.role == role) &&
-            (identical(other.bio, bio) || other.bio == bio) &&
-            (identical(other.photoFileUrl, photoFileUrl) ||
-                other.photoFileUrl == photoFileUrl) &&
-            (identical(other.photoTitle, photoTitle) ||
-                other.photoTitle == photoTitle) &&
-            (identical(other.photoDescription, photoDescription) ||
-                other.photoDescription == photoDescription) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.urlGithub, urlGithub) ||
-                other.urlGithub == urlGithub) &&
-            (identical(other.urlLinkedIn, urlLinkedIn) ||
-                other.urlLinkedIn == urlLinkedIn) &&
-            (identical(other.urlTwitter, urlTwitter) ||
-                other.urlTwitter == urlTwitter) &&
-            (identical(other.urlWww, urlWww) || other.urlWww == urlWww));
-  }
+/// Create a copy of Speaker
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$SpeakerCopyWith<_Speaker> get copyWith => __$SpeakerCopyWithImpl<_Speaker>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      role,
-      bio,
-      photoFileUrl,
-      photoTitle,
-      photoDescription,
-      email,
-      urlGithub,
-      urlLinkedIn,
-      urlTwitter,
-      urlWww);
 
-  /// Create a copy of Speaker
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$SpeakerImplCopyWith<_$SpeakerImpl> get copyWith =>
-      __$$SpeakerImplCopyWithImpl<_$SpeakerImpl>(this, _$identity);
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Speaker&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.role, role) || other.role == role)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.photoFileUrl, photoFileUrl) || other.photoFileUrl == photoFileUrl)&&(identical(other.photoTitle, photoTitle) || other.photoTitle == photoTitle)&&(identical(other.photoDescription, photoDescription) || other.photoDescription == photoDescription)&&(identical(other.email, email) || other.email == email)&&(identical(other.urlGithub, urlGithub) || other.urlGithub == urlGithub)&&(identical(other.urlLinkedIn, urlLinkedIn) || other.urlLinkedIn == urlLinkedIn)&&(identical(other.urlTwitter, urlTwitter) || other.urlTwitter == urlTwitter)&&(identical(other.urlWww, urlWww) || other.urlWww == urlWww));
 }
 
-abstract class _Speaker implements Speaker {
-  const factory _Speaker(
-      {required final String? id,
-      required final String? name,
-      required final String? role,
-      required final String? bio,
-      required final String? photoFileUrl,
-      required final String? photoTitle,
-      required final String? photoDescription,
-      required final String? email,
-      required final String? urlGithub,
-      required final String? urlLinkedIn,
-      required final String? urlTwitter,
-      required final String? urlWww}) = _$SpeakerImpl;
 
-  @override
-  String? get id;
-  @override
-  String? get name;
-  @override
-  String? get role;
-  @override
-  String? get bio;
-  @override
-  String? get photoFileUrl;
-  @override
-  String? get photoTitle;
-  @override
-  String? get photoDescription;
-  @override
-  String? get email;
-  @override
-  String? get urlGithub;
-  @override
-  String? get urlLinkedIn;
-  @override
-  String? get urlTwitter;
-  @override
-  String? get urlWww;
+@override
+int get hashCode => Object.hash(runtimeType,id,name,role,bio,photoFileUrl,photoTitle,photoDescription,email,urlGithub,urlLinkedIn,urlTwitter,urlWww);
 
-  /// Create a copy of Speaker
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SpeakerImplCopyWith<_$SpeakerImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'Speaker(id: $id, name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$SpeakerCopyWith<$Res> implements $SpeakerCopyWith<$Res> {
+  factory _$SpeakerCopyWith(_Speaker value, $Res Function(_Speaker) _then) = __$SpeakerCopyWithImpl;
+@override @useResult
+$Res call({
+ String? id, String? name, String? role, String? bio, String? photoFileUrl, String? photoTitle, String? photoDescription, String? email, String? urlGithub, String? urlLinkedIn, String? urlTwitter, String? urlWww
+});
+
+
+
+
+}
+/// @nodoc
+class __$SpeakerCopyWithImpl<$Res>
+    implements _$SpeakerCopyWith<$Res> {
+  __$SpeakerCopyWithImpl(this._self, this._then);
+
+  final _Speaker _self;
+  final $Res Function(_Speaker) _then;
+
+/// Create a copy of Speaker
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,Object? role = freezed,Object? bio = freezed,Object? photoFileUrl = freezed,Object? photoTitle = freezed,Object? photoDescription = freezed,Object? email = freezed,Object? urlGithub = freezed,Object? urlLinkedIn = freezed,Object? urlTwitter = freezed,Object? urlWww = freezed,}) {
+  return _then(_Speaker(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,role: freezed == role ? _self.role : role // ignore: cast_nullable_to_non_nullable
+as String?,bio: freezed == bio ? _self.bio : bio // ignore: cast_nullable_to_non_nullable
+as String?,photoFileUrl: freezed == photoFileUrl ? _self.photoFileUrl : photoFileUrl // ignore: cast_nullable_to_non_nullable
+as String?,photoTitle: freezed == photoTitle ? _self.photoTitle : photoTitle // ignore: cast_nullable_to_non_nullable
+as String?,photoDescription: freezed == photoDescription ? _self.photoDescription : photoDescription // ignore: cast_nullable_to_non_nullable
+as String?,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,urlGithub: freezed == urlGithub ? _self.urlGithub : urlGithub // ignore: cast_nullable_to_non_nullable
+as String?,urlLinkedIn: freezed == urlLinkedIn ? _self.urlLinkedIn : urlLinkedIn // ignore: cast_nullable_to_non_nullable
+as String?,urlTwitter: freezed == urlTwitter ? _self.urlTwitter : urlTwitter // ignore: cast_nullable_to_non_nullable
+as String?,urlWww: freezed == urlWww ? _self.urlWww : urlWww // ignore: cast_nullable_to_non_nullable
+as String?,
+  ));
+}
+
+
+}
+
+// dart format on

@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:ng_poland_conf_app/features/nggirls/domains/entities/ngGirls.dart';
 
 part 'ngGirls_model.freezed.dart';
@@ -9,7 +9,7 @@ part 'ngGirls_model.g.dart';
 
 @freezed
 @HiveType(typeId: 5)
-class NgGirlsModel with _$NgGirlsModel {
+abstract class NgGirlsModel with _$NgGirlsModel {
   const NgGirlsModel._();
 
   const factory NgGirlsModel({
@@ -20,7 +20,9 @@ class NgGirlsModel with _$NgGirlsModel {
     @HiveField(4) DateTime? lastUpdate,
   }) = _NgGirlsModel;
 
-  factory NgGirlsModel.fromJson(Map<String, dynamic> json) => _$NgGirlsModelFromJson(json['items'][0]['fields']);
+  factory NgGirlsModel.fromJson(Map<String, dynamic> json) =>
+      _$NgGirlsModelFromJson(json['items'][0]['fields']);
 
-  NgGirls toEntity() => NgGirls(myId: myId, title: title ?? '', text: text ?? '');
+  NgGirls toEntity() =>
+      NgGirls(myId: myId, title: title ?? '', text: text ?? '');
 }

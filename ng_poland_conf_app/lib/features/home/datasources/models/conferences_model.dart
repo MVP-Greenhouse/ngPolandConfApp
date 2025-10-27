@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conference_model.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
 
@@ -9,14 +9,15 @@ part 'conferences_model.g.dart';
 
 @freezed
 @HiveType(typeId: 0)
-class ConferencesModel with _$ConferencesModel {
+abstract class ConferencesModel with _$ConferencesModel {
   const ConferencesModel._();
 
   const factory ConferencesModel({
     @HiveField(0) List<ConferenceModel?>? items,
   }) = _ConferencesModel;
 
-  factory ConferencesModel.fromJson(Map<String, dynamic> json) => _$ConferencesModelFromJson(json);
+  factory ConferencesModel.fromJson(Map<String, dynamic> json) =>
+      _$ConferencesModelFromJson(json);
 
   ConferenceModel? get getNewestConference => items?.first;
 
@@ -30,9 +31,7 @@ class ConferencesModel with _$ConferencesModel {
     return Conferences(
       list: items
           .whereType<ConferenceModel>()
-          .map(
-            (conferenceModel) => conferenceModel.toEntity(),
-          )
+          .map((conferenceModel) => conferenceModel.toEntity())
           .toList(),
     );
   }

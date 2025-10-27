@@ -8,7 +8,7 @@ part of 'workshops_model.dart';
 
 class WorkshopsModelAdapter extends TypeAdapter<WorkshopsModel> {
   @override
-  final int typeId = 10;
+  final typeId = 10;
 
   @override
   WorkshopsModel read(BinaryReader reader) {

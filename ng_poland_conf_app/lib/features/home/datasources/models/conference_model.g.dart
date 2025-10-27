@@ -8,7 +8,7 @@ part of 'conference_model.dart';
 
 class ConferenceModelAdapter extends TypeAdapter<ConferenceModel> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   ConferenceModel read(BinaryReader reader) {
@@ -21,8 +21,8 @@ class ConferenceModelAdapter extends TypeAdapter<ConferenceModel> {
       confName: fields[1] as String,
       description: fields[2] as String?,
       conferencesStartDate: fields[3] as String?,
-      listItems:
-          (fields[4] as List?)?.cast<ConferenceHomePageScheduleItemModel>(),
+      listItems: (fields[4] as List?)
+          ?.cast<ConferenceHomePageScheduleItemModel>(),
     );
   }
 
@@ -57,19 +57,18 @@ class ConferenceModelAdapter extends TypeAdapter<ConferenceModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ConferenceModelImpl _$$ConferenceModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ConferenceModelImpl(
+_ConferenceModel _$ConferenceModelFromJson(Map<String, dynamic> json) =>
+    _ConferenceModel(
       confId: json['confId'] as String,
       confName: json['confName'] as String,
       description: json['description'] as String?,
       conferencesStartDate: json['conferencesStartDate'] as String?,
       listItems: _listItemsFromJson(
-          json['conferenceHomePageSchedule'] as Map<String, dynamic>?),
+        json['conferenceHomePageSchedule'] as Map<String, dynamic>?,
+      ),
     );
 
-Map<String, dynamic> _$$ConferenceModelImplToJson(
-        _$ConferenceModelImpl instance) =>
+Map<String, dynamic> _$ConferenceModelToJson(_ConferenceModel instance) =>
     <String, dynamic>{
       'confId': instance.confId,
       'confName': instance.confName,

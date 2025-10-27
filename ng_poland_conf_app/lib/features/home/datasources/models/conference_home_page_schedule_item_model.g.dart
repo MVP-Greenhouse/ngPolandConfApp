@@ -9,7 +9,7 @@ part of 'conference_home_page_schedule_item_model.dart';
 class ConferenceHomePageScheduleItemModelAdapter
     extends TypeAdapter<ConferenceHomePageScheduleItemModel> {
   @override
-  final int typeId = 2;
+  final typeId = 2;
 
   @override
   ConferenceHomePageScheduleItemModel read(BinaryReader reader) {
@@ -48,17 +48,13 @@ class ConferenceHomePageScheduleItemModelAdapter
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ConferenceHomePageScheduleItemModelImpl
-    _$$ConferenceHomePageScheduleItemModelImplFromJson(
-            Map<String, dynamic> json) =>
-        _$ConferenceHomePageScheduleItemModelImpl(
-          name: json['name'] as String,
-          desc: json['desc'] as String,
-        );
+_ConferenceHomePageScheduleItemModel
+_$ConferenceHomePageScheduleItemModelFromJson(Map<String, dynamic> json) =>
+    _ConferenceHomePageScheduleItemModel(
+      name: json['name'] as String,
+      desc: json['desc'] as String,
+    );
 
-Map<String, dynamic> _$$ConferenceHomePageScheduleItemModelImplToJson(
-        _$ConferenceHomePageScheduleItemModelImpl instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'desc': instance.desc,
-    };
+Map<String, dynamic> _$ConferenceHomePageScheduleItemModelToJson(
+  _ConferenceHomePageScheduleItemModel instance,
+) => <String, dynamic>{'name': instance.name, 'desc': instance.desc};

@@ -4,7 +4,7 @@ import 'package:ng_poland_conf_app/features/home/domains/entities/conference_ite
 part 'conference.freezed.dart';
 
 @freezed
-class Conference with _$Conference {
+abstract class Conference with _$Conference {
   const factory Conference({
     required String confId,
     required String confName,

@@ -3,20 +3,21 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'speaker.freezed.dart';
 
 @freezed
-class Speaker with _$Speaker {
-  const factory Speaker(
-      {required String? id,
-      required String? name,
-      required String? role,
-      required String? bio,
-      required String? photoFileUrl,
-      required String? photoTitle,
-      required String? photoDescription,
-      required String? email,
-      required String? urlGithub,
-      required String? urlLinkedIn,
-      required String? urlTwitter,
-      required String? urlWww}) = _Speaker;
+abstract class Speaker with _$Speaker {
+  const factory Speaker({
+    required String? id,
+    required String? name,
+    required String? role,
+    required String? bio,
+    required String? photoFileUrl,
+    required String? photoTitle,
+    required String? photoDescription,
+    required String? email,
+    required String? urlGithub,
+    required String? urlLinkedIn,
+    required String? urlTwitter,
+    required String? urlWww,
+  }) = _Speaker;
 
   factory Speaker.fromJson(Map<String, dynamic> json) {
     String photoFileUrl = '';
@@ -42,6 +43,18 @@ class Speaker with _$Speaker {
     );
   }
 
-  static const empty =
-      Speaker(id: '', name: '', role: '', bio: '', photoFileUrl: '', photoTitle: '', photoDescription: '', email: '', urlGithub: '', urlLinkedIn: '', urlTwitter: '', urlWww: '');
+  static const empty = Speaker(
+    id: '',
+    name: '',
+    role: '',
+    bio: '',
+    photoFileUrl: '',
+    photoTitle: '',
+    photoDescription: '',
+    email: '',
+    urlGithub: '',
+    urlLinkedIn: '',
+    urlTwitter: '',
+    urlWww: '',
+  );
 }

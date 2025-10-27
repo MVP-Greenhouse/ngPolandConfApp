@@ -8,7 +8,7 @@ part of 'workshop_model.dart';
 
 class WorkshopModelAdapter extends TypeAdapter<WorkshopModel> {
   @override
-  final int typeId = 9;
+  final typeId = 9;
 
   @override
   WorkshopModel read(BinaryReader reader) {
@@ -24,7 +24,7 @@ class WorkshopModelAdapter extends TypeAdapter<WorkshopModel> {
       endDate: fields[4] as String,
       locationDescription: fields[5] as String?,
       speaker: fields[6] as SpeakerModel,
-      pricePln: fields[7] as int?,
+      pricePln: (fields[7] as num?)?.toInt(),
     );
   }
 

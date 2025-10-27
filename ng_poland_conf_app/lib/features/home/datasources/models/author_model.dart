@@ -3,10 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'author_model.freezed.dart';
 
 @freezed
-class AuthorModel with _$AuthorModel {
-  const factory AuthorModel({
-    String? name,
-    String? image,
-    String? twitterUrl,
-  }) = _AuthorModel;
+abstract class AuthorModel with _$AuthorModel {
+  const factory AuthorModel({String? name, String? image, String? twitterUrl}) =
+      _AuthorModel;
 }

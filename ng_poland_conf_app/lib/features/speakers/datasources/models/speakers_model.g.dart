@@ -8,7 +8,7 @@ part of 'speakers_model.dart';
 
 class SpeakersModelAdapter extends TypeAdapter<SpeakersModel> {
   @override
-  final int typeId = 11;
+  final typeId = 11;
 
   @override
   SpeakersModel read(BinaryReader reader) {

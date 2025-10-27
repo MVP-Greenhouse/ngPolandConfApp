@@ -4,7 +4,7 @@ publish_to: "none"
 version: 1.2.0+13
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -23,15 +23,15 @@ dependencies:
   go_router: 15.2.3
 
   # Dependency Injection
-  injectable: 2.5.0
-  get_it: 8.0.3
+  injectable: 2.5.2
+  get_it: 8.2.0
 
   # Utils
   flutter_dotenv: 5.2.1
   intl: 0.20.2
   url_launcher: 6.3.0
   logger: 1.4.0
-  collection: 1.19.0
+  collection: 1.19.1
   dartz: 0.10.1
 
   # UI
@@ -41,13 +41,10 @@ dependencies:
   webview_flutter: 4.9.0
   connectivity_plus: 6.1.4
 
-  # Hive (local storage)
-  hive: 2.2.3
-  hive_flutter: 1.1.0
 
   # Networking
   dio: 5.8.0+1
-  retrofit: 4.4.2
+  retrofit: 4.8.0
 
   # Bloc (state management)
   bloc: 9.0.0
@@ -56,8 +53,12 @@ dependencies:
   rxdart: 0.28.0
 
   # Codegen annotations
-  freezed_annotation: 2.4.4
+  freezed_annotation: 3.1.0
   json_annotation: 4.9.0
+
+  #hive
+  hive_ce_flutter: ^2.3.3
+  hive_ce: ^2.15.1
 
 dev_dependencies:
   flutter_test:
@@ -65,12 +66,13 @@ dev_dependencies:
   flutter_lints: 5.0.0
 
   # Codegen
-  build_runner: 2.4.15
-  freezed: 2.5.7
-  retrofit_generator: 9.2.0
-  json_serializable: 6.9.0
-  hive_generator: 2.0.1
-  injectable_generator: 2.6.2
+  build_runner: 2.10.1
+  freezed: 3.2.3
+  retrofit_generator: 10.1.1
+  json_serializable: 6.11.1
+  injectable_generator: 2.9.0
+  hive_ce_generator: ^1.10.0
+
 
 flutter:
   uses-material-design: true

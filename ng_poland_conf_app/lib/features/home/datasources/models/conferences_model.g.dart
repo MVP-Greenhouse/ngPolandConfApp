@@ -8,7 +8,7 @@ part of 'conferences_model.dart';
 
 class ConferencesModelAdapter extends TypeAdapter<ConferencesModel> {
   @override
-  final int typeId = 0;
+  final typeId = 0;
 
   @override
   ConferencesModel read(BinaryReader reader) {
@@ -44,18 +44,16 @@ class ConferencesModelAdapter extends TypeAdapter<ConferencesModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ConferencesModelImpl _$$ConferencesModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ConferencesModelImpl(
+_ConferencesModel _$ConferencesModelFromJson(Map<String, dynamic> json) =>
+    _ConferencesModel(
       items: (json['items'] as List<dynamic>?)
-          ?.map((e) => e == null
-              ? null
-              : ConferenceModel.fromJson(e as Map<String, dynamic>))
+          ?.map(
+            (e) => e == null
+                ? null
+                : ConferenceModel.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
     );
 
-Map<String, dynamic> _$$ConferencesModelImplToJson(
-        _$ConferencesModelImpl instance) =>
-    <String, dynamic>{
-      'items': instance.items,
-    };
+Map<String, dynamic> _$ConferencesModelToJson(_ConferencesModel instance) =>
+    <String, dynamic>{'items': instance.items};

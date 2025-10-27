@@ -8,7 +8,7 @@ part of 'info_item_model.dart';
 
 class InfoItemModelAdapter extends TypeAdapter<InfoItemModel> {
   @override
-  final int typeId = 4;
+  final typeId = 4;
 
   @override
   InfoItemModel read(BinaryReader reader) {
@@ -18,7 +18,7 @@ class InfoItemModelAdapter extends TypeAdapter<InfoItemModel> {
     };
     return InfoItemModel(
       title: fields[0] as String,
-      order: fields[1] as int,
+      order: (fields[1] as num).toInt(),
       icon: fields[2] as String,
       description: fields[3] as String?,
       confId: fields[4] as String,
@@ -59,8 +59,8 @@ class InfoItemModelAdapter extends TypeAdapter<InfoItemModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$InfoItemModelImpl _$$InfoItemModelImplFromJson(Map<String, dynamic> json) =>
-    _$InfoItemModelImpl(
+_InfoItemModel _$InfoItemModelFromJson(Map<String, dynamic> json) =>
+    _InfoItemModel(
       title: json['title'] as String,
       order: (json['order'] as num).toInt(),
       icon: json['icon'] as String,
@@ -69,7 +69,7 @@ _$InfoItemModelImpl _$$InfoItemModelImplFromJson(Map<String, dynamic> json) =>
       urlLink: json['urlLink'] as String?,
     );
 
-Map<String, dynamic> _$$InfoItemModelImplToJson(_$InfoItemModelImpl instance) =>
+Map<String, dynamic> _$InfoItemModelToJson(_InfoItemModel instance) =>
     <String, dynamic>{
       'title': instance.title,
       'order': instance.order,

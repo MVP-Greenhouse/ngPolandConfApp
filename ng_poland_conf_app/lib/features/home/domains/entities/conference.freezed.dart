@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,258 +9,284 @@ part of 'conference.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$Conference {
-  String get confId => throw _privateConstructorUsedError;
-  String get confName => throw _privateConstructorUsedError;
-  bool get isCurrent => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
-  String? get conferencesStartDate => throw _privateConstructorUsedError;
-  List<ConferenceItem> get listItems => throw _privateConstructorUsedError;
 
-  /// Create a copy of Conference
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $ConferenceCopyWith<Conference> get copyWith =>
-      throw _privateConstructorUsedError;
+ String get confId; String get confName; bool get isCurrent; String? get description; String? get conferencesStartDate; List<ConferenceItem> get listItems;
+/// Create a copy of Conference
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ConferenceCopyWith<Conference> get copyWith => _$ConferenceCopyWithImpl<Conference>(this as Conference, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Conference&&(identical(other.confId, confId) || other.confId == confId)&&(identical(other.confName, confName) || other.confName == confName)&&(identical(other.isCurrent, isCurrent) || other.isCurrent == isCurrent)&&(identical(other.description, description) || other.description == description)&&(identical(other.conferencesStartDate, conferencesStartDate) || other.conferencesStartDate == conferencesStartDate)&&const DeepCollectionEquality().equals(other.listItems, listItems));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,confId,confName,isCurrent,description,conferencesStartDate,const DeepCollectionEquality().hash(listItems));
+
+@override
+String toString() {
+  return 'Conference(confId: $confId, confName: $confName, isCurrent: $isCurrent, description: $description, conferencesStartDate: $conferencesStartDate, listItems: $listItems)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ConferenceCopyWith<$Res> {
-  factory $ConferenceCopyWith(
-          Conference value, $Res Function(Conference) then) =
-      _$ConferenceCopyWithImpl<$Res, Conference>;
-  @useResult
-  $Res call(
-      {String confId,
-      String confName,
-      bool isCurrent,
-      String? description,
-      String? conferencesStartDate,
-      List<ConferenceItem> listItems});
-}
+abstract mixin class $ConferenceCopyWith<$Res>  {
+  factory $ConferenceCopyWith(Conference value, $Res Function(Conference) _then) = _$ConferenceCopyWithImpl;
+@useResult
+$Res call({
+ String confId, String confName, bool isCurrent, String? description, String? conferencesStartDate, List<ConferenceItem> listItems
+});
 
+
+
+
+}
 /// @nodoc
-class _$ConferenceCopyWithImpl<$Res, $Val extends Conference>
+class _$ConferenceCopyWithImpl<$Res>
     implements $ConferenceCopyWith<$Res> {
-  _$ConferenceCopyWithImpl(this._value, this._then);
+  _$ConferenceCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final Conference _self;
+  final $Res Function(Conference) _then;
 
-  /// Create a copy of Conference
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? confId = null,
-    Object? confName = null,
-    Object? isCurrent = null,
-    Object? description = freezed,
-    Object? conferencesStartDate = freezed,
-    Object? listItems = null,
-  }) {
-    return _then(_value.copyWith(
-      confId: null == confId
-          ? _value.confId
-          : confId // ignore: cast_nullable_to_non_nullable
-              as String,
-      confName: null == confName
-          ? _value.confName
-          : confName // ignore: cast_nullable_to_non_nullable
-              as String,
-      isCurrent: null == isCurrent
-          ? _value.isCurrent
-          : isCurrent // ignore: cast_nullable_to_non_nullable
-              as bool,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      conferencesStartDate: freezed == conferencesStartDate
-          ? _value.conferencesStartDate
-          : conferencesStartDate // ignore: cast_nullable_to_non_nullable
-              as String?,
-      listItems: null == listItems
-          ? _value.listItems
-          : listItems // ignore: cast_nullable_to_non_nullable
-              as List<ConferenceItem>,
-    ) as $Val);
-  }
+/// Create a copy of Conference
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? confId = null,Object? confName = null,Object? isCurrent = null,Object? description = freezed,Object? conferencesStartDate = freezed,Object? listItems = null,}) {
+  return _then(_self.copyWith(
+confId: null == confId ? _self.confId : confId // ignore: cast_nullable_to_non_nullable
+as String,confName: null == confName ? _self.confName : confName // ignore: cast_nullable_to_non_nullable
+as String,isCurrent: null == isCurrent ? _self.isCurrent : isCurrent // ignore: cast_nullable_to_non_nullable
+as bool,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,conferencesStartDate: freezed == conferencesStartDate ? _self.conferencesStartDate : conferencesStartDate // ignore: cast_nullable_to_non_nullable
+as String?,listItems: null == listItems ? _self.listItems : listItems // ignore: cast_nullable_to_non_nullable
+as List<ConferenceItem>,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [Conference].
+extension ConferencePatterns on Conference {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _Conference value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _Conference() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _Conference value)  $default,){
+final _that = this;
+switch (_that) {
+case _Conference():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _Conference value)?  $default,){
+final _that = this;
+switch (_that) {
+case _Conference() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String confId,  String confName,  bool isCurrent,  String? description,  String? conferencesStartDate,  List<ConferenceItem> listItems)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _Conference() when $default != null:
+return $default(_that.confId,_that.confName,_that.isCurrent,_that.description,_that.conferencesStartDate,_that.listItems);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String confId,  String confName,  bool isCurrent,  String? description,  String? conferencesStartDate,  List<ConferenceItem> listItems)  $default,) {final _that = this;
+switch (_that) {
+case _Conference():
+return $default(_that.confId,_that.confName,_that.isCurrent,_that.description,_that.conferencesStartDate,_that.listItems);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String confId,  String confName,  bool isCurrent,  String? description,  String? conferencesStartDate,  List<ConferenceItem> listItems)?  $default,) {final _that = this;
+switch (_that) {
+case _Conference() when $default != null:
+return $default(_that.confId,_that.confName,_that.isCurrent,_that.description,_that.conferencesStartDate,_that.listItems);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
-abstract class _$$ConferenceImplCopyWith<$Res>
-    implements $ConferenceCopyWith<$Res> {
-  factory _$$ConferenceImplCopyWith(
-          _$ConferenceImpl value, $Res Function(_$ConferenceImpl) then) =
-      __$$ConferenceImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String confId,
-      String confName,
-      bool isCurrent,
-      String? description,
-      String? conferencesStartDate,
-      List<ConferenceItem> listItems});
+
+
+class _Conference implements Conference {
+  const _Conference({required this.confId, required this.confName, this.isCurrent = false, this.description, this.conferencesStartDate, required final  List<ConferenceItem> listItems}): _listItems = listItems;
+  
+
+@override final  String confId;
+@override final  String confName;
+@override@JsonKey() final  bool isCurrent;
+@override final  String? description;
+@override final  String? conferencesStartDate;
+ final  List<ConferenceItem> _listItems;
+@override List<ConferenceItem> get listItems {
+  if (_listItems is EqualUnmodifiableListView) return _listItems;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_listItems);
+}
+
+
+/// Create a copy of Conference
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$ConferenceCopyWith<_Conference> get copyWith => __$ConferenceCopyWithImpl<_Conference>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Conference&&(identical(other.confId, confId) || other.confId == confId)&&(identical(other.confName, confName) || other.confName == confName)&&(identical(other.isCurrent, isCurrent) || other.isCurrent == isCurrent)&&(identical(other.description, description) || other.description == description)&&(identical(other.conferencesStartDate, conferencesStartDate) || other.conferencesStartDate == conferencesStartDate)&&const DeepCollectionEquality().equals(other._listItems, _listItems));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,confId,confName,isCurrent,description,conferencesStartDate,const DeepCollectionEquality().hash(_listItems));
+
+@override
+String toString() {
+  return 'Conference(confId: $confId, confName: $confName, isCurrent: $isCurrent, description: $description, conferencesStartDate: $conferencesStartDate, listItems: $listItems)';
+}
+
+
 }
 
 /// @nodoc
-class __$$ConferenceImplCopyWithImpl<$Res>
-    extends _$ConferenceCopyWithImpl<$Res, _$ConferenceImpl>
-    implements _$$ConferenceImplCopyWith<$Res> {
-  __$$ConferenceImplCopyWithImpl(
-      _$ConferenceImpl _value, $Res Function(_$ConferenceImpl) _then)
-      : super(_value, _then);
+abstract mixin class _$ConferenceCopyWith<$Res> implements $ConferenceCopyWith<$Res> {
+  factory _$ConferenceCopyWith(_Conference value, $Res Function(_Conference) _then) = __$ConferenceCopyWithImpl;
+@override @useResult
+$Res call({
+ String confId, String confName, bool isCurrent, String? description, String? conferencesStartDate, List<ConferenceItem> listItems
+});
 
-  /// Create a copy of Conference
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? confId = null,
-    Object? confName = null,
-    Object? isCurrent = null,
-    Object? description = freezed,
-    Object? conferencesStartDate = freezed,
-    Object? listItems = null,
-  }) {
-    return _then(_$ConferenceImpl(
-      confId: null == confId
-          ? _value.confId
-          : confId // ignore: cast_nullable_to_non_nullable
-              as String,
-      confName: null == confName
-          ? _value.confName
-          : confName // ignore: cast_nullable_to_non_nullable
-              as String,
-      isCurrent: null == isCurrent
-          ? _value.isCurrent
-          : isCurrent // ignore: cast_nullable_to_non_nullable
-              as bool,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      conferencesStartDate: freezed == conferencesStartDate
-          ? _value.conferencesStartDate
-          : conferencesStartDate // ignore: cast_nullable_to_non_nullable
-              as String?,
-      listItems: null == listItems
-          ? _value._listItems
-          : listItems // ignore: cast_nullable_to_non_nullable
-              as List<ConferenceItem>,
-    ));
-  }
+
+
+
 }
-
 /// @nodoc
+class __$ConferenceCopyWithImpl<$Res>
+    implements _$ConferenceCopyWith<$Res> {
+  __$ConferenceCopyWithImpl(this._self, this._then);
 
-class _$ConferenceImpl implements _Conference {
-  const _$ConferenceImpl(
-      {required this.confId,
-      required this.confName,
-      this.isCurrent = false,
-      this.description,
-      this.conferencesStartDate,
-      required final List<ConferenceItem> listItems})
-      : _listItems = listItems;
+  final _Conference _self;
+  final $Res Function(_Conference) _then;
 
-  @override
-  final String confId;
-  @override
-  final String confName;
-  @override
-  @JsonKey()
-  final bool isCurrent;
-  @override
-  final String? description;
-  @override
-  final String? conferencesStartDate;
-  final List<ConferenceItem> _listItems;
-  @override
-  List<ConferenceItem> get listItems {
-    if (_listItems is EqualUnmodifiableListView) return _listItems;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_listItems);
-  }
-
-  @override
-  String toString() {
-    return 'Conference(confId: $confId, confName: $confName, isCurrent: $isCurrent, description: $description, conferencesStartDate: $conferencesStartDate, listItems: $listItems)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ConferenceImpl &&
-            (identical(other.confId, confId) || other.confId == confId) &&
-            (identical(other.confName, confName) ||
-                other.confName == confName) &&
-            (identical(other.isCurrent, isCurrent) ||
-                other.isCurrent == isCurrent) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.conferencesStartDate, conferencesStartDate) ||
-                other.conferencesStartDate == conferencesStartDate) &&
-            const DeepCollectionEquality()
-                .equals(other._listItems, _listItems));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      confId,
-      confName,
-      isCurrent,
-      description,
-      conferencesStartDate,
-      const DeepCollectionEquality().hash(_listItems));
-
-  /// Create a copy of Conference
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ConferenceImplCopyWith<_$ConferenceImpl> get copyWith =>
-      __$$ConferenceImplCopyWithImpl<_$ConferenceImpl>(this, _$identity);
+/// Create a copy of Conference
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? confId = null,Object? confName = null,Object? isCurrent = null,Object? description = freezed,Object? conferencesStartDate = freezed,Object? listItems = null,}) {
+  return _then(_Conference(
+confId: null == confId ? _self.confId : confId // ignore: cast_nullable_to_non_nullable
+as String,confName: null == confName ? _self.confName : confName // ignore: cast_nullable_to_non_nullable
+as String,isCurrent: null == isCurrent ? _self.isCurrent : isCurrent // ignore: cast_nullable_to_non_nullable
+as bool,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,conferencesStartDate: freezed == conferencesStartDate ? _self.conferencesStartDate : conferencesStartDate // ignore: cast_nullable_to_non_nullable
+as String?,listItems: null == listItems ? _self._listItems : listItems // ignore: cast_nullable_to_non_nullable
+as List<ConferenceItem>,
+  ));
 }
 
-abstract class _Conference implements Conference {
-  const factory _Conference(
-      {required final String confId,
-      required final String confName,
-      final bool isCurrent,
-      final String? description,
-      final String? conferencesStartDate,
-      required final List<ConferenceItem> listItems}) = _$ConferenceImpl;
 
-  @override
-  String get confId;
-  @override
-  String get confName;
-  @override
-  bool get isCurrent;
-  @override
-  String? get description;
-  @override
-  String? get conferencesStartDate;
-  @override
-  List<ConferenceItem> get listItems;
-
-  /// Create a copy of Conference
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ConferenceImplCopyWith<_$ConferenceImpl> get copyWith =>
-      throw _privateConstructorUsedError;
 }
+
+// dart format on
