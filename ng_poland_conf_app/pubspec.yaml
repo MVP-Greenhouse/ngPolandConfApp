@@ -1,7 +1,7 @@
 name: ng_poland_conf_app
 description: NG an JS Poland Conference official app.
 publish_to: "none"
-version: 1.2.0+13
+version: 1.2.1+14
 
 environment:
   sdk: ">=3.8.0 <4.0.0"
