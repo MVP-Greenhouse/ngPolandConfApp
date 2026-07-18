@@ -16,6 +16,22 @@
         "/^cd ng_poland_conf_app && /Users/sebastiandenis/Programs/flutter/bin/flutter analyze$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^cd ng_poland_conf_app && /Users/sebastiandenis/Programs/flutter/bin/flutter config --list$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd ng_poland_conf_app && /Users/sebastiandenis/Programs/flutter/bin/flutter build ios -h \\| sed -n '1,220p'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd ng_poland_conf_app && /Users/sebastiandenis/Programs/flutter/bin/flutter config --help \\| sed -n '1,220p'$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd ng_poland_conf_app && /Users/sebastiandenis/Programs/flutter/bin/flutter build ios --debug --no-codesign$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }
