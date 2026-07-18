@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,16 +37,11 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
 
   @override
   void initState() {
-    rootBundle.load(EventRating.ratingFilePath).then(
-      (data) async {
-        //   ratingFile = rive.RiveFile.import(data); // TODO: fix Rive 0.14 migration
-      },
-    );
+    rootBundle.load(EventRating.ratingFilePath).then((data) async {
+      //   ratingFile = rive.RiveFile.import(data); // TODO: fix Rive 0.14 migration
+    });
     _eventCubit = getIt.get<EventCubit>()
-      ..getData(
-        eventId: widget.eventId,
-        eventItemType: widget.eventItemType,
-      );
+      ..getData(eventId: widget.eventId, eventItemType: widget.eventItemType);
 
     super.initState();
   }
@@ -59,14 +53,11 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
       appBar: AppBar(
         title: Text(
           'Event',
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium
-              ?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
         ),
-        actions: const [
-          ConnectionStatus(),
-        ],
+        actions: const [ConnectionStatus()],
       ),
       body: BlocBuilder<EventCubit, EventState>(
         bloc: _eventCubit,
@@ -96,19 +87,16 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
   Widget _buildEventInfo(EventItem eventItem) {
     return Column(
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.02,
-        ),
+        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
         Container(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             eventItem.title,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onBackground
-                      .withOpacity(0.9),
-                ),
+              color: Theme.of(
+                context,
+              ).colorScheme.onBackground.withOpacity(0.9),
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -130,8 +118,10 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
             child: eventItem.description != null
                 ? Container(
                     alignment: Alignment.centerLeft,
-                    child: Text(eventItem.description ?? '',
-                        style: Theme.of(context).textTheme.bodySmall),
+                    child: Text(
+                      eventItem.description ?? '',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   )
                 : Container(
                     padding: const EdgeInsets.only(top: 40, bottom: 20),
@@ -139,7 +129,9 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
                     width: double.infinity,
                     child: const FittedBox(
                       child: Opacity(
-                          opacity: 0.1, child: Icon(Icons.question_mark)),
+                        opacity: 0.1,
+                        child: Icon(Icons.question_mark),
+                      ),
                     ),
                   ),
           ),
@@ -154,9 +146,7 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
       foregroundColor: Colors.black87,
       minimumSize: const Size(50, 50),
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(100.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
     );
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -167,9 +157,9 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
           child: Text(
             speaker.name as String,
             style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  fontSize: 18.0,
-                ),
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 18.0,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -191,12 +181,12 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
                   margin: const EdgeInsets.only(right: 20.0),
                   height:
                       MediaQuery.of(context).orientation == Orientation.portrait
-                          ? MediaQuery.of(context).size.width * 0.30
-                          : MediaQuery.of(context).size.width * 0.37,
+                      ? MediaQuery.of(context).size.width * 0.30
+                      : MediaQuery.of(context).size.width * 0.37,
                   width:
                       MediaQuery.of(context).orientation == Orientation.portrait
-                          ? null
-                          : MediaQuery.of(context).size.width * 0.33,
+                      ? null
+                      : MediaQuery.of(context).size.width * 0.33,
                   child: CircleAvatar(
                     radius: 25,
                     backgroundColor: Colors.white,
@@ -207,7 +197,7 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
                             ? launchUrl(Uri.parse(speaker.urlTwitter as String))
                             : null;
                       },
-                      child: const Icon(
+                      child: const FaIcon(
                         FontAwesomeIcons.twitter,
                         color: Colors.blue,
                       ),

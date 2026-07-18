@@ -38,13 +38,14 @@ class _AboutPageState extends State<AboutPage> with ConnectivityMixin {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: AppBar(
-          title: Text(
-            'About',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+        title: Text(
+          'About',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: Theme.of(context).colorScheme.inversePrimary,
           ),
-          actions: const [
-            ConnectionStatus(),
-          ]),
+        ),
+        actions: const [ConnectionStatus()],
+      ),
       body: SingleChildScrollView(
         clipBehavior: Clip.none,
         child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
@@ -62,33 +63,36 @@ class _AboutPageState extends State<AboutPage> with ConnectivityMixin {
                     ),
                     Text(
                       'This app is built with Flutter!',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                    const Divider(
-                      height: 35,
-                    ),
+                    const Divider(height: 35),
                     SizedBox(
                       width: double.infinity,
                       child: Text(
                         'Authors:',
                         textAlign: TextAlign.left,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: themeMode == ThemeMode.light
-                                ? Theme.of(context).colorScheme.secondary
-                                : Theme.of(context).colorScheme.primary.withAlpha(200),
-                            fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              color: themeMode == ThemeMode.light
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.primary.withAlpha(200),
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.03,
-                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                     Column(
                       children: AboutPage._dataAuthors
                           .map(
                             (author) => Column(
                               children: [
                                 ListTile(
-                                  onTap: () => launchUrl(Uri.parse(author.linkedinUrl)),
+                                  onTap: () =>
+                                      launchUrl(Uri.parse(author.linkedinUrl)),
                                   leading: ClipRRect(
                                     borderRadius: BorderRadius.circular(50.0),
                                     child: Image.asset(
@@ -98,48 +102,64 @@ class _AboutPageState extends State<AboutPage> with ConnectivityMixin {
                                   ),
                                   title: Text(
                                     author.name,
-                                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                                        color: themeMode == ThemeMode.light ? const Color(0xff3F51B5) : const Color(0xff82B1FF), fontSize: 15.0),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(
+                                          color: themeMode == ThemeMode.light
+                                              ? const Color(0xff3F51B5)
+                                              : const Color(0xff82B1FF),
+                                          fontSize: 15.0,
+                                        ),
                                   ),
                                 ),
                                 SizedBox(
-                                  height: MediaQuery.of(context).size.height * 0.02,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.02,
                                 ),
                               ],
                             ),
                           )
                           .toList(),
                     ),
-                    const Divider(
-                      height: 35,
-                    ),
+                    const Divider(height: 35),
                     ListTile(
                       leading: Image.asset(
                         'assets/images/github.png',
                         height: 50,
                       ),
                       title: InkWell(
-                        onTap: () => launchUrl(Uri.parse('https://github.com/MVP-Greenhouse/ngPolandConfApp')),
+                        onTap: () => launchUrl(
+                          Uri.parse(
+                            'https://github.com/MVP-Greenhouse/ngPolandConfApp',
+                          ),
+                        ),
                         child: Text(
                           'ngPolandConfApp',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge
-                              ?.copyWith(color: themeMode == ThemeMode.light ? const Color(0xff3F51B5) : const Color(0xff82B1FF), fontSize: 15.0),
+                          style: Theme.of(context).textTheme.labelLarge
+                              ?.copyWith(
+                                color: themeMode == ThemeMode.light
+                                    ? const Color(0xff3F51B5)
+                                    : const Color(0xff82B1FF),
+                                fontSize: 15.0,
+                              ),
                         ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 32.0),
                       child: Text(
-                        'Version: 20251001.1',
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimary.withAlpha(150)),
+                        'Version: 20260718.1',
+                        style: Theme.of(context).textTheme.labelMedium
+                            ?.copyWith(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onPrimary.withAlpha(150),
+                            ),
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                    ),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   ],
                 ),
               ),

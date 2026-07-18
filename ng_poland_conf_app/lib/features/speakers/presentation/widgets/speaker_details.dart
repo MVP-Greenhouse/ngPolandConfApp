@@ -26,13 +26,11 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
   late final SpeakersCubit _speakersCubit;
 
   ButtonStyle get _flatButtonStyle => TextButton.styleFrom(
-        foregroundColor: Colors.black87,
-        minimumSize: const Size(50, 50),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100.0),
-        ),
-      );
+    foregroundColor: Colors.black87,
+    minimumSize: const Size(50, 50),
+    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+  );
 
   @override
   void initState() {
@@ -47,139 +45,137 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            'Speaker',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
+        title: Text(
+          'Speaker',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: Theme.of(context).colorScheme.inversePrimary,
           ),
-          leading: IconButton(
-            onPressed: () {
-              GoRouter.of(context).pop();
-            },
-            icon: const Icon(Icons.arrow_back_ios),
-            //replace with our own icon data.
-          )),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            GoRouter.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back_ios),
+          //replace with our own icon data.
+        ),
+      ),
       body: BlocBuilder<SpeakersCubit, SpeakersState>(
-          bloc: _speakersCubit,
-          builder: (context, state) {
-            return state.maybeWhen(
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              loaded: (listSpeakers) {
-                final speaker = listSpeakers.firstWhere((element) {
-                  return element.id == widget.id;
-                }, orElse: () => Speaker.empty);
-                return speaker.id == Speaker.empty.id
-                    ? const EmptyListInformation()
-                    : SingleChildScrollView(
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(24.0),
-                                child: SelectableText(
-                                  speaker.name as String,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineLarge
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary,
+        bloc: _speakersCubit,
+        builder: (context, state) {
+          return state.maybeWhen(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            loaded: (listSpeakers) {
+              final speaker = listSpeakers.firstWhere((element) {
+                return element.id == widget.id;
+              }, orElse: () => Speaker.empty);
+              return speaker.id == Speaker.empty.id
+                  ? const EmptyListInformation()
+                  : SingleChildScrollView(
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: SelectableText(
+                                speaker.name as String,
+                                style: Theme.of(context).textTheme.headlineLarge
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.tertiary,
+                                    ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                              ),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: Stack(
+                                  children: [
+                                    Center(
+                                      child: CrossOriginImage(
+                                        imageUrl:
+                                            'https:${speaker.photoFileUrl}',
+                                        placeholderAsset:
+                                            'assets/images/person.png',
+                                        sizeFactor:
+                                            0.4, // Passing the required 0.4 factor
                                       ),
-                                  textAlign: TextAlign.center,
+                                    ),
+                                    _buildTwitterButton(speaker.urlTwitter),
+                                  ].nonNulls.toList(),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24.0),
-                                child: SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  child: Stack(
-                                    children: [
-                                      Center(
-                                        child: CrossOriginImage(
-                                          imageUrl:
-                                              'https:${speaker.photoFileUrl}',
-                                          placeholderAsset:
-                                              'assets/images/person.png',
-                                          sizeFactor:
-                                              0.4, // Passing the required 0.4 factor
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.02,
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                              ),
+                              child: SelectableText(
+                                speaker.role ?? '',
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground
+                                          .withOpacity(0.9),
+                                    ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16.0,
+                              ),
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: speaker.bio != null
+                                    ? Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: SelectableText(
+                                          speaker.bio ?? '',
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodySmall,
                                         ),
-                                      ),
-                                      _buildTwitterButton(speaker.urlTwitter),
-                                    ].nonNulls.toList(),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.02,
-                              ),
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8.0),
-                                child: SelectableText(
-                                  speaker.role ?? '',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onBackground
-                                            .withOpacity(0.9),
-                                      ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16.0),
-                                child: Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: speaker.bio != null
-                                      ? Container(
-                                          alignment: Alignment.centerLeft,
-                                          child: SelectableText(
-                                              speaker.bio ?? '',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall),
-                                        )
-                                      : Container(
-                                          padding: const EdgeInsets.only(
-                                              top: 40, bottom: 20),
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.2,
-                                          width: double.infinity,
-                                          child: const FittedBox(
-                                            child: Opacity(
-                                                opacity: 0.1,
-                                                child:
-                                                    Icon(Icons.question_mark)),
+                                      )
+                                    : Container(
+                                        padding: const EdgeInsets.only(
+                                          top: 40,
+                                          bottom: 20,
+                                        ),
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                            0.2,
+                                        width: double.infinity,
+                                        child: const FittedBox(
+                                          child: Opacity(
+                                            opacity: 0.1,
+                                            child: Icon(Icons.question_mark),
                                           ),
                                         ),
-                                ),
+                                      ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      );
-              },
-              orElse: () => const SizedBox.shrink(),
-            );
-          }),
+                      ),
+                    );
+            },
+            orElse: () => const SizedBox.shrink(),
+          );
+        },
+      ),
     );
   }
 
@@ -200,10 +196,7 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
           child: TextButton(
             style: _flatButtonStyle,
             onPressed: () => launchUrl(Uri.parse(urlTwitter)),
-            child: const Icon(
-              FontAwesomeIcons.twitter,
-              color: Colors.blue,
-            ),
+            child: const FaIcon(FontAwesomeIcons.twitter, color: Colors.blue),
           ),
         ),
       ),

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -53,10 +52,7 @@ class _ScheduleEventState extends State<ScheduleEvent>
       _ => null,
     };
 
-    return Icon(
-      icon,
-      color: widget.iconColor,
-    );
+    return FaIcon(icon, color: widget.iconColor);
   }
 
   @override
@@ -89,7 +85,10 @@ class _ScheduleEventState extends State<ScheduleEvent>
   }
 
   Widget _listElement(
-      BuildContext context, DateTime? startDate, DateTime? endDate) {
+    BuildContext context,
+    DateTime? startDate,
+    DateTime? endDate,
+  ) {
     return ListTile(
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -113,17 +112,18 @@ class _ScheduleEventState extends State<ScheduleEvent>
         onPressed: widget.eventItem.speaker == null
             ? null
             : () => context.pushNamed(
-                  '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
-                  pathParameters: {
-                    'eventId': widget.eventItem.id,
-                    'eventItemType': widget.eventItemType.name,
-                  },
-                ),
+                '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
+                pathParameters: {
+                  'eventId': widget.eventItem.id,
+                  'eventItemType': widget.eventItemType.name,
+                },
+              ),
         child: Text(
           widget.eventItem.title,
           style: TextStyle(
-            color:
-                Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.8),
+            color: Theme.of(
+              context,
+            ).textTheme.bodySmall?.color?.withOpacity(0.8),
             fontSize: 15,
             fontWeight: FontWeight.w500,
           ),
@@ -134,10 +134,7 @@ class _ScheduleEventState extends State<ScheduleEvent>
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Opacity(
-            opacity: 0.7,
-            child: _getIcon(widget.eventItem.category),
-          ),
+          Opacity(opacity: 0.7, child: _getIcon(widget.eventItem.category)),
         ],
       ),
     );
@@ -153,9 +150,7 @@ class _ScheduleEventState extends State<ScheduleEvent>
             child: _buildButton(
               onPressed: () => context.pushNamed(
                 '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',
-                pathParameters: {
-                  'id': widget.eventItem.speaker?.id ?? '',
-                },
+                pathParameters: {'id': widget.eventItem.speaker?.id ?? ''},
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -201,10 +196,7 @@ class _ScheduleEventState extends State<ScheduleEvent>
       alignment: Alignment.centerLeft,
       child: TextButton(
         style: TextButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12.0,
-            vertical: 6.0,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
           minimumSize: Size.zero,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           alignment: Alignment.centerLeft,

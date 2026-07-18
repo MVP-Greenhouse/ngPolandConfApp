@@ -12,16 +12,18 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<Either<String, String>> signInWithApple() async {
     try {
-      final AuthorizationCredentialAppleID appleCredential = await SignInWithApple.getAppleIDCredential(
-        scopes: [
-          AppleIDAuthorizationScopes.email,
-          AppleIDAuthorizationScopes.fullName,
-        ],
-      );
-      final AuthCredential authCredential = OAuthProvider('apple.com').credential(
-        idToken: appleCredential.identityToken,
-        accessToken: appleCredential.authorizationCode,
-      );
+      final AuthorizationCredentialAppleID appleCredential =
+          await SignInWithApple.getAppleIDCredential(
+            scopes: [
+              AppleIDAuthorizationScopes.email,
+              AppleIDAuthorizationScopes.fullName,
+            ],
+          );
+      final AuthCredential authCredential = OAuthProvider('apple.com')
+          .credential(
+            idToken: appleCredential.identityToken,
+            accessToken: appleCredential.authorizationCode,
+          );
       await FirebaseAuth.instance.signInWithCredential(authCredential);
       return right('Zalogowano');
     } catch (_) {
@@ -32,11 +34,11 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<Either<String, String>> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance
+          .authenticate();
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
+        idToken: googleAuth.idToken,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
       return right('Zalogowano');

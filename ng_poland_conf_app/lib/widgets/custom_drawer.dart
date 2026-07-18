@@ -18,22 +18,14 @@ class CustomDrawer extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(210),
       shadowColor: Theme.of(context).colorScheme.surface,
       child: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8.0,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         children: <Widget>[
           DrawerHeader(
-            padding: EdgeInsets.symmetric(
-              vertical: 8.0,
-            ),
+            padding: EdgeInsets.symmetric(vertical: 8.0),
             child: Image.asset('assets/images/logo.png'),
           ),
           for (Pages page in Pages.values)
-            _buildCustomListTile(
-              context,
-              page,
-              currentPage,
-            ),
+            _buildCustomListTile(context, page, currentPage),
           // _buildLogoutButton(context),
           Divider(
             color: Theme.of(context).colorScheme.primary,
@@ -42,17 +34,13 @@ class CustomDrawer extends StatelessWidget {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
               builder: (context, state) {
                 return state.when(
                   initial: () => const SizedBox.shrink(),
-                  loaded: (ThemeMode themeMode) => _buildDarkModeSwitch(
-                    context,
-                    themeMode: themeMode,
-                  ),
+                  loaded: (ThemeMode themeMode) =>
+                      _buildDarkModeSwitch(context, themeMode: themeMode),
                 );
               },
             ),
@@ -72,47 +60,43 @@ class CustomDrawer extends StatelessWidget {
     Pages currentPage,
   ) {
     return ListTile(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
       selected: page == currentPage,
       selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
       selectedColor: Theme.of(context).colorScheme.onPrimaryContainer,
       leading: SizedBox(
         width: 34.0,
-        child: Icon(
+        child: FaIcon(
           _buildIconForPage(page),
-          color: page == currentPage ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.primary,
+          color: page == currentPage
+              ? Theme.of(context).colorScheme.onPrimaryContainer
+              : Theme.of(context).colorScheme.primary,
         ),
       ),
-      title: Text(page.nameKey,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: page == currentPage ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.primary,
-              )),
-      onTap: () => _goTo(
-        context,
-        page: page,
+      title: Text(
+        page.nameKey,
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          color: page == currentPage
+              ? Theme.of(context).colorScheme.onPrimaryContainer
+              : Theme.of(context).colorScheme.primary,
+        ),
       ),
+      onTap: () => _goTo(context, page: page),
     );
   }
 
   Widget _buildLogoutButton(BuildContext context) {
     return ListTile(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(6.0),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
       leading: SizedBox(
         width: 34.0,
-        child: Icon(
-          Icons.logout,
-          color: Theme.of(context).colorScheme.primary,
-        ),
+        child: Icon(Icons.logout, color: Theme.of(context).colorScheme.primary),
       ),
       title: Text(
         'Logout',
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
       onTap: AuthenticationUtils.logout,
     );
@@ -130,11 +114,21 @@ class CustomDrawer extends StatelessWidget {
     return Row(
       children: [
         Switch(
-          thumbColor: MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface),
-          trackColor:
-              MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
-          trackOutlineColor:
-              MaterialStatePropertyAll(valueForSwitch ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.secondary),
+          thumbColor: MaterialStatePropertyAll(
+            valueForSwitch
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.surface,
+          ),
+          trackColor: MaterialStatePropertyAll(
+            valueForSwitch
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Theme.of(context).colorScheme.secondary,
+          ),
+          trackOutlineColor: MaterialStatePropertyAll(
+            valueForSwitch
+                ? Theme.of(context).colorScheme.primaryContainer
+                : Theme.of(context).colorScheme.secondary,
+          ),
           value: valueForSwitch,
           onChanged: (val) async {
             ThemeMode? newThemeMode;
@@ -148,18 +142,18 @@ class CustomDrawer extends StatelessWidget {
             await getIt.get<ThemeModeCubit>().updateThemeMode(newThemeMode);
           },
         ),
-        const SizedBox(
-          width: 16.0,
-        ),
+        const SizedBox(width: 16.0),
         Text(
           (valueForSwitch ? 'Dark mode' : 'Light mode'),
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Theme.of(context).colorScheme.primary),
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
       ],
     );
   }
 
-  IconData _buildIconForPage(Pages page) {
+  FaIconData _buildIconForPage(Pages page) {
     return switch (page) {
       Pages.home => FontAwesomeIcons.gripVertical,
       Pages.schedule => FontAwesomeIcons.solidClock,
@@ -176,10 +170,7 @@ class CustomDrawer extends StatelessWidget {
   /// Functions
   ///
 
-  void _goTo(
-    BuildContext context, {
-    required Pages page,
-  }) {
+  void _goTo(BuildContext context, {required Pages page}) {
     context.go(page.path);
   }
 }

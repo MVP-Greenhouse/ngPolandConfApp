@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
@@ -26,6 +27,7 @@ import 'firebase_options.dart'; // Import the generated file
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await GoogleSignIn.instance.initialize();
   await Hive.initFlutter();
 
   Hive

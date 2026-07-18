@@ -1,3 +1,21 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "chat.tools.terminal.autoApprove": {
+        "/^/Users/sebastiandenis/Programs/flutter/bin/flutter --version && /Users/sebastiandenis/Programs/flutter/bin/flutter pub outdated$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd ng_poland_conf_app && /Users/sebastiandenis/Programs/flutter/bin/flutter build apk --debug$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd ng_poland_conf_app && /Users/sebastiandenis/Programs/flutter/bin/flutter analyze lib$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd ng_poland_conf_app && /Users/sebastiandenis/Programs/flutter/bin/flutter analyze$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
 }
