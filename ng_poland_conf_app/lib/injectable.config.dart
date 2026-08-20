@@ -71,6 +71,8 @@ import 'features/home/datasources/data/conferences_local_datasource.dart'
     as _i924;
 import 'features/home/datasources/data/conferences_remote_datasource.dart'
     as _i800;
+import 'features/home/datasources/data/contest_ui_local_datasource.dart'
+    as _i355;
 import 'features/home/datasources/data/theme_mode_local_datasource.dart'
     as _i397;
 import 'features/home/datasources/repositories/conferences_repository.dart'
@@ -83,6 +85,7 @@ import 'features/home/domains/repositories/theme_mode_repository.dart' as _i905;
 import 'features/home/domains/usecases/get_all_conferences.dart' as _i359;
 import 'features/home/domains/usecases/get_theme_mode.dart' as _i189;
 import 'features/home/domains/usecases/update_theme_mode.dart' as _i184;
+import 'features/home/presentation/cubit/contest_home_cubit.dart' as _i995;
 import 'features/info/datasources/data/info_local_datasource.dart' as _i1041;
 import 'features/info/datasources/data/info_remote_datasource.dart' as _i369;
 import 'features/info/datasources/repositories/info_repository.dart' as _i123;
@@ -153,6 +156,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i189.SpeakerVoteRemoteDataSource>(
       () => _i189.SpeakerVoteRemoteDataSource(),
+    );
+    gh.factory<_i355.ContestUiLocalDataSource>(
+      () => _i355.ContestUiLocalDataSource(),
     );
     await gh.singletonAsync<_i242.RawConfig>(
       () => registerModule.config(),
@@ -298,6 +304,14 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i472.NgGirlsImpl(
         gh<_i818.NgGirlsRemoteDataSource>(),
         gh<_i214.NgGirlsLocalDataSource>(),
+      ),
+    );
+    gh.factory<_i995.ContestHomeCubit>(
+      () => _i995.ContestHomeCubit(
+        gh<_i33.ContestRepository>(),
+        gh<_i419.EngagementConfigRepository>(),
+        gh<_i793.UserSessionCubit>(),
+        gh<_i933.ConferencesCubit>(),
       ),
     );
     gh.singleton<_i600.InfoRepository>(

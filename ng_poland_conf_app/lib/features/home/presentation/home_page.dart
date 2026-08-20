@@ -1,8 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/constants/app_dimensions.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
+import 'package:ng_poland_conf_app/features/home/presentation/widgets/contest_home_section.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/widgets/custom_timer.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
@@ -24,6 +26,12 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
   void initState() {
     _cubit = getIt.get<ConferencesCubit>();
     super.initState();
+    Connectivity().checkConnectivity().then((results) {
+      if (!mounted || results.isEmpty) return;
+      setState(() {
+        connectivityResult = results.last;
+      });
+    });
   }
 
   @override
@@ -107,6 +115,9 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
                 height: 50.0,
               ),
               _buildTimer(),
+              ContestHomeSectionHost(
+                online: connectivityResult != ConnectivityResult.none,
+              ),
               const Divider(
                 height: 60.0,
               ),
