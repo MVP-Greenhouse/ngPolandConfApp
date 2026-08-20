@@ -57,7 +57,9 @@ class SpeakerVoteCubit extends Cubit<SpeakerVoteState> {
             .switchMap(_mapToState)
             .listen(
               (next) {
-                if (!isClosed) emit(next);
+                if (isClosed) return;
+                if (_shouldIgnoreWatchMyVote(next)) return;
+                emit(next);
               },
               onError: (_) {
                 if (!isClosed) emit(const SpeakerVoteState.hidden());
@@ -100,9 +102,18 @@ class SpeakerVoteCubit extends Cubit<SpeakerVoteState> {
 
       return _speakerVoteRepository
           .watchMyVote(confId: selectedConfId, speakerId: speakerId, uid: uid)
-          .startWith(null)
           .map(SpeakerVoteState.ready);
     });
+  }
+
+  bool _shouldIgnoreWatchMyVote(SpeakerVoteState next) {
+    final inFlight = state.maybeWhen(
+      saving: (_) => true,
+      failure: (_) => true,
+      orElse: () => false,
+    );
+    if (!inFlight) return false;
+    return next.maybeWhen(ready: (_) => true, orElse: () => false);
   }
 
   Future<void> tap(SpeakerVoteValue tapped) async {
