@@ -18,6 +18,20 @@ import 'package:ng_poland_conf_app/injectable.dart';
 
 import '../features/questions/presentation/questions_page.dart';
 
+String? adminGuardRedirect({
+  required String matchedLocation,
+  required UserSessionState session,
+}) {
+  if (matchedLocation != AdminPage.path) return null;
+  final isLoading = session.maybeWhen(
+    loading: () => true,
+    orElse: () => false,
+  );
+  if (isLoading) return null;
+  if (!session.isAdmin) return Pages.home.path;
+  return null;
+}
+
 enum Pages {
   home('/', 'Home'),
   schedule('/schedule', 'Schedule'),
@@ -52,8 +66,10 @@ class Routing {
     router = GoRouter(
       redirect: (_, state) {
         if (state.matchedLocation == AdminPage.path) {
-          final isAdmin = getIt.get<UserSessionCubit>().state.isAdmin;
-          if (!isAdmin) return Pages.home.path;
+          return adminGuardRedirect(
+            matchedLocation: state.matchedLocation,
+            session: getIt.get<UserSessionCubit>().state,
+          );
         }
         return state.path;
         // bool authentication = FirebaseAuth.instance.currentUser == null;

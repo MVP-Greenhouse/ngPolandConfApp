@@ -25,31 +25,53 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
   ) : super(const AuthenticationState.initial());
 
   Future<void> signInSocialMedia(SignInSocialMediaType type) async {
-    emit(AuthenticationState.inProgress(
-      type: switch (type) {
-        SignInGoogle() => AuthenticationType.google,
-        SignInApple() => AuthenticationType.apple,
-      },
-    ));
+    emit(
+      AuthenticationState.inProgress(
+        type: switch (type) {
+          SignInGoogle() => AuthenticationType.google,
+          SignInApple() => AuthenticationType.apple,
+        },
+      ),
+    );
     Either<String, String> signInStatus = await switch (type) {
       SignInGoogle() => signInGoogleUseCase(type.params),
       SignInApple() => signInAppleUseCase(type.params),
     };
-    await signInStatus.fold(
-      (l) async => emit(AuthenticationState.error(l)),
-      (_) async {
-        final user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          await ensureUserProfile(
-            EnsureUserProfileParams(
-              uid: user.uid,
-              displayName: user.displayName ?? '',
-              email: user.email ?? '',
-            ),
-          );
-        }
-        emit(const AuthenticationState.authenticated());
-      },
-    );
+    await signInStatus.fold((l) async => emit(AuthenticationState.error(l)), (
+      _,
+    ) async {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await ensureProfileAfterSignIn(
+          uid: user.uid,
+          displayName: user.displayName ?? '',
+          email: user.email ?? '',
+        );
+        return;
+      }
+      emit(const AuthenticationState.authenticated());
+    });
+  }
+
+  Future<void> ensureProfileAfterSignIn({
+    required String uid,
+    required String displayName,
+    required String email,
+  }) async {
+    try {
+      await ensureUserProfile(
+        EnsureUserProfileParams(
+          uid: uid,
+          displayName: displayName,
+          email: email,
+        ),
+      );
+    } catch (_) {
+      emit(
+        const AuthenticationState.error('Wystąpił problem z zapisem profilu.'),
+      );
+      return;
+    }
+    emit(const AuthenticationState.authenticated());
   }
 }

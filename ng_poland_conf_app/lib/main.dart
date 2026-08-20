@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,7 +49,7 @@ Future<void> main() async {
     Environment.prod,
   ); // Replace 'Environment.prod' with the appropriate argument for your setup.
 
-  FirebaseAuth.instance.authStateChanges().listen(
+  getIt.get<UserSessionCubit>().stream.listen(
     (_) => getIt.get<Routing>().router.refresh(),
   );
 
