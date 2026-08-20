@@ -18,6 +18,7 @@ import 'config/raw_config.dart' as _i242;
 import 'config/register_module.dart' as _i733;
 import 'core/blocks/conferences/conferences_cubit.dart' as _i933;
 import 'core/blocks/themeMode/theme_mode_cubit.dart' as _i399;
+import 'features/admin/presentation/cubit/admin_cubit.dart' as _i152;
 import 'features/authentication/datasources/data/user_remote_datasource.dart'
     as _i273;
 import 'features/authentication/datasources/repositories/authentication_repository.dart'
@@ -389,6 +390,16 @@ extension GetItInjectableX on _i174.GetIt {
         conferencesCubit: gh<_i933.ConferencesCubit>(),
         getAllSpeakerGetAllInfoItemsForConference:
             gh<_i816.GetAllInfoItemsForConference>(),
+      ),
+    );
+    gh.factory<_i152.AdminCubit>(
+      () => _i152.AdminCubit(
+        gh<_i419.EngagementConfigRepository>(),
+        gh<_i75.SpeakerVoteRepository>(),
+        gh<_i33.ContestRepository>(),
+        gh<_i350.GetAllSpeakersForConference>(),
+        gh<_i793.UserSessionCubit>(),
+        gh<_i933.ConferencesCubit>(),
       ),
     );
     gh.factory<_i236.WorkshopCubit>(

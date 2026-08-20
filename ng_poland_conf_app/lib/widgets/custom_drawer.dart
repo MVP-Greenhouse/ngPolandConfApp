@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
 import 'package:ng_poland_conf_app/core/utils/authentication_utils.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/admin_page.dart';
+import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +14,11 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Pages currentPage = getIt.get<Routing>().currentPage(context);
+    final isAdminRoute =
+        GoRouterState.of(context).matchedLocation == AdminPage.path;
+    final Pages? currentPage = isAdminRoute
+        ? null
+        : getIt.get<Routing>().currentPage(context);
 
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.surface.withAlpha(210),
@@ -26,6 +32,15 @@ class CustomDrawer extends StatelessWidget {
           ),
           for (Pages page in Pages.values)
             _buildCustomListTile(context, page, currentPage),
+          BlocBuilder<UserSessionCubit, UserSessionState>(
+            builder: (context, state) {
+              return AdminDrawerTile(
+                visible: state.isAdmin,
+                selected: isAdminRoute,
+                onTap: () => context.go(AdminPage.path),
+              );
+            },
+          ),
           // _buildLogoutButton(context),
           Divider(
             color: Theme.of(context).colorScheme.primary,
@@ -57,7 +72,7 @@ class CustomDrawer extends StatelessWidget {
   Widget _buildCustomListTile(
     BuildContext context,
     Pages page,
-    Pages currentPage,
+    Pages? currentPage,
   ) {
     return ListTile(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
@@ -172,5 +187,48 @@ class CustomDrawer extends StatelessWidget {
 
   void _goTo(BuildContext context, {required Pages page}) {
     context.go(page.path);
+  }
+}
+
+class AdminDrawerTile extends StatelessWidget {
+  const AdminDrawerTile({
+    super.key,
+    required this.visible,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final bool visible;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!visible) return const SizedBox.shrink();
+
+    return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+      selected: selected,
+      selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
+      selectedColor: Theme.of(context).colorScheme.onPrimaryContainer,
+      leading: SizedBox(
+        width: 34.0,
+        child: FaIcon(
+          FontAwesomeIcons.userShield,
+          color: selected
+              ? Theme.of(context).colorScheme.onPrimaryContainer
+              : Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      title: Text(
+        'Admin',
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          color: selected
+              ? Theme.of(context).colorScheme.onPrimaryContainer
+              : Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      onTap: onTap,
+    );
   }
 }
