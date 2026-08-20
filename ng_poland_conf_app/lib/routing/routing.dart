@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/about/presentation/about_page.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/admin_page.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/authentication_page.dart';
+import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/home_page.dart';
 import 'package:ng_poland_conf_app/features/info/presentation/info_page.dart';
@@ -12,6 +14,7 @@ import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_page.
 import 'package:ng_poland_conf_app/features/speakers/presentation/speakers_page.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/workshops_page.dart';
+import 'package:ng_poland_conf_app/injectable.dart';
 
 import '../features/questions/presentation/questions_page.dart';
 
@@ -48,6 +51,10 @@ class Routing {
     navigatorKey = GlobalKey<NavigatorState>();
     router = GoRouter(
       redirect: (_, state) {
+        if (state.matchedLocation == AdminPage.path) {
+          final isAdmin = getIt.get<UserSessionCubit>().state.isAdmin;
+          if (!isAdmin) return Pages.home.path;
+        }
         return state.path;
         // bool authentication = FirebaseAuth.instance.currentUser == null;
         // if (authentication) {
@@ -63,6 +70,10 @@ class Routing {
         GoRoute(
           path: AuthenticationPage.path,
           builder: (context, state) => const AuthenticationPage(),
+        ),
+        GoRoute(
+          path: AdminPage.path,
+          builder: (context, state) => const AdminPage(),
         ),
         GoRoute(
           path: Pages.home.path,

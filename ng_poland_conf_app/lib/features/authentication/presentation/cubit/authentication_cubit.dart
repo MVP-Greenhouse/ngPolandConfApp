@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/authentication/domains/entities/sign_in_social_media_type.dart';
+import 'package:ng_poland_conf_app/features/authentication/domains/usecases/ensure_user_profile.dart';
 import 'package:ng_poland_conf_app/features/authentication/domains/usecases/sign_in_apple.dart';
 import 'package:ng_poland_conf_app/features/authentication/domains/usecases/sign_in_google.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/social_media_button.dart';
@@ -14,10 +16,12 @@ part 'authentication_cubit.freezed.dart';
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   final SignInAppleUseCase signInAppleUseCase;
   final SignInGoogleUseCase signInGoogleUseCase;
+  final EnsureUserProfile ensureUserProfile;
 
   AuthenticationCubit(
     this.signInAppleUseCase,
     this.signInGoogleUseCase,
+    this.ensureUserProfile,
   ) : super(const AuthenticationState.initial());
 
   Future<void> signInSocialMedia(SignInSocialMediaType type) async {
@@ -31,9 +35,21 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       SignInGoogle() => signInGoogleUseCase(type.params),
       SignInApple() => signInAppleUseCase(type.params),
     };
-    signInStatus.fold(
-      (l) => emit(AuthenticationState.error(l)),
-      (_) => emit(const AuthenticationState.authenticated()),
+    await signInStatus.fold(
+      (l) async => emit(AuthenticationState.error(l)),
+      (_) async {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await ensureUserProfile(
+            EnsureUserProfileParams(
+              uid: user.uid,
+              displayName: user.displayName ?? '',
+              email: user.email ?? '',
+            ),
+          );
+        }
+        emit(const AuthenticationState.authenticated());
+      },
     );
   }
 }

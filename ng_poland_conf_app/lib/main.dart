@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
+import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conference_home_page_schedule_item_model.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conference_model.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conferences_model.dart';
@@ -69,6 +70,7 @@ class MainApp extends StatelessWidget {
         BlocProvider(
           create: (context) => getIt.get<ThemeModeCubit>()..getThemeMode(),
         ),
+        BlocProvider(create: (_) => getIt.get<UserSessionCubit>()),
       ],
       child: BlocBuilder<ThemeModeCubit, ThemeModeState>(
         builder: (context, state) {
