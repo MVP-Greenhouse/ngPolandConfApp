@@ -121,6 +121,7 @@ import 'features/speakers/domains/repositories/speakers_repository.dart'
     as _i1005;
 import 'features/speakers/domains/usecases/get_all_speakers_for_conference.dart'
     as _i350;
+import 'features/speakers/presentation/cubit/speaker_vote_cubit.dart' as _i440;
 import 'features/speakers/presentation/cubit/speakers_cubit.dart' as _i181;
 import 'features/workshops/datasources/data/workshops_local_datasource.dart'
     as _i636;
@@ -303,6 +304,15 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i123.InfoRepositoryImpl(
         gh<_i369.InfoRemoteDataSource>(),
         gh<_i1041.InfoLocalDataSource>(),
+      ),
+    );
+    gh.factoryParam<_i440.SpeakerVoteCubit, String, dynamic>(
+      (speakerId, _) => _i440.SpeakerVoteCubit(
+        gh<_i75.SpeakerVoteRepository>(),
+        gh<_i419.EngagementConfigRepository>(),
+        gh<_i793.UserSessionCubit>(),
+        gh<_i933.ConferencesCubit>(),
+        speakerId,
       ),
     );
     gh.factory<_i350.GetAllSpeakersForConference>(

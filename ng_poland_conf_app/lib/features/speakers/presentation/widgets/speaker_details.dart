@@ -1,7 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../injectable.dart';
@@ -9,6 +11,7 @@ import '../../../../widgets/cross_origin_image.dart';
 import '../../../../widgets/empty_list_info.dart';
 import '../../domains/entities/speaker.dart';
 import '../cubit/speakers_cubit.dart';
+import 'speaker_vote_buttons.dart';
 
 class SpeakerDetails extends StatefulWidget {
   final String id;
@@ -22,7 +25,8 @@ class SpeakerDetails extends StatefulWidget {
   State<SpeakerDetails> createState() => _SpeakerDetailsState();
 }
 
-class _SpeakerDetailsState extends State<SpeakerDetails> {
+class _SpeakerDetailsState extends State<SpeakerDetails>
+    with ConnectivityMixin {
   late final SpeakersCubit _speakersCubit;
 
   ButtonStyle get _flatButtonStyle => TextButton.styleFrom(
@@ -37,6 +41,12 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
     _speakersCubit = getIt.get<SpeakersCubit>();
     _speakersCubit.getListSpeakers();
     super.initState();
+    Connectivity().checkConnectivity().then((results) {
+      if (!mounted || results.isEmpty) return;
+      setState(() {
+        connectivityResult = results.last;
+      });
+    });
   }
 
   @override
@@ -133,6 +143,13 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
+                            if ((speaker.id ?? '').isNotEmpty)
+                              SpeakerVoteButtonsHost(
+                                speakerId: speaker.id!,
+                                enabled:
+                                    connectivityResult !=
+                                    ConnectivityResult.none,
+                              ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 16.0,
