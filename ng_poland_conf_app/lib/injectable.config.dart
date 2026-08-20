@@ -36,6 +36,24 @@ import 'features/authentication/presentation/cubit/authentication_cubit.dart'
     as _i48;
 import 'features/authentication/presentation/cubit/user_session_cubit.dart'
     as _i793;
+import 'features/engagement/datasources/data/contest_remote_datasource.dart'
+    as _i481;
+import 'features/engagement/datasources/data/engagement_config_remote_datasource.dart'
+    as _i1016;
+import 'features/engagement/datasources/data/speaker_vote_remote_datasource.dart'
+    as _i189;
+import 'features/engagement/datasources/repositories/contest_repository.dart'
+    as _i804;
+import 'features/engagement/datasources/repositories/engagement_config_repository.dart'
+    as _i408;
+import 'features/engagement/datasources/repositories/speaker_vote_repository.dart'
+    as _i747;
+import 'features/engagement/domains/repositories/contest_repository.dart'
+    as _i33;
+import 'features/engagement/domains/repositories/engagement_config_repository.dart'
+    as _i419;
+import 'features/engagement/domains/repositories/speaker_vote_repository.dart'
+    as _i75;
 import 'features/event/datasources/data/local/rate_event_local_datasource.dart'
     as _i234;
 import 'features/event/datasources/data/remote/rate_event_remote_datasource.dart'
@@ -126,6 +144,15 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
     gh.factory<_i273.UserRemoteDataSource>(() => _i273.UserRemoteDataSource());
+    gh.factory<_i481.ContestRemoteDataSource>(
+      () => _i481.ContestRemoteDataSource(),
+    );
+    gh.factory<_i1016.EngagementConfigRemoteDataSource>(
+      () => _i1016.EngagementConfigRemoteDataSource(),
+    );
+    gh.factory<_i189.SpeakerVoteRemoteDataSource>(
+      () => _i189.SpeakerVoteRemoteDataSource(),
+    );
     await gh.singletonAsync<_i242.RawConfig>(
       () => registerModule.config(),
       preResolve: true,
@@ -133,6 +160,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i933.ConferencesCubit>(() => _i933.ConferencesCubit());
     gh.singleton<_i399.ThemeModeCubit>(() => _i399.ThemeModeCubit());
     gh.singleton<_i883.Routing>(() => _i883.Routing());
+    gh.singleton<_i33.ContestRepository>(
+      () => _i804.ContestRepositoryImpl(gh<_i481.ContestRemoteDataSource>()),
+    );
     gh.singleton<_i234.RateEventLocalDataSource>(
       () => _i234.RateEventLocalDataSourceImpl(),
     );
@@ -170,6 +200,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i878.ScheduleLocalDataSource>(
       () => _i878.ScheduleLocalDataSourceImpl(),
     );
+    gh.singleton<_i75.SpeakerVoteRepository>(
+      () => _i747.SpeakerVoteRepositoryImpl(
+        gh<_i189.SpeakerVoteRemoteDataSource>(),
+      ),
+    );
     gh.singleton<_i476.UserRepository>(
       () => _i137.UserRepositoryImpl(gh<_i273.UserRemoteDataSource>()),
     );
@@ -183,6 +218,11 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.singleton<_i361.Dio>(() => registerModule.dio(gh<_i297.AppConfig>()));
+    gh.singleton<_i419.EngagementConfigRepository>(
+      () => _i408.EngagementConfigRepositoryImpl(
+        gh<_i1016.EngagementConfigRemoteDataSource>(),
+      ),
+    );
     gh.singleton<_i905.ThemeModeRepository>(
       () => _i877.ThemeModeImpl(gh<_i397.ThemeModeLocalDataSource>()),
     );
