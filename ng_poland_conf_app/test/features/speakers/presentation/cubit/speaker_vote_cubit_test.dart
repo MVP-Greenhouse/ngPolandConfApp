@@ -44,6 +44,47 @@ void main() {
     await votes.dispose();
   });
 
+  test('stays hidden when session is loading at create', () async {
+    cubit = _buildCubit(
+      votes: votes,
+      config: config,
+      session: session,
+      conferences: conferences,
+    );
+
+    await pumpEventQueue();
+
+    expect(cubit!.state, const SpeakerVoteState.hidden());
+    expect(votes.watchMyVoteCalls, 0);
+  });
+
+  test(
+    'does not keep needsLogin after auth starts; waits for first vote snapshot',
+    () async {
+      session.signOut();
+      cubit = _buildCubit(
+        votes: votes,
+        config: config,
+        session: session,
+        conferences: conferences,
+      );
+      await pumpEventQueue();
+      expect(cubit!.state, const SpeakerVoteState.needsLogin());
+
+      session.signIn();
+      await pumpEventQueue();
+
+      expect(cubit!.state, isNot(const SpeakerVoteState.needsLogin()));
+      expect(cubit!.state, const SpeakerVoteState.hidden());
+      expect(votes.watchMyVoteCalls, 1);
+
+      votes.voteController.add(SpeakerVoteValue.up);
+      await pumpEventQueue();
+
+      expect(cubit!.state, const SpeakerVoteState.ready(SpeakerVoteValue.up));
+    },
+  );
+
   test('holds hidden until the first watchMyVote snapshot', () async {
     session.signIn();
     cubit = _buildCubit(

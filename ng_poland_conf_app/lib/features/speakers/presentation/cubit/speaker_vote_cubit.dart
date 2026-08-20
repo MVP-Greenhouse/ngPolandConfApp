@@ -93,16 +93,22 @@ class SpeakerVoteCubit extends Cubit<SpeakerVoteState> {
         return Stream<SpeakerVoteState>.value(const SpeakerVoteState.hidden());
       }
 
-      final uid = snapshot.session.profile?.uid;
-      if (uid == null) {
-        return Stream<SpeakerVoteState>.value(
+      return snapshot.session.when(
+        loading: () => Stream<SpeakerVoteState>.value(
+          const SpeakerVoteState.hidden(),
+        ),
+        unauthenticated: () => Stream<SpeakerVoteState>.value(
           const SpeakerVoteState.needsLogin(),
-        );
-      }
-
-      return _speakerVoteRepository
-          .watchMyVote(confId: selectedConfId, speakerId: speakerId, uid: uid)
-          .map(SpeakerVoteState.ready);
+        ),
+        authenticated: (profile) => _speakerVoteRepository
+            .watchMyVote(
+              confId: selectedConfId,
+              speakerId: speakerId,
+              uid: profile.uid,
+            )
+            .map(SpeakerVoteState.ready)
+            .startWith(const SpeakerVoteState.hidden()),
+      );
     });
   }
 
