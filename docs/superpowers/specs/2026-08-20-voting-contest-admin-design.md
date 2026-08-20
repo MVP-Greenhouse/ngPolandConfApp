@@ -228,3 +228,15 @@ Nowe feature’y w istniejącym układzie katalogów:
 - `widgets/custom_drawer.dart` — pozycja Admin poza `Pages` (żeby nie trafiła do zwykłego użytkownika)
 
 BLoC/Cubit + GetIt, zgodnie z resztą projektu.
+
+## Firestore paths (implementation)
+
+- `conf/{confId}/engagement/config`
+- `conf/{confId}/speakerVotes/{speakerId}`
+- `conf/{confId}/speakerVotes/{speakerId}/votes/{uid}`
+- `conf/{confId}/contestParticipants/{uid}`
+- `conf/{confId}/contestWinners/{uid}`
+- `users/{uid}`
+
+Deploy rules: `firebase deploy --only firestore:rules` from repo root (requires Firebase CLI and project `ngpolandconfapp`).
+

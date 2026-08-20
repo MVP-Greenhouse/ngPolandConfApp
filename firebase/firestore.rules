@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+    function userDoc(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data;
+    }
+    function isAdmin() {
+      return signedIn() && userDoc(request.auth.uid).role == 'admin';
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid)
+        && request.resource.data.role == 'user';
+      allow update: if isOwner(uid)
+        && request.resource.data.role == resource.data.role;
+      allow delete: if false;
+    }
+
+    match /conf/{confId}/engagement/{docId} {
+      allow read: if true;
+      allow write: if isAdmin() && docId == 'config';
+    }
+
+    match /conf/{confId}/speakerVotes/{speakerId} {
+      allow read: if isAdmin();
+      allow create, update: if signedIn()
+        && request.resource.data.keys().size() == 0;
+      allow delete: if false;
+
+      match /votes/{uid} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create, update, delete: if isOwner(uid);
+      }
+    }
+
+    match /conf/{confId}/contestParticipants/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow create: if isOwner(uid);
+      allow update, delete: if false;
+    }
+
+    match /conf/{confId}/contestWinners/{uid} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // Existing event star ratings — keep working under default-deny.
+    match /conf/{confId}/{eventItemType}/{eventId}/rates/{uid} {
+      allow read, write: if isOwner(uid);
+    }
+  }
+}
