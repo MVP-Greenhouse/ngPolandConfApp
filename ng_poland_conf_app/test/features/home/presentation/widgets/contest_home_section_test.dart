@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/contest_home_view.dart';
+import 'package:ng_poland_conf_app/features/home/datasources/data/contest_ui_local_datasource.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/widgets/contest_home_section.dart';
 
 void main() {
@@ -68,6 +69,68 @@ void main() {
       isNull,
     );
   });
+
+  testWidgets('winner view shows Gratulacje! once then dismisses on OK', (
+    tester,
+  ) async {
+    final ui = _FakeContestUi();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ContestWinDialogListener(
+          view: ContestHomeView.winner,
+          confId: '2026',
+          ui: ui,
+          child: const ContestHomeSection(
+            view: ContestHomeView.winner,
+            online: true,
+            onJoin: _noop,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Gratulacje!'), findsOneWidget);
+
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Gratulacje!'), findsNothing);
+  });
+
+  testWidgets('loser view does not show Gratulacje!', (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ContestWinDialogListener(
+          view: ContestHomeView.loser,
+          confId: '2026',
+          ui: _FakeContestUi(),
+          child: const ContestHomeSection(
+            view: ContestHomeView.loser,
+            online: true,
+            onJoin: _noop,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Gratulacje!'), findsNothing);
+  });
 }
 
 void _noop() {}
+
+class _FakeContestUi extends ContestUiLocalDataSource {
+  var shown = false;
+
+  @override
+  Future<bool> wasWinDialogShown(String confId) async => shown;
+
+  @override
+  Future<void> markWinDialogShown(String confId) async {
+    shown = true;
+  }
+}

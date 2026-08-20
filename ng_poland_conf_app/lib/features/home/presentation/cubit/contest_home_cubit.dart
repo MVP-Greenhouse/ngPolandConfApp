@@ -66,7 +66,9 @@ class ContestHomeCubit extends Cubit<ContestHomeState> {
                 emit(next);
               },
               onError: (_) {
-                if (!isClosed) emit(const ContestHomeState());
+                // Keep the last good ContestHomeState. Emitting a blank
+                // ContestHomeState() would hide the CTA for the rest of
+                // this Host lifetime after a transient stream error.
               },
             );
   }

@@ -17,6 +17,7 @@ import 'package:ng_poland_conf_app/features/engagement/domains/repositories/enga
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/cubit/contest_home_cubit.dart';
+import 'package:rxdart/rxdart.dart';
 
 void main() {
   late _TestConferencesCubit conferences;
@@ -120,6 +121,27 @@ void main() {
     expect(cubit!.state.joinFailed, isTrue);
   });
 
+  test('stream error keeps last good home state', () async {
+    session.signOut();
+    final config$ = BehaviorSubject<EngagementConfig>.seeded(
+      _openContestConfig,
+    );
+    addTearDown(config$.close);
+    cubit = _buildCubit(
+      contest: contest,
+      config: _StreamConfigRepository(config$),
+      session: session,
+      conferences: conferences,
+    );
+    await pumpEventQueue();
+    expect(cubit!.state.view, ContestHomeView.join);
+
+    config$.addError(Exception('network'));
+    await pumpEventQueue();
+
+    expect(cubit!.state.view, ContestHomeView.join);
+  });
+
   test('winner view when watchMyWin emits', () async {
     session.signIn();
     contest.participant = const ContestParticipant(
@@ -147,7 +169,7 @@ void main() {
 
 ContestHomeCubit _buildCubit({
   required _FakeContestRepository contest,
-  required _FakeConfigRepository config,
+  required EngagementConfigRepository config,
   required _TestUserSessionCubit session,
   required _TestConferencesCubit conferences,
 }) {
@@ -225,6 +247,18 @@ class _FakeConfigRepository implements EngagementConfigRepository {
 
   @override
   Stream<EngagementConfig> watchConfig(String confId) => Stream.value(config);
+
+  @override
+  Future<void> saveConfig(String confId, EngagementConfig config) async {}
+}
+
+class _StreamConfigRepository implements EngagementConfigRepository {
+  _StreamConfigRepository(this._stream);
+
+  final Stream<EngagementConfig> _stream;
+
+  @override
+  Stream<EngagementConfig> watchConfig(String confId) => _stream;
 
   @override
   Future<void> saveConfig(String confId, EngagementConfig config) async {}

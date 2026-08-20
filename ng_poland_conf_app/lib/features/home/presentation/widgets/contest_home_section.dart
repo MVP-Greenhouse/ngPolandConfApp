@@ -115,7 +115,6 @@ class ContestHomeSectionHost extends StatefulWidget {
 class _ContestHomeSectionHostState extends State<ContestHomeSectionHost> {
   late final ContestHomeCubit _cubit;
   late final ContestUiLocalDataSource _ui;
-  String? _winDialogHandledConfId;
 
   @override
   void initState() {
@@ -135,9 +134,7 @@ class _ContestHomeSectionHostState extends State<ContestHomeSectionHost> {
     return BlocConsumer<ContestHomeCubit, ContestHomeState>(
       bloc: _cubit,
       listenWhen: (previous, current) =>
-          (!previous.joinFailed && current.joinFailed) ||
-          (previous.view != ContestHomeView.winner &&
-              current.view == ContestHomeView.winner),
+          !previous.joinFailed && current.joinFailed,
       listener: (context, state) {
         if (state.joinFailed) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -145,43 +142,75 @@ class _ContestHomeSectionHostState extends State<ContestHomeSectionHost> {
           );
           _cubit.clearJoinFailed();
         }
-        if (state.view == ContestHomeView.winner) {
-          unawaited(_maybeShowWinDialog(state));
-        }
       },
       builder: (context, state) {
-        return ContestHomeSection(
+        return ContestWinDialogListener(
           view: state.view,
-          online: widget.online,
-          onJoin: () {
-            if (_cubit.requiresLogin()) {
-              context.push(
-                AuthenticationPage.loginPath(
-                  from: GoRouterState.of(context).uri.toString(),
-                ),
-              );
-              return;
-            }
-            unawaited(_cubit.join());
-          },
+          confId: state.latestConfId,
+          ui: _ui,
+          child: ContestHomeSection(
+            view: state.view,
+            online: widget.online,
+            onJoin: () {
+              if (_cubit.requiresLogin()) {
+                context.push(
+                  AuthenticationPage.loginPath(
+                    from: GoRouterState.of(context).uri.toString(),
+                  ),
+                );
+                return;
+              }
+              unawaited(_cubit.join());
+            },
+          ),
         );
       },
     );
   }
+}
 
-  Future<void> _maybeShowWinDialog(ContestHomeState state) async {
-    final confId = state.latestConfId;
+class ContestWinDialogListener extends StatefulWidget {
+  const ContestWinDialogListener({
+    super.key,
+    required this.view,
+    required this.confId,
+    required this.ui,
+    required this.child,
+  });
+
+  final ContestHomeView view;
+  final String? confId;
+  final ContestUiLocalDataSource ui;
+  final Widget child;
+
+  @override
+  State<ContestWinDialogListener> createState() =>
+      _ContestWinDialogListenerState();
+}
+
+class _ContestWinDialogListenerState extends State<ContestWinDialogListener> {
+  String? _winDialogHandledConfId;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.view == ContestHomeView.winner) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_maybeShowWinDialog());
+      });
+    }
+    return widget.child;
+  }
+
+  Future<void> _maybeShowWinDialog() async {
+    final confId = widget.confId;
     if (confId == null) return;
     if (_winDialogHandledConfId == confId) return;
+    _winDialogHandledConfId = confId;
 
-    final shown = await _ui.wasWinDialogShown(confId);
-    if (shown) {
-      _winDialogHandledConfId = confId;
-      return;
-    }
+    final shown = await widget.ui.wasWinDialogShown(confId);
+    if (shown) return;
     if (!mounted) return;
 
-    _winDialogHandledConfId = confId;
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -198,6 +227,6 @@ class _ContestHomeSectionHostState extends State<ContestHomeSectionHost> {
         ],
       ),
     );
-    await _ui.markWinDialogShown(confId);
+    await widget.ui.markWinDialogShown(confId);
   }
 }
