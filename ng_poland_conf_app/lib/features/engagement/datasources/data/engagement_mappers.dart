@@ -39,7 +39,7 @@ class EngagementMappers {
 
   static SpeakerVoteValue? voteFromMap(Map<String, dynamic>? data) {
     if (data == null) return null;
-    return SpeakerVoteValue.fromFirestore(data['value'] as int?);
+    return SpeakerVoteValue.fromFirestore(readInt(data['value']));
   }
 
   static ContestParticipant? participantFromMap(
@@ -60,8 +60,12 @@ class EngagementMappers {
       uid: uid,
       displayName: data['displayName'] as String? ?? '',
       email: data['email'] as String? ?? '',
-      order: data['order'] as int? ?? 0,
+      order: readInt(data['order']) ?? 0,
     );
+  }
+
+  static int? readInt(Object? value) {
+    return value is int ? value : (value is num ? value.toInt() : null);
   }
 
   static DateTime _dateTime(dynamic value) {

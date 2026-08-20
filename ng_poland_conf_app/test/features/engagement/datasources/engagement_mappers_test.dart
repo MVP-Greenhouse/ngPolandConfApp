@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ng_poland_conf_app/features/engagement/datasources/data/engagement_mappers.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/speaker_vote_value.dart';
 
 void main() {
   test('config map round-trip keeps status and flags', () {
@@ -25,5 +26,21 @@ void main() {
     expect(config.votingEnabled, isFalse);
     expect(config.contestEnabled, isFalse);
     expect(config.contestStatus, ContestStatus.idle);
+  });
+
+  test('voteFromMap accepts Firestore num as int', () {
+    expect(
+      EngagementMappers.voteFromMap({'value': 1.0}),
+      SpeakerVoteValue.up,
+    );
+  });
+
+  test('winnerFromMap accepts Firestore num as int', () {
+    final winner = EngagementMappers.winnerFromMap('uid-1', {
+      'displayName': 'Alice',
+      'email': 'alice@example.com',
+      'order': 2.0,
+    });
+    expect(winner?.order, 2);
   });
 }
