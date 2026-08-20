@@ -31,7 +31,7 @@ class AdminCubit extends Cubit<AdminState> {
     this._getAllSpeakers,
     this._userSessionCubit,
     this._conferencesCubit,
-  ) : super(const AdminState()) {
+  ) : super(_seedState(_userSessionCubit, _conferencesCubit)) {
     _listen();
   }
 
@@ -63,13 +63,16 @@ class AdminCubit extends Cubit<AdminState> {
             .listen(
               (next) {
                 if (isClosed) return;
+                var merged = next;
                 if (state.message != null) {
-                  emit(next.copyWith(message: state.message));
-                  return;
+                  merged = merged.copyWith(message: state.message);
                 }
-                emit(next);
+                emit(_retainContestStatus(state, merged));
               },
-              onError: (_) {},
+              onError: (Object error, StackTrace stackTrace) {
+                if (isClosed) return;
+                emit(state.copyWith(message: error.toString(), loading: false));
+              },
             );
   }
 
@@ -114,6 +117,8 @@ class AdminCubit extends Cubit<AdminState> {
         participants: participants,
         winners: winners,
       ),
+    ).startWith(
+      AdminState(isAdmin: true, loading: true, latestConfId: latestConfId),
     );
   }
 
@@ -151,6 +156,7 @@ class AdminCubit extends Cubit<AdminState> {
         votingEnabled: enabled,
         votingStartsAt: start.toUtc(),
         votingEndsAt: end.toUtc(),
+        contestStatus: state.config?.contestStatus ?? config.contestStatus,
       ),
     );
   }
@@ -163,12 +169,14 @@ class AdminCubit extends Cubit<AdminState> {
     final confId = state.latestConfId;
     final config = state.config;
     if (confId == null || config == null) return;
+    final contestStatus = state.config?.contestStatus ?? config.contestStatus;
     var next = config.copyWith(
       contestEnabled: enabled,
       contestStartsAt: start.toUtc(),
       contestEndsAt: end.toUtc(),
+      contestStatus: contestStatus,
     );
-    if (enabled && config.contestStatus == ContestStatus.idle) {
+    if (enabled && contestStatus == ContestStatus.idle) {
       next = next.copyWith(contestStatus: ContestStatus.open);
     }
     await _configRepository.saveConfig(confId, next);
@@ -210,6 +218,7 @@ class AdminCubit extends Cubit<AdminState> {
         confId: confId,
         status: ContestStatus.drawing,
       );
+      _emitContestStatus(ContestStatus.drawing);
     }
   }
 
@@ -221,6 +230,7 @@ class AdminCubit extends Cubit<AdminState> {
       confId: confId,
       status: ContestStatus.finished,
     );
+    _emitContestStatus(ContestStatus.finished);
   }
 
   void clearMessage() {
@@ -228,6 +238,53 @@ class AdminCubit extends Cubit<AdminState> {
       emit(state.copyWith(message: null));
     }
   }
+
+  void _emitContestStatus(ContestStatus status) {
+    if (isClosed) return;
+    final config = state.config;
+    if (config == null) return;
+    emit(state.copyWith(config: config.copyWith(contestStatus: status)));
+  }
+
+  static AdminState _seedState(
+    UserSessionCubit session,
+    ConferencesCubit conferences,
+  ) {
+    if (!session.state.isAdmin) return const AdminState();
+    return AdminState(
+      isAdmin: true,
+      loading: true,
+      latestConfId: _latestConfId(conferences.state),
+    );
+  }
+
+  static String? _latestConfId(ConferencesState conferences) {
+    final loaded = conferences.mapOrNull(loaded: (state) => state);
+    if (loaded == null) return null;
+    return LatestConferenceResolver.fromConfIds(
+      loaded.conferences.list.map((conference) => conference.confId),
+    );
+  }
+
+  static AdminState _retainContestStatus(AdminState current, AdminState next) {
+    final currentStatus = current.config?.contestStatus;
+    final nextConfig = next.config;
+    if (currentStatus == null || nextConfig == null) return next;
+    if (_statusPriority(currentStatus) <=
+        _statusPriority(nextConfig.contestStatus)) {
+      return next;
+    }
+    return next.copyWith(
+      config: nextConfig.copyWith(contestStatus: currentStatus),
+    );
+  }
+
+  static int _statusPriority(ContestStatus status) => switch (status) {
+    ContestStatus.idle => 0,
+    ContestStatus.open => 1,
+    ContestStatus.drawing => 2,
+    ContestStatus.finished => 3,
+  };
 
   static String _orMissing(String? value) {
     final trimmed = value?.trim() ?? '';
