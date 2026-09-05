@@ -78,7 +78,7 @@ void main() {
       MaterialApp(
         home: ContestWinDialogListener(
           view: ContestHomeView.winner,
-          confId: '2026',
+          contestId: 'contest-round-1',
           ui: ui,
           child: const ContestHomeSection(
             view: ContestHomeView.winner,
@@ -97,6 +97,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Gratulacje!'), findsNothing);
+    expect(ui.lookedUpContestIds, ['contest-round-1']);
+    expect(ui.markedContestIds, ['contest-round-1']);
   });
 
   testWidgets('loser view does not show Gratulacje!', (tester) async {
@@ -104,7 +106,7 @@ void main() {
       MaterialApp(
         home: ContestWinDialogListener(
           view: ContestHomeView.loser,
-          confId: '2026',
+          contestId: 'contest-round-1',
           ui: _FakeContestUi(),
           child: const ContestHomeSection(
             view: ContestHomeView.loser,
@@ -119,18 +121,79 @@ void main() {
 
     expect(find.text('Gratulacje!'), findsNothing);
   });
+
+  testWidgets('winner dialog is shown again for a different contestId', (
+    tester,
+  ) async {
+    final ui = _FakeContestUi();
+
+    Future<void> pumpListener(String contestId) {
+      return tester.pumpWidget(
+        MaterialApp(
+          home: ContestWinDialogListener(
+            view: ContestHomeView.winner,
+            contestId: contestId,
+            ui: ui,
+            child: const SizedBox.shrink(),
+          ),
+        ),
+      );
+    }
+
+    await pumpListener('contest-round-1');
+    await tester.pump();
+    await tester.pump();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    await pumpListener('contest-round-2');
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Gratulacje!'), findsOneWidget);
+    expect(ui.lookedUpContestIds, ['contest-round-1', 'contest-round-2']);
+  });
+
+  for (final contestId in <String?>[null, '']) {
+    testWidgets('winner dialog is skipped for contestId "$contestId"', (
+      tester,
+    ) async {
+      final ui = _FakeContestUi();
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ContestWinDialogListener(
+            view: ContestHomeView.winner,
+            contestId: contestId,
+            ui: ui,
+            child: const SizedBox.shrink(),
+          ),
+        ),
+      );
+      await tester.pump();
+      await tester.pump();
+
+      expect(find.text('Gratulacje!'), findsNothing);
+      expect(ui.lookedUpContestIds, isEmpty);
+    });
+  }
 }
 
 void _noop() {}
 
 class _FakeContestUi extends ContestUiLocalDataSource {
-  var shown = false;
+  final shownContestIds = <String>{};
+  final lookedUpContestIds = <String>[];
+  final markedContestIds = <String>[];
 
   @override
-  Future<bool> wasWinDialogShown(String confId) async => shown;
+  Future<bool> wasWinDialogShown(String contestId) async {
+    lookedUpContestIds.add(contestId);
+    return shownContestIds.contains(contestId);
+  }
 
   @override
-  Future<void> markWinDialogShown(String confId) async {
-    shown = true;
+  Future<void> markWinDialogShown(String contestId) async {
+    markedContestIds.add(contestId);
+    shownContestIds.add(contestId);
   }
 }

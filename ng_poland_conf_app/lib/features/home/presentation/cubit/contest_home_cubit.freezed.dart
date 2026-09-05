@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ContestHomeState {
 
- ContestHomeView get view; String? get latestConfId; UserProfile? get profile; bool get joinFailed;
+ ContestHomeView get view; String? get latestConfId; String? get contestId; UserProfile? get profile; bool get joinFailed;
 /// Create a copy of ContestHomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ContestHomeStateCopyWith<ContestHomeState> get copyWith => _$ContestHomeStateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContestHomeState&&(identical(other.view, view) || other.view == view)&&(identical(other.latestConfId, latestConfId) || other.latestConfId == latestConfId)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.joinFailed, joinFailed) || other.joinFailed == joinFailed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ContestHomeState&&(identical(other.view, view) || other.view == view)&&(identical(other.latestConfId, latestConfId) || other.latestConfId == latestConfId)&&(identical(other.contestId, contestId) || other.contestId == contestId)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.joinFailed, joinFailed) || other.joinFailed == joinFailed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,view,latestConfId,profile,joinFailed);
+int get hashCode => Object.hash(runtimeType,view,latestConfId,contestId,profile,joinFailed);
 
 @override
 String toString() {
-  return 'ContestHomeState(view: $view, latestConfId: $latestConfId, profile: $profile, joinFailed: $joinFailed)';
+  return 'ContestHomeState(view: $view, latestConfId: $latestConfId, contestId: $contestId, profile: $profile, joinFailed: $joinFailed)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ContestHomeStateCopyWith<$Res>  {
   factory $ContestHomeStateCopyWith(ContestHomeState value, $Res Function(ContestHomeState) _then) = _$ContestHomeStateCopyWithImpl;
 @useResult
 $Res call({
- ContestHomeView view, String? latestConfId, UserProfile? profile, bool joinFailed
+ ContestHomeView view, String? latestConfId, String? contestId, UserProfile? profile, bool joinFailed
 });
 
 
@@ -62,10 +62,11 @@ class _$ContestHomeStateCopyWithImpl<$Res>
 
 /// Create a copy of ContestHomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? view = null,Object? latestConfId = freezed,Object? profile = freezed,Object? joinFailed = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? view = null,Object? latestConfId = freezed,Object? contestId = freezed,Object? profile = freezed,Object? joinFailed = null,}) {
   return _then(_self.copyWith(
 view: null == view ? _self.view : view // ignore: cast_nullable_to_non_nullable
 as ContestHomeView,latestConfId: freezed == latestConfId ? _self.latestConfId : latestConfId // ignore: cast_nullable_to_non_nullable
+as String?,contestId: freezed == contestId ? _self.contestId : contestId // ignore: cast_nullable_to_non_nullable
 as String?,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as UserProfile?,joinFailed: null == joinFailed ? _self.joinFailed : joinFailed // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ContestHomeView view,  String? latestConfId,  UserProfile? profile,  bool joinFailed)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ContestHomeView view,  String? latestConfId,  String? contestId,  UserProfile? profile,  bool joinFailed)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ContestHomeState() when $default != null:
-return $default(_that.view,_that.latestConfId,_that.profile,_that.joinFailed);case _:
+return $default(_that.view,_that.latestConfId,_that.contestId,_that.profile,_that.joinFailed);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.view,_that.latestConfId,_that.profile,_that.joinFailed);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ContestHomeView view,  String? latestConfId,  UserProfile? profile,  bool joinFailed)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ContestHomeView view,  String? latestConfId,  String? contestId,  UserProfile? profile,  bool joinFailed)  $default,) {final _that = this;
 switch (_that) {
 case _ContestHomeState():
-return $default(_that.view,_that.latestConfId,_that.profile,_that.joinFailed);case _:
+return $default(_that.view,_that.latestConfId,_that.contestId,_that.profile,_that.joinFailed);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.view,_that.latestConfId,_that.profile,_that.joinFailed);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ContestHomeView view,  String? latestConfId,  UserProfile? profile,  bool joinFailed)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ContestHomeView view,  String? latestConfId,  String? contestId,  UserProfile? profile,  bool joinFailed)?  $default,) {final _that = this;
 switch (_that) {
 case _ContestHomeState() when $default != null:
-return $default(_that.view,_that.latestConfId,_that.profile,_that.joinFailed);case _:
+return $default(_that.view,_that.latestConfId,_that.contestId,_that.profile,_that.joinFailed);case _:
   return null;
 
 }
@@ -209,11 +210,12 @@ return $default(_that.view,_that.latestConfId,_that.profile,_that.joinFailed);ca
 
 
 class _ContestHomeState extends ContestHomeState {
-  const _ContestHomeState({this.view = ContestHomeView.hidden, this.latestConfId, this.profile, this.joinFailed = false}): super._();
+  const _ContestHomeState({this.view = ContestHomeView.hidden, this.latestConfId, this.contestId, this.profile, this.joinFailed = false}): super._();
   
 
 @override@JsonKey() final  ContestHomeView view;
 @override final  String? latestConfId;
+@override final  String? contestId;
 @override final  UserProfile? profile;
 @override@JsonKey() final  bool joinFailed;
 
@@ -227,16 +229,16 @@ _$ContestHomeStateCopyWith<_ContestHomeState> get copyWith => __$ContestHomeStat
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContestHomeState&&(identical(other.view, view) || other.view == view)&&(identical(other.latestConfId, latestConfId) || other.latestConfId == latestConfId)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.joinFailed, joinFailed) || other.joinFailed == joinFailed));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ContestHomeState&&(identical(other.view, view) || other.view == view)&&(identical(other.latestConfId, latestConfId) || other.latestConfId == latestConfId)&&(identical(other.contestId, contestId) || other.contestId == contestId)&&(identical(other.profile, profile) || other.profile == profile)&&(identical(other.joinFailed, joinFailed) || other.joinFailed == joinFailed));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,view,latestConfId,profile,joinFailed);
+int get hashCode => Object.hash(runtimeType,view,latestConfId,contestId,profile,joinFailed);
 
 @override
 String toString() {
-  return 'ContestHomeState(view: $view, latestConfId: $latestConfId, profile: $profile, joinFailed: $joinFailed)';
+  return 'ContestHomeState(view: $view, latestConfId: $latestConfId, contestId: $contestId, profile: $profile, joinFailed: $joinFailed)';
 }
 
 
@@ -247,7 +249,7 @@ abstract mixin class _$ContestHomeStateCopyWith<$Res> implements $ContestHomeSta
   factory _$ContestHomeStateCopyWith(_ContestHomeState value, $Res Function(_ContestHomeState) _then) = __$ContestHomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- ContestHomeView view, String? latestConfId, UserProfile? profile, bool joinFailed
+ ContestHomeView view, String? latestConfId, String? contestId, UserProfile? profile, bool joinFailed
 });
 
 
@@ -264,10 +266,11 @@ class __$ContestHomeStateCopyWithImpl<$Res>
 
 /// Create a copy of ContestHomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? view = null,Object? latestConfId = freezed,Object? profile = freezed,Object? joinFailed = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? view = null,Object? latestConfId = freezed,Object? contestId = freezed,Object? profile = freezed,Object? joinFailed = null,}) {
   return _then(_ContestHomeState(
 view: null == view ? _self.view : view // ignore: cast_nullable_to_non_nullable
 as ContestHomeView,latestConfId: freezed == latestConfId ? _self.latestConfId : latestConfId // ignore: cast_nullable_to_non_nullable
+as String?,contestId: freezed == contestId ? _self.contestId : contestId // ignore: cast_nullable_to_non_nullable
 as String?,profile: freezed == profile ? _self.profile : profile // ignore: cast_nullable_to_non_nullable
 as UserProfile?,joinFailed: null == joinFailed ? _self.joinFailed : joinFailed // ignore: cast_nullable_to_non_nullable
 as bool,

@@ -165,6 +165,7 @@ void main() {
     await pumpEventQueue();
 
     expect(cubit!.state.view, ContestHomeView.winner);
+    expect(cubit!.state.contestId, 'contest-round-1');
   });
 }
 
@@ -185,6 +186,7 @@ final _openContestConfig = EngagementConfig(
   contestStartsAt: DateTime.utc(2020),
   contestEndsAt: DateTime.utc(2099),
   contestStatus: ContestStatus.open,
+  contestId: 'contest-round-1',
 );
 
 class _TestConferencesCubit extends ConferencesCubit {

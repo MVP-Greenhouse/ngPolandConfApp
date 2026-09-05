@@ -146,7 +146,7 @@ class _ContestHomeSectionHostState extends State<ContestHomeSectionHost> {
       builder: (context, state) {
         return ContestWinDialogListener(
           view: state.view,
-          confId: state.latestConfId,
+          contestId: state.contestId,
           ui: _ui,
           child: ContestHomeSection(
             view: state.view,
@@ -173,13 +173,13 @@ class ContestWinDialogListener extends StatefulWidget {
   const ContestWinDialogListener({
     super.key,
     required this.view,
-    required this.confId,
+    required this.contestId,
     required this.ui,
     required this.child,
   });
 
   final ContestHomeView view;
-  final String? confId;
+  final String? contestId;
   final ContestUiLocalDataSource ui;
   final Widget child;
 
@@ -189,7 +189,7 @@ class ContestWinDialogListener extends StatefulWidget {
 }
 
 class _ContestWinDialogListenerState extends State<ContestWinDialogListener> {
-  String? _winDialogHandledConfId;
+  String? _winDialogHandledContestId;
 
   @override
   Widget build(BuildContext context) {
@@ -202,12 +202,12 @@ class _ContestWinDialogListenerState extends State<ContestWinDialogListener> {
   }
 
   Future<void> _maybeShowWinDialog() async {
-    final confId = widget.confId;
-    if (confId == null) return;
-    if (_winDialogHandledConfId == confId) return;
-    _winDialogHandledConfId = confId;
+    final contestId = widget.contestId;
+    if (contestId == null || contestId.isEmpty) return;
+    if (_winDialogHandledContestId == contestId) return;
+    _winDialogHandledContestId = contestId;
 
-    final shown = await widget.ui.wasWinDialogShown(confId);
+    final shown = await widget.ui.wasWinDialogShown(contestId);
     if (shown) return;
     if (!mounted) return;
 
@@ -227,6 +227,6 @@ class _ContestWinDialogListenerState extends State<ContestWinDialogListener> {
         ],
       ),
     );
-    await widget.ui.markWinDialogShown(confId);
+    await widget.ui.markWinDialogShown(contestId);
   }
 }

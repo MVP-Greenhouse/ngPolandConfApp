@@ -7,6 +7,7 @@ abstract class ContestHomeState with _$ContestHomeState {
   const factory ContestHomeState({
     @Default(ContestHomeView.hidden) ContestHomeView view,
     String? latestConfId,
+    String? contestId,
     UserProfile? profile,
     @Default(false) bool joinFailed,
   }) = _ContestHomeState;

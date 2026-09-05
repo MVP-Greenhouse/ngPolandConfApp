@@ -5,13 +5,13 @@ import 'package:injectable/injectable.dart';
 class ContestUiLocalDataSource {
   Future<Box<bool>> _box() => Hive.openBox<bool>('contest_ui');
 
-  Future<bool> wasWinDialogShown(String confId) async {
+  Future<bool> wasWinDialogShown(String contestId) async {
     final box = await _box();
-    return box.get('winDialogShown_$confId') ?? false;
+    return box.get('winDialogShown_$contestId') ?? false;
   }
 
-  Future<void> markWinDialogShown(String confId) async {
+  Future<void> markWinDialogShown(String contestId) async {
     final box = await _box();
-    await box.put('winDialogShown_$confId', true);
+    await box.put('winDialogShown_$contestId', true);
   }
 }

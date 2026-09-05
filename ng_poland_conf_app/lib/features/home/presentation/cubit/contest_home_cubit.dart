@@ -109,6 +109,7 @@ class ContestHomeCubit extends Cubit<ContestHomeState> {
               isWinner: false,
             ),
             latestConfId: latestConfId,
+            contestId: config.contestId,
             profile: profile,
           ),
         );
@@ -130,6 +131,7 @@ class ContestHomeCubit extends Cubit<ContestHomeState> {
                 isWinner: winner != null,
               ),
               latestConfId: latestConfId,
+              contestId: config.contestId,
               profile: profile,
             ),
       );
