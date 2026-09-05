@@ -81,7 +81,9 @@ class EngagementMappers {
       for (final item in rawWinners) {
         if (item is! Map) continue;
         final map = Map<String, dynamic>.from(item);
-        final uid = map['uid'] as String? ?? '';
+        final rawUid = map['uid'];
+        if (rawUid is! String) continue;
+        final uid = rawUid;
         if (uid.isEmpty) continue;
         final winner = winnerFromMap(uid, map);
         if (winner != null) winners.add(winner);

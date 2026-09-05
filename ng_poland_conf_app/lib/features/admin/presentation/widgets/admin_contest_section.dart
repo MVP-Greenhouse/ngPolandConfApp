@@ -92,6 +92,7 @@ class _AdminContestSectionState extends State<AdminContestSection> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final status = widget.config.contestStatus;
+    final canDraw = status != ContestStatus.finished;
     final statusLabel =
         '${widget.config.contestEnabled ? 'włączone' : 'wyłączone'}'
         ' · ${status.name}'
@@ -155,11 +156,11 @@ class _AdminContestSectionState extends State<AdminContestSection> {
           runSpacing: 8,
           children: [
             FilledButton(
-              onPressed: () => widget.onDraw(_count),
+              onPressed: canDraw ? () => widget.onDraw(_count) : null,
               child: const Text('Losuj N'),
             ),
             FilledButton.tonal(
-              onPressed: () => widget.onDraw(1),
+              onPressed: canDraw ? () => widget.onDraw(1) : null,
               child: const Text('Losuj 1'),
             ),
             FilledButton(

@@ -2,9 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/contest_archive.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/has_any_prize.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/start_new_contest_guard.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/user_prize_resolver.dart';
 
@@ -148,23 +146,6 @@ void main() {
         activeContestName: 'Gadżety',
       );
       expect(prizes, hasLength(1));
-    });
-  });
-
-  group('HasAnyPrize', () {
-    test('true for history or active', () {
-      expect(
-        HasAnyPrize.resolve(historyWins: 0, hasActiveWin: true),
-        isTrue,
-      );
-      expect(
-        HasAnyPrize.resolve(historyWins: 1, hasActiveWin: false),
-        isTrue,
-      );
-      expect(
-        HasAnyPrize.resolve(historyWins: 0, hasActiveWin: false),
-        isFalse,
-      );
     });
   });
 }

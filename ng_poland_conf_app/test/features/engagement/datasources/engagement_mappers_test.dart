@@ -63,6 +63,17 @@ void main() {
     expect(entry?.finishedAt, finishedAt);
   });
 
+  test('history entry skips winner with non-string uid', () {
+    final entry = EngagementMappers.historyFromMap('c1', {
+      'winners': [
+        {'uid': 123, 'displayName': 'Invalid'},
+        {'uid': 'u1', 'displayName': 'Ada'},
+      ],
+    });
+
+    expect(entry?.winners.map((winner) => winner.uid), ['u1']);
+  });
+
   test('missing config map yields disabled defaults', () {
     final config = EngagementMappers.configFromMap(null);
     expect(config.votingEnabled, isFalse);
