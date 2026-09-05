@@ -9,6 +9,8 @@ class EngagementConfig {
     required this.contestStartsAt,
     required this.contestEndsAt,
     required this.contestStatus,
+    this.contestName = '',
+    this.contestId = '',
   });
 
   final bool votingEnabled;
@@ -18,6 +20,8 @@ class EngagementConfig {
   final DateTime contestStartsAt;
   final DateTime contestEndsAt;
   final ContestStatus contestStatus;
+  final String contestName;
+  final String contestId;
 
   static final missing = EngagementConfig(
     votingEnabled: false,
@@ -49,6 +53,8 @@ class EngagementConfig {
     DateTime? contestStartsAt,
     DateTime? contestEndsAt,
     ContestStatus? contestStatus,
+    String? contestName,
+    String? contestId,
   }) {
     return EngagementConfig(
       votingEnabled: votingEnabled ?? this.votingEnabled,
@@ -58,6 +64,8 @@ class EngagementConfig {
       contestStartsAt: contestStartsAt ?? this.contestStartsAt,
       contestEndsAt: contestEndsAt ?? this.contestEndsAt,
       contestStatus: contestStatus ?? this.contestStatus,
+      contestName: contestName ?? this.contestName,
+      contestId: contestId ?? this.contestId,
     );
   }
 

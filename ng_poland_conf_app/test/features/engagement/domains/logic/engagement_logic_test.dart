@@ -168,6 +168,32 @@ void main() {
         ContestHomeView.hidden,
       );
     });
+
+    test('historical winner with open contest sees join, not winner', () {
+      expect(
+        ContestHomeViewResolver.resolve(
+          isLatestConference: true,
+          config: openConfig,
+          now: now,
+          isParticipant: false,
+          isWinner: false, // active winners only
+        ),
+        ContestHomeView.join,
+      );
+    });
+
+    test('active winner still winner even if they also have history', () {
+      expect(
+        ContestHomeViewResolver.resolve(
+          isLatestConference: true,
+          config: openConfig.copyWith(contestStatus: ContestStatus.drawing),
+          now: now,
+          isParticipant: true,
+          isWinner: true,
+        ),
+        ContestHomeView.winner,
+      );
+    });
   });
 
   group('SpeakerVoteToggle', () {
