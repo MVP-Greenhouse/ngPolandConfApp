@@ -43,12 +43,19 @@ service cloud.firestore {
     match /conf/{confId}/contestParticipants/{uid} {
       allow read: if isOwner(uid) || isAdmin();
       allow create: if isOwner(uid);
-      allow update, delete: if false;
+      allow update: if false;
+      allow delete: if isAdmin();
     }
 
     match /conf/{confId}/contestWinners/{uid} {
       allow read: if signedIn();
       allow write: if isAdmin();
+    }
+
+    match /conf/{confId}/contestHistory/{contestId} {
+      allow read: if signedIn();
+      allow create, update: if isAdmin();
+      allow delete: if false;
     }
 
     // Existing event star ratings — keep working under default-deny.
