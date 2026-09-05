@@ -9,6 +9,7 @@ import 'package:ng_poland_conf_app/features/authentication/domains/entities/user
 import 'package:ng_poland_conf_app/features/authentication/domains/repositories/user_repository.dart';
 import 'package:ng_poland_conf_app/features/authentication/domains/usecases/ensure_user_profile.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_participant.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
@@ -324,6 +325,22 @@ class _FakeContestRepository implements ContestRepository {
   }) async {
     lastStatus = status;
   }
+
+  @override
+  Stream<List<ContestHistoryEntry>> watchHistory(String confId) =>
+      Stream.value(const []);
+
+  @override
+  Future<void> archiveContestIfAbsent({
+    required String confId,
+    required ContestHistoryEntry entry,
+  }) async {}
+
+  @override
+  Future<void> clearWinners(String confId) async {}
+
+  @override
+  Future<void> clearParticipants(String confId) async {}
 
   Future<void> dispose() => winners$.close();
 }

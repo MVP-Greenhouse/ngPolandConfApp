@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/engagement/datasources/data/engagement_mappers.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_participant.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
@@ -39,6 +40,9 @@ class ContestRemoteDataSource {
 
   CollectionReference<Map<String, dynamic>> _winnersCollection(String confId) =>
       _firestore.collection('conf').doc(confId).collection('contestWinners');
+
+  CollectionReference<Map<String, dynamic>> _historyCollection(String confId) =>
+      _firestore.collection('conf').doc(confId).collection('contestHistory');
 
   DocumentReference<Map<String, dynamic>> _configRef(String confId) =>
       _firestore
@@ -129,5 +133,48 @@ class ContestRemoteDataSource {
     return _configRef(
       confId,
     ).set({'contestStatus': status.id}, SetOptions(merge: true));
+  }
+
+  Stream<List<ContestHistoryEntry>> watchHistory(String confId) {
+    return _historyCollection(confId).snapshots().map((snapshot) {
+      final history = <ContestHistoryEntry>[];
+      for (final doc in snapshot.docs) {
+        final entry = EngagementMappers.historyFromMap(doc.id, doc.data());
+        if (entry != null) history.add(entry);
+      }
+      history.sort((a, b) => b.finishedAt.compareTo(a.finishedAt));
+      return history;
+    });
+  }
+
+  Future<void> archiveContestIfAbsent({
+    required String confId,
+    required ContestHistoryEntry entry,
+  }) async {
+    final ref = _historyCollection(confId).doc(entry.contestId);
+    if ((await ref.get()).exists) return;
+    await ref.set(EngagementMappers.historyToMap(entry));
+  }
+
+  Future<void> clearWinners(String confId) {
+    return _clearCollection(_winnersCollection(confId));
+  }
+
+  Future<void> clearParticipants(String confId) {
+    return _clearCollection(_participantsCollection(confId));
+  }
+
+  Future<void> _clearCollection(
+    CollectionReference<Map<String, dynamic>> collection,
+  ) async {
+    final snapshot = await collection.get();
+    const batchSize = 400;
+    for (var offset = 0; offset < snapshot.docs.length; offset += batchSize) {
+      final batch = _firestore.batch();
+      for (final doc in snapshot.docs.skip(offset).take(batchSize)) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    }
   }
 }

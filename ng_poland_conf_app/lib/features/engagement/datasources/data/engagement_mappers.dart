@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_participant.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
@@ -22,6 +24,8 @@ class EngagementMappers {
       contestStartsAt: _dateTime(data['contestStartsAt']),
       contestEndsAt: _dateTime(data['contestEndsAt']),
       contestStatus: ContestStatusX.fromId(data['contestStatus'] as String?),
+      contestName: data['contestName'] as String? ?? '',
+      contestId: data['contestId'] as String? ?? '',
     );
   }
 
@@ -34,6 +38,8 @@ class EngagementMappers {
       'contestStartsAt': config.contestStartsAt,
       'contestEndsAt': config.contestEndsAt,
       'contestStatus': config.contestStatus.id,
+      'contestName': config.contestName,
+      'contestId': config.contestId,
     };
   }
 
@@ -64,12 +70,63 @@ class EngagementMappers {
     );
   }
 
+  static ContestHistoryEntry? historyFromMap(
+    String contestId,
+    Map<String, dynamic>? data,
+  ) {
+    if (data == null) return null;
+    final rawWinners = data['winners'];
+    final winners = <ContestWinner>[];
+    if (rawWinners is List) {
+      for (final item in rawWinners) {
+        if (item is! Map) continue;
+        final map = Map<String, dynamic>.from(item);
+        final uid = map['uid'] as String? ?? '';
+        if (uid.isEmpty) continue;
+        final winner = winnerFromMap(uid, map);
+        if (winner != null) winners.add(winner);
+      }
+    }
+    return ContestHistoryEntry(
+      contestId: contestId,
+      name: data['name'] as String? ?? '',
+      startsAt: _dateTime(data['startsAt']),
+      endsAt: _dateTime(data['endsAt']),
+      finishedAt: _dateTime(data['finishedAt']),
+      winners: winners,
+    );
+  }
+
+  static Map<String, dynamic> historyToMap(ContestHistoryEntry entry) {
+    return {
+      'name': entry.name,
+      'startsAt': entry.startsAt,
+      'endsAt': entry.endsAt,
+      'finishedAt': entry.finishedAt,
+      'winners': [
+        for (final winner in entry.winners)
+          {
+            'uid': winner.uid,
+            'displayName': winner.displayName,
+            'email': winner.email,
+            'order': winner.order,
+          },
+      ],
+    };
+  }
+
   static int? readInt(Object? value) {
     return value is int ? value : (value is num ? value.toInt() : null);
   }
 
   static DateTime _dateTime(dynamic value) {
     if (value is DateTime) return value;
+    if (value is Timestamp) {
+      return DateTime.fromMillisecondsSinceEpoch(
+        value.millisecondsSinceEpoch,
+        isUtc: true,
+      );
+    }
     return _epochUtc;
   }
 }

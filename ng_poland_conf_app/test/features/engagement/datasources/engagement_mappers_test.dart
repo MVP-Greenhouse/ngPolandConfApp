@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ng_poland_conf_app/features/engagement/datasources/data/engagement_mappers.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
@@ -21,6 +22,47 @@ void main() {
     expect(map['votingEnabled'], isTrue);
   });
 
+  test('config maps contestName and contestId', () {
+    final config = EngagementMappers.configFromMap({
+      'votingEnabled': true,
+      'votingStartsAt': DateTime.utc(2026, 11, 20, 9),
+      'votingEndsAt': DateTime.utc(2026, 11, 21, 18),
+      'contestEnabled': true,
+      'contestStartsAt': DateTime.utc(2026, 11, 20, 12),
+      'contestEndsAt': DateTime.utc(2026, 11, 20, 16),
+      'contestStatus': 'open',
+      'contestName': 'Koszulki',
+      'contestId': 'abc',
+    });
+    expect(config.contestName, 'Koszulki');
+    expect(config.contestId, 'abc');
+    final map = EngagementMappers.configToMap(config);
+    expect(map['contestName'], 'Koszulki');
+    expect(map['contestId'], 'abc');
+  });
+
+  test('history entry from map', () {
+    final entry = EngagementMappers.historyFromMap('c1', {
+      'name': 'Koszulki',
+      'startsAt': DateTime.utc(2026, 1, 1),
+      'endsAt': DateTime.utc(2026, 1, 2),
+      'finishedAt': DateTime.utc(2026, 1, 3),
+      'winners': [
+        {'uid': 'u1', 'displayName': 'Ada', 'email': 'a@b.c', 'order': 1},
+      ],
+    });
+    expect(entry?.name, 'Koszulki');
+    expect(entry?.winners.single.uid, 'u1');
+  });
+
+  test('history entry accepts Firestore timestamps', () {
+    final finishedAt = DateTime.utc(2026, 1, 3);
+    final entry = EngagementMappers.historyFromMap('c1', {
+      'finishedAt': Timestamp.fromDate(finishedAt),
+    });
+    expect(entry?.finishedAt, finishedAt);
+  });
+
   test('missing config map yields disabled defaults', () {
     final config = EngagementMappers.configFromMap(null);
     expect(config.votingEnabled, isFalse);
@@ -29,10 +71,7 @@ void main() {
   });
 
   test('voteFromMap accepts Firestore num as int', () {
-    expect(
-      EngagementMappers.voteFromMap({'value': 1.0}),
-      SpeakerVoteValue.up,
-    );
+    expect(EngagementMappers.voteFromMap({'value': 1.0}), SpeakerVoteValue.up);
   });
 
   test('winnerFromMap accepts Firestore num as int', () {

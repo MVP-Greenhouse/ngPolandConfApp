@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/engagement/datasources/data/contest_remote_datasource.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_participant.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
@@ -69,5 +70,31 @@ class ContestRepositoryImpl implements ContestRepository {
       confId: confId,
       status: status,
     );
+  }
+
+  @override
+  Stream<List<ContestHistoryEntry>> watchHistory(String confId) {
+    return _remoteDataSource.watchHistory(confId);
+  }
+
+  @override
+  Future<void> archiveContestIfAbsent({
+    required String confId,
+    required ContestHistoryEntry entry,
+  }) {
+    return _remoteDataSource.archiveContestIfAbsent(
+      confId: confId,
+      entry: entry,
+    );
+  }
+
+  @override
+  Future<void> clearWinners(String confId) {
+    return _remoteDataSource.clearWinners(confId);
+  }
+
+  @override
+  Future<void> clearParticipants(String confId) {
+    return _remoteDataSource.clearParticipants(confId);
   }
 }

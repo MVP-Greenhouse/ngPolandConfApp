@@ -1,3 +1,4 @@
+import '../entities/contest_history_entry.dart';
 import '../entities/contest_participant.dart';
 import '../entities/contest_status.dart';
 import '../entities/contest_winner.dart';
@@ -33,4 +34,15 @@ abstract interface class ContestRepository {
     required String confId,
     required ContestStatus status,
   });
+
+  Stream<List<ContestHistoryEntry>> watchHistory(String confId);
+
+  Future<void> archiveContestIfAbsent({
+    required String confId,
+    required ContestHistoryEntry entry,
+  });
+
+  Future<void> clearWinners(String confId);
+
+  Future<void> clearParticipants(String confId);
 }
