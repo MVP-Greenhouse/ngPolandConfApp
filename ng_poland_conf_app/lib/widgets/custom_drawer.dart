@@ -5,6 +5,8 @@ import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
 import 'package:ng_poland_conf_app/core/utils/authentication_utils.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/admin_page.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
+import 'package:ng_poland_conf_app/features/prizes/presentation/cubit/prizes_cubit.dart';
+import 'package:ng_poland_conf_app/features/prizes/presentation/prizes_page.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +18,9 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final isAdminRoute =
         GoRouterState.of(context).matchedLocation == AdminPage.path;
-    final Pages? currentPage = isAdminRoute
+    final isPrizesRoute =
+        GoRouterState.of(context).matchedLocation == PrizesPage.path;
+    final Pages? currentPage = isAdminRoute || isPrizesRoute
         ? null
         : getIt.get<Routing>().currentPage(context);
 
@@ -38,6 +42,16 @@ class CustomDrawer extends StatelessWidget {
                 visible: state.isAdmin,
                 selected: isAdminRoute,
                 onTap: () => context.go(AdminPage.path),
+              );
+            },
+          ),
+          BlocBuilder<PrizesCubit, PrizesState>(
+            bloc: getIt.get<PrizesCubit>(),
+            builder: (context, state) {
+              return PrizesDrawerTile(
+                visible: state.hasPrizes,
+                selected: isPrizesRoute,
+                onTap: () => context.go(PrizesPage.path),
               );
             },
           ),
@@ -222,6 +236,49 @@ class AdminDrawerTile extends StatelessWidget {
       ),
       title: Text(
         'Admin',
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+          color: selected
+              ? Theme.of(context).colorScheme.onPrimaryContainer
+              : Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+}
+
+class PrizesDrawerTile extends StatelessWidget {
+  const PrizesDrawerTile({
+    super.key,
+    required this.visible,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final bool visible;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!visible) return const SizedBox.shrink();
+
+    return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+      selected: selected,
+      selectedTileColor: Theme.of(context).colorScheme.primaryContainer,
+      selectedColor: Theme.of(context).colorScheme.onPrimaryContainer,
+      leading: SizedBox(
+        width: 34.0,
+        child: FaIcon(
+          FontAwesomeIcons.trophy,
+          color: selected
+              ? Theme.of(context).colorScheme.onPrimaryContainer
+              : Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      title: Text(
+        'Nagrody',
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
           color: selected
               ? Theme.of(context).colorScheme.onPrimaryContainer

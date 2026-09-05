@@ -104,6 +104,7 @@ import 'features/nggirls/domains/repositories/ngGirls_repository.dart' as _i33;
 import 'features/nggirls/domains/usecases/get_ngGirls_for_conference.dart'
     as _i642;
 import 'features/nggirls/presentation/cubit/ngGirls_cubit.dart' as _i685;
+import 'features/prizes/presentation/cubit/prizes_cubit.dart' as _i635;
 import 'features/schedule/datasources/data/schedule_local_datasource.dart'
     as _i878;
 import 'features/schedule/datasources/data/schedule_remote_datasource.dart'
@@ -309,6 +310,14 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i995.ContestHomeCubit>(
       () => _i995.ContestHomeCubit(
+        gh<_i33.ContestRepository>(),
+        gh<_i419.EngagementConfigRepository>(),
+        gh<_i793.UserSessionCubit>(),
+        gh<_i933.ConferencesCubit>(),
+      ),
+    );
+    gh.lazySingleton<_i635.PrizesCubit>(
+      () => _i635.PrizesCubit(
         gh<_i33.ContestRepository>(),
         gh<_i419.EngagementConfigRepository>(),
         gh<_i793.UserSessionCubit>(),

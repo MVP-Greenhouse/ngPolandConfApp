@@ -10,6 +10,8 @@ import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/home_page.dart';
 import 'package:ng_poland_conf_app/features/info/presentation/info_page.dart';
 import 'package:ng_poland_conf_app/features/nggirls/presentation/nggirls_page.dart';
+import 'package:ng_poland_conf_app/features/prizes/presentation/cubit/prizes_cubit.dart';
+import 'package:ng_poland_conf_app/features/prizes/presentation/prizes_page.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_page.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/speakers_page.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
@@ -29,6 +31,21 @@ String? adminGuardRedirect({
   );
   if (isLoading) return null;
   if (!session.isAdmin) return Pages.home.path;
+  return null;
+}
+
+String? prizesGuardRedirect({
+  required String matchedLocation,
+  required UserSessionState session,
+  required bool loading,
+  required bool hasPrizes,
+}) {
+  if (matchedLocation != PrizesPage.path || loading) return null;
+  final loggedIn = session.maybeWhen(
+    authenticated: (_) => true,
+    orElse: () => false,
+  );
+  if (!loggedIn || !hasPrizes) return Pages.home.path;
   return null;
 }
 
@@ -90,6 +107,19 @@ class Routing {
         GoRoute(
           path: AdminPage.path,
           builder: (context, state) => const AdminPage(),
+        ),
+        GoRoute(
+          path: PrizesPage.path,
+          redirect: (context, state) {
+            final prizes = getIt.get<PrizesCubit>().state;
+            return prizesGuardRedirect(
+              matchedLocation: state.matchedLocation,
+              session: getIt.get<UserSessionCubit>().state,
+              loading: prizes.loading,
+              hasPrizes: prizes.hasPrizes,
+            );
+          },
+          builder: (context, state) => const PrizesPage(),
         ),
         GoRoute(
           path: Pages.home.path,
