@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/about/presentation/about_page.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/admin_contest_page.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/admin_page.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/admin_shell.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/admin_voting_page.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/authentication_page.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
@@ -24,11 +27,8 @@ String? adminGuardRedirect({
   required String matchedLocation,
   required UserSessionState session,
 }) {
-  if (matchedLocation != AdminPage.path) return null;
-  final isLoading = session.maybeWhen(
-    loading: () => true,
-    orElse: () => false,
-  );
+  if (!matchedLocation.startsWith(AdminPage.path)) return null;
+  final isLoading = session.maybeWhen(loading: () => true, orElse: () => false);
   if (isLoading) return null;
   if (!session.isAdmin) return Pages.home.path;
   return null;
@@ -82,7 +82,7 @@ class Routing {
     navigatorKey = GlobalKey<NavigatorState>();
     router = GoRouter(
       redirect: (_, state) {
-        if (state.matchedLocation == AdminPage.path) {
+        if (state.matchedLocation.startsWith(AdminPage.path)) {
           return adminGuardRedirect(
             matchedLocation: state.matchedLocation,
             session: getIt.get<UserSessionCubit>().state,
@@ -104,9 +104,24 @@ class Routing {
           path: AuthenticationPage.path,
           builder: (context, state) => const AuthenticationPage(),
         ),
-        GoRoute(
-          path: AdminPage.path,
-          builder: (context, state) => const AdminPage(),
+        ShellRoute(
+          builder: (context, state, child) => AdminShell(child: child),
+          routes: [
+            GoRoute(
+              path: AdminPage.path,
+              builder: (context, state) => const AdminPage(),
+              routes: [
+                GoRoute(
+                  path: 'voting',
+                  builder: (context, state) => const AdminVotingPage(),
+                ),
+                GoRoute(
+                  path: 'contest',
+                  builder: (context, state) => const AdminContestPage(),
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           path: PrizesPage.path,

@@ -46,10 +46,37 @@ void main() {
     );
   });
 
+  test('guards nested admin paths', () {
+    expect(
+      adminGuardRedirect(
+        matchedLocation: '/admin/voting',
+        session: const UserSessionState.authenticated(userProfile),
+      ),
+      Pages.home.path,
+    );
+    expect(
+      adminGuardRedirect(
+        matchedLocation: '/admin/contest',
+        session: const UserSessionState.unauthenticated(),
+      ),
+      Pages.home.path,
+    );
+  });
+
   test('allows authenticated admin to stay on /admin', () {
     expect(
       adminGuardRedirect(
         matchedLocation: AdminPage.path,
+        session: const UserSessionState.authenticated(adminProfile),
+      ),
+      isNull,
+    );
+  });
+
+  test('allows authenticated admin to stay on nested admin paths', () {
+    expect(
+      adminGuardRedirect(
+        matchedLocation: '/admin/voting',
         session: const UserSessionState.authenticated(adminProfile),
       ),
       isNull,

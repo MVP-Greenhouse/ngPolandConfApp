@@ -16,10 +16,9 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isAdminRoute =
-        GoRouterState.of(context).matchedLocation == AdminPage.path;
-    final isPrizesRoute =
-        GoRouterState.of(context).matchedLocation == PrizesPage.path;
+    final location = GoRouterState.of(context).matchedLocation;
+    final isAdminRoute = location.startsWith(AdminPage.path);
+    final isPrizesRoute = location == PrizesPage.path;
     final Pages? currentPage = isAdminRoute || isPrizesRoute
         ? null
         : getIt.get<Routing>().currentPage(context);
