@@ -14,6 +14,7 @@ class UserPrizeResolver {
     final prizes = <UserPrize>[];
     final seen = <String>{};
     for (final entry in history) {
+      if (seen.contains(entry.contestId)) continue;
       ContestWinner? mine;
       for (final w in entry.winners) {
         if (w.uid == uid) {

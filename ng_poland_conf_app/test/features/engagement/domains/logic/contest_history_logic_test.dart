@@ -98,6 +98,37 @@ void main() {
       expect(prizes.single.contestId, 'c2');
     });
 
+    test('dedupes duplicate history entries by contestId', () {
+      final history = [
+        ContestHistoryEntry(
+          contestId: 'c1',
+          name: 'Koszulki',
+          startsAt: DateTime.utc(2026, 1, 1),
+          endsAt: DateTime.utc(2026, 1, 2),
+          finishedAt: DateTime.utc(2026, 1, 3),
+          winners: [winner],
+        ),
+        ContestHistoryEntry(
+          contestId: 'c1',
+          name: 'Koszulki (duplicate)',
+          startsAt: DateTime.utc(2026, 1, 1),
+          endsAt: DateTime.utc(2026, 1, 2),
+          finishedAt: DateTime.utc(2026, 1, 4),
+          winners: [winner],
+        ),
+      ];
+      final prizes = UserPrizeResolver.resolve(
+        uid: 'u1',
+        history: history,
+        activeWin: null,
+        activeContestId: null,
+        activeContestName: '',
+      );
+      expect(prizes, hasLength(1));
+      expect(prizes.single.contestId, 'c1');
+      expect(prizes.single.contestName, 'Koszulki');
+    });
+
     test('dedupes active win when already archived', () {
       final history = [
         ContestHistoryEntry(
