@@ -90,29 +90,13 @@ class _AdminContestSectionState extends State<AdminContestSection> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final status = widget.config.contestStatus;
     final canDraw = status != ContestStatus.finished;
-    final statusLabel =
-        '${widget.config.contestEnabled ? 'włączone' : 'wyłączone'}'
-        ' · ${status.name}'
-        ' · ${widget.participants.length} zgłoszeń';
     String emailOrMissing(String email) =>
         email.trim().isEmpty ? 'brak danych' : email;
 
-    return ExpansionTile(
-      initiallyExpanded: false,
-      tilePadding: EdgeInsets.zero,
-      childrenPadding: const EdgeInsets.only(bottom: 8),
-      shape: const Border(),
-      collapsedShape: const Border(),
-      title: Text('Konkurs', style: theme.textTheme.titleLarge),
-      subtitle: Text(
-        statusLabel,
-        style: theme.textTheme.bodySmall?.copyWith(
-          color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
-        ),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextField(
           controller: _nameController,

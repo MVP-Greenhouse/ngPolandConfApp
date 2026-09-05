@@ -24,7 +24,6 @@ class AdminVotingSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('Głosowanie', style: Theme.of(context).textTheme.titleLarge),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
           title: const Text('Włączone'),
@@ -94,8 +93,6 @@ class AdminDateTimeTile extends StatelessWidget {
       initialTime: TimeOfDay.fromDateTime(local),
     );
     if (time == null) return;
-    onPicked(
-      DateTime(date.year, date.month, date.day, time.hour, time.minute),
-    );
+    onPicked(DateTime(date.year, date.month, date.day, time.hour, time.minute));
   }
 }

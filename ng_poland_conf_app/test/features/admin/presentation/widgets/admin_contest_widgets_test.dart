@@ -1,11 +1,73 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_contest_history_section.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_contest_section.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_voting_section.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/start_new_contest_dialog.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
 
 void main() {
+  testWidgets('voting section shows controls without an expansion tile', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: AdminVotingSection(
+            config: EngagementConfig.missing,
+            ranking: const [],
+            onEnabledChanged: (_) {},
+            onStartChanged: (_) {},
+            onEndChanged: (_) {},
+          ),
+        ),
+      ),
+    );
+
+    final section = find.byType(AdminVotingSection);
+    expect(
+      find.descendant(of: section, matching: find.byType(ExpansionTile)),
+      findsNothing,
+    );
+    expect(find.byType(SwitchListTile), findsOneWidget);
+  });
+
+  testWidgets('contest section only keeps the history expansion tile', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: AdminContestSection(
+              config: EngagementConfig.missing,
+              participants: const [],
+              winners: const [],
+              history: const [],
+              onNameChanged: (_) {},
+              onEnabledChanged: (_) {},
+              onStartChanged: (_) {},
+              onEndChanged: (_) {},
+              onDraw: (_) {},
+              onFinish: () {},
+              onStartNewContest:
+                  ({required name, required carryParticipants}) async {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final section = find.byType(AdminContestSection);
+    expect(
+      find.descendant(of: section, matching: find.byType(ExpansionTile)),
+      findsOneWidget,
+    );
+    expect(find.text('Nazwa konkursu'), findsOneWidget);
+  });
+
   testWidgets('history starts collapsed and shows archived winners', (
     tester,
   ) async {
