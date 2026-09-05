@@ -9,7 +9,6 @@ import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/user_prize.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/has_any_prize.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/user_prize_resolver.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/contest_repository.dart';
@@ -105,17 +104,8 @@ class PrizesCubit extends Cubit<PrizesState> {
               ? 'Konkurs'
               : config.contestName,
         );
-        final historyWins = history
-            .where(
-              (entry) =>
-                  entry.winners.any((winner) => winner.uid == profile.uid),
-            )
-            .length;
         return PrizesState(
-          hasPrizes: HasAnyPrize.resolve(
-            historyWins: historyWins,
-            hasActiveWin: activeWin != null,
-          ),
+          hasPrizes: prizes.isNotEmpty,
           prizes: prizes,
           loading: false,
         );

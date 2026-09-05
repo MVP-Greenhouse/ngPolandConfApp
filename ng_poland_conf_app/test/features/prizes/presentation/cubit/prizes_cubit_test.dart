@@ -50,6 +50,21 @@ void main() {
     ]);
   });
 
+  test('active win with empty contestId yields no prizes', () async {
+    cubit = PrizesCubit(
+      _ActiveWinOnlyContestRepository(),
+      const _EmptyContestIdConfigRepository(),
+      session,
+      conferences,
+    );
+
+    await pumpEventQueue();
+
+    expect(cubit!.state.loading, isFalse);
+    expect(cubit!.state.hasPrizes, isFalse);
+    expect(cubit!.state.prizes, isEmpty);
+  });
+
   test('clears prizes after sign-out', () async {
     cubit = PrizesCubit(
       _FakeContestRepository(),
@@ -138,6 +153,17 @@ class _FakeConfigRepository implements EngagementConfigRepository {
   Future<void> saveConfig(String confId, EngagementConfig config) async {}
 }
 
+class _EmptyContestIdConfigRepository implements EngagementConfigRepository {
+  const _EmptyContestIdConfigRepository();
+
+  @override
+  Stream<EngagementConfig> watchConfig(String confId) =>
+      Stream.value(EngagementConfig.missing);
+
+  @override
+  Future<void> saveConfig(String confId, EngagementConfig config) async {}
+}
+
 class _FakeContestRepository implements ContestRepository {
   static const winner = ContestWinner(
     uid: 'u1',
@@ -210,4 +236,10 @@ class _FakeContestRepository implements ContestRepository {
 
   @override
   Future<void> clearParticipants(String confId) async {}
+}
+
+class _ActiveWinOnlyContestRepository extends _FakeContestRepository {
+  @override
+  Stream<List<ContestHistoryEntry>> watchHistory(String confId) =>
+      Stream.value(const []);
 }
