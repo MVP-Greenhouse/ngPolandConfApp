@@ -11,6 +11,7 @@ abstract class AdminState with _$AdminState {
     @Default(<SpeakerVoteRank>[]) List<SpeakerVoteRank> ranking,
     @Default(<ContestParticipant>[]) List<ContestParticipant> participants,
     @Default(<ContestWinner>[]) List<ContestWinner> winners,
+    @Default(<ContestHistoryEntry>[]) List<ContestHistoryEntry> history,
     String? message,
     @Default(false) bool loading,
   }) = _AdminState;

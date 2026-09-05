@@ -156,10 +156,182 @@ void main() {
       enabled: true,
       start: DateTime.utc(2026, 1, 1),
       end: DateTime.utc(2026, 12, 31),
+      name: 'Nagrody',
     );
 
     expect(config.lastSaved?.contestStatus, ContestStatus.finished);
     expect(cubit!.state.config?.contestStatus, ContestStatus.finished);
+  });
+
+  test('finishDrawing archives then marks finished', () async {
+    config = _FakeConfigRepository(
+      _openContestConfig.copyWith(
+        contestId: 'contest-1',
+        contestName: 'Nagrody',
+      ),
+    );
+    contest.participants = const [
+      ContestParticipant(uid: 'p1', displayName: 'Pat', email: 'p@x.com'),
+    ];
+    cubit = _buildCubit(
+      config: config,
+      contest: contest,
+      votes: votes,
+      session: session,
+      conferences: conferences,
+    );
+    await pumpEventQueue();
+
+    await cubit!.draw(count: 1, random: Random(1));
+    contest.operations.clear();
+    await cubit!.finishDrawing();
+
+    expect(contest.operations, ['archive:contest-1', 'status:finished']);
+    expect(contest.archived.single.name, 'Nagrody');
+    expect(contest.archived.single.winners, hasLength(1));
+    expect(cubit!.state.config?.contestStatus, ContestStatus.finished);
+  });
+
+  test('startNewContest carry keeps participants clears winners', () async {
+    config = _FakeConfigRepository(
+      _openContestConfig.copyWith(
+        contestStatus: ContestStatus.finished,
+        contestId: 'contest-1',
+        contestName: 'Stary konkurs',
+      ),
+    );
+    cubit = _buildCubit(
+      config: config,
+      contest: contest,
+      votes: votes,
+      session: session,
+      conferences: conferences,
+    );
+    await pumpEventQueue();
+
+    await cubit!.startNewContest(
+      name: '  Nowy konkurs  ',
+      carryParticipants: true,
+    );
+    await pumpEventQueue();
+
+    expect(contest.operations, ['archive:contest-1', 'clearWinners']);
+    expect(config.lastSaved?.contestName, 'Nowy konkurs');
+    expect(config.lastSaved?.contestId, startsWith('c_'));
+    expect(config.lastSaved?.contestStatus, ContestStatus.open);
+    expect(config.lastSaved?.contestEnabled, isTrue);
+    expect(cubit!.state.config?.contestStatus, ContestStatus.open);
+    expect(cubit!.state.config?.contestName, 'Nowy konkurs');
+  });
+
+  test('startNewContest without carry clears both', () async {
+    config = _FakeConfigRepository(
+      _openContestConfig.copyWith(
+        contestStatus: ContestStatus.finished,
+        contestId: 'contest-1',
+      ),
+    );
+    cubit = _buildCubit(
+      config: config,
+      contest: contest,
+      votes: votes,
+      session: session,
+      conferences: conferences,
+    );
+    await pumpEventQueue();
+
+    await cubit!.startNewContest(
+      name: 'Nowy konkurs',
+      carryParticipants: false,
+    );
+
+    expect(contest.operations, [
+      'archive:contest-1',
+      'clearWinners',
+      'clearParticipants',
+    ]);
+  });
+
+  test('startNewContest rejects when not finished', () async {
+    cubit = _buildCubit(
+      config: config,
+      contest: contest,
+      votes: votes,
+      session: session,
+      conferences: conferences,
+    );
+    await pumpEventQueue();
+
+    await cubit!.startNewContest(
+      name: 'Nowy konkurs',
+      carryParticipants: false,
+    );
+
+    expect(cubit!.state.message, 'Konkurs musi być zakończony');
+    expect(contest.operations, isEmpty);
+    expect(config.lastSaved, isNull);
+  });
+
+  test('saveContest idle to open requires name', () async {
+    config = _FakeConfigRepository(
+      _openContestConfig.copyWith(
+        contestEnabled: false,
+        contestStatus: ContestStatus.idle,
+      ),
+    );
+    cubit = _buildCubit(
+      config: config,
+      contest: contest,
+      votes: votes,
+      session: session,
+      conferences: conferences,
+    );
+    await pumpEventQueue();
+
+    await cubit!.saveContest(
+      enabled: true,
+      start: DateTime.utc(2026, 1, 1),
+      end: DateTime.utc(2026, 12, 31),
+      name: '   ',
+    );
+
+    expect(cubit!.state.message, 'Podaj nazwę konkursu');
+    expect(config.lastSaved, isNull);
+
+    cubit!.clearMessage();
+    await cubit!.saveContest(
+      enabled: true,
+      start: DateTime.utc(2026, 1, 1),
+      end: DateTime.utc(2026, 12, 31),
+      name: '  Nagrody  ',
+    );
+
+    expect(config.lastSaved?.contestName, 'Nagrody');
+    expect(config.lastSaved?.contestId, startsWith('c_'));
+    expect(config.lastSaved?.contestStatus, ContestStatus.open);
+  });
+
+  test('watches contest history into state', () async {
+    contest.history = [
+      ContestHistoryEntry(
+        contestId: 'contest-1',
+        name: 'Poprzedni konkurs',
+        startsAt: DateTime.utc(2026, 1, 1),
+        endsAt: DateTime.utc(2026, 1, 2),
+        finishedAt: DateTime.utc(2026, 1, 2),
+        winners: const [],
+      ),
+    ];
+    cubit = _buildCubit(
+      config: config,
+      contest: contest,
+      votes: votes,
+      session: session,
+      conferences: conferences,
+    );
+    await pumpEventQueue();
+
+    expect(cubit!.state.history.single.name, 'Poprzedni konkurs');
   });
 }
 
@@ -265,6 +437,7 @@ class _FakeConfigRepository implements EngagementConfigRepository {
   @override
   Future<void> saveConfig(String confId, EngagementConfig config) async {
     lastSaved = config;
+    config$.add(config);
   }
 
   Future<void> dispose() => config$.close();
@@ -275,7 +448,10 @@ class _FakeContestRepository implements ContestRepository {
 
   final bool delayWatch;
   List<ContestParticipant> participants = const [];
+  List<ContestHistoryEntry> history = const [];
   final winners$ = BehaviorSubject<List<ContestWinner>>.seeded(const []);
+  final List<ContestHistoryEntry> archived = [];
+  final List<String> operations = [];
   ContestStatus? lastStatus;
 
   @override
@@ -324,23 +500,31 @@ class _FakeContestRepository implements ContestRepository {
     required ContestStatus status,
   }) async {
     lastStatus = status;
+    operations.add('status:${status.name}');
   }
 
   @override
   Stream<List<ContestHistoryEntry>> watchHistory(String confId) =>
-      Stream.value(const []);
+      Stream.value(history);
 
   @override
   Future<void> archiveContestIfAbsent({
     required String confId,
     required ContestHistoryEntry entry,
-  }) async {}
+  }) async {
+    archived.add(entry);
+    operations.add('archive:${entry.contestId}');
+  }
 
   @override
-  Future<void> clearWinners(String confId) async {}
+  Future<void> clearWinners(String confId) async {
+    operations.add('clearWinners');
+  }
 
   @override
-  Future<void> clearParticipants(String confId) async {}
+  Future<void> clearParticipants(String confId) async {
+    operations.add('clearParticipants');
+  }
 
   Future<void> dispose() => winners$.close();
 }

@@ -21,6 +21,9 @@ class AdminPage extends StatefulWidget {
 
 class _AdminPageState extends State<AdminPage> {
   late final AdminCubit _cubit;
+  String? _contestConfId;
+  String? _contestId;
+  String _contestName = '';
 
   @override
   void initState() {
@@ -80,6 +83,12 @@ class _AdminPageState extends State<AdminPage> {
     }
 
     final config = state.config ?? EngagementConfig.missing;
+    if (_contestConfId != state.latestConfId ||
+        _contestId != config.contestId) {
+      _contestConfId = state.latestConfId;
+      _contestId = config.contestId;
+      _contestName = config.contestName;
+    }
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       children: [
@@ -102,28 +111,34 @@ class _AdminPageState extends State<AdminPage> {
             end: end,
           ),
         ),
-        const SizedBox(height: 32),
+        const Divider(height: 1),
         AdminContestSection(
           config: config,
           participants: state.participants,
           winners: state.winners,
+          history: state.history,
+          onNameChanged: (name) => _contestName = name,
           onEnabledChanged: (enabled) => _cubit.saveContest(
             enabled: enabled,
             start: config.contestStartsAt,
             end: config.contestEndsAt,
+            name: _contestName,
           ),
           onStartChanged: (start) => _cubit.saveContest(
             enabled: config.contestEnabled,
             start: start,
             end: config.contestEndsAt,
+            name: _contestName,
           ),
           onEndChanged: (end) => _cubit.saveContest(
             enabled: config.contestEnabled,
             start: config.contestStartsAt,
             end: end,
+            name: _contestName,
           ),
           onDraw: (count) => _cubit.draw(count: count, random: Random()),
           onFinish: _cubit.finishDrawing,
+          onStartNewContest: _cubit.startNewContest,
         ),
       ],
     );

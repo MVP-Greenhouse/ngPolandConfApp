@@ -6,13 +6,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_participant.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/logic/contest_archive.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/contest_draw.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/speaker_vote_ranking.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/logic/start_new_contest_guard.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/contest_repository.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/speaker_vote_repository.dart';
@@ -99,15 +102,17 @@ class AdminCubit extends Cubit<AdminState> {
       _loadRanking(latestConfId),
     ).startWith(const <SpeakerVoteRank>[]);
 
-    return Rx.combineLatest4(
+    return Rx.combineLatest5(
       _configRepository.watchConfig(latestConfId),
       _contestRepository.watchParticipants(latestConfId),
       _contestRepository.watchWinners(latestConfId),
+      _contestRepository.watchHistory(latestConfId),
       ranking$,
       (
         EngagementConfig config,
         List<ContestParticipant> participants,
         List<ContestWinner> winners,
+        List<ContestHistoryEntry> history,
         List<SpeakerVoteRank> ranking,
       ) => AdminState(
         isAdmin: true,
@@ -116,6 +121,7 @@ class AdminCubit extends Cubit<AdminState> {
         ranking: ranking,
         participants: participants,
         winners: winners,
+        history: history,
       ),
     ).startWith(
       AdminState(isAdmin: true, loading: true, latestConfId: latestConfId),
@@ -165,19 +171,31 @@ class AdminCubit extends Cubit<AdminState> {
     required bool enabled,
     required DateTime start,
     required DateTime end,
+    required String name,
   }) async {
     final confId = state.latestConfId;
     final config = state.config;
     if (confId == null || config == null) return;
     final contestStatus = state.config?.contestStatus ?? config.contestStatus;
+    final trimmedName = name.trim();
+    if (enabled && contestStatus == ContestStatus.idle && trimmedName.isEmpty) {
+      emit(state.copyWith(message: 'Podaj nazwę konkursu'));
+      return;
+    }
     var next = config.copyWith(
       contestEnabled: enabled,
       contestStartsAt: start.toUtc(),
       contestEndsAt: end.toUtc(),
       contestStatus: contestStatus,
+      contestName: trimmedName,
     );
     if (enabled && contestStatus == ContestStatus.idle) {
-      next = next.copyWith(contestStatus: ContestStatus.open);
+      next = next.copyWith(
+        contestId: config.contestId.isEmpty
+            ? 'c_${DateTime.now().toUtc().millisecondsSinceEpoch}'
+            : config.contestId,
+        contestStatus: ContestStatus.open,
+      );
     }
     await _configRepository.saveConfig(confId, next);
   }
@@ -224,13 +242,81 @@ class AdminCubit extends Cubit<AdminState> {
 
   Future<void> finishDrawing() async {
     final confId = state.latestConfId;
-    if (confId == null) return;
-    if (state.config?.contestStatus != ContestStatus.drawing) return;
+    final config = state.config;
+    if (confId == null || config == null) return;
+    if (config.contestStatus != ContestStatus.drawing) return;
+
+    var contestId = config.contestId;
+    if (contestId.isEmpty) {
+      contestId = 'c_${DateTime.now().toUtc().millisecondsSinceEpoch}';
+      await _configRepository.saveConfig(
+        confId,
+        config.copyWith(contestId: contestId),
+      );
+    }
+
+    final entry = ContestArchive.buildEntry(
+      contestId: contestId,
+      name: config.contestName.isEmpty ? 'Konkurs' : config.contestName,
+      startsAt: config.contestStartsAt,
+      endsAt: config.contestEndsAt,
+      finishedAt: DateTime.now().toUtc(),
+      winners: state.winners,
+    );
+    await _contestRepository.archiveContestIfAbsent(
+      confId: confId,
+      entry: entry,
+    );
     await _contestRepository.updateContestStatus(
       confId: confId,
       status: ContestStatus.finished,
     );
     _emitContestStatus(ContestStatus.finished);
+  }
+
+  Future<void> startNewContest({
+    required String name,
+    required bool carryParticipants,
+  }) async {
+    final confId = state.latestConfId;
+    final config = state.config;
+    if (confId == null || config == null) return;
+    final error = StartNewContestGuard.validate(
+      status: config.contestStatus,
+      name: name,
+    );
+    if (error != null) {
+      emit(state.copyWith(message: error));
+      return;
+    }
+
+    if (config.contestId.isNotEmpty) {
+      await _contestRepository.archiveContestIfAbsent(
+        confId: confId,
+        entry: ContestArchive.buildEntry(
+          contestId: config.contestId,
+          name: config.contestName.isEmpty ? 'Konkurs' : config.contestName,
+          startsAt: config.contestStartsAt,
+          endsAt: config.contestEndsAt,
+          finishedAt: DateTime.now().toUtc(),
+          winners: state.winners,
+        ),
+      );
+    }
+
+    await _contestRepository.clearWinners(confId);
+    if (!carryParticipants) {
+      await _contestRepository.clearParticipants(confId);
+    }
+
+    final nextId = 'c_${DateTime.now().toUtc().millisecondsSinceEpoch}';
+    final next = config.copyWith(
+      contestId: nextId,
+      contestName: name.trim(),
+      contestStatus: ContestStatus.open,
+      contestEnabled: true,
+    );
+    await _configRepository.saveConfig(confId, next);
   }
 
   void clearMessage() {
@@ -270,6 +356,7 @@ class AdminCubit extends Cubit<AdminState> {
     final currentStatus = current.config?.contestStatus;
     final nextConfig = next.config;
     if (currentStatus == null || nextConfig == null) return next;
+    if (current.config?.contestId != nextConfig.contestId) return next;
     if (_statusPriority(currentStatus) <=
         _statusPriority(nextConfig.contestStatus)) {
       return next;

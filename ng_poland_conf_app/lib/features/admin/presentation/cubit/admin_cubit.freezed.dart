@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AdminState {
 
- bool get isAdmin; String? get latestConfId; EngagementConfig? get config; List<SpeakerVoteRank> get ranking; List<ContestParticipant> get participants; List<ContestWinner> get winners; String? get message; bool get loading;
+ bool get isAdmin; String? get latestConfId; EngagementConfig? get config; List<SpeakerVoteRank> get ranking; List<ContestParticipant> get participants; List<ContestWinner> get winners; List<ContestHistoryEntry> get history; String? get message; bool get loading;
 /// Create a copy of AdminState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AdminStateCopyWith<AdminState> get copyWith => _$AdminStateCopyWithImpl<AdminSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AdminState&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.latestConfId, latestConfId) || other.latestConfId == latestConfId)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.ranking, ranking)&&const DeepCollectionEquality().equals(other.participants, participants)&&const DeepCollectionEquality().equals(other.winners, winners)&&(identical(other.message, message) || other.message == message)&&(identical(other.loading, loading) || other.loading == loading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AdminState&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.latestConfId, latestConfId) || other.latestConfId == latestConfId)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other.ranking, ranking)&&const DeepCollectionEquality().equals(other.participants, participants)&&const DeepCollectionEquality().equals(other.winners, winners)&&const DeepCollectionEquality().equals(other.history, history)&&(identical(other.message, message) || other.message == message)&&(identical(other.loading, loading) || other.loading == loading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isAdmin,latestConfId,config,const DeepCollectionEquality().hash(ranking),const DeepCollectionEquality().hash(participants),const DeepCollectionEquality().hash(winners),message,loading);
+int get hashCode => Object.hash(runtimeType,isAdmin,latestConfId,config,const DeepCollectionEquality().hash(ranking),const DeepCollectionEquality().hash(participants),const DeepCollectionEquality().hash(winners),const DeepCollectionEquality().hash(history),message,loading);
 
 @override
 String toString() {
-  return 'AdminState(isAdmin: $isAdmin, latestConfId: $latestConfId, config: $config, ranking: $ranking, participants: $participants, winners: $winners, message: $message, loading: $loading)';
+  return 'AdminState(isAdmin: $isAdmin, latestConfId: $latestConfId, config: $config, ranking: $ranking, participants: $participants, winners: $winners, history: $history, message: $message, loading: $loading)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AdminStateCopyWith<$Res>  {
   factory $AdminStateCopyWith(AdminState value, $Res Function(AdminState) _then) = _$AdminStateCopyWithImpl;
 @useResult
 $Res call({
- bool isAdmin, String? latestConfId, EngagementConfig? config, List<SpeakerVoteRank> ranking, List<ContestParticipant> participants, List<ContestWinner> winners, String? message, bool loading
+ bool isAdmin, String? latestConfId, EngagementConfig? config, List<SpeakerVoteRank> ranking, List<ContestParticipant> participants, List<ContestWinner> winners, List<ContestHistoryEntry> history, String? message, bool loading
 });
 
 
@@ -62,7 +62,7 @@ class _$AdminStateCopyWithImpl<$Res>
 
 /// Create a copy of AdminState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isAdmin = null,Object? latestConfId = freezed,Object? config = freezed,Object? ranking = null,Object? participants = null,Object? winners = null,Object? message = freezed,Object? loading = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isAdmin = null,Object? latestConfId = freezed,Object? config = freezed,Object? ranking = null,Object? participants = null,Object? winners = null,Object? history = null,Object? message = freezed,Object? loading = null,}) {
   return _then(_self.copyWith(
 isAdmin: null == isAdmin ? _self.isAdmin : isAdmin // ignore: cast_nullable_to_non_nullable
 as bool,latestConfId: freezed == latestConfId ? _self.latestConfId : latestConfId // ignore: cast_nullable_to_non_nullable
@@ -70,7 +70,8 @@ as String?,config: freezed == config ? _self.config : config // ignore: cast_nul
 as EngagementConfig?,ranking: null == ranking ? _self.ranking : ranking // ignore: cast_nullable_to_non_nullable
 as List<SpeakerVoteRank>,participants: null == participants ? _self.participants : participants // ignore: cast_nullable_to_non_nullable
 as List<ContestParticipant>,winners: null == winners ? _self.winners : winners // ignore: cast_nullable_to_non_nullable
-as List<ContestWinner>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as List<ContestWinner>,history: null == history ? _self.history : history // ignore: cast_nullable_to_non_nullable
+as List<ContestHistoryEntry>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,loading: null == loading ? _self.loading : loading // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -157,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isAdmin,  String? latestConfId,  EngagementConfig? config,  List<SpeakerVoteRank> ranking,  List<ContestParticipant> participants,  List<ContestWinner> winners,  String? message,  bool loading)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isAdmin,  String? latestConfId,  EngagementConfig? config,  List<SpeakerVoteRank> ranking,  List<ContestParticipant> participants,  List<ContestWinner> winners,  List<ContestHistoryEntry> history,  String? message,  bool loading)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AdminState() when $default != null:
-return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_that.participants,_that.winners,_that.message,_that.loading);case _:
+return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_that.participants,_that.winners,_that.history,_that.message,_that.loading);case _:
   return orElse();
 
 }
@@ -178,10 +179,10 @@ return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isAdmin,  String? latestConfId,  EngagementConfig? config,  List<SpeakerVoteRank> ranking,  List<ContestParticipant> participants,  List<ContestWinner> winners,  String? message,  bool loading)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isAdmin,  String? latestConfId,  EngagementConfig? config,  List<SpeakerVoteRank> ranking,  List<ContestParticipant> participants,  List<ContestWinner> winners,  List<ContestHistoryEntry> history,  String? message,  bool loading)  $default,) {final _that = this;
 switch (_that) {
 case _AdminState():
-return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_that.participants,_that.winners,_that.message,_that.loading);case _:
+return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_that.participants,_that.winners,_that.history,_that.message,_that.loading);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +199,10 @@ return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isAdmin,  String? latestConfId,  EngagementConfig? config,  List<SpeakerVoteRank> ranking,  List<ContestParticipant> participants,  List<ContestWinner> winners,  String? message,  bool loading)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isAdmin,  String? latestConfId,  EngagementConfig? config,  List<SpeakerVoteRank> ranking,  List<ContestParticipant> participants,  List<ContestWinner> winners,  List<ContestHistoryEntry> history,  String? message,  bool loading)?  $default,) {final _that = this;
 switch (_that) {
 case _AdminState() when $default != null:
-return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_that.participants,_that.winners,_that.message,_that.loading);case _:
+return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_that.participants,_that.winners,_that.history,_that.message,_that.loading);case _:
   return null;
 
 }
@@ -213,7 +214,7 @@ return $default(_that.isAdmin,_that.latestConfId,_that.config,_that.ranking,_tha
 
 
 class _AdminState extends AdminState {
-  const _AdminState({this.isAdmin = false, this.latestConfId, this.config, final  List<SpeakerVoteRank> ranking = const <SpeakerVoteRank>[], final  List<ContestParticipant> participants = const <ContestParticipant>[], final  List<ContestWinner> winners = const <ContestWinner>[], this.message, this.loading = false}): _ranking = ranking,_participants = participants,_winners = winners,super._();
+  const _AdminState({this.isAdmin = false, this.latestConfId, this.config, final  List<SpeakerVoteRank> ranking = const <SpeakerVoteRank>[], final  List<ContestParticipant> participants = const <ContestParticipant>[], final  List<ContestWinner> winners = const <ContestWinner>[], final  List<ContestHistoryEntry> history = const <ContestHistoryEntry>[], this.message, this.loading = false}): _ranking = ranking,_participants = participants,_winners = winners,_history = history,super._();
   
 
 @override@JsonKey() final  bool isAdmin;
@@ -240,6 +241,13 @@ class _AdminState extends AdminState {
   return EqualUnmodifiableListView(_winners);
 }
 
+ final  List<ContestHistoryEntry> _history;
+@override@JsonKey() List<ContestHistoryEntry> get history {
+  if (_history is EqualUnmodifiableListView) return _history;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_history);
+}
+
 @override final  String? message;
 @override@JsonKey() final  bool loading;
 
@@ -253,16 +261,16 @@ _$AdminStateCopyWith<_AdminState> get copyWith => __$AdminStateCopyWithImpl<_Adm
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AdminState&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.latestConfId, latestConfId) || other.latestConfId == latestConfId)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other._ranking, _ranking)&&const DeepCollectionEquality().equals(other._participants, _participants)&&const DeepCollectionEquality().equals(other._winners, _winners)&&(identical(other.message, message) || other.message == message)&&(identical(other.loading, loading) || other.loading == loading));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AdminState&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.latestConfId, latestConfId) || other.latestConfId == latestConfId)&&(identical(other.config, config) || other.config == config)&&const DeepCollectionEquality().equals(other._ranking, _ranking)&&const DeepCollectionEquality().equals(other._participants, _participants)&&const DeepCollectionEquality().equals(other._winners, _winners)&&const DeepCollectionEquality().equals(other._history, _history)&&(identical(other.message, message) || other.message == message)&&(identical(other.loading, loading) || other.loading == loading));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isAdmin,latestConfId,config,const DeepCollectionEquality().hash(_ranking),const DeepCollectionEquality().hash(_participants),const DeepCollectionEquality().hash(_winners),message,loading);
+int get hashCode => Object.hash(runtimeType,isAdmin,latestConfId,config,const DeepCollectionEquality().hash(_ranking),const DeepCollectionEquality().hash(_participants),const DeepCollectionEquality().hash(_winners),const DeepCollectionEquality().hash(_history),message,loading);
 
 @override
 String toString() {
-  return 'AdminState(isAdmin: $isAdmin, latestConfId: $latestConfId, config: $config, ranking: $ranking, participants: $participants, winners: $winners, message: $message, loading: $loading)';
+  return 'AdminState(isAdmin: $isAdmin, latestConfId: $latestConfId, config: $config, ranking: $ranking, participants: $participants, winners: $winners, history: $history, message: $message, loading: $loading)';
 }
 
 
@@ -273,7 +281,7 @@ abstract mixin class _$AdminStateCopyWith<$Res> implements $AdminStateCopyWith<$
   factory _$AdminStateCopyWith(_AdminState value, $Res Function(_AdminState) _then) = __$AdminStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isAdmin, String? latestConfId, EngagementConfig? config, List<SpeakerVoteRank> ranking, List<ContestParticipant> participants, List<ContestWinner> winners, String? message, bool loading
+ bool isAdmin, String? latestConfId, EngagementConfig? config, List<SpeakerVoteRank> ranking, List<ContestParticipant> participants, List<ContestWinner> winners, List<ContestHistoryEntry> history, String? message, bool loading
 });
 
 
@@ -290,7 +298,7 @@ class __$AdminStateCopyWithImpl<$Res>
 
 /// Create a copy of AdminState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isAdmin = null,Object? latestConfId = freezed,Object? config = freezed,Object? ranking = null,Object? participants = null,Object? winners = null,Object? message = freezed,Object? loading = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isAdmin = null,Object? latestConfId = freezed,Object? config = freezed,Object? ranking = null,Object? participants = null,Object? winners = null,Object? history = null,Object? message = freezed,Object? loading = null,}) {
   return _then(_AdminState(
 isAdmin: null == isAdmin ? _self.isAdmin : isAdmin // ignore: cast_nullable_to_non_nullable
 as bool,latestConfId: freezed == latestConfId ? _self.latestConfId : latestConfId // ignore: cast_nullable_to_non_nullable
@@ -298,7 +306,8 @@ as String?,config: freezed == config ? _self.config : config // ignore: cast_nul
 as EngagementConfig?,ranking: null == ranking ? _self._ranking : ranking // ignore: cast_nullable_to_non_nullable
 as List<SpeakerVoteRank>,participants: null == participants ? _self._participants : participants // ignore: cast_nullable_to_non_nullable
 as List<ContestParticipant>,winners: null == winners ? _self._winners : winners // ignore: cast_nullable_to_non_nullable
-as List<ContestWinner>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
+as List<ContestWinner>,history: null == history ? _self._history : history // ignore: cast_nullable_to_non_nullable
+as List<ContestHistoryEntry>,message: freezed == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String?,loading: null == loading ? _self.loading : loading // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
