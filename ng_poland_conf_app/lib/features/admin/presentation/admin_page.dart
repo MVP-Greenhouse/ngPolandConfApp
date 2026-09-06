@@ -29,7 +29,11 @@ class AdminPage extends StatelessWidget {
               if (state.latestConfId != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Chip(label: Text(state.latestConfId!)),
+                  child: Chip(
+                    label: Text(state.latestConfId!),
+                    visualDensity: VisualDensity.compact,
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                 ),
               const ConnectionStatus(),
             ],
@@ -77,24 +81,201 @@ class AdminHubContent extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       children: [
-        ListTile(
-          title: const Text('Głosowanie'),
-          subtitle: Text(AdminHubStatus.votingSubtitle(config)),
-          trailing: const Icon(Icons.chevron_right),
+        AdminHubNavCard(
+          title: 'Głosowanie',
+          icon: Icons.thumb_up_alt_outlined,
+          iconBackground: _votingIconBackground(context),
+          accentColor: _accentColor(context),
+          chips: [
+            _StatusChip(
+              label: AdminHubStatus.votingSubtitle(config),
+              filled: config.votingEnabled,
+            ),
+          ],
           onTap: onVotingTap,
         ),
-        ListTile(
-          title: const Text('Konkurs'),
-          subtitle: Text(
-            AdminHubStatus.contestSubtitle(
-              config: config,
-              participantCount: participantCount,
+        const SizedBox(height: 12),
+        AdminHubNavCard(
+          title: 'Konkurs',
+          icon: Icons.card_giftcard,
+          iconBackground: _contestIconBackground(context),
+          accentColor: _accentColor(context),
+          chips: [
+            _StatusChip(
+              label: AdminHubStatus.enabledLabel(config.contestEnabled),
+              filled: config.contestEnabled,
             ),
-          ),
-          trailing: const Icon(Icons.chevron_right),
+            _StatusChip(
+              label: AdminHubStatus.contestStatusLabel(config.contestStatus),
+              filled: false,
+            ),
+            _StatusChip(
+              label: AdminHubStatus.participantChipLabel(participantCount),
+              filled: false,
+            ),
+          ],
           onTap: onContestTap,
         ),
       ],
+    );
+  }
+
+  static Color _accentColor(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Theme.of(context).brightness == Brightness.dark
+        ? scheme.primaryContainer
+        : scheme.secondary;
+  }
+
+  static Color _votingIconBackground(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    if (Theme.of(context).brightness == Brightness.dark) {
+      return scheme.secondaryContainer.withValues(alpha: 0.35);
+    }
+    return scheme.primary.withValues(alpha: 0.12);
+  }
+
+  static Color _contestIconBackground(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    if (Theme.of(context).brightness == Brightness.dark) {
+      return scheme.primaryContainer.withValues(alpha: 0.25);
+    }
+    return scheme.secondary.withValues(alpha: 0.12);
+  }
+}
+
+class AdminHubNavCard extends StatelessWidget {
+  const AdminHubNavCard({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.iconBackground,
+    required this.accentColor,
+    required this.chips,
+    required this.onTap,
+  });
+
+  final String title;
+  final IconData icon;
+  final Color iconBackground;
+  final Color accentColor;
+  final List<Widget> chips;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
+    return Material(
+      color: scheme.surface,
+      borderRadius: BorderRadius.circular(12),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: scheme.outline.withValues(alpha: isDark ? 0.28 : 0.12),
+            ),
+          ),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(width: 4, color: accentColor),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: iconBackground,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(icon, size: 20, color: scheme.onSurface),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                title,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: scheme.onSurface,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Wrap(spacing: 6, runSpacing: 6, children: chips),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          color: scheme.onSurface.withValues(alpha: 0.5),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StatusChip extends StatelessWidget {
+  const _StatusChip({required this.label, required this.filled});
+
+  final String label;
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    if (filled) {
+      return Chip(
+        label: Text(label),
+        labelStyle: TextStyle(
+          fontSize: 12,
+          color: scheme.onPrimaryContainer,
+        ),
+        backgroundColor: scheme.primaryContainer,
+        side: BorderSide.none,
+        visualDensity: VisualDensity.compact,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: EdgeInsets.zero,
+        labelPadding: const EdgeInsets.symmetric(horizontal: 8),
+      );
+    }
+    return Chip(
+      label: Text(label),
+      labelStyle: TextStyle(
+        fontSize: 12,
+        color: scheme.onSurface.withValues(alpha: 0.7),
+      ),
+      backgroundColor: Colors.transparent,
+      side: BorderSide(color: scheme.outline.withValues(alpha: 0.35)),
+      visualDensity: VisualDensity.compact,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      padding: EdgeInsets.zero,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 8),
     );
   }
 }

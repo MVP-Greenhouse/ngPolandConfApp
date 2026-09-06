@@ -19,7 +19,12 @@ class AdminVotingPage extends StatelessWidget {
         return CustomScaffold(
           appBar: AppBar(
             leading: BackButton(onPressed: () => context.go(AdminPage.path)),
-            title: const Text('Głosowanie'),
+            title: Text(
+              'Głosowanie',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ),
           ),
           body: _buildBody(context, state),
         );

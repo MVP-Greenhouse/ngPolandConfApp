@@ -95,6 +95,35 @@ class MainApp extends StatelessWidget {
                   alignedDropdown: false,
                   colorScheme: lightButtonColorScheme,
                 ),
+                filledButtonTheme: FilledButtonThemeData(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: lightButtonColorScheme.primary,
+                    foregroundColor: Colors.white,
+                    disabledBackgroundColor:
+                        lightButtonColorScheme.primary.withValues(alpha: 0.38),
+                    disabledForegroundColor: Colors.white.withValues(alpha: 0.38),
+                  ),
+                ),
+                switchTheme: SwitchThemeData(
+                  thumbColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return Colors.white;
+                    }
+                    return lightColorScheme.outline;
+                  }),
+                  trackColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return lightColorScheme.secondary;
+                    }
+                    return lightColorScheme.surfaceContainerHighest;
+                  }),
+                  trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return Colors.transparent;
+                    }
+                    return lightColorScheme.outline;
+                  }),
+                ),
                 dividerTheme: DividerThemeData(
                   color: lightColorScheme.secondary,
                   thickness: 1.0,
@@ -152,6 +181,38 @@ class MainApp extends StatelessWidget {
                 buttonTheme: const ButtonThemeData(
                   alignedDropdown: false,
                   colorScheme: darkButtonColorScheme,
+                ),
+                // Dark ColorScheme.primary is near-white (#FFEDEB); brand
+                // purple/pink keep FilledButton and Switch readable.
+                filledButtonTheme: FilledButtonThemeData(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: darkButtonColorScheme.primary,
+                    foregroundColor: darkButtonColorScheme.onPrimary,
+                    disabledBackgroundColor:
+                        darkButtonColorScheme.primary.withValues(alpha: 0.38),
+                    disabledForegroundColor:
+                        darkButtonColorScheme.onPrimary.withValues(alpha: 0.38),
+                  ),
+                ),
+                switchTheme: SwitchThemeData(
+                  thumbColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return Colors.white;
+                    }
+                    return darkColorScheme.outline;
+                  }),
+                  trackColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return darkColorScheme.primaryContainer;
+                    }
+                    return darkColorScheme.surfaceContainerHighest;
+                  }),
+                  trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return Colors.transparent;
+                    }
+                    return darkColorScheme.outline;
+                  }),
                 ),
                 dividerTheme: DividerThemeData(
                   color: darkColorScheme.primary,

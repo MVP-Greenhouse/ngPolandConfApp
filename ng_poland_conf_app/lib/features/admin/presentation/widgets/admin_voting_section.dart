@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_section_card.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/speaker_vote_ranking.dart';
 
@@ -21,32 +22,137 @@ class AdminVotingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SwitchListTile(
-          contentPadding: EdgeInsets.zero,
-          title: const Text('Włączone'),
-          value: config.votingEnabled,
-          onChanged: onEnabledChanged,
-        ),
-        AdminDateTimeTile(
-          label: 'Od',
-          value: config.votingStartsAt,
-          onPicked: onStartChanged,
-        ),
-        AdminDateTimeTile(
-          label: 'Do',
-          value: config.votingEndsAt,
-          onPicked: onEndChanged,
-        ),
-        const SizedBox(height: 8),
-        for (final rank in ranking)
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(rank.name),
-            trailing: Text('👍 ${rank.up}  👎 ${rank.down}'),
+        AdminSectionCard(
+          title: 'Ustawienia',
+          child: Column(
+            children: [
+              AdminSwitchListTile(
+                title: Text(
+                  'Włączone',
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontSize: 16,
+                    color: scheme.onSurface,
+                  ),
+                ),
+                value: config.votingEnabled,
+                onChanged: onEnabledChanged,
+              ),
+              AdminDateTimeTile(
+                label: 'Od',
+                value: config.votingStartsAt,
+                onPicked: onStartChanged,
+              ),
+              AdminDateTimeTile(
+                label: 'Do',
+                value: config.votingEndsAt,
+                onPicked: onEndChanged,
+              ),
+            ],
           ),
+        ),
+        const SizedBox(height: 12),
+        AdminSectionCard(
+          title: 'Ranking',
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: ranking.isEmpty
+              ? Text(
+                  'Brak głosów',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontSize: 14,
+                    color: scheme.onSurface.withValues(alpha: 0.6),
+                  ),
+                )
+              : Column(
+                  children: [
+                    for (var i = 0; i < ranking.length; i++) ...[
+                      if (i > 0)
+                        Divider(
+                          height: 1,
+                          color: scheme.outline.withValues(alpha: 0.15),
+                        ),
+                      _RankingRow(rank: ranking[i]),
+                    ],
+                  ],
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+class _RankingRow extends StatelessWidget {
+  const _RankingRow({required this.rank});
+
+  final SpeakerVoteRank rank;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              rank.name,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: scheme.onSurface,
+                height: 1.25,
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          _VoteCount(
+            icon: Icons.thumb_up_alt_outlined,
+            count: rank.up,
+            color: scheme.secondary,
+          ),
+          const SizedBox(width: 12),
+          _VoteCount(
+            icon: Icons.thumb_down_alt_outlined,
+            count: rank.down,
+            color: scheme.onSurface.withValues(alpha: 0.55),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VoteCount extends StatelessWidget {
+  const _VoteCount({
+    required this.icon,
+    required this.count,
+    required this.color,
+  });
+
+  final IconData icon;
+  final int count;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 16, color: color),
+        const SizedBox(width: 4),
+        Text(
+          '$count',
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
       ],
     );
   }
@@ -68,12 +174,43 @@ class AdminDateTimeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     final unset = value.millisecondsSinceEpoch == 0;
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(label),
-      subtitle: Text(unset ? '—' : _format.format(value.toLocal())),
+    return InkWell(
       onTap: () => _pick(context),
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 36,
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  fontSize: 14,
+                  color: scheme.onSurface.withValues(alpha: 0.65),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                unset ? '—' : _format.format(value.toLocal()),
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: scheme.onSurface,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.event,
+              size: 18,
+              color: scheme.onSurface.withValues(alpha: 0.45),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

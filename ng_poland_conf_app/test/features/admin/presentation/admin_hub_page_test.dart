@@ -95,17 +95,17 @@ void main() {
 
     expect(find.text('Głosowanie'), findsOneWidget);
     expect(find.text('Konkurs'), findsOneWidget);
-    expect(find.text(AdminHubStatus.votingSubtitle(config)), findsOneWidget);
+    expect(find.text(AdminHubStatus.votingSubtitle(config)), findsWidgets);
     expect(
-      find.text(
-        AdminHubStatus.contestSubtitle(
-          config: config,
-          participantCount: participants.length,
-        ),
-      ),
+      find.text(AdminHubStatus.contestStatusLabel(config.contestStatus)),
+      findsOneWidget,
+    );
+    expect(
+      find.text(AdminHubStatus.participantChipLabel(participants.length)),
       findsOneWidget,
     );
     expect(find.byType(ExpansionTile), findsNothing);
+    expect(find.byType(AdminHubNavCard), findsNWidgets(2));
   });
 }
 

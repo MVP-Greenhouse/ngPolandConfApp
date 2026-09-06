@@ -25,7 +25,7 @@ void main() {
   test('contest subtitle format', () {
     expect(
       AdminHubStatus.contestSubtitle(config: base, participantCount: 12),
-      'włączone · open · 12 zgłoszeń',
+      'włączone · open · 12 zgł.',
     );
     expect(
       AdminHubStatus.contestSubtitle(
@@ -35,7 +35,12 @@ void main() {
         ),
         participantCount: 0,
       ),
-      'wyłączone · finished · 0 zgłoszeń',
+      'wyłączone · finished · 0 zgł.',
     );
+  });
+
+  test('participant chip uses short label', () {
+    expect(AdminHubStatus.participantChipLabel(1), '1 zgł.');
+    expect(AdminHubStatus.contestStatusLabel(ContestStatus.open), 'open');
   });
 }

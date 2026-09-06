@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_section_card.dart';
 
 class StartNewContestResult {
   const StartNewContestResult({
@@ -62,8 +63,7 @@ class _StartNewContestDialogState extends State<StartNewContestDialog> {
               errorText: _nameError,
             ),
           ),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
+          AdminSwitchListTile(
             title: const Text('Przenieś uczestników'),
             value: _carryParticipants,
             onChanged: (value) {

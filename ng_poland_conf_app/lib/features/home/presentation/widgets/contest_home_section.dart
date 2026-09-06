@@ -215,19 +215,76 @@ class _ContestWinDialogListenerState extends State<ContestWinDialogListener> {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text(ContestHomeCopy.winTitle),
-        content: const Text(ContestHomeCopy.winBody),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(dialogContext).pop();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
+      builder: (dialogContext) => const ContestWinDialog(),
     );
     await widget.ui.markWinDialogShown(contestId);
+  }
+}
+
+class ContestWinDialog extends StatelessWidget {
+  const ContestWinDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final accent = isDark ? scheme.primaryContainer : scheme.secondary;
+
+    return Dialog(
+      backgroundColor: scheme.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: scheme.outline.withValues(alpha: isDark ? 0.28 : 0.12),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: isDark ? 0.25 : 0.12),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.emoji_events, size: 30, color: accent),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              ContestHomeCopy.winTitle,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: scheme.onSurface,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              ContestHomeCopy.winBody,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall?.copyWith(
+                fontSize: 14,
+                height: 1.35,
+                color: scheme.onSurface.withValues(alpha: 0.75),
+              ),
+            ),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -30,7 +30,12 @@ class _AdminContestPageState extends State<AdminContestPage> {
         return CustomScaffold(
           appBar: AppBar(
             leading: BackButton(onPressed: () => context.go(AdminPage.path)),
-            title: const Text('Konkurs'),
+            title: Text(
+              'Konkurs',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ),
           ),
           body: _buildBody(context, state),
         );

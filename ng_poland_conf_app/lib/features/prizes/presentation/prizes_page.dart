@@ -26,49 +26,112 @@ class PrizesPage extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        final scheme = Theme.of(context).colorScheme;
         return CustomScaffold(
-          appBar: AppBar(title: const Text('Nagrody')),
-          body: _buildBody(state),
+          appBar: AppBar(
+            title: Text(
+              'Nagrody',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: scheme.inversePrimary,
+              ),
+            ),
+          ),
+          body: _buildBody(context, state),
         );
       },
     );
   }
 
-  Widget _buildBody(PrizesState state) {
+  Widget _buildBody(BuildContext context, PrizesState state) {
     if (state.loading) {
       return const Center(child: CircularProgressIndicator());
     }
 
     return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       itemCount: state.prizes.length,
-      separatorBuilder: (_, _) => const Divider(),
-      itemBuilder: (context, index) => _PrizeTile(prize: state.prizes[index]),
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
+      itemBuilder: (context, index) => _PrizeCard(prize: state.prizes[index]),
     );
   }
 }
 
-class _PrizeTile extends StatelessWidget {
-  const _PrizeTile({required this.prize});
+class _PrizeCard extends StatelessWidget {
+  const _PrizeCard({required this.prize});
 
   final UserPrize prize;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final accent = isDark ? scheme.primaryContainer : scheme.secondary;
+
     final finishedAt = prize.finishedAt;
-    final subtitle = finishedAt == null
+    final placeLine = finishedAt == null
         ? 'Miejsce ${prize.order}'
         : 'Miejsce ${prize.order} • '
               '${DateFormat('dd.MM.yyyy').format(finishedAt.toLocal())}';
 
-    return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-      leading: Icon(
-        Icons.emoji_events,
-        color: Theme.of(context).colorScheme.primary,
+    return Material(
+      color: scheme.surface,
+      borderRadius: BorderRadius.circular(12),
+      clipBehavior: Clip.antiAlias,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: scheme.outline.withValues(alpha: isDark ? 0.28 : 0.12),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: isDark ? 0.25 : 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.emoji_events,
+                  size: 22,
+                  color: accent,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      prize.contestName,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: scheme.onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      placeLine,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        fontSize: 13,
+                        color: scheme.onSurface.withValues(alpha: 0.65),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
-      title: Text(prize.contestName),
-      subtitle: Text(subtitle),
     );
   }
 }

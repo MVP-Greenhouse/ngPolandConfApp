@@ -20,6 +20,7 @@ void main() {
 
     expect(find.text('Głosowanie'), findsOneWidget);
     expect(find.text('Konkurs'), findsOneWidget);
-    expect(find.textContaining('3 zgłoszeń'), findsOneWidget);
+    expect(find.textContaining('3 zgł.'), findsOneWidget);
+    expect(find.byType(AdminHubNavCard), findsNWidgets(2));
   });
 }
