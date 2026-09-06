@@ -36,17 +36,18 @@ class ContestHomeSection extends StatelessWidget {
     return switch (view) {
       ContestHomeView.hidden => const SizedBox.shrink(),
       ContestHomeView.join => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.only(top: 8, bottom: 0),
         child: SizedBox(
           width: double.infinity,
-          child: FilledButton(
+          child: FilledButton.icon(
             onPressed: online ? onJoin : null,
-            child: const Text(ContestHomeCopy.join),
+            icon: const Icon(Icons.card_giftcard),
+            label: const Text(ContestHomeCopy.join),
           ),
         ),
       ),
       ContestHomeView.joined => const Padding(
-        padding: EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.only(top: 8, bottom: 0),
         child: SizedBox(
           width: double.infinity,
           child: FilledButton(

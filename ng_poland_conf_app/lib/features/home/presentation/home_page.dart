@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
                 online: connectivityResult != ConnectivityResult.none,
               ),
               const Divider(
-                height: 60.0,
+                height: 24.0,
               ),
               state.maybeWhen(
                 loaded: (conferences, selectedConference) => Column(

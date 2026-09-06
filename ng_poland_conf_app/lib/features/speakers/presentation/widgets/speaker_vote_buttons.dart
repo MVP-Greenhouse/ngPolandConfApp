@@ -32,8 +32,8 @@ class SpeakerVoteButtons extends StatelessWidget {
             icon: Icon(
               Icons.thumb_up,
               color: current == SpeakerVoteValue.up
-                  ? colorScheme.primary
-                  : null,
+                  ? colorScheme.secondary
+                  : colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
           IconButton(
@@ -42,8 +42,8 @@ class SpeakerVoteButtons extends StatelessWidget {
             icon: Icon(
               Icons.thumb_down,
               color: current == SpeakerVoteValue.down
-                  ? colorScheme.primary
-                  : null,
+                  ? colorScheme.secondary
+                  : colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],
