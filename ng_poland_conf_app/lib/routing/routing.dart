@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
@@ -95,11 +94,16 @@ class Routing {
           );
         }
 
+        final session = getIt.get<UserSessionCubit>().state;
+        final isAuthenticated = session.maybeWhen(
+          authenticated: (_) => true,
+          orElse: () => false,
+        );
         return authRedirect(
           matchedLocation: state.matchedLocation,
           fullPath: state.fullPath,
           queryParameters: state.uri.queryParameters,
-          isAuthenticated: FirebaseAuth.instance.currentUser != null,
+          isAuthenticated: isAuthenticated,
         );
       },
       routes: [
