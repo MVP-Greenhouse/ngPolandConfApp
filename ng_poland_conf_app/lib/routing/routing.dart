@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/about/presentation/about_page.dart';
-import 'package:ng_poland_conf_app/features/admin/presentation/admin_contest_page.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/admin_page.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/admin_shell.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/admin_voting_page.dart';
@@ -13,9 +12,8 @@ import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/home_page.dart';
 import 'package:ng_poland_conf_app/features/info/presentation/info_page.dart';
 import 'package:ng_poland_conf_app/features/nggirls/presentation/nggirls_page.dart';
-import 'package:ng_poland_conf_app/features/prizes/presentation/cubit/prizes_cubit.dart';
-import 'package:ng_poland_conf_app/features/prizes/presentation/prizes_page.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_page.dart';
+import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_top5_page.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/speakers_page.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
 import 'package:ng_poland_conf_app/features/workshops/presentation/workshops_page.dart';
@@ -34,19 +32,27 @@ String? adminGuardRedirect({
   return null;
 }
 
-String? prizesGuardRedirect({
+String? authRedirect({
   required String matchedLocation,
-  required UserSessionState session,
-  required bool loading,
-  required bool hasPrizes,
+  required String? fullPath,
+  required Map<String, String> queryParameters,
+  required bool isAuthenticated,
 }) {
-  if (matchedLocation != PrizesPage.path || loading) return null;
-  final loggedIn = session.maybeWhen(
-    authenticated: (_) => true,
-    orElse: () => false,
-  );
-  if (!loggedIn || !hasPrizes) return Pages.home.path;
-  return null;
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  final onAuth = matchedLocation == AuthenticationPage.path ||
+      (fullPath?.contains(AuthenticationPage.path) ?? false);
+  if (!onAuth) {
+    return null;
+  }
+
+  final from = queryParameters['from'];
+  if (from != null && from.isNotEmpty) {
+    return from;
+  }
+  return Pages.home.path;
 }
 
 enum Pages {
@@ -115,32 +121,23 @@ class Routing {
                   path: 'voting',
                   builder: (context, state) => const AdminVotingPage(),
                 ),
-                GoRoute(
-                  path: 'contest',
-                  builder: (context, state) => const AdminContestPage(),
-                ),
               ],
             ),
           ],
-        ),
-        GoRoute(
-          path: PrizesPage.path,
-          redirect: (context, state) {
-            final prizes = getIt.get<PrizesCubit>().state;
-            return prizesGuardRedirect(
-              matchedLocation: state.matchedLocation,
-              session: getIt.get<UserSessionCubit>().state,
-              loading: prizes.loading,
-              hasPrizes: prizes.hasPrizes,
-            );
-          },
-          builder: (context, state) => const PrizesPage(),
         ),
         GoRoute(
           path: Pages.home.path,
           builder: (context, state) => const HomePage(),
         ),
         GoRoute(path: Pages.schedule.path, builder: (context, state) => const SchedulePage(), routes: [
+          GoRoute(
+            path: '${ScheduleTop5Page.pathSegment}/:eventItemType',
+            name: '${Pages.schedule.nameKey}-${ScheduleTop5Page.routeNameKey}',
+            builder: (context, state) {
+              final eventItemType = state.pathParameters['eventItemType'];
+              return ScheduleTop5Page(eventItemType: eventItemType!);
+            },
+          ),
           GoRoute(
             path: 'schedule/${EventPage.routeName}/:eventId/:eventItemType',
             name: '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
