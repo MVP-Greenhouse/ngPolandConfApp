@@ -94,16 +94,13 @@ class Routing {
             session: getIt.get<UserSessionCubit>().state,
           );
         }
-        // return state.path;
-        bool authentication = FirebaseAuth.instance.currentUser == null;
-        if (authentication) {
-          return AuthenticationPage.path;
-        } else {
-          if (state.fullPath?.contains(AuthenticationPage.path) ?? true) {
-            return Pages.home.path;
-          }
-          return state.path;
-        }
+
+        return authRedirect(
+          matchedLocation: state.matchedLocation,
+          fullPath: state.fullPath,
+          queryParameters: state.uri.queryParameters,
+          isAuthenticated: FirebaseAuth.instance.currentUser != null,
+        );
       },
       routes: [
         GoRoute(
