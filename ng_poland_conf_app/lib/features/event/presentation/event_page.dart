@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_cubit.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/widgets/event_rating.dart';
+import 'package:ng_poland_conf_app/features/event/presentation/widgets/event_vote_button.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
@@ -71,6 +72,11 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
                   child: Column(
                     children: [
                       _buildSpeaker(eventItem.speaker),
+                      if (eventItem.speaker != null)
+                        EventVoteButtonHost(
+                          eventId: widget.eventId,
+                          eventItemType: widget.eventItemType,
+                        ),
                       _buildEventInfo(eventItem),
                     ],
                   ),

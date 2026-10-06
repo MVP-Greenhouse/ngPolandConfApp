@@ -13,7 +13,7 @@ void main() {
     role: UserRole.user,
   );
 
-  testWidgets('shows Zaloguj when unauthenticated', (tester) async {
+  testWidgets('shows Sign in when unauthenticated', (tester) async {
     var login = false;
     await tester.pumpWidget(
       MaterialApp(
@@ -27,13 +27,13 @@ void main() {
       ),
     );
 
-    expect(find.text('Zaloguj'), findsOneWidget);
-    expect(find.text('Wyloguj'), findsNothing);
-    await tester.tap(find.text('Zaloguj'));
+    expect(find.text('Sign in'), findsOneWidget);
+    expect(find.text('Sign out'), findsNothing);
+    await tester.tap(find.text('Sign in'));
     expect(login, isTrue);
   });
 
-  testWidgets('shows Wyloguj when authenticated', (tester) async {
+  testWidgets('shows Sign out when authenticated', (tester) async {
     var logout = false;
     await tester.pumpWidget(
       MaterialApp(
@@ -47,8 +47,8 @@ void main() {
       ),
     );
 
-    expect(find.text('Wyloguj'), findsOneWidget);
-    await tester.tap(find.text('Wyloguj'));
+    expect(find.text('Sign out'), findsOneWidget);
+    await tester.tap(find.text('Sign out'));
     expect(logout, isTrue);
   });
 
@@ -65,7 +65,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Zaloguj'), findsNothing);
-    expect(find.text('Wyloguj'), findsNothing);
+    expect(find.text('Sign in'), findsNothing);
+    expect(find.text('Sign out'), findsNothing);
   });
 }

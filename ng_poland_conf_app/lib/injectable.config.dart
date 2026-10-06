@@ -9,9 +9,12 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:app_links/app_links.dart' as _i327;
 import 'package:dio/dio.dart' as _i361;
+import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:logger/logger.dart' as _i974;
 
 import 'config/app_config.dart' as _i297;
 import 'config/raw_config.dart' as _i242;
@@ -19,6 +22,8 @@ import 'config/register_module.dart' as _i733;
 import 'core/blocks/conferences/conferences_cubit.dart' as _i933;
 import 'core/blocks/themeMode/theme_mode_cubit.dart' as _i399;
 import 'features/admin/presentation/cubit/admin_cubit.dart' as _i152;
+import 'features/authentication/datasources/data/magic_link_email_local_datasource.dart'
+    as _i995;
 import 'features/authentication/datasources/data/user_remote_datasource.dart'
     as _i273;
 import 'features/authentication/datasources/repositories/authentication_repository.dart'
@@ -29,32 +34,31 @@ import 'features/authentication/domains/repositories/authentication_repository.d
     as _i38;
 import 'features/authentication/domains/repositories/user_repository.dart'
     as _i476;
+import 'features/authentication/domains/usecases/complete_magic_link.dart'
+    as _i771;
 import 'features/authentication/domains/usecases/ensure_user_profile.dart'
     as _i834;
+import 'features/authentication/domains/usecases/send_magic_link.dart' as _i369;
 import 'features/authentication/domains/usecases/sign_in_apple.dart' as _i241;
 import 'features/authentication/domains/usecases/sign_in_google.dart' as _i631;
 import 'features/authentication/presentation/cubit/authentication_cubit.dart'
     as _i48;
 import 'features/authentication/presentation/cubit/user_session_cubit.dart'
     as _i793;
-import 'features/engagement/datasources/data/contest_remote_datasource.dart'
-    as _i481;
+import 'features/authentication/presentation/services/magic_link_deep_link_listener.dart'
+    as _i419;
 import 'features/engagement/datasources/data/engagement_config_remote_datasource.dart'
     as _i1016;
-import 'features/engagement/datasources/data/speaker_vote_remote_datasource.dart'
-    as _i189;
-import 'features/engagement/datasources/repositories/contest_repository.dart'
-    as _i804;
+import 'features/engagement/datasources/data/event_vote_remote_datasource.dart'
+    as _i785;
 import 'features/engagement/datasources/repositories/engagement_config_repository.dart'
     as _i408;
-import 'features/engagement/datasources/repositories/speaker_vote_repository.dart'
-    as _i747;
-import 'features/engagement/domains/repositories/contest_repository.dart'
-    as _i33;
+import 'features/engagement/datasources/repositories/event_vote_repository.dart'
+    as _i838;
 import 'features/engagement/domains/repositories/engagement_config_repository.dart'
     as _i419;
-import 'features/engagement/domains/repositories/speaker_vote_repository.dart'
-    as _i75;
+import 'features/engagement/domains/repositories/event_vote_repository.dart'
+    as _i670;
 import 'features/event/datasources/data/local/rate_event_local_datasource.dart'
     as _i234;
 import 'features/event/datasources/data/remote/rate_event_remote_datasource.dart'
@@ -68,12 +72,11 @@ import 'features/event/domains/usecases/get_rate_for_event.dart' as _i473;
 import 'features/event/domains/usecases/rate_event.dart' as _i589;
 import 'features/event/presentation/bloc/event_rating_bloc.dart' as _i730;
 import 'features/event/presentation/cubit/event_cubit.dart' as _i224;
+import 'features/event/presentation/cubit/event_vote_cubit.dart' as _i217;
 import 'features/home/datasources/data/conferences_local_datasource.dart'
     as _i924;
 import 'features/home/datasources/data/conferences_remote_datasource.dart'
     as _i800;
-import 'features/home/datasources/data/contest_ui_local_datasource.dart'
-    as _i355;
 import 'features/home/datasources/data/theme_mode_local_datasource.dart'
     as _i397;
 import 'features/home/datasources/repositories/conferences_repository.dart'
@@ -86,7 +89,6 @@ import 'features/home/domains/repositories/theme_mode_repository.dart' as _i905;
 import 'features/home/domains/usecases/get_all_conferences.dart' as _i359;
 import 'features/home/domains/usecases/get_theme_mode.dart' as _i189;
 import 'features/home/domains/usecases/update_theme_mode.dart' as _i184;
-import 'features/home/presentation/cubit/contest_home_cubit.dart' as _i995;
 import 'features/info/datasources/data/info_local_datasource.dart' as _i1041;
 import 'features/info/datasources/data/info_remote_datasource.dart' as _i369;
 import 'features/info/datasources/repositories/info_repository.dart' as _i123;
@@ -104,7 +106,6 @@ import 'features/nggirls/domains/repositories/ngGirls_repository.dart' as _i33;
 import 'features/nggirls/domains/usecases/get_ngGirls_for_conference.dart'
     as _i642;
 import 'features/nggirls/presentation/cubit/ngGirls_cubit.dart' as _i685;
-import 'features/prizes/presentation/cubit/prizes_cubit.dart' as _i635;
 import 'features/schedule/datasources/data/schedule_local_datasource.dart'
     as _i878;
 import 'features/schedule/datasources/data/schedule_remote_datasource.dart'
@@ -116,6 +117,9 @@ import 'features/schedule/domains/repositories/schedule_repository.dart'
 import 'features/schedule/domains/usecases/get_all_events_for_conference.dart'
     as _i797;
 import 'features/schedule/presentation/cubit/schedule_cubit.dart' as _i211;
+import 'features/schedule/presentation/cubit/schedule_top5_cubit.dart' as _i960;
+import 'features/schedule/presentation/cubit/schedule_voting_banner_cubit.dart'
+    as _i1039;
 import 'features/speakers/datasources/data/local/speakers_local_datasource.dart'
     as _i71;
 import 'features/speakers/datasources/data/remote/speakers_remote_datasource.dart'
@@ -126,7 +130,6 @@ import 'features/speakers/domains/repositories/speakers_repository.dart'
     as _i1005;
 import 'features/speakers/domains/usecases/get_all_speakers_for_conference.dart'
     as _i350;
-import 'features/speakers/presentation/cubit/speaker_vote_cubit.dart' as _i440;
 import 'features/speakers/presentation/cubit/speakers_cubit.dart' as _i181;
 import 'features/workshops/datasources/data/workshops_local_datasource.dart'
     as _i636;
@@ -150,17 +153,11 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final registerModule = _$RegisterModule();
     gh.factory<_i273.UserRemoteDataSource>(() => _i273.UserRemoteDataSource());
-    gh.factory<_i481.ContestRemoteDataSource>(
-      () => _i481.ContestRemoteDataSource(),
-    );
     gh.factory<_i1016.EngagementConfigRemoteDataSource>(
       () => _i1016.EngagementConfigRemoteDataSource(),
     );
-    gh.factory<_i189.SpeakerVoteRemoteDataSource>(
-      () => _i189.SpeakerVoteRemoteDataSource(),
-    );
-    gh.factory<_i355.ContestUiLocalDataSource>(
-      () => _i355.ContestUiLocalDataSource(),
+    gh.factory<_i785.EventVoteRemoteDataSource>(
+      () => _i785.EventVoteRemoteDataSource(),
     );
     await gh.singletonAsync<_i242.RawConfig>(
       () => registerModule.config(),
@@ -169,9 +166,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i933.ConferencesCubit>(() => _i933.ConferencesCubit());
     gh.singleton<_i399.ThemeModeCubit>(() => _i399.ThemeModeCubit());
     gh.singleton<_i883.Routing>(() => _i883.Routing());
-    gh.singleton<_i33.ContestRepository>(
-      () => _i804.ContestRepositoryImpl(gh<_i481.ContestRemoteDataSource>()),
-    );
+    gh.lazySingleton<_i327.AppLinks>(() => registerModule.appLinks());
+    gh.lazySingleton<_i59.FirebaseAuth>(() => registerModule.firebaseAuth());
+    gh.lazySingleton<_i974.Logger>(() => registerModule.logger());
     gh.singleton<_i234.RateEventLocalDataSource>(
       () => _i234.RateEventLocalDataSourceImpl(),
     );
@@ -181,13 +178,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i1041.InfoLocalDataSource>(
       () => _i1041.InfoLocalDataSourceImpl(),
     );
+    gh.singleton<_i995.MagicLinkEmailLocalDataSource>(
+      () => _i995.MagicLinkEmailLocalDataSourceImpl(),
+    );
     gh.singleton<_i71.SpeakersLocalDataSource>(
       () => _i71.SpeakersLocalDataSourceImpl(),
     );
-    gh.singleton<_i297.AppConfig>(() => _i297.AppConfig(gh<_i242.RawConfig>()));
-    gh.singleton<_i38.AuthenticationRepository>(
-      () => const _i113.AuthenticationRepositoryImpl(),
+    gh.singleton<_i670.EventVoteRepository>(
+      () =>
+          _i838.EventVoteRepositoryImpl(gh<_i785.EventVoteRemoteDataSource>()),
     );
+    gh.singleton<_i297.AppConfig>(() => _i297.AppConfig(gh<_i242.RawConfig>()));
     gh.singleton<_i429.RateEventRemoteDataSource>(
       () => _i429.RateEventRemoteDataSourceImpl(),
     );
@@ -197,28 +198,22 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i636.WorkshopsLocalDataSource>(
       () => _i636.WorkshopsLocalDataSourceImpl(),
     );
-    gh.factory<_i241.SignInAppleUseCase>(
-      () => _i241.SignInAppleUseCase(gh<_i38.AuthenticationRepository>()),
-    );
-    gh.factory<_i631.SignInGoogleUseCase>(
-      () => _i631.SignInGoogleUseCase(gh<_i38.AuthenticationRepository>()),
-    );
     gh.singleton<_i397.ThemeModeLocalDataSource>(
       () => _i397.ThemeModeLocalDataSourceImpl(),
     );
     gh.singleton<_i878.ScheduleLocalDataSource>(
       () => _i878.ScheduleLocalDataSourceImpl(),
     );
-    gh.singleton<_i75.SpeakerVoteRepository>(
-      () => _i747.SpeakerVoteRepositoryImpl(
-        gh<_i189.SpeakerVoteRemoteDataSource>(),
-      ),
-    );
     gh.singleton<_i476.UserRepository>(
       () => _i137.UserRepositoryImpl(gh<_i273.UserRemoteDataSource>()),
     );
     gh.factory<_i834.EnsureUserProfile>(
       () => _i834.EnsureUserProfile(gh<_i476.UserRepository>()),
+    );
+    gh.singleton<_i38.AuthenticationRepository>(
+      () => _i113.AuthenticationRepositoryImpl(
+        gh<_i995.MagicLinkEmailLocalDataSource>(),
+      ),
     );
     gh.singleton<_i563.RateEventRepository>(
       () => _i608.RateEventRepositoryImpl(
@@ -259,6 +254,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i545.WorkshopsRemoteDataSource>(
       () => _i545.WorkshopsRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.factory<_i771.CompleteMagicLinkUseCase>(
+      () => _i771.CompleteMagicLinkUseCase(gh<_i38.AuthenticationRepository>()),
+    );
+    gh.factory<_i369.SendMagicLinkUseCase>(
+      () => _i369.SendMagicLinkUseCase(gh<_i38.AuthenticationRepository>()),
+    );
+    gh.factory<_i241.SignInAppleUseCase>(
+      () => _i241.SignInAppleUseCase(gh<_i38.AuthenticationRepository>()),
+    );
+    gh.factory<_i631.SignInGoogleUseCase>(
+      () => _i631.SignInGoogleUseCase(gh<_i38.AuthenticationRepository>()),
+    );
     gh.singleton<_i958.ConferencesRepository>(
       () => _i912.ConferencesRepositoryImpl(
         gh<_i800.ConferencesRemoteDataSource>(),
@@ -267,13 +274,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i359.GetAllConferences>(
       () => _i359.GetAllConferences(gh<_i958.ConferencesRepository>()),
-    );
-    gh.factory<_i48.AuthenticationCubit>(
-      () => _i48.AuthenticationCubit(
-        gh<_i241.SignInAppleUseCase>(),
-        gh<_i631.SignInGoogleUseCase>(),
-        gh<_i834.EnsureUserProfile>(),
-      ),
     );
     gh.factory<_i473.GetRateForEvent>(
       () => _i473.GetRateForEvent(gh<_i563.RateEventRepository>()),
@@ -302,25 +302,24 @@ extension GetItInjectableX on _i174.GetIt {
         gh<String>(),
       ),
     );
+    gh.factory<_i48.AuthenticationCubit>(
+      () => _i48.AuthenticationCubit(
+        gh<_i241.SignInAppleUseCase>(),
+        gh<_i631.SignInGoogleUseCase>(),
+        gh<_i369.SendMagicLinkUseCase>(),
+        gh<_i771.CompleteMagicLinkUseCase>(),
+        gh<_i834.EnsureUserProfile>(),
+      ),
+    );
     gh.singleton<_i33.NgGirlsRepository>(
       () => _i472.NgGirlsImpl(
         gh<_i818.NgGirlsRemoteDataSource>(),
         gh<_i214.NgGirlsLocalDataSource>(),
       ),
     );
-    gh.factory<_i995.ContestHomeCubit>(
-      () => _i995.ContestHomeCubit(
-        gh<_i33.ContestRepository>(),
+    gh.factory<_i1039.ScheduleVotingBannerCubit>(
+      () => _i1039.ScheduleVotingBannerCubit(
         gh<_i419.EngagementConfigRepository>(),
-        gh<_i793.UserSessionCubit>(),
-        gh<_i933.ConferencesCubit>(),
-      ),
-    );
-    gh.lazySingleton<_i635.PrizesCubit>(
-      () => _i635.PrizesCubit(
-        gh<_i33.ContestRepository>(),
-        gh<_i419.EngagementConfigRepository>(),
-        gh<_i793.UserSessionCubit>(),
         gh<_i933.ConferencesCubit>(),
       ),
     );
@@ -330,13 +329,23 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i1041.InfoLocalDataSource>(),
       ),
     );
-    gh.factoryParam<_i440.SpeakerVoteCubit, String, dynamic>(
-      (speakerId, _) => _i440.SpeakerVoteCubit(
-        gh<_i75.SpeakerVoteRepository>(),
+    gh.factoryParam<_i217.EventVoteCubit, String, String>(
+      (eventId, trackName) => _i217.EventVoteCubit(
+        gh<_i670.EventVoteRepository>(),
         gh<_i419.EngagementConfigRepository>(),
         gh<_i793.UserSessionCubit>(),
         gh<_i933.ConferencesCubit>(),
-        speakerId,
+        eventId,
+        trackName,
+      ),
+    );
+    gh.lazySingleton<_i419.MagicLinkDeepLinkListener>(
+      () => _i419.MagicLinkDeepLinkListener(
+        gh<_i771.CompleteMagicLinkUseCase>(),
+        gh<_i834.EnsureUserProfile>(),
+        gh<_i327.AppLinks>(),
+        gh<_i59.FirebaseAuth>(),
+        gh<_i974.Logger>(),
       ),
     );
     gh.factory<_i350.GetAllSpeakersForConference>(
@@ -388,6 +397,15 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i343.GetWorkshopsForConference>(
       () => _i343.GetWorkshopsForConference(gh<_i343.WorkshopsRepository>()),
     );
+    gh.factory<_i960.ScheduleTop5Cubit>(
+      () => _i960.ScheduleTop5Cubit(
+        gh<_i419.EngagementConfigRepository>(),
+        gh<_i670.EventVoteRepository>(),
+        gh<_i933.ConferencesCubit>(),
+        gh<_i793.UserSessionCubit>(),
+        gh<_i797.GetAllEventsForConference>(),
+      ),
+    );
     gh.factory<_i224.EventCubit>(
       () => _i224.EventCubit(
         conferencesCubit: gh<_i933.ConferencesCubit>(),
@@ -404,9 +422,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i152.AdminCubit>(
       () => _i152.AdminCubit(
         gh<_i419.EngagementConfigRepository>(),
-        gh<_i75.SpeakerVoteRepository>(),
-        gh<_i33.ContestRepository>(),
-        gh<_i350.GetAllSpeakersForConference>(),
+        gh<_i670.EventVoteRepository>(),
+        gh<_i797.GetAllEventsForConference>(),
         gh<_i793.UserSessionCubit>(),
         gh<_i933.ConferencesCubit>(),
       ),

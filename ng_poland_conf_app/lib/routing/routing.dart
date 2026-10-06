@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/about/presentation/about_page.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/admin_page.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/admin_shell.dart';
@@ -20,6 +21,15 @@ import 'package:ng_poland_conf_app/injectable.dart';
 
 import '../features/questions/presentation/questions_page.dart';
 
+EventItemType? trackFromQuery(Map<String, String> queryParameters) {
+  final track = queryParameters['track'];
+  if (track == null || track.isEmpty) return null;
+  for (final type in EventItemType.values) {
+    if (type.name == track) return type;
+  }
+  return null;
+}
+
 String? adminGuardRedirect({
   required String matchedLocation,
   required UserSessionState session,
@@ -31,12 +41,78 @@ String? adminGuardRedirect({
   return null;
 }
 
+/// Firebase Hosting / Auth email links are opened as app deep links, but they
+/// are not GoRouter routes. Send the user to `/auth` while [MagicLinkDeepLinkListener]
+/// completes sign-in from the same URI.
+bool isFirebaseAuthDeepLink(Uri uri) {
+  final path = uri.path;
+  if (path.startsWith('/__/auth/')) return true;
+  if (uri.queryParameters.containsKey('oobCode') &&
+      (uri.queryParameters['mode']?.toLowerCase() == 'signin')) {
+    return true;
+  }
+  final nested = uri.queryParameters['link'];
+  if (nested != null && nested.isNotEmpty) {
+    final nestedUri = Uri.tryParse(nested);
+    if (nestedUri != null && isFirebaseAuthDeepLink(nestedUri)) return true;
+  }
+  return false;
+}
+
+/// Path (+ optional query) safe for in-app redirects after login.
+///
+/// Rejects absolute URLs, protocol-relative URLs, and `/auth` loops.
+String? safeInternalRedirectPath(String? candidate) {
+  if (candidate == null || candidate.isEmpty) return null;
+
+  final value = candidate.trim();
+  if (value.contains('://') ||
+      value.startsWith('//') ||
+      value.contains(r'\') ||
+      value.contains('\n') ||
+      value.contains('\r')) {
+    return null;
+  }
+  if (!value.startsWith('/')) return null;
+
+  final uri = Uri.tryParse(value);
+  if (uri == null || uri.hasScheme || uri.host.isNotEmpty) return null;
+
+  final path = uri.path;
+  if (path.isEmpty || !path.startsWith('/')) return null;
+  if (path == AuthenticationPage.path ||
+      path.startsWith('${AuthenticationPage.path}/')) {
+    return null;
+  }
+
+  return uri.hasQuery ? '$path?${uri.query}' : path;
+}
+
+/// Location string suitable for [AuthenticationPage.loginPath] `from`.
+String internalLocationFromUri(Uri uri) {
+  if (uri.hasScheme || uri.host.isNotEmpty) {
+    return uri.hasQuery ? '${uri.path}?${uri.query}' : uri.path;
+  }
+  return uri.toString();
+}
+
 String? authRedirect({
   required String matchedLocation,
   required String? fullPath,
   required Map<String, String> queryParameters,
   required bool isAuthenticated,
+  Uri? uri,
 }) {
+  if (uri != null && isFirebaseAuthDeepLink(uri)) {
+    return AuthenticationPage.path;
+  }
+
+  // GoRouter may pass the full https://… Auth URL as matchedLocation.
+  if (matchedLocation.contains('/__/auth/') ||
+      (fullPath?.contains('/__/auth/') ?? false)) {
+    return AuthenticationPage.path;
+  }
+
   if (!isAuthenticated) {
     return null;
   }
@@ -47,11 +123,7 @@ String? authRedirect({
     return null;
   }
 
-  final from = queryParameters['from'];
-  if (from != null && from.isNotEmpty) {
-    return from;
-  }
-  return Pages.home.path;
+  return safeInternalRedirectPath(queryParameters['from']) ?? Pages.home.path;
 }
 
 enum Pages {
@@ -87,6 +159,11 @@ class Routing {
     navigatorKey = GlobalKey<NavigatorState>();
     router = GoRouter(
       redirect: (_, state) {
+        if (isFirebaseAuthDeepLink(state.uri) ||
+            state.matchedLocation.contains('/__/auth/')) {
+          return AuthenticationPage.path;
+        }
+
         if (state.matchedLocation.startsWith(AdminPage.path)) {
           return adminGuardRedirect(
             matchedLocation: state.matchedLocation,
@@ -104,7 +181,16 @@ class Routing {
           fullPath: state.fullPath,
           queryParameters: state.uri.queryParameters,
           isAuthenticated: isAuthenticated,
+          uri: state.uri,
         );
+      },
+      onException: (context, state, router) {
+        if (isFirebaseAuthDeepLink(state.uri) ||
+            state.uri.toString().contains('/__/auth/')) {
+          router.go(AuthenticationPage.path);
+          return;
+        }
+        router.go(Pages.home.path);
       },
       routes: [
         GoRoute(
@@ -130,7 +216,12 @@ class Routing {
           path: Pages.home.path,
           builder: (context, state) => const HomePage(),
         ),
-        GoRoute(path: Pages.schedule.path, builder: (context, state) => const SchedulePage(), routes: [
+        GoRoute(
+          path: Pages.schedule.path,
+          builder: (context, state) => SchedulePage(
+            initialTrack: trackFromQuery(state.uri.queryParameters),
+          ),
+          routes: [
           GoRoute(
             path: '${ScheduleTop5Page.pathSegment}/:eventItemType',
             name: '${Pages.schedule.nameKey}-${ScheduleTop5Page.routeNameKey}',
@@ -161,7 +252,12 @@ class Routing {
             },
           )
         ]),
-        GoRoute(path: Pages.workshops.path, builder: (context, state) => const WorkshopsPage(), routes: [
+        GoRoute(
+          path: Pages.workshops.path,
+          builder: (context, state) => WorkshopsPage(
+            initialTrack: trackFromQuery(state.uri.queryParameters),
+          ),
+          routes: [
           GoRoute(
             path: 'speaker/${SpeakerDetails.routeName}/:id',
             name: '${Pages.workshops.nameKey}-${SpeakerDetails.routeNameKey}',

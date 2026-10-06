@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
 
 class ScheduleEventsList extends StatefulWidget {
@@ -19,73 +20,63 @@ class ScheduleEventsList extends StatefulWidget {
   State<ScheduleEventsList> createState() => _ScheduleEventsListState();
 }
 
-class _ScheduleEventsListState extends State<ScheduleEventsList> with WidgetsBindingObserver {
+class _ScheduleEventsListState extends State<ScheduleEventsList>
+    with WidgetsBindingObserver {
   Timer? _timer;
-  final ValueNotifier<String?> _activeEventIdNotifier = ValueNotifier<String?>(null);
+  final ValueNotifier<String?> _activeEventIdNotifier =
+      ValueNotifier<String?>(null);
 
   @override
   void initState() {
     super.initState();
-    _checkActiveEvent(widget.listEvents);
+    _checkActiveEvent();
     WidgetsBinding.instance.addObserver(this);
   }
 
-  bool checkTimeEventToAnimation(
-    DateTime dateNow,
-    DateTime? dateStartEvent,
-    DateTime? dateEndEvent,
-  ) {
-    if (dateStartEvent == null || dateEndEvent == null) return false;
-
-    return dateStartEvent.toUtc().millisecondsSinceEpoch < dateNow.toUtc().millisecondsSinceEpoch &&
-        dateNow.toUtc().millisecondsSinceEpoch < dateEndEvent.toUtc().millisecondsSinceEpoch;
+  @override
+  void didUpdateWidget(covariant ScheduleEventsList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.listEvents, widget.listEvents)) {
+      _checkActiveEvent();
+    }
   }
 
-  void _checkActiveEvent(List<EventItem> listEvents) {
+  List<({String id, DateTime? start, DateTime? end})> get _slots => [
+        for (final event in widget.listEvents)
+          (id: event.id, start: event.startDate, end: event.endDate),
+      ];
+
+  void _checkActiveEvent() {
     _timer?.cancel();
-    List<EventItem> listEventsToShow = [];
-    _activeEventIdNotifier.value = null;
-    if (listEvents.isEmpty) return;
-
-    final dateNow = DateTime.now().toUtc();
-    // Dodaj do listy tylko przyszle eventy
-    for (var event in listEvents) {
-      final dateStartEvent = event.startDate?.toUtc();
-      final dateEndEvent = event.endDate?.toUtc();
-      if (dateStartEvent == null || dateEndEvent == null) continue;
-      if (dateEndEvent.isBefore(dateNow)) continue;
-
-      if (checkTimeEventToAnimation(dateNow, dateStartEvent, dateEndEvent)) {
-        _activeEventIdNotifier.value = event.id;
-        continue;
-      }
-      listEventsToShow.add(event);
-    }
-    // Jezeli nie ma wiecej eventow do wyswietlenia to ustaw timer na koniec ostatniego eventu
-    if (listEventsToShow.isEmpty) {
-      final lastEventEndDate = listEvents.last.endDate?.toUtc();
-      if (lastEventEndDate == null) return;
-      _timer = Timer(
-        lastEventEndDate.difference(dateNow),
-        () => _checkActiveEvent(listEventsToShow),
-      );
+    final listEvents = widget.listEvents;
+    if (listEvents.isEmpty) {
+      _activeEventIdNotifier.value = null;
       return;
     }
 
-    // Wykonaj ponownie przy nastepnym evencie
-    final nextEvent = listEventsToShow.first;
-    final nextEventStartDate = nextEvent.startDate?.toUtc();
-    if (nextEventStartDate == null) return;
-    _timer = Timer(
-      nextEventStartDate.difference(dateNow),
-      () => _checkActiveEvent(listEventsToShow),
+    final now = DateTime.now().toUtc();
+    _activeEventIdNotifier.value = activeScheduleEventId(
+      events: _slots,
+      now: now,
     );
+
+    final nextCheck = nextActiveScheduleCheckAt(events: _slots, now: now);
+    if (nextCheck == null) return;
+
+    final delay = nextCheck.difference(now);
+    if (delay.isNegative || delay == Duration.zero) {
+      // Clock / data edge: retry shortly instead of spinning.
+      _timer = Timer(const Duration(seconds: 1), _checkActiveEvent);
+      return;
+    }
+
+    _timer = Timer(delay, _checkActiveEvent);
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _checkActiveEvent(widget.listEvents);
+      _checkActiveEvent();
     }
     super.didChangeAppLifecycleState(state);
   }

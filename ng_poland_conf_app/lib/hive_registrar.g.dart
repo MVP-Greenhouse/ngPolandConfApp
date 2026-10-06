@@ -2,7 +2,7 @@
 // Do not modify
 // Check in to version control
 
-import 'package:hive_ce/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conference_home_page_schedule_item_model.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conference_model.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conferences_model.dart';

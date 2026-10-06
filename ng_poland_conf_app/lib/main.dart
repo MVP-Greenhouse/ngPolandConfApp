@@ -7,6 +7,7 @@ import 'package:hive_ce_flutter/adapters.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
+import 'package:ng_poland_conf_app/features/authentication/presentation/services/magic_link_deep_link_listener.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conference_home_page_schedule_item_model.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conference_model.dart';
 import 'package:ng_poland_conf_app/features/home/datasources/models/conferences_model.dart';
@@ -21,6 +22,7 @@ import 'package:ng_poland_conf_app/features/workshops/datasources/models/worksho
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/theme.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
 import 'features/speakers/datasources/models/speakers_model.dart';
 import 'firebase_options.dart'; // Import the generated file
 
@@ -49,9 +51,12 @@ Future<void> main() async {
     Environment.prod,
   ); // Replace 'Environment.prod' with the appropriate argument for your setup.
 
+  tzdata.initializeTimeZones();
+
   getIt.get<UserSessionCubit>().stream.listen(
     (_) => getIt.get<Routing>().router.refresh(),
   );
+  await getIt.get<MagicLinkDeepLinkListener>().start();
 
   runApp(const MainApp());
 }

@@ -63,6 +63,49 @@ void main() {
     );
   });
 
+  test('authenticated on /auth rejects absolute from and goes home', () {
+    expect(
+      authRedirect(
+        matchedLocation: AuthenticationPage.path,
+        fullPath: AuthenticationPage.path,
+        queryParameters: const {'from': 'https://evil.example/phish'},
+        isAuthenticated: true,
+      ),
+      Pages.home.path,
+    );
+  });
+
+  test('authenticated on /auth rejects protocol-relative from', () {
+    expect(
+      authRedirect(
+        matchedLocation: AuthenticationPage.path,
+        fullPath: AuthenticationPage.path,
+        queryParameters: const {'from': '//evil.example/phish'},
+        isAuthenticated: true,
+      ),
+      Pages.home.path,
+    );
+  });
+
+  test('authenticated on /auth rejects from=/auth loop', () {
+    expect(
+      authRedirect(
+        matchedLocation: AuthenticationPage.path,
+        fullPath: AuthenticationPage.path,
+        queryParameters: const {'from': '/auth'},
+        isAuthenticated: true,
+      ),
+      Pages.home.path,
+    );
+  });
+
+  test('safeInternalRedirectPath keeps query', () {
+    expect(
+      safeInternalRedirectPath('/schedule?track=ngPoland'),
+      '/schedule?track=ngPoland',
+    );
+  });
+
   test('authenticated on home has no redirect', () {
     expect(
       authRedirect(

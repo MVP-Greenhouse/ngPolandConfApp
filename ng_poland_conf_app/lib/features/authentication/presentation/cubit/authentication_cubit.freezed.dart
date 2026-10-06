@@ -55,12 +55,13 @@ extension AuthenticationStatePatterns on AuthenticationState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _InProgress value)?  inProgress,TResult Function( _Authenticated value)?  authenticated,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _InProgress value)?  inProgress,TResult Function( _LinkSent value)?  linkSent,TResult Function( _Authenticated value)?  authenticated,TResult Function( _Error value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _InProgress() when inProgress != null:
-return inProgress(_that);case _Authenticated() when authenticated != null:
+return inProgress(_that);case _LinkSent() when linkSent != null:
+return linkSent(_that);case _Authenticated() when authenticated != null:
 return authenticated(_that);case _Error() when error != null:
 return error(_that);case _:
   return orElse();
@@ -80,12 +81,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _InProgress value)  inProgress,required TResult Function( _Authenticated value)  authenticated,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _InProgress value)  inProgress,required TResult Function( _LinkSent value)  linkSent,required TResult Function( _Authenticated value)  authenticated,required TResult Function( _Error value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case _InProgress():
-return inProgress(_that);case _Authenticated():
+return inProgress(_that);case _LinkSent():
+return linkSent(_that);case _Authenticated():
 return authenticated(_that);case _Error():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
@@ -104,12 +106,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _InProgress value)?  inProgress,TResult? Function( _Authenticated value)?  authenticated,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _InProgress value)?  inProgress,TResult? Function( _LinkSent value)?  linkSent,TResult? Function( _Authenticated value)?  authenticated,TResult? Function( _Error value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case _InProgress() when inProgress != null:
-return inProgress(_that);case _Authenticated() when authenticated != null:
+return inProgress(_that);case _LinkSent() when linkSent != null:
+return linkSent(_that);case _Authenticated() when authenticated != null:
 return authenticated(_that);case _Error() when error != null:
 return error(_that);case _:
   return null;
@@ -128,11 +131,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( AuthenticationType type)?  inProgress,TResult Function()?  authenticated,TResult Function( String text)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( AuthenticationType type)?  inProgress,TResult Function( String email)?  linkSent,TResult Function()?  authenticated,TResult Function( String text)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _InProgress() when inProgress != null:
-return inProgress(_that.type);case _Authenticated() when authenticated != null:
+return inProgress(_that.type);case _LinkSent() when linkSent != null:
+return linkSent(_that.email);case _Authenticated() when authenticated != null:
 return authenticated();case _Error() when error != null:
 return error(_that.text);case _:
   return orElse();
@@ -152,11 +156,12 @@ return error(_that.text);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( AuthenticationType type)  inProgress,required TResult Function()  authenticated,required TResult Function( String text)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( AuthenticationType type)  inProgress,required TResult Function( String email)  linkSent,required TResult Function()  authenticated,required TResult Function( String text)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case _InProgress():
-return inProgress(_that.type);case _Authenticated():
+return inProgress(_that.type);case _LinkSent():
+return linkSent(_that.email);case _Authenticated():
 return authenticated();case _Error():
 return error(_that.text);case _:
   throw StateError('Unexpected subclass');
@@ -175,11 +180,12 @@ return error(_that.text);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( AuthenticationType type)?  inProgress,TResult? Function()?  authenticated,TResult? Function( String text)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( AuthenticationType type)?  inProgress,TResult? Function( String email)?  linkSent,TResult? Function()?  authenticated,TResult? Function( String text)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case _InProgress() when inProgress != null:
-return inProgress(_that.type);case _Authenticated() when authenticated != null:
+return inProgress(_that.type);case _LinkSent() when linkSent != null:
+return linkSent(_that.email);case _Authenticated() when authenticated != null:
 return authenticated();case _Error() when error != null:
 return error(_that.text);case _:
   return null;
@@ -281,6 +287,72 @@ class __$InProgressCopyWithImpl<$Res>
   return _then(_InProgress(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as AuthenticationType,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class _LinkSent implements AuthenticationState {
+  const _LinkSent({required this.email});
+  
+
+ final  String email;
+
+/// Create a copy of AuthenticationState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LinkSentCopyWith<_LinkSent> get copyWith => __$LinkSentCopyWithImpl<_LinkSent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LinkSent&&(identical(other.email, email) || other.email == email));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,email);
+
+@override
+String toString() {
+  return 'AuthenticationState.linkSent(email: $email)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$LinkSentCopyWith<$Res> implements $AuthenticationStateCopyWith<$Res> {
+  factory _$LinkSentCopyWith(_LinkSent value, $Res Function(_LinkSent) _then) = __$LinkSentCopyWithImpl;
+@useResult
+$Res call({
+ String email
+});
+
+
+
+
+}
+/// @nodoc
+class __$LinkSentCopyWithImpl<$Res>
+    implements _$LinkSentCopyWith<$Res> {
+  __$LinkSentCopyWithImpl(this._self, this._then);
+
+  final _LinkSent _self;
+  final $Res Function(_LinkSent) _then;
+
+/// Create a copy of AuthenticationState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? email = null,}) {
+  return _then(_LinkSent(
+email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

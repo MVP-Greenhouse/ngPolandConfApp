@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
 import 'package:ng_poland_conf_app/features/speakers/datasources/models/speaker_model.dart';
 
 part 'event_item_model.freezed.dart';
@@ -79,8 +80,8 @@ abstract class EventItemModel with _$EventItemModel {
     category: category,
     shortDescription: shortDescription ?? '',
     description: description ?? '',
-    startDate: DateTime.tryParse(startDate),
-    endDate: DateTime.tryParse(endDate),
+    startDate: ConferenceDateTime.parseToUtc(startDate),
+    endDate: ConferenceDateTime.parseToUtc(endDate),
     speaker: speaker?.toEntity(),
   );
 }

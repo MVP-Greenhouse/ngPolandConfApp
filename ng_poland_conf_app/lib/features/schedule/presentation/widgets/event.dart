@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/highlight_shadow.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
@@ -95,7 +95,7 @@ class _ScheduleEventState extends State<ScheduleEvent>
         children: [
           if (startDate != null)
             Text(
-              DateFormat.Hm().format(startDate),
+              ConferenceDateTime.formatHm(startDate),
               style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).textTheme.bodySmall?.color,
@@ -103,7 +103,7 @@ class _ScheduleEventState extends State<ScheduleEvent>
             ),
           if (endDate != null)
             Text(
-              DateFormat.Hm().format(endDate),
+              ConferenceDateTime.formatHm(endDate),
               style: const TextStyle(fontSize: 12),
             ),
         ],

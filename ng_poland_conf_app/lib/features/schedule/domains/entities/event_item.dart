@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:intl/intl.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
 part 'event_item.freezed.dart';
@@ -21,19 +21,7 @@ abstract class EventItem with _$EventItem {
     required Speaker? speaker,
   }) = _EventItem;
 
-  String startTime() {
-    final startDate = this.startDate;
+  String startTime() => ConferenceDateTime.formatHm(startDate);
 
-    if (startDate == null) return '';
-
-    return DateFormat('hh:mm').format(startDate);
-  }
-
-  String endTime() {
-    final endDate = this.endDate;
-
-    if (endDate == null) return '';
-
-    return DateFormat('hh:mm').format(endDate);
-  }
+  String endTime() => ConferenceDateTime.formatHm(endDate);
 }

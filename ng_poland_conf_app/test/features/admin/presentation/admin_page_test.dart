@@ -4,23 +4,20 @@ import 'package:ng_poland_conf_app/features/admin/presentation/admin_page.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 
 void main() {
-  testWidgets('shows voting and contest destinations', (tester) async {
+  testWidgets('shows voting hub card', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
           body: AdminHubContent(
-            config: EngagementConfig.missing,
-            participantCount: 3,
+            config: TrackEngagementConfig.missing,
             onVotingTap: () {},
-            onContestTap: () {},
           ),
         ),
       ),
     );
 
-    expect(find.text('Głosowanie'), findsOneWidget);
-    expect(find.text('Konkurs'), findsOneWidget);
-    expect(find.textContaining('3 zgł.'), findsOneWidget);
-    expect(find.byType(AdminHubNavCard), findsNWidgets(2));
+    expect(find.text('Voting'), findsOneWidget);
+    expect(find.textContaining('Top 5'), findsOneWidget);
+    expect(find.byType(AdminHubNavCard), findsOneWidget);
   });
 }

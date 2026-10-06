@@ -2,23 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_section_card.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/speaker_vote_ranking.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
 
 class AdminVotingSection extends StatelessWidget {
   const AdminVotingSection({
     super.key,
     required this.config,
     required this.ranking,
+    this.rankingTitle = 'Talk ranking',
     required this.onEnabledChanged,
     required this.onStartChanged,
     required this.onEndChanged,
+    required this.onEndNow,
+    required this.onTop5EnabledChanged,
   });
 
-  final EngagementConfig config;
-  final List<SpeakerVoteRank> ranking;
+  final TrackEngagementConfig config;
+  final List<EventVoteRank> ranking;
+  final String rankingTitle;
   final ValueChanged<bool> onEnabledChanged;
   final ValueChanged<DateTime> onStartChanged;
   final ValueChanged<DateTime> onEndChanged;
+  final VoidCallback onEndNow;
+  final ValueChanged<bool> onTop5EnabledChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +34,12 @@ class AdminVotingSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AdminSectionCard(
-          title: 'Ustawienia',
+          title: 'Voting settings',
           child: Column(
             children: [
               AdminSwitchListTile(
                 title: Text(
-                  'Włączone',
+                  'Voting enabled',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontSize: 16,
                     color: scheme.onSurface,
@@ -52,16 +58,39 @@ class AdminVotingSection extends StatelessWidget {
                 value: config.votingEndsAt,
                 onPicked: onEndChanged,
               ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton.icon(
+                  onPressed: onEndNow,
+                  icon: const Icon(Icons.stop_circle_outlined),
+                  label: const Text('End now'),
+                ),
+              ),
             ],
           ),
         ),
         const SizedBox(height: 12),
         AdminSectionCard(
-          title: 'Ranking',
+          title: 'Top 5 na schedule',
+          child: AdminSwitchListTile(
+            title: Text(
+              'Top 5 enabled',
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontSize: 16,
+                color: scheme.onSurface,
+              ),
+            ),
+            value: config.top5Enabled,
+            onChanged: onTop5EnabledChanged,
+          ),
+        ),
+        const SizedBox(height: 12),
+        AdminSectionCard(
+          title: rankingTitle,
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: ranking.isEmpty
               ? Text(
-                  'Brak głosów',
+                  'No votes in this track',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontSize: 14,
                     color: scheme.onSurface.withValues(alpha: 0.6),
@@ -88,7 +117,7 @@ class AdminVotingSection extends StatelessWidget {
 class _RankingRow extends StatelessWidget {
   const _RankingRow({required this.rank});
 
-  final SpeakerVoteRank rank;
+  final EventVoteRank rank;
 
   @override
   Widget build(BuildContext context) {
@@ -99,27 +128,33 @@ class _RankingRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Text(
-              rank.name,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: scheme.onSurface,
-                height: 1.25,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  rank.title,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: scheme.onSurface,
+                    height: 1.25,
+                  ),
+                ),
+                if (rank.speakerName.isNotEmpty)
+                  Text(
+                    rank.speakerName,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurface.withValues(alpha: 0.65),
+                    ),
+                  ),
+              ],
             ),
           ),
           const SizedBox(width: 12),
           _VoteCount(
             icon: Icons.thumb_up_alt_outlined,
-            count: rank.up,
+            count: rank.likes,
             color: scheme.secondary,
-          ),
-          const SizedBox(width: 12),
-          _VoteCount(
-            icon: Icons.thumb_down_alt_outlined,
-            count: rank.down,
-            color: scheme.onSurface.withValues(alpha: 0.55),
           ),
         ],
       ),

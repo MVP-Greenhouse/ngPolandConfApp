@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ng_poland_conf_app/features/admin/presentation/admin_contest_page.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/admin_voting_page.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/logic/admin_hub_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/settings/presentation/connection_status.dart';
+import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
 class AdminPage extends StatelessWidget {
@@ -26,14 +26,16 @@ class AdminPage extends StatelessWidget {
           appBar: AppBar(
             title: Text('Admin', style: titleStyle),
             actions: [
-              if (state.latestConfId != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Chip(
-                    label: Text(state.latestConfId!),
-                    visualDensity: VisualDensity.compact,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
+              if (state.confIds.isNotEmpty && state.selectedConfId != null)
+                CustomDropDown(
+                  options: state.confIds,
+                  selectedOption: state.selectedConfId!,
+                  tooltip: 'Select conference',
+                  onChanged: (confId) {
+                    if (confId != null) {
+                      context.read<AdminCubit>().selectConference(confId);
+                    }
+                  },
                 ),
               const ConnectionStatus(),
             ],
@@ -52,12 +54,13 @@ class AdminPage extends StatelessWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final config = state.config ?? EngagementConfig.missing;
+    final config =
+        state.config?.forTrack(state.selectedTrack) ??
+        TrackEngagementConfig.missing;
     return AdminHubContent(
       config: config,
-      participantCount: state.participants.length,
+      trackLabel: state.selectedTrack.label,
       onVotingTap: () => context.go(AdminVotingPage.path),
-      onContestTap: () => context.go(AdminContestPage.path),
     );
   }
 }
@@ -66,15 +69,13 @@ class AdminHubContent extends StatelessWidget {
   const AdminHubContent({
     super.key,
     required this.config,
-    required this.participantCount,
     required this.onVotingTap,
-    required this.onContestTap,
+    this.trackLabel,
   });
 
-  final EngagementConfig config;
-  final int participantCount;
+  final TrackEngagementConfig config;
   final VoidCallback onVotingTap;
-  final VoidCallback onContestTap;
+  final String? trackLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,7 @@ class AdminHubContent extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       children: [
         AdminHubNavCard(
-          title: 'Głosowanie',
+          title: trackLabel == null ? 'Voting' : 'Voting · $trackLabel',
           icon: Icons.thumb_up_alt_outlined,
           iconBackground: _votingIconBackground(context),
           accentColor: _accentColor(context),
@@ -91,30 +92,12 @@ class AdminHubContent extends StatelessWidget {
               label: AdminHubStatus.votingSubtitle(config),
               filled: config.votingEnabled,
             ),
+            _StatusChip(
+              label: 'Top 5: ${AdminHubStatus.top5Subtitle(config)}',
+              filled: config.top5Enabled,
+            ),
           ],
           onTap: onVotingTap,
-        ),
-        const SizedBox(height: 12),
-        AdminHubNavCard(
-          title: 'Konkurs',
-          icon: Icons.card_giftcard,
-          iconBackground: _contestIconBackground(context),
-          accentColor: _accentColor(context),
-          chips: [
-            _StatusChip(
-              label: AdminHubStatus.enabledLabel(config.contestEnabled),
-              filled: config.contestEnabled,
-            ),
-            _StatusChip(
-              label: AdminHubStatus.contestStatusLabel(config.contestStatus),
-              filled: false,
-            ),
-            _StatusChip(
-              label: AdminHubStatus.participantChipLabel(participantCount),
-              filled: false,
-            ),
-          ],
-          onTap: onContestTap,
         ),
       ],
     );
@@ -133,14 +116,6 @@ class AdminHubContent extends StatelessWidget {
       return scheme.secondaryContainer.withValues(alpha: 0.35);
     }
     return scheme.primary.withValues(alpha: 0.12);
-  }
-
-  static Color _contestIconBackground(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    if (Theme.of(context).brightness == Brightness.dark) {
-      return scheme.primaryContainer.withValues(alpha: 0.25);
-    }
-    return scheme.secondary.withValues(alpha: 0.12);
   }
 }
 

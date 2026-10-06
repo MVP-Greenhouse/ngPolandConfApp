@@ -30,7 +30,7 @@ class EventCubit extends Cubit<EventState> {
         await conferencesCubit.getConferences();
         conference = conferencesCubit.selectedConference;
       }
-      if (conference == null) return emit(const EventState.error('Wystąpił problem'));
+      if (conference == null) return emit(const EventState.error('Something went wrong'));
       final EventItem eventItem = await getEvent(
         Params(
           eventId: eventId,
@@ -45,7 +45,7 @@ class EventCubit extends Cubit<EventState> {
         ),
       );
     } catch (_) {
-      emit(const EventState.error('Wystąpił problem'));
+      emit(const EventState.error('Something went wrong'));
     }
   }
 }

@@ -1,12 +1,14 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/core/constants/app_dimensions.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
-import 'package:ng_poland_conf_app/features/home/presentation/widgets/contest_home_section.dart';
+import 'package:ng_poland_conf_app/features/home/domains/logic/home_schedule_navigation.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/widgets/custom_timer.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
+import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
@@ -115,52 +117,19 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
                 height: 50.0,
               ),
               _buildTimer(),
-              ContestHomeSectionHost(
-                online: connectivityResult != ConnectivityResult.none,
-              ),
-              const Divider(
-                height: 24.0,
+              const SizedBox(
+                height: 50.0,
               ),
               state.maybeWhen(
                 loaded: (conferences, selectedConference) => Column(
-                  children: selectedConference.listItems
-                      .map(
-                        (e) => Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.calendar_month,
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(150),
-                                  size: 16.0,
-                                ),
-                                const SizedBox(
-                                  width: 12.0,
-                                ),
-                                Text(e.desc,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer.withAlpha(170), fontSize: 16.0))
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 6.0,
-                            ),
-                            Text(
-                              e.name,
-                              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
-                            ),
-                            const SizedBox(
-                              height: 18.0,
-                            ),
-                          ],
-                        ),
-                      )
-                      .toList(),
+                  children: [
+                    for (final item in selectedConference.listItems)
+                      _HomeScheduleItem(
+                        date: item.desc,
+                        name: item.name,
+                        onTap: () => _openScheduleItem(context, item.name),
+                      ),
+                  ],
                 ),
                 orElse: () => const SizedBox.shrink(),
               ),
@@ -169,6 +138,17 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
         ),
       ),
     );
+  }
+
+  void _openScheduleItem(BuildContext context, String name) {
+    final target = HomeScheduleNavigation.targetForName(name);
+    if (target == null) return;
+
+    final base = switch (target.destination) {
+      HomeScheduleDestination.schedule => Pages.schedule.path,
+      HomeScheduleDestination.workshops => Pages.workshops.path,
+    };
+    context.go('$base?track=${target.track.name}');
   }
 
   String _getTitleForConference(String? confId) {
@@ -199,6 +179,63 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
           );
         },
       ),
+    );
+  }
+}
+
+class _HomeScheduleItem extends StatelessWidget {
+  const _HomeScheduleItem({
+    required this.date,
+    required this.name,
+    required this.onTap,
+  });
+
+  final String date;
+  final String name;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.calendar_month,
+              color: scheme.onPrimaryContainer.withAlpha(150),
+              size: 16.0,
+            ),
+            const SizedBox(width: 12.0),
+            Text(
+              date,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: scheme.onPrimaryContainer.withAlpha(170),
+                    fontSize: 16.0,
+                  ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 6.0),
+        InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(6),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Text(
+              name,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: scheme.secondary,
+                  ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 18.0),
+      ],
     );
   }
 }

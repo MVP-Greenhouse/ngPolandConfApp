@@ -8,6 +8,9 @@ class AuthenticationState with _$AuthenticationState {
     required AuthenticationType type,
   }) = _InProgress;
 
+  const factory AuthenticationState.linkSent({required String email}) =
+      _LinkSent;
+
   const factory AuthenticationState.authenticated() = _Authenticated;
 
   const factory AuthenticationState.error(String text) = _Error;

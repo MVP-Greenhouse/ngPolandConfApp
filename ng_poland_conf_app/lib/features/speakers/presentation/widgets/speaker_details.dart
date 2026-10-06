@@ -11,7 +11,6 @@ import '../../../../widgets/cross_origin_image.dart';
 import '../../../../widgets/empty_list_info.dart';
 import '../../domains/entities/speaker.dart';
 import '../cubit/speakers_cubit.dart';
-import 'speaker_vote_buttons.dart';
 
 class SpeakerDetails extends StatefulWidget {
   final String id;
@@ -143,13 +142,6 @@ class _SpeakerDetailsState extends State<SpeakerDetails>
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            if ((speaker.id ?? '').isNotEmpty)
-                              SpeakerVoteButtonsHost(
-                                speakerId: speaker.id!,
-                                enabled:
-                                    connectivityResult !=
-                                    ConnectivityResult.none,
-                              ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 16.0,

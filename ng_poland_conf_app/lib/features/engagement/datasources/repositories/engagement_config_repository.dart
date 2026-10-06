@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/engagement/datasources/data/engagement_config_remote_datasource.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
@@ -15,7 +16,15 @@ class EngagementConfigRepositoryImpl implements EngagementConfigRepository {
   }
 
   @override
-  Future<void> saveConfig(String confId, EngagementConfig config) {
-    return _remoteDataSource.saveConfig(confId, config);
+  Future<void> saveTrackConfig({
+    required String confId,
+    required EventItemType track,
+    required TrackEngagementConfig config,
+  }) {
+    return _remoteDataSource.saveTrackConfig(
+      confId: confId,
+      track: track,
+      config: config,
+    );
   }
 }

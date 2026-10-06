@@ -1,10 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_participant.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/speaker_vote_value.dart';
 
 class EngagementMappers {
   const EngagementMappers._();
@@ -16,109 +12,80 @@ class EngagementMappers {
 
   static EngagementConfig configFromMap(Map<String, dynamic>? data) {
     if (data == null) return EngagementConfig.missing;
+
+    final tracksRaw = data['tracks'];
+    if (tracksRaw is Map) {
+      final tracks = <EventItemType, TrackEngagementConfig>{};
+      for (final entry in tracksRaw.entries) {
+        final track = _trackFromKey(entry.key);
+        if (track == null) continue;
+        final value = entry.value;
+        if (value is! Map) continue;
+        tracks[track] = _trackFromMap(Map<String, dynamic>.from(value));
+      }
+      return EngagementConfig(tracks: tracks);
+    }
+
+    // Legacy flat fields → apply as default for every known track.
+    final legacy = _trackFromMap(data);
+    if (_isMissingTrack(legacy)) return EngagementConfig.missing;
     return EngagementConfig(
-      votingEnabled: data['votingEnabled'] as bool? ?? false,
-      votingStartsAt: _dateTime(data['votingStartsAt']),
-      votingEndsAt: _dateTime(data['votingEndsAt']),
-      contestEnabled: data['contestEnabled'] as bool? ?? false,
-      contestStartsAt: _dateTime(data['contestStartsAt']),
-      contestEndsAt: _dateTime(data['contestEndsAt']),
-      contestStatus: ContestStatusX.fromId(data['contestStatus'] as String?),
-      contestName: data['contestName'] as String? ?? '',
-      contestId: data['contestId'] as String? ?? '',
+      tracks: {
+        for (final track in EventItemType.values) track: legacy,
+      },
     );
   }
 
-  static Map<String, dynamic> configToMap(EngagementConfig config) {
+  static Map<String, dynamic> tracksToMap(EngagementConfig config) {
+    return {
+      'tracks': {
+        for (final entry in config.tracks.entries)
+          entry.key.name: trackToMap(entry.value),
+      },
+    };
+  }
+
+  static Map<String, dynamic> trackToMap(TrackEngagementConfig config) {
     return {
       'votingEnabled': config.votingEnabled,
       'votingStartsAt': config.votingStartsAt,
       'votingEndsAt': config.votingEndsAt,
-      'contestEnabled': config.contestEnabled,
-      'contestStartsAt': config.contestStartsAt,
-      'contestEndsAt': config.contestEndsAt,
-      'contestStatus': config.contestStatus.id,
-      'contestName': config.contestName,
-      'contestId': config.contestId,
+      'top5Enabled': config.top5Enabled,
     };
   }
 
-  static SpeakerVoteValue? voteFromMap(Map<String, dynamic>? data) {
-    if (data == null) return null;
-    return SpeakerVoteValue.fromFirestore(readInt(data['value']));
-  }
-
-  static ContestParticipant? participantFromMap(
-    String uid,
-    Map<String, dynamic>? data,
-  ) {
-    if (data == null) return null;
-    return ContestParticipant(
-      uid: uid,
-      displayName: data['displayName'] as String? ?? '',
-      email: data['email'] as String? ?? '',
-    );
-  }
-
-  static ContestWinner? winnerFromMap(String uid, Map<String, dynamic>? data) {
-    if (data == null) return null;
-    return ContestWinner(
-      uid: uid,
-      displayName: data['displayName'] as String? ?? '',
-      email: data['email'] as String? ?? '',
-      order: readInt(data['order']) ?? 0,
-    );
-  }
-
-  static ContestHistoryEntry? historyFromMap(
-    String contestId,
-    Map<String, dynamic>? data,
-  ) {
-    if (data == null) return null;
-    final rawWinners = data['winners'];
-    final winners = <ContestWinner>[];
-    if (rawWinners is List) {
-      for (final item in rawWinners) {
-        if (item is! Map) continue;
-        final map = Map<String, dynamic>.from(item);
-        final rawUid = map['uid'];
-        if (rawUid is! String) continue;
-        final uid = rawUid;
-        if (uid.isEmpty) continue;
-        final winner = winnerFromMap(uid, map);
-        if (winner != null) winners.add(winner);
-      }
-    }
-    return ContestHistoryEntry(
-      contestId: contestId,
-      name: data['name'] as String? ?? '',
-      startsAt: _dateTime(data['startsAt']),
-      endsAt: _dateTime(data['endsAt']),
-      finishedAt: _dateTime(data['finishedAt']),
-      winners: winners,
-    );
-  }
-
-  static Map<String, dynamic> historyToMap(ContestHistoryEntry entry) {
-    return {
-      'name': entry.name,
-      'startsAt': entry.startsAt,
-      'endsAt': entry.endsAt,
-      'finishedAt': entry.finishedAt,
-      'winners': [
-        for (final winner in entry.winners)
-          {
-            'uid': winner.uid,
-            'displayName': winner.displayName,
-            'email': winner.email,
-            'order': winner.order,
-          },
-      ],
-    };
+  static bool isLikeFromMap(Map<String, dynamic>? data) {
+    if (data == null) return false;
+    final value = readInt(data['value']);
+    return value == 1;
   }
 
   static int? readInt(Object? value) {
     return value is int ? value : (value is num ? value.toInt() : null);
+  }
+
+  static TrackEngagementConfig _trackFromMap(Map<String, dynamic> data) {
+    return TrackEngagementConfig(
+      votingEnabled: data['votingEnabled'] as bool? ?? false,
+      votingStartsAt: _dateTime(data['votingStartsAt']),
+      votingEndsAt: _dateTime(data['votingEndsAt']),
+      top5Enabled: data['top5Enabled'] as bool? ?? false,
+    );
+  }
+
+  static bool _isMissingTrack(TrackEngagementConfig config) {
+    return !config.votingEnabled &&
+        !config.top5Enabled &&
+        config.votingStartsAt == _epochUtc &&
+        config.votingEndsAt == _epochUtc;
+  }
+
+  static EventItemType? _trackFromKey(Object? key) {
+    if (key is! String) return null;
+    for (final track in EventItemType.values) {
+      if (track.name == key) return track;
+    }
+    return null;
   }
 
   static DateTime _dateTime(dynamic value) {

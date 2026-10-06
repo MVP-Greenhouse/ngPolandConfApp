@@ -1,498 +1,136 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit.dart';
 import 'package:ng_poland_conf_app/features/authentication/domains/entities/user_profile.dart';
 import 'package:ng_poland_conf_app/features/authentication/domains/entities/user_role.dart';
 import 'package:ng_poland_conf_app/features/authentication/domains/repositories/user_repository.dart';
 import 'package:ng_poland_conf_app/features/authentication/domains/usecases/ensure_user_profile.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_participant.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/speaker_vote_counts.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/speaker_vote_value.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/contest_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/event_vote_counts.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/speaker_vote_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/repositories/speakers_repository.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/usecases/get_all_speakers_for_conference.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/repositories/schedule_repository.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/usecases/get_all_events_for_conference.dart';
 import 'package:rxdart/rxdart.dart';
 
+TrackEngagementConfig _track({
+  bool votingEnabled = true,
+  bool top5Enabled = false,
+}) {
+  return TrackEngagementConfig(
+    votingEnabled: votingEnabled,
+    votingStartsAt: DateTime.utc(2026, 1, 1),
+    votingEndsAt: DateTime.utc(2026, 12, 31),
+    top5Enabled: top5Enabled,
+  );
+}
+
+EngagementConfig _config(TrackEngagementConfig track) {
+  return EngagementConfig(
+    tracks: {
+      for (final type in EventItemType.values) type: track,
+    },
+  );
+}
+
 void main() {
+  late _FakeConfigRepository configRepo;
   late _TestConferencesCubit conferences;
   late _TestUserSessionCubit session;
-  late _FakeConfigRepository config;
-  late _FakeContestRepository contest;
-  late _FakeVoteRepository votes;
-  AdminCubit? cubit;
+  late AdminCubit cubit;
 
-  final conference = Conference(
-    confId: '2026',
-    confName: 'NG Poland',
-    listItems: const [],
-  );
-
-  setUp(() {
-    conferences = _TestConferencesCubit()..load(conference);
+  setUp(() async {
+    configRepo = _FakeConfigRepository(_config(_track()));
+    conferences = _TestConferencesCubit()
+      ..load(
+        const Conference(confId: '2026', confName: 'NG', listItems: []),
+      );
     session = _TestUserSessionCubit()..signInAdmin();
-    config = _FakeConfigRepository(_openContestConfig);
-    contest = _FakeContestRepository();
-    votes = _FakeVoteRepository();
+    cubit = AdminCubit(
+      configRepo,
+      _FakeVoteRepository(),
+      GetAllEventsForConference(_EmptyScheduleRepository()),
+      session,
+      conferences,
+    );
+    await pumpUntil(
+      () => cubit.state.selectedConfId == '2026' && cubit.state.config != null,
+    );
   });
 
   tearDown(() async {
-    await cubit?.close();
+    await cubit.close();
     await session.close();
     await conferences.close();
-    await config.dispose();
-    await contest.dispose();
+    await configRepo.dispose();
   });
 
-  test('seeds admin loading before watches emit', () {
-    config = _FakeConfigRepository(_openContestConfig, delayWatch: true);
-    contest = _FakeContestRepository(delayWatch: true);
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
+  test('endVotingNow sets votingEndsAt to now for selected track', () async {
+    final before = DateTime.now().toUtc();
+    await cubit.endVotingNow();
+    final saved = configRepo.lastSavedTrack;
+    expect(saved, isNotNull);
+    expect(configRepo.lastSavedTrackType, EventItemType.ngPoland);
+    expect(
+      saved!.votingEndsAt.isAfter(before.subtract(const Duration(seconds: 2))),
+      isTrue,
     );
-
-    expect(cubit!.state.isAdmin, isTrue);
-    expect(cubit!.state.loading, isTrue);
-    expect(cubit!.state.latestConfId, '2026');
   });
 
-  test('shows admin loading after session becomes admin', () async {
-    session.signOut();
-    config = _FakeConfigRepository(_openContestConfig, delayWatch: true);
-    contest = _FakeContestRepository(delayWatch: true);
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-    expect(cubit!.state.isAdmin, isFalse);
-
-    session.signInAdmin();
-    await pumpEventQueue();
-
-    expect(cubit!.state.isAdmin, isTrue);
-    expect(cubit!.state.loading, isTrue);
-    expect(cubit!.state.latestConfId, '2026');
+  test('saveTop5Enabled persists flag for selected track', () async {
+    await cubit.saveTop5Enabled(true);
+    expect(configRepo.lastSavedTrack?.top5Enabled, isTrue);
+    expect(configRepo.lastSavedTrackType, EventItemType.ngPoland);
   });
 
-  test('surfaces watch errors as message', () async {
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-    expect(cubit!.state.config, isNotNull);
-
-    config.config$.addError(Exception('network'));
-    await pumpEventQueue();
-
-    expect(cubit!.state.message, contains('network'));
-    expect(cubit!.state.isAdmin, isTrue);
-  });
-
-  test('saveVoting after draw keeps drawing status', () async {
-    contest.participants = const [
-      ContestParticipant(uid: 'p1', displayName: 'Pat', email: 'p@x.com'),
-    ];
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-    expect(cubit!.state.config?.contestStatus, ContestStatus.open);
-
-    await cubit!.draw(count: 1, random: Random(1));
-    await cubit!.saveVoting(
-      enabled: true,
-      start: DateTime.utc(2026, 1, 1),
-      end: DateTime.utc(2026, 12, 31),
-    );
-
-    expect(config.lastSaved?.contestStatus, ContestStatus.drawing);
-    expect(cubit!.state.config?.contestStatus, ContestStatus.drawing);
-  });
-
-  test('saveContest after finishDrawing keeps finished status', () async {
-    contest.participants = const [
-      ContestParticipant(uid: 'p1', displayName: 'Pat', email: 'p@x.com'),
-    ];
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.draw(count: 1, random: Random(1));
-    await cubit!.finishDrawing();
-    await cubit!.saveContest(
-      enabled: true,
-      start: DateTime.utc(2026, 1, 1),
-      end: DateTime.utc(2026, 12, 31),
-      name: 'Nagrody',
-    );
-
-    expect(config.lastSaved?.contestStatus, ContestStatus.finished);
-    expect(cubit!.state.config?.contestStatus, ContestStatus.finished);
-  });
-
-  test('finishDrawing archives then marks finished', () async {
-    config = _FakeConfigRepository(
-      _openContestConfig.copyWith(
-        contestId: 'contest-1',
-        contestName: 'Nagrody',
-      ),
-    );
-    contest.participants = const [
-      ContestParticipant(uid: 'p1', displayName: 'Pat', email: 'p@x.com'),
-    ];
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.draw(count: 1, random: Random(1));
-    contest.operations.clear();
-    await cubit!.finishDrawing();
-
-    expect(contest.operations, ['archive:contest-1', 'status:finished']);
-    expect(contest.archived.single.name, 'Nagrody');
-    expect(contest.archived.single.winners, hasLength(1));
-    expect(cubit!.state.config?.contestStatus, ContestStatus.finished);
-  });
-
-  test('draw is blocked when contest is finished', () async {
-    config = _FakeConfigRepository(
-      _openContestConfig.copyWith(contestStatus: ContestStatus.finished),
-    );
-    contest.participants = const [
-      ContestParticipant(uid: 'p1', displayName: 'Pat', email: 'p@x.com'),
-    ];
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.draw(count: 1, random: Random(1));
-
-    expect(contest.winners$.value, isEmpty);
-    expect(contest.operations, isEmpty);
-  });
-
-  test('finishDrawing reports repository failure', () async {
-    contest.participants = const [
-      ContestParticipant(uid: 'p1', displayName: 'Pat', email: 'p@x.com'),
-    ];
-    contest.throwOnArchive = true;
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-    await cubit!.draw(count: 1, random: Random(1));
-
-    await cubit!.finishDrawing();
-
-    expect(cubit!.state.message, 'Nie udało się zakończyć losowania');
-    expect(cubit!.state.config?.contestStatus, ContestStatus.drawing);
-  });
-
-  test('startNewContest carry keeps participants clears winners', () async {
-    config = _FakeConfigRepository(
-      _openContestConfig.copyWith(
-        contestStatus: ContestStatus.finished,
-        contestId: 'contest-1',
-        contestName: 'Stary konkurs',
-      ),
-    );
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.startNewContest(
-      name: '  Nowy konkurs  ',
-      carryParticipants: true,
-    );
-    await pumpEventQueue();
-
-    expect(contest.operations, ['archive:contest-1', 'clearWinners']);
-    expect(config.lastSaved?.contestName, 'Nowy konkurs');
-    expect(config.lastSaved?.contestId, startsWith('c_'));
-    expect(config.lastSaved?.contestStatus, ContestStatus.open);
-    expect(config.lastSaved?.contestEnabled, isTrue);
-    expect(cubit!.state.config?.contestStatus, ContestStatus.open);
-    expect(cubit!.state.config?.contestName, 'Nowy konkurs');
-  });
-
-  test('startNewContest reports repository failure', () async {
-    config = _FakeConfigRepository(
-      _openContestConfig.copyWith(
-        contestStatus: ContestStatus.finished,
-        contestId: 'contest-1',
-      ),
-    );
-    contest.throwOnClearWinners = true;
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.startNewContest(name: 'Nowy konkurs', carryParticipants: true);
-
-    expect(cubit!.state.message, 'Nie udało się rozpocząć nowego konkursu');
-    expect(config.lastSaved, isNull);
-  });
-
-  test('startNewContest without carry clears both', () async {
-    config = _FakeConfigRepository(
-      _openContestConfig.copyWith(
-        contestStatus: ContestStatus.finished,
-        contestId: 'contest-1',
-      ),
-    );
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.startNewContest(
-      name: 'Nowy konkurs',
-      carryParticipants: false,
-    );
-
-    expect(contest.operations, [
-      'archive:contest-1',
-      'clearWinners',
-      'clearParticipants',
+  test('selectConference switches edited conference', () async {
+    conferences.loadMany([
+      const Conference(confId: '2025', confName: 'NG', listItems: []),
+      const Conference(confId: '2026', confName: 'NG', listItems: []),
     ]);
+    await pumpUntil(() => cubit.state.confIds.contains('2025'));
+
+    cubit.selectConference('2025');
+    await pumpUntil(() => cubit.state.selectedConfId == '2025');
+
+    expect(cubit.state.selectedConfId, '2025');
+    expect(cubit.state.latestConfId, '2026');
+    expect(configRepo.lastWatchedConfId, '2025');
   });
 
-  test('startNewContest rejects when not finished', () async {
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
+  test('selectTrack filters ranking track', () async {
+    expect(cubit.state.availableTracks, contains(EventItemType.aiPoland));
+    cubit.selectTrack(EventItemType.jsPoland);
+    await pumpUntil(() => cubit.state.selectedTrack == EventItemType.jsPoland);
+    expect(cubit.state.selectedTrack, EventItemType.jsPoland);
 
-    await cubit!.startNewContest(
-      name: 'Nowy konkurs',
-      carryParticipants: false,
-    );
-
-    expect(cubit!.state.message, 'Konkurs musi być zakończony');
-    expect(contest.operations, isEmpty);
-    expect(config.lastSaved, isNull);
-  });
-
-  test('saveContest idle to open requires name', () async {
-    config = _FakeConfigRepository(
-      _openContestConfig.copyWith(
-        contestEnabled: false,
-        contestStatus: ContestStatus.idle,
-      ),
-    );
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.saveContest(
-      enabled: true,
-      start: DateTime.utc(2026, 1, 1),
-      end: DateTime.utc(2026, 12, 31),
-      name: '   ',
-    );
-
-    expect(cubit!.state.message, 'Podaj nazwę konkursu');
-    expect(config.lastSaved, isNull);
-
-    cubit!.clearMessage();
-    await cubit!.saveContest(
-      enabled: true,
-      start: DateTime.utc(2026, 1, 1),
-      end: DateTime.utc(2026, 12, 31),
-      name: '  Nagrody  ',
-    );
-
-    expect(config.lastSaved?.contestName, 'Nagrody');
-    expect(config.lastSaved?.contestId, startsWith('c_'));
-    expect(config.lastSaved?.contestStatus, ContestStatus.open);
-  });
-
-  test('saveContest open contest requires name', () async {
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.saveContest(
-      enabled: true,
-      start: DateTime.utc(2026, 1, 1),
-      end: DateTime.utc(2026, 12, 31),
-      name: '   ',
-    );
-
-    expect(cubit!.state.message, 'Podaj nazwę konkursu');
-    expect(config.lastSaved, isNull);
-  });
-
-  test('saveContest generates missing id for open contest', () async {
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    await cubit!.saveContest(
-      enabled: true,
-      start: DateTime.utc(2026, 1, 1),
-      end: DateTime.utc(2026, 12, 31),
-      name: 'Nagrody',
-    );
-
-    expect(config.lastSaved?.contestId, startsWith('c_'));
-    expect(config.lastSaved?.contestStatus, ContestStatus.open);
-  });
-
-  test('watches contest history into state', () async {
-    contest.history = [
-      ContestHistoryEntry(
-        contestId: 'contest-1',
-        name: 'Poprzedni konkurs',
-        startsAt: DateTime.utc(2026, 1, 1),
-        endsAt: DateTime.utc(2026, 1, 2),
-        finishedAt: DateTime.utc(2026, 1, 2),
-        winners: const [],
-      ),
-    ];
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    expect(cubit!.state.history.single.name, 'Poprzedni konkurs');
-  });
-
-  test('history watch failure degrades to empty history', () async {
-    contest.watchHistoryError = Exception('history unavailable');
-    cubit = _buildCubit(
-      config: config,
-      contest: contest,
-      votes: votes,
-      session: session,
-      conferences: conferences,
-    );
-    await pumpEventQueue();
-
-    expect(cubit!.state.config, isNotNull);
-    expect(cubit!.state.history, isEmpty);
-    expect(cubit!.state.message, isNull);
+    await cubit.saveTop5Enabled(true);
+    expect(configRepo.lastSavedTrackType, EventItemType.jsPoland);
   });
 }
 
-AdminCubit _buildCubit({
-  required _FakeConfigRepository config,
-  required _FakeContestRepository contest,
-  required _FakeVoteRepository votes,
-  required _TestUserSessionCubit session,
-  required _TestConferencesCubit conferences,
-}) {
-  return AdminCubit(
-    config,
-    votes,
-    contest,
-    GetAllSpeakersForConference(_EmptySpeakersRepository()),
-    session,
-    conferences,
-  );
+Future<void> pumpUntil(bool Function() condition) async {
+  for (var i = 0; i < 50 && !condition(); i++) {
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+  }
 }
-
-final _openContestConfig = EngagementConfig(
-  votingEnabled: false,
-  votingStartsAt: DateTime.utc(2020),
-  votingEndsAt: DateTime.utc(2020),
-  contestEnabled: true,
-  contestStartsAt: DateTime.utc(2020),
-  contestEndsAt: DateTime.utc(2099),
-  contestStatus: ContestStatus.open,
-);
 
 class _TestConferencesCubit extends ConferencesCubit {
   void load(Conference conference) {
-    selectedConference = conference;
+    loadMany([conference]);
+  }
+
+  void loadMany(List<Conference> conferences) {
+    selectedConference = conferences.first;
     emit(
       ConferencesState.loaded(
-        conferences: Conferences(list: [conference]),
-        selectedConference: conference,
+        conferences: Conferences(list: conferences),
+        selectedConference: conferences.first,
       ),
     );
   }
@@ -518,10 +156,64 @@ class _TestUserSessionCubit extends UserSessionCubit {
       ),
     );
   }
+}
 
-  void signOut() {
-    emit(const UserSessionState.unauthenticated());
+class _FakeConfigRepository implements EngagementConfigRepository {
+  _FakeConfigRepository(EngagementConfig config)
+    : _subject = BehaviorSubject<EngagementConfig>.seeded(config);
+
+  final BehaviorSubject<EngagementConfig> _subject;
+  TrackEngagementConfig? lastSavedTrack;
+  EventItemType? lastSavedTrackType;
+  String? lastWatchedConfId;
+  String? lastSavedConfId;
+
+  @override
+  Stream<EngagementConfig> watchConfig(String confId) {
+    lastWatchedConfId = confId;
+    return _subject.stream;
   }
+
+  @override
+  Future<void> saveTrackConfig({
+    required String confId,
+    required EventItemType track,
+    required TrackEngagementConfig config,
+  }) async {
+    lastSavedConfId = confId;
+    lastSavedTrackType = track;
+    lastSavedTrack = config;
+    _subject.add(_subject.value.withTrack(track, config));
+  }
+
+  Future<void> dispose() => _subject.close();
+}
+
+class _FakeVoteRepository implements EventVoteRepository {
+  @override
+  Future<Map<String, EventVoteCounts>> loadVoteCounts(String confId) async =>
+      const {};
+
+  @override
+  Future<void> setLike({
+    required String confId,
+    required String eventId,
+    required String uid,
+    required bool liked,
+  }) async {}
+
+  @override
+  Stream<bool> watchMyLike({
+    required String confId,
+    required String eventId,
+    required String uid,
+  }) =>
+      Stream.value(false);
+}
+
+class _EmptyScheduleRepository implements ScheduleRepository {
+  @override
+  Future<List<EventItem>> getAllEvents(Params params) async => const [];
 }
 
 class _NoopUserRepository implements UserRepository {
@@ -538,152 +230,4 @@ class _NoopUserRepository implements UserRepository {
 
   @override
   Stream<UserProfile?> watchProfile(String uid) => const Stream.empty();
-}
-
-class _EmptySpeakersRepository implements SpeakersRepository {
-  @override
-  Future<List<Speaker>> getAllSpeakers(Params params) async => const [];
-}
-
-class _FakeConfigRepository implements EngagementConfigRepository {
-  _FakeConfigRepository(EngagementConfig config, {this.delayWatch = false})
-    : config$ = delayWatch
-          ? BehaviorSubject<EngagementConfig>()
-          : BehaviorSubject<EngagementConfig>.seeded(config);
-
-  final bool delayWatch;
-  final BehaviorSubject<EngagementConfig> config$;
-  EngagementConfig? lastSaved;
-
-  @override
-  Stream<EngagementConfig> watchConfig(String confId) => config$.stream;
-
-  @override
-  Future<void> saveConfig(String confId, EngagementConfig config) async {
-    lastSaved = config;
-    config$.add(config);
-  }
-
-  Future<void> dispose() => config$.close();
-}
-
-class _FakeContestRepository implements ContestRepository {
-  _FakeContestRepository({this.delayWatch = false});
-
-  final bool delayWatch;
-  List<ContestParticipant> participants = const [];
-  List<ContestHistoryEntry> history = const [];
-  final winners$ = BehaviorSubject<List<ContestWinner>>.seeded(const []);
-  final List<ContestHistoryEntry> archived = [];
-  final List<String> operations = [];
-  ContestStatus? lastStatus;
-  Object? watchHistoryError;
-  bool throwOnArchive = false;
-  bool throwOnClearWinners = false;
-
-  @override
-  Stream<ContestParticipant?> watchMyParticipation({
-    required String confId,
-    required String uid,
-  }) => Stream.value(null);
-
-  @override
-  Future<void> join({
-    required String confId,
-    required String uid,
-    required String displayName,
-    required String email,
-  }) async {}
-
-  @override
-  Stream<List<ContestParticipant>> watchParticipants(String confId) {
-    if (delayWatch) return const Stream.empty();
-    return Stream.value(participants);
-  }
-
-  @override
-  Stream<ContestWinner?> watchMyWin({
-    required String confId,
-    required String uid,
-  }) => Stream.value(null);
-
-  @override
-  Stream<List<ContestWinner>> watchWinners(String confId) {
-    if (delayWatch) return const Stream.empty();
-    return winners$.stream;
-  }
-
-  @override
-  Future<void> saveWinners({
-    required String confId,
-    required List<ContestWinner> winners,
-  }) async {
-    winners$.add([...winners$.value, ...winners]);
-  }
-
-  @override
-  Future<void> updateContestStatus({
-    required String confId,
-    required ContestStatus status,
-  }) async {
-    lastStatus = status;
-    operations.add('status:${status.name}');
-  }
-
-  @override
-  Stream<List<ContestHistoryEntry>> watchHistory(String confId) {
-    final error = watchHistoryError;
-    if (error != null) return Stream.error(error);
-    return Stream.value(history);
-  }
-
-  @override
-  Future<void> archiveContestIfAbsent({
-    required String confId,
-    required ContestHistoryEntry entry,
-  }) async {
-    if (throwOnArchive) throw Exception('archive failed');
-    archived.add(entry);
-    operations.add('archive:${entry.contestId}');
-  }
-
-  @override
-  Future<void> clearWinners(String confId) async {
-    if (throwOnClearWinners) throw Exception('clear winners failed');
-    operations.add('clearWinners');
-  }
-
-  @override
-  Future<void> clearParticipants(String confId) async {
-    operations.add('clearParticipants');
-  }
-
-  Future<void> dispose() => winners$.close();
-}
-
-class _FakeVoteRepository implements SpeakerVoteRepository {
-  @override
-  Stream<SpeakerVoteValue?> watchMyVote({
-    required String confId,
-    required String speakerId,
-    required String uid,
-  }) => Stream.value(null);
-
-  @override
-  Future<void> setVote({
-    required String confId,
-    required String speakerId,
-    required String uid,
-    SpeakerVoteValue? value,
-  }) async {}
-
-  @override
-  Stream<Map<String, SpeakerVoteValue>> watchAllVotes({
-    required String confId,
-    required String speakerId,
-  }) => const Stream.empty();
-
-  @override
-  Future<Map<String, SpeakerVoteCounts>> loadVoteCounts(String confId) async =>
-      {};
 }

@@ -1,51 +1,56 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_history_entry.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_participant.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_winner.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/contest_archive.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/contest_draw.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/speaker_vote_ranking.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/start_new_contest_guard.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/contest_repository.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/speaker_vote_repository.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/usecases/get_all_speakers_for_conference.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/usecases/get_all_events_for_conference.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'admin_state.dart';
-part 'admin_cubit.freezed.dart';
 
 @injectable
 class AdminCubit extends Cubit<AdminState> {
   AdminCubit(
     this._configRepository,
-    this._speakerVoteRepository,
-    this._contestRepository,
-    this._getAllSpeakers,
+    this._eventVoteRepository,
+    this._getAllEvents,
     this._userSessionCubit,
     this._conferencesCubit,
   ) : super(_seedState(_userSessionCubit, _conferencesCubit)) {
+    _selectedConfId$.add(state.selectedConfId);
+    _selectedTrack$.add(state.selectedTrack);
     _listen();
   }
 
   final EngagementConfigRepository _configRepository;
-  final SpeakerVoteRepository _speakerVoteRepository;
-  final ContestRepository _contestRepository;
-  final GetAllSpeakersForConference _getAllSpeakers;
+  final EventVoteRepository _eventVoteRepository;
+  final GetAllEventsForConference _getAllEvents;
   final UserSessionCubit _userSessionCubit;
   final ConferencesCubit _conferencesCubit;
 
+  final BehaviorSubject<String?> _selectedConfId$ =
+      BehaviorSubject<String?>.seeded(null);
+  final BehaviorSubject<EventItemType> _selectedTrack$ =
+      BehaviorSubject<EventItemType>.seeded(EventItemType.ngPoland);
+
   StreamSubscription<AdminState>? _subscription;
+
+  void selectConference(String confId) {
+    if (_selectedConfId$.value == confId) return;
+    _selectedConfId$.add(confId);
+  }
+
+  void selectTrack(EventItemType track) {
+    if (_selectedTrack$.value == track) return;
+    _selectedTrack$.add(track);
+  }
 
   void _listen() {
     final conferences$ = _conferencesCubit.stream.startWith(
@@ -56,11 +61,22 @@ class AdminCubit extends Cubit<AdminState> {
     );
 
     _subscription =
-        Rx.combineLatest2(
+        Rx.combineLatest4(
               conferences$,
               session$,
-              (ConferencesState conferences, UserSessionState session) =>
-                  (conferences: conferences, session: session),
+              _selectedConfId$,
+              _selectedTrack$,
+              (
+                ConferencesState conferences,
+                UserSessionState session,
+                String? selectedConfId,
+                EventItemType selectedTrack,
+              ) => (
+                conferences: conferences,
+                session: session,
+                selectedConfId: selectedConfId,
+                selectedTrack: selectedTrack,
+              ),
             )
             .switchMap(_mapToState)
             .listen(
@@ -70,7 +86,7 @@ class AdminCubit extends Cubit<AdminState> {
                 if (state.message != null) {
                   merged = merged.copyWith(message: state.message);
                 }
-                emit(_retainContestStatus(state, merged));
+                emit(merged);
               },
               onError: (Object error, StackTrace stackTrace) {
                 if (isClosed) return;
@@ -80,7 +96,13 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   Stream<AdminState> _mapToState(
-    ({ConferencesState conferences, UserSessionState session}) snapshot,
+    ({
+      ConferencesState conferences,
+      UserSessionState session,
+      String? selectedConfId,
+      EventItemType selectedTrack,
+    })
+    snapshot,
   ) {
     if (!snapshot.session.isAdmin) {
       return Stream.value(const AdminState());
@@ -91,60 +113,81 @@ class AdminCubit extends Cubit<AdminState> {
       return Stream.value(const AdminState(isAdmin: true, loading: true));
     }
 
-    final latestConfId = LatestConferenceResolver.fromConfIds(
+    final confIds = _sortedConfIds(
       loaded.conferences.list.map((conference) => conference.confId),
     );
-    if (latestConfId == null) {
+    if (confIds.isEmpty) {
       return Stream.value(const AdminState(isAdmin: true));
     }
 
-    final ranking$ = Stream.fromFuture(
-      _loadRanking(latestConfId),
-    ).startWith(const <SpeakerVoteRank>[]);
+    final latestConfId = LatestConferenceResolver.fromConfIds(confIds);
+    final selectedConfId = _resolveSelectedConfId(
+      preferred: snapshot.selectedConfId,
+      confIds: confIds,
+      latestConfId: latestConfId,
+    );
+    final availableTracks = _tracksForConf(selectedConfId);
+    final selectedTrack = availableTracks.contains(snapshot.selectedTrack)
+        ? snapshot.selectedTrack
+        : availableTracks.first;
 
-    return Rx.combineLatest5(
-      _configRepository.watchConfig(latestConfId),
-      _contestRepository.watchParticipants(latestConfId),
-      _contestRepository.watchWinners(latestConfId),
-      _contestRepository
-          .watchHistory(latestConfId)
-          .onErrorReturn(const <ContestHistoryEntry>[]),
+    final ranking$ = Stream.fromFuture(
+      _loadRanking(confId: selectedConfId, track: selectedTrack),
+    ).startWith(const <EventVoteRank>[]);
+
+    return Rx.combineLatest2(
+      _configRepository.watchConfig(selectedConfId),
       ranking$,
-      (
-        EngagementConfig config,
-        List<ContestParticipant> participants,
-        List<ContestWinner> winners,
-        List<ContestHistoryEntry> history,
-        List<SpeakerVoteRank> ranking,
-      ) => AdminState(
+      (EngagementConfig config, List<EventVoteRank> ranking) => AdminState(
         isAdmin: true,
         latestConfId: latestConfId,
+        selectedConfId: selectedConfId,
+        confIds: confIds,
+        selectedTrack: selectedTrack,
+        availableTracks: availableTracks,
         config: config,
         ranking: ranking,
-        participants: participants,
-        winners: winners,
-        history: history,
       ),
     ).startWith(
-      AdminState(isAdmin: true, loading: true, latestConfId: latestConfId),
+      AdminState(
+        isAdmin: true,
+        loading: true,
+        latestConfId: latestConfId,
+        selectedConfId: selectedConfId,
+        confIds: confIds,
+        selectedTrack: selectedTrack,
+        availableTracks: availableTracks,
+      ),
     );
   }
 
-  Future<List<SpeakerVoteRank>> _loadRanking(String confId) async {
+  Future<List<EventVoteRank>> _loadRanking({
+    required String confId,
+    required EventItemType track,
+  }) async {
     try {
-      final speakers = await _getAllSpeakers.call(
-        Params(confId: confId, limit: 1000),
+      final counts = await _eventVoteRepository.loadVoteCounts(confId);
+      final events = await _getAllEvents.call(
+        Params(
+          eventItemType: track.name,
+          confId: confId,
+          limit: 1000,
+        ),
       );
-      final counts = await _speakerVoteRepository.loadVoteCounts(confId);
-      return SpeakerVoteRanking.sort([
-        for (final speaker in speakers)
-          SpeakerVoteRank(
-            speakerId: speaker.id ?? '',
-            name: speaker.name ?? '',
-            up: counts[speaker.id ?? '']?.up ?? 0,
-            down: counts[speaker.id ?? '']?.down ?? 0,
-          ),
-      ]);
+      final ranking = [
+        for (final event in events)
+          if (event.speaker != null)
+            EventVoteRank(
+              eventId: event.id,
+              title: event.title,
+              speakerName: event.speaker?.name ?? '',
+              trackType: event.type,
+              likes: counts[event.id]?.likes ?? 0,
+            ),
+      ];
+      return EventVoteRanking.sort(
+        ranking.where((entry) => entry.likes > 0).toList(),
+      );
     } catch (_) {
       return const [];
     }
@@ -155,187 +198,43 @@ class AdminCubit extends Cubit<AdminState> {
     required DateTime start,
     required DateTime end,
   }) async {
-    final confId = state.latestConfId;
+    final confId = state.selectedConfId;
     final config = state.config;
     if (confId == null || config == null) return;
-    await _configRepository.saveConfig(
-      confId,
-      config.copyWith(
+    final trackConfig = config.forTrack(state.selectedTrack);
+    await _configRepository.saveTrackConfig(
+      confId: confId,
+      track: state.selectedTrack,
+      config: trackConfig.copyWith(
         votingEnabled: enabled,
         votingStartsAt: start.toUtc(),
         votingEndsAt: end.toUtc(),
-        contestStatus: state.config?.contestStatus ?? config.contestStatus,
       ),
     );
   }
 
-  Future<void> saveContest({
-    required bool enabled,
-    required DateTime start,
-    required DateTime end,
-    required String name,
-  }) async {
-    final confId = state.latestConfId;
+  Future<void> saveTop5Enabled(bool enabled) async {
+    final confId = state.selectedConfId;
     final config = state.config;
     if (confId == null || config == null) return;
-    final contestStatus = state.config?.contestStatus ?? config.contestStatus;
-    final trimmedName = name.trim();
-    if (enabled &&
-        contestStatus != ContestStatus.finished &&
-        trimmedName.isEmpty) {
-      emit(state.copyWith(message: 'Podaj nazwę konkursu'));
-      return;
-    }
-    var next = config.copyWith(
-      contestEnabled: enabled,
-      contestStartsAt: start.toUtc(),
-      contestEndsAt: end.toUtc(),
-      contestStatus: contestStatus,
-      contestName: trimmedName,
+    final trackConfig = config.forTrack(state.selectedTrack);
+    await _configRepository.saveTrackConfig(
+      confId: confId,
+      track: state.selectedTrack,
+      config: trackConfig.copyWith(top5Enabled: enabled),
     );
-    if (enabled && config.contestId.isEmpty) {
-      next = next.copyWith(
-        contestId: 'c_${DateTime.now().toUtc().millisecondsSinceEpoch}',
-      );
-    }
-    if (enabled && contestStatus == ContestStatus.idle) {
-      next = next.copyWith(contestStatus: ContestStatus.open);
-    }
-    await _configRepository.saveConfig(confId, next);
   }
 
-  Future<void> draw({required int count, required Random random}) async {
-    final confId = state.latestConfId;
-    if (confId == null) return;
-    if (state.config?.contestStatus == ContestStatus.finished) return;
-
-    final picked = ContestDraw.pick(
-      participantIds: state.participants.map((p) => p.uid).toList(),
-      winnerIds: state.winners.map((w) => w.uid).toSet(),
-      count: count,
-      random: random,
-    );
-    if (picked.isEmpty) {
-      if (!isClosed) {
-        emit(state.copyWith(message: 'Brak osób do wylosowania'));
-      }
-      return;
-    }
-
-    final byUid = {for (final p in state.participants) p.uid: p};
-    var order = state.winners.length + 1;
-    final winners = <ContestWinner>[
-      for (final uid in picked)
-        ContestWinner(
-          uid: uid,
-          displayName: _orMissing(byUid[uid]?.displayName),
-          email: _orMissing(byUid[uid]?.email),
-          order: order++,
-        ),
-    ];
-    await _contestRepository.saveWinners(confId: confId, winners: winners);
-
-    final status = state.config?.contestStatus;
-    if (status == ContestStatus.idle || status == ContestStatus.open) {
-      await _contestRepository.updateContestStatus(
-        confId: confId,
-        status: ContestStatus.drawing,
-      );
-      _emitContestStatus(ContestStatus.drawing);
-    }
-  }
-
-  Future<void> finishDrawing() async {
-    final confId = state.latestConfId;
+  Future<void> endVotingNow() async {
+    final confId = state.selectedConfId;
     final config = state.config;
     if (confId == null || config == null) return;
-    if (config.contestStatus != ContestStatus.drawing) return;
-
-    try {
-      var contestId = config.contestId;
-      if (contestId.isEmpty) {
-        contestId = 'c_${DateTime.now().toUtc().millisecondsSinceEpoch}';
-        await _configRepository.saveConfig(
-          confId,
-          config.copyWith(contestId: contestId),
-        );
-      }
-
-      final entry = ContestArchive.buildEntry(
-        contestId: contestId,
-        name: config.contestName.isEmpty ? 'Konkurs' : config.contestName,
-        startsAt: config.contestStartsAt,
-        endsAt: config.contestEndsAt,
-        finishedAt: DateTime.now().toUtc(),
-        winners: state.winners,
-      );
-      await _contestRepository.archiveContestIfAbsent(
-        confId: confId,
-        entry: entry,
-      );
-      await _contestRepository.updateContestStatus(
-        confId: confId,
-        status: ContestStatus.finished,
-      );
-      _emitContestStatus(ContestStatus.finished);
-    } catch (_) {
-      if (!isClosed) {
-        emit(state.copyWith(message: 'Nie udało się zakończyć losowania'));
-      }
-    }
-  }
-
-  Future<void> startNewContest({
-    required String name,
-    required bool carryParticipants,
-  }) async {
-    final confId = state.latestConfId;
-    final config = state.config;
-    if (confId == null || config == null) return;
-    final error = StartNewContestGuard.validate(
-      status: config.contestStatus,
-      name: name,
+    final trackConfig = config.forTrack(state.selectedTrack);
+    await _configRepository.saveTrackConfig(
+      confId: confId,
+      track: state.selectedTrack,
+      config: trackConfig.copyWith(votingEndsAt: DateTime.now().toUtc()),
     );
-    if (error != null) {
-      emit(state.copyWith(message: error));
-      return;
-    }
-
-    try {
-      if (config.contestId.isNotEmpty) {
-        await _contestRepository.archiveContestIfAbsent(
-          confId: confId,
-          entry: ContestArchive.buildEntry(
-            contestId: config.contestId,
-            name: config.contestName.isEmpty ? 'Konkurs' : config.contestName,
-            startsAt: config.contestStartsAt,
-            endsAt: config.contestEndsAt,
-            finishedAt: DateTime.now().toUtc(),
-            winners: state.winners,
-          ),
-        );
-      }
-
-      await _contestRepository.clearWinners(confId);
-      if (!carryParticipants) {
-        await _contestRepository.clearParticipants(confId);
-      }
-
-      final nextId = 'c_${DateTime.now().toUtc().millisecondsSinceEpoch}';
-      final next = config.copyWith(
-        contestId: nextId,
-        contestName: name.trim(),
-        contestStatus: ContestStatus.open,
-        contestEnabled: true,
-      );
-      await _configRepository.saveConfig(confId, next);
-    } catch (_) {
-      if (!isClosed) {
-        emit(
-          state.copyWith(message: 'Nie udało się rozpocząć nowego konkursu'),
-        );
-      }
-    }
   }
 
   void clearMessage() {
@@ -344,11 +243,30 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
-  void _emitContestStatus(ContestStatus status) {
-    if (isClosed) return;
-    final config = state.config;
-    if (config == null) return;
-    emit(state.copyWith(config: config.copyWith(contestStatus: status)));
+  static List<String> _sortedConfIds(Iterable<String> confIds) {
+    final unique = confIds.toSet().toList()
+      ..sort((a, b) => b.compareTo(a));
+    return unique;
+  }
+
+  static List<EventItemType> _tracksForConf(String confId) {
+    final confIdInt = int.tryParse(confId) ?? 0;
+    if (confIdInt >= 2025) return EventItemType.values;
+    return const [EventItemType.ngPoland, EventItemType.jsPoland];
+  }
+
+  static String _resolveSelectedConfId({
+    required String? preferred,
+    required List<String> confIds,
+    required String? latestConfId,
+  }) {
+    if (preferred != null && confIds.contains(preferred)) {
+      return preferred;
+    }
+    if (latestConfId != null && confIds.contains(latestConfId)) {
+      return latestConfId;
+    }
+    return confIds.first;
   }
 
   static AdminState _seedState(
@@ -356,50 +274,41 @@ class AdminCubit extends Cubit<AdminState> {
     ConferencesCubit conferences,
   ) {
     if (!session.state.isAdmin) return const AdminState();
+    final loaded = conferences.state.mapOrNull(loaded: (state) => state);
+    final confIds = loaded == null
+        ? const <String>[]
+        : _sortedConfIds(
+            loaded.conferences.list.map((conference) => conference.confId),
+          );
+    final latestConfId = confIds.isEmpty
+        ? null
+        : LatestConferenceResolver.fromConfIds(confIds);
+    final selectedConfId = confIds.isEmpty
+        ? null
+        : _resolveSelectedConfId(
+            preferred: null,
+            confIds: confIds,
+            latestConfId: latestConfId,
+          );
+    final availableTracks = selectedConfId == null
+        ? const [EventItemType.ngPoland, EventItemType.jsPoland]
+        : _tracksForConf(selectedConfId);
     return AdminState(
       isAdmin: true,
       loading: true,
-      latestConfId: _latestConfId(conferences.state),
+      latestConfId: latestConfId,
+      selectedConfId: selectedConfId,
+      confIds: confIds,
+      selectedTrack: availableTracks.first,
+      availableTracks: availableTracks,
     );
-  }
-
-  static String? _latestConfId(ConferencesState conferences) {
-    final loaded = conferences.mapOrNull(loaded: (state) => state);
-    if (loaded == null) return null;
-    return LatestConferenceResolver.fromConfIds(
-      loaded.conferences.list.map((conference) => conference.confId),
-    );
-  }
-
-  static AdminState _retainContestStatus(AdminState current, AdminState next) {
-    final currentStatus = current.config?.contestStatus;
-    final nextConfig = next.config;
-    if (currentStatus == null || nextConfig == null) return next;
-    if (current.config?.contestId != nextConfig.contestId) return next;
-    if (_statusPriority(currentStatus) <=
-        _statusPriority(nextConfig.contestStatus)) {
-      return next;
-    }
-    return next.copyWith(
-      config: nextConfig.copyWith(contestStatus: currentStatus),
-    );
-  }
-
-  static int _statusPriority(ContestStatus status) => switch (status) {
-    ContestStatus.idle => 0,
-    ContestStatus.open => 1,
-    ContestStatus.drawing => 2,
-    ContestStatus.finished => 3,
-  };
-
-  static String _orMissing(String? value) {
-    final trimmed = value?.trim() ?? '';
-    return trimmed.isEmpty ? 'brak danych' : trimmed;
   }
 
   @override
   Future<void> close() async {
     await _subscription?.cancel();
+    await _selectedConfId$.close();
+    await _selectedTrack$.close();
     return super.close();
   }
 }

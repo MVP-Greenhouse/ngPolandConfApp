@@ -12,7 +12,9 @@ import '../../../widgets/confs_bottom_nav_bar.dart';
 import '../../settings/presentation/connection_status.dart';
 
 class WorkshopsPage extends StatefulWidget {
-  const WorkshopsPage({super.key});
+  const WorkshopsPage({super.key, this.initialTrack});
+
+  final EventItemType? initialTrack;
 
   @override
   State<WorkshopsPage> createState() => _WorkshopsPageState();
@@ -20,18 +22,21 @@ class WorkshopsPage extends StatefulWidget {
 
 class _WorkshopsPageState extends State<WorkshopsPage> with ConnectivityMixin {
   late final WorkshopCubit _cubit;
+  late EventItemType _eventItemType;
 
   @override
   void initState() {
     _cubit = getIt.get<WorkshopCubit>();
+    _eventItemType = widget.initialTrack ?? EventItemType.ngPoland;
     _cubit.getListWorkshop(
-      eventItemType: EventItemType.ngPoland,
+      eventItemType: _eventItemType,
     );
 
     super.initState();
   }
 
   void onEventItemTabChange(EventItemType type) {
+    setState(() => _eventItemType = type);
     _cubit.getListWorkshop(
       eventItemType: type,
     );
@@ -72,7 +77,10 @@ class _WorkshopsPageState extends State<WorkshopsPage> with ConnectivityMixin {
         },
       ),
       showBottomNavigationBar: true,
-      bottomNavigationBar: ConfsBottomNavigationBar(onItemTapped: onEventItemTabChange),
+      bottomNavigationBar: ConfsBottomNavigationBar(
+        selectedType: _eventItemType,
+        onItemTapped: onEventItemTabChange,
+      ),
     );
   }
 }

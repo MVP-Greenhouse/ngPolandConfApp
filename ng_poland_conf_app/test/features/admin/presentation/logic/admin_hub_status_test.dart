@@ -1,46 +1,28 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/logic/admin_hub_status.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/contest_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 
 void main() {
-  final base = EngagementConfig(
+  final base = TrackEngagementConfig(
     votingEnabled: true,
     votingStartsAt: DateTime.utc(2026, 1, 1),
     votingEndsAt: DateTime.utc(2026, 1, 2),
-    contestEnabled: true,
-    contestStartsAt: DateTime.utc(2026, 1, 1),
-    contestEndsAt: DateTime.utc(2026, 1, 2),
-    contestStatus: ContestStatus.open,
+    top5Enabled: true,
   );
 
   test('voting subtitle on/off', () {
-    expect(AdminHubStatus.votingSubtitle(base), 'włączone');
+    expect(AdminHubStatus.votingSubtitle(base), 'enabled');
     expect(
       AdminHubStatus.votingSubtitle(base.copyWith(votingEnabled: false)),
-      'wyłączone',
+      'disabled',
     );
   });
 
-  test('contest subtitle format', () {
+  test('top5 subtitle on/off', () {
+    expect(AdminHubStatus.top5Subtitle(base), 'enabled');
     expect(
-      AdminHubStatus.contestSubtitle(config: base, participantCount: 12),
-      'włączone · open · 12 zgł.',
+      AdminHubStatus.top5Subtitle(base.copyWith(top5Enabled: false)),
+      'disabled',
     );
-    expect(
-      AdminHubStatus.contestSubtitle(
-        config: base.copyWith(
-          contestEnabled: false,
-          contestStatus: ContestStatus.finished,
-        ),
-        participantCount: 0,
-      ),
-      'wyłączone · finished · 0 zgł.',
-    );
-  });
-
-  test('participant chip uses short label', () {
-    expect(AdminHubStatus.participantChipLabel(1), '1 zgł.');
-    expect(AdminHubStatus.contestStatusLabel(ContestStatus.open), 'open');
   });
 }

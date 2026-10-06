@@ -18,6 +18,7 @@ dependencies:
   # Auth
   google_sign_in: ^7.2.0
   sign_in_with_apple: ^8.1.0
+  app_links: ^6.4.1
 
   # Routing
   go_router: ^17.3.0
@@ -59,6 +60,7 @@ dependencies:
   #hive
   hive_ce_flutter: ^2.3.3
   hive_ce: ^2.15.1
+  timezone: ^0.11.1
 
 dev_dependencies:
   flutter_test:

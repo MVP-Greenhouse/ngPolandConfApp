@@ -47,7 +47,9 @@ class CustomDrawer extends StatelessWidget {
               return AuthSessionDrawerTile(
                 session: state,
                 onLogin: () {
-                  final from = GoRouterState.of(context).uri.toString();
+                  final from = internalLocationFromUri(
+                    GoRouterState.of(context).uri,
+                  );
                   context.push(AuthenticationPage.loginPath(from: from));
                 },
                 onLogout: AuthenticationUtils.logout,
@@ -203,13 +205,13 @@ class AuthSessionDrawerTile extends StatelessWidget {
       loading: () => const SizedBox.shrink(),
       unauthenticated: () => _buildTile(
         context,
-        title: 'Zaloguj',
+        title: 'Sign in',
         icon: Icons.login,
         onTap: onLogin,
       ),
       authenticated: (_) => _buildTile(
         context,
-        title: 'Wyloguj',
+        title: 'Sign out',
         icon: Icons.logout,
         onTap: onLogout,
       ),
