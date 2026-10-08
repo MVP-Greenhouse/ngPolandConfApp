@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -40,10 +40,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   void initState() {
     authenticationCubit = getIt.get<AuthenticationCubit>();
     _conferencesCubit = getIt.get<ConferencesCubit>();
-    _magicLinkErrorsSub =
-        getIt.get<MagicLinkDeepLinkListener>().errors.listen(
-              authenticationCubit.reportExternalError,
-            );
+    _magicLinkErrorsSub = getIt.get<MagicLinkDeepLinkListener>().errors.listen(
+      authenticationCubit.reportExternalError,
+    );
     super.initState();
   }
 
@@ -87,9 +86,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   String _editionLabel() {
     final confId = _conferencesCubit.state.maybeWhen(
-          loaded: (_, conference) => conference.confId,
-          orElse: () => null,
-        );
+      loaded: (_, conference) => conference.confId,
+      orElse: () => null,
+    );
     final year = (confId != null && confId.isNotEmpty) ? confId : '2025';
     return 'Edition $year • Warsaw Live';
   }
@@ -131,93 +130,116 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   children: [
                     _AuthHeader(onClose: () => _onClose(context)),
                     Expanded(
-                      child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
-                        builder: (context, state) {
-                          final isBusy = state.maybeWhen(
-                            inProgress: (_) => true,
-                            orElse: () => false,
-                          );
-                          final linkSentEmail = state.maybeWhen(
-                            linkSent: (email) => email,
-                            orElse: () => null,
-                          );
-                          final errorText = state.maybeWhen(
-                            error: (text) => text,
-                            orElse: () => null,
-                          );
+                      child:
+                          BlocBuilder<AuthenticationCubit, AuthenticationState>(
+                            builder: (context, state) {
+                              final isBusy = state.maybeWhen(
+                                inProgress: (_) => true,
+                                orElse: () => false,
+                              );
+                              final linkSentEmail = state.maybeWhen(
+                                linkSent: (email) => email,
+                                orElse: () => null,
+                              );
+                              final errorText = state.maybeWhen(
+                                error: (text) => text,
+                                orElse: () => null,
+                              );
 
-                          return IgnorePointer(
-                            ignoring: isBusy,
-                            child: GestureDetector(
-                              onTap: () => FocusManager.instance.primaryFocus
-                                  ?.unfocus(),
-                              behavior: HitTestBehavior.opaque,
-                              child: SingleChildScrollView(
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
-                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  _AuthHero(editionLabel: _editionLabel()),
-                                  const SizedBox(height: 24),
-                                  SocialMediaButton(
-                                    isLoading: state.maybeMap(
-                                      inProgress: (value) =>
-                                          value.type == AuthenticationType.google,
-                                      orElse: () => false,
+                              return IgnorePointer(
+                                ignoring: isBusy,
+                                child: GestureDetector(
+                                  onTap: () => FocusManager
+                                      .instance
+                                      .primaryFocus
+                                      ?.unfocus(),
+                                  behavior: HitTestBehavior.opaque,
+                                  child: SingleChildScrollView(
+                                    keyboardDismissBehavior:
+                                        ScrollViewKeyboardDismissBehavior
+                                            .onDrag,
+                                    padding: const EdgeInsets.fromLTRB(
+                                      16,
+                                      8,
+                                      16,
+                                      24,
                                     ),
-                                    onTap: () => authenticationCubit
-                                        .signInSocialMedia(SignInGoogle()),
-                                    authenticationType: AuthenticationType.google,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        _AuthHero(
+                                          editionLabel: _editionLabel(),
+                                        ),
+                                        const SizedBox(height: 24),
+                                        SocialMediaButton(
+                                          isLoading: state.maybeMap(
+                                            inProgress: (value) =>
+                                                value.type ==
+                                                AuthenticationType.google,
+                                            orElse: () => false,
+                                          ),
+                                          onTap: () => authenticationCubit
+                                              .signInSocialMedia(
+                                                SignInGoogle(),
+                                              ),
+                                          authenticationType:
+                                              AuthenticationType.google,
+                                        ),
+                                        if (defaultTargetPlatform ==
+                                            TargetPlatform.iOS) ...[
+                                          const SizedBox(height: 10),
+                                          SocialMediaButton(
+                                            isLoading: state.maybeMap(
+                                              inProgress: (value) =>
+                                                  value.type ==
+                                                  AuthenticationType.apple,
+                                              orElse: () => false,
+                                            ),
+                                            onTap: () => authenticationCubit
+                                                .signInSocialMedia(
+                                                  SignInApple(),
+                                                ),
+                                            authenticationType:
+                                                AuthenticationType.apple,
+                                          ),
+                                        ],
+                                        const SizedBox(height: 24),
+                                        const _MagicLinkDivider(),
+                                        const SizedBox(height: 16),
+                                        MagicLinkForm(
+                                          isLoading: state.maybeMap(
+                                            inProgress: (value) =>
+                                                value.type ==
+                                                AuthenticationType.email,
+                                            orElse: () => false,
+                                          ),
+                                          linkSent: linkSentEmail != null,
+                                          initialEmail: linkSentEmail ?? '',
+                                          onSubmit:
+                                              authenticationCubit.sendMagicLink,
+                                        ),
+                                        if (errorText != null) ...[
+                                          const SizedBox(height: 12),
+                                          Text(
+                                            errorText,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: scheme.error,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ],
+                                        const SizedBox(height: 28),
+                                        const _AuthFooter(),
+                                      ],
+                                    ),
                                   ),
-                                  if (Platform.isIOS) ...[
-                                    const SizedBox(height: 10),
-                                    SocialMediaButton(
-                                      isLoading: state.maybeMap(
-                                        inProgress: (value) =>
-                                            value.type == AuthenticationType.apple,
-                                        orElse: () => false,
-                                      ),
-                                      onTap: () => authenticationCubit
-                                          .signInSocialMedia(SignInApple()),
-                                      authenticationType: AuthenticationType.apple,
-                                    ),
-                                  ],
-                                  const SizedBox(height: 24),
-                                  const _MagicLinkDivider(),
-                                  const SizedBox(height: 16),
-                                  MagicLinkForm(
-                                    isLoading: state.maybeMap(
-                                      inProgress: (value) =>
-                                          value.type == AuthenticationType.email,
-                                      orElse: () => false,
-                                    ),
-                                    linkSent: linkSentEmail != null,
-                                    initialEmail: linkSentEmail ?? '',
-                                    onSubmit: authenticationCubit.sendMagicLink,
-                                  ),
-                                  if (errorText != null) ...[
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      errorText,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: scheme.error,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
-                                  const SizedBox(height: 28),
-                                  const _AuthFooter(),
-                                ],
-                              ),
-                            ),
-                            ),
-                          );
-                        },
-                      ),
+                                ),
+                              );
+                            },
+                          ),
                     ),
                   ],
                 ),
@@ -333,35 +355,26 @@ class _AuthHero extends StatelessWidget {
           decoration: BoxDecoration(
             color: AuthUiTokens.fieldBg,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: accent.withValues(alpha: 0.35),
-            ),
+            border: Border.all(color: accent.withValues(alpha: 0.35)),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.4),
                 blurRadius: 14,
                 offset: const Offset(0, 4),
               ),
-              BoxShadow(
-                color: accent.withValues(alpha: 0.4),
-                blurRadius: 28,
-              ),
+              BoxShadow(color: accent.withValues(alpha: 0.4), blurRadius: 28),
             ],
           ),
-          child: Icon(
-            Icons.verified_user_rounded,
-            size: 34,
-            color: accent,
-          ),
+          child: Icon(Icons.verified_user_rounded, size: 34, color: accent),
         ),
         const SizedBox(height: 16),
         Text.rich(
           TextSpan(
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  height: 1.2,
-                ),
+              fontWeight: FontWeight.w800,
+              color: Colors.white,
+              height: 1.2,
+            ),
             children: [
               const TextSpan(text: 'Welcome to '),
               TextSpan(
@@ -377,10 +390,10 @@ class _AuthHero extends StatelessWidget {
           'Get access to live Top 5 voting.',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.white.withValues(alpha: 0.72),
-                height: 1.4,
-                fontWeight: FontWeight.w500,
-              ),
+            color: Colors.white.withValues(alpha: 0.72),
+            height: 1.4,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
@@ -430,10 +443,7 @@ class _AuthFooter extends StatelessWidget {
       height: 1.45,
       color: Colors.white.withValues(alpha: 0.68),
     );
-    final linkStyle = base.copyWith(
-      color: accent,
-      fontWeight: FontWeight.w700,
-    );
+    final linkStyle = base.copyWith(color: accent, fontWeight: FontWeight.w700);
 
     return Column(
       children: [
@@ -528,12 +538,7 @@ class _BlurredOrb extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: RadialGradient(
-            colors: [
-              color,
-              color.withValues(alpha: 0),
-            ],
-          ),
+          gradient: RadialGradient(colors: [color, color.withValues(alpha: 0)]),
         ),
       ),
     );

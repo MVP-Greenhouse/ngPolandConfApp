@@ -5,6 +5,7 @@ import 'package:ng_poland_conf_app/features/authentication/presentation/authenti
 import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_vote_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 
 class EventLikeButton extends StatelessWidget {
   const EventLikeButton({
@@ -20,17 +21,45 @@ class EventLikeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = Theme.of(context).extension<AppPalette>();
     final colorScheme = Theme.of(context).colorScheme;
-    return FilledButton.tonalIcon(
-      key: const Key('event-vote-like'),
-      onPressed: enabled ? onTap : null,
-      icon: Icon(
-        liked ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
-        color: liked
-            ? colorScheme.secondary
-            : colorScheme.onSurface.withValues(alpha: 0.75),
+    final background = palette?.card ?? colorScheme.surface;
+    final foreground = palette?.onCard ?? colorScheme.onSurface;
+    final accent = palette?.accent ?? colorScheme.secondary;
+    final border = palette?.hairline ?? foreground.withValues(alpha: 0.12);
+    final idleColor = liked ? accent : foreground;
+    final contentColor = enabled ? idleColor : idleColor.withValues(alpha: 0.4);
+
+    return SizedBox(
+      width: double.infinity,
+      height: 52,
+      child: OutlinedButton.icon(
+        key: const Key('event-vote-like'),
+        onPressed: enabled ? onTap : null,
+        style: OutlinedButton.styleFrom(
+          backgroundColor: enabled
+              ? background
+              : background.withValues(alpha: 0.45),
+          foregroundColor: contentColor,
+          disabledForegroundColor: contentColor,
+          disabledBackgroundColor: background.withValues(alpha: 0.45),
+          side: BorderSide(
+            color: enabled ? border : border.withValues(alpha: 0.4),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
+        ),
+        icon: Icon(
+          liked ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
+          color: contentColor,
+          size: 18,
+        ),
+        label: Text(
+          liked ? 'Liked' : 'Like talk',
+          style: TextStyle(fontWeight: FontWeight.w600, color: contentColor),
+        ),
       ),
-      label: Text(liked ? 'Liked' : 'Like talk'),
     );
   }
 }
@@ -88,25 +117,20 @@ class _EventVoteButtonHostState extends State<EventVoteButtonHost> {
           orElse: () => true,
         );
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: EventLikeButton(
-            liked: state.liked,
-            enabled: enabled,
-            onTap: () {
-              if (_cubit.requiresLogin()) {
-                context.push(
-                  AuthenticationPage.loginPath(
-                    from: internalLocationFromUri(
-                      GoRouterState.of(context).uri,
-                    ),
-                  ),
-                );
-                return;
-              }
-              _cubit.toggleLike();
-            },
-          ),
+        return EventLikeButton(
+          liked: state.liked,
+          enabled: enabled,
+          onTap: () {
+            if (_cubit.requiresLogin()) {
+              context.push(
+                AuthenticationPage.loginPath(
+                  from: internalLocationFromUri(GoRouterState.of(context).uri),
+                ),
+              );
+              return;
+            }
+            _cubit.toggleLike();
+          },
         );
       },
     );

@@ -7,6 +7,8 @@ import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/schedule_top5_section.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/widgets/custom_back_button.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
 
@@ -57,9 +59,9 @@ class _ScheduleTop5PageState extends State<ScheduleTop5Page> {
       await _cubit.toggleLike(eventId);
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not save your vote')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Could not save your vote')));
     }
   }
 
@@ -73,7 +75,7 @@ class _ScheduleTop5PageState extends State<ScheduleTop5Page> {
     return CustomScaffold(
       showDrawer: false,
       appBar: AppBar(
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: const CustomBackButton(),
         title: BlocBuilder<ScheduleTop5Cubit, ScheduleTop5State>(
           bloc: _cubit,
           builder: (context, state) {
@@ -116,48 +118,48 @@ class _ScheduleTop5PageState extends State<ScheduleTop5Page> {
           ),
         ],
       ),
-      body: BlocBuilder<ScheduleTop5Cubit, ScheduleTop5State>(
-        bloc: _cubit,
-        builder: (context, state) {
-          return state.maybeWhen(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            hidden: () => const EmptyListInformation(),
-            empty: (track, confId, votingOpen, myLikedEventIds) => ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                ScheduleTop5Section(
-                  top: const [],
-                  track: track,
-                  votingOpen: votingOpen,
-                  myLikedEventIds: myLikedEventIds,
-                  onVote: _onVote,
-                ),
-              ],
-            ),
-            loaded: (top, track, confId, votingOpen, myLikedEventIds) =>
-                ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    ScheduleTop5Section(
-                      top: top,
-                      track: track,
-                      votingOpen: votingOpen,
-                      myLikedEventIds: myLikedEventIds,
-                      onVote: _onVote,
-                    ),
-                  ],
-                ),
-            orElse: () => const EmptyListInformation(),
-          );
-        },
+      body: ColoredBox(
+        color: context.palette.screen,
+        child: BlocBuilder<ScheduleTop5Cubit, ScheduleTop5State>(
+          bloc: _cubit,
+          builder: (context, state) {
+            return state.maybeWhen(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              hidden: () => const EmptyListInformation(),
+              empty: (track, confId, votingOpen, myLikedEventIds) => ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  ScheduleTop5Section(
+                    top: const [],
+                    track: track,
+                    votingOpen: votingOpen,
+                    myLikedEventIds: myLikedEventIds,
+                    onVote: _onVote,
+                  ),
+                ],
+              ),
+              loaded: (top, track, confId, votingOpen, myLikedEventIds) =>
+                  ListView(
+                    padding: EdgeInsets.zero,
+                    children: [
+                      ScheduleTop5Section(
+                        top: top,
+                        track: track,
+                        votingOpen: votingOpen,
+                        myLikedEventIds: myLikedEventIds,
+                        onVote: _onVote,
+                      ),
+                    ],
+                  ),
+              orElse: () => const EmptyListInformation(),
+            );
+          },
+        ),
       ),
     );
   }
 
-  static String _subtitle({
-    required String confId,
-    required bool votingOpen,
-  }) {
+  static String _subtitle({required String confId, required bool votingOpen}) {
     final confLabel = confId.isEmpty ? 'NG Poland' : 'NG Poland $confId';
     if (votingOpen) {
       return '$confLabel • Live voting';
@@ -171,10 +173,16 @@ class _LiveBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final light = Theme.of(context).brightness == Brightness.light;
+    final background = light
+        ? context.palette.accent
+        : Colors.white.withValues(alpha: 0.18);
+    const foreground = Colors.white;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.18),
+        color: background,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -184,7 +192,7 @@ class _LiveBadge extends StatelessWidget {
             width: 7,
             height: 7,
             decoration: const BoxDecoration(
-              color: Colors.white,
+              color: foreground,
               shape: BoxShape.circle,
             ),
           ),
@@ -194,7 +202,7 @@ class _LiveBadge extends StatelessWidget {
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w800,
               letterSpacing: 0.6,
-              color: Colors.white,
+              color: foreground,
               fontSize: 11,
             ),
           ),

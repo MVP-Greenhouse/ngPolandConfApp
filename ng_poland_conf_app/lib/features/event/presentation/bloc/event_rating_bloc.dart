@@ -3,8 +3,8 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
-import 'package:ng_poland_conf_app/features/event/domains/usecases/get_rate_for_event.dart';
-import 'package:ng_poland_conf_app/features/event/domains/usecases/rate_event.dart';
+import 'package:ng_poland_conf_app/features/event/domains/entities/rate_event_basic_params.dart';
+import 'package:ng_poland_conf_app/features/event/domains/repositories/rate_event_repository.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 
 part 'event_rating_event.dart';
@@ -14,27 +14,22 @@ part 'event_rating_bloc.freezed.dart';
 @injectable
 class EventRatingBloc extends Bloc<EventRatingEvent, EventRatingState> {
   final ConferencesCubit conferencesCubit;
-  final GetRateForEvent getRateForEvent;
-  final RateEvent rateEvent;
+  final RateEventRepository rateEventRepository;
   final String eventId;
   final String eventItemType;
 
   Conference? get _selectedConference => conferencesCubit.state.mapOrNull(
-        loaded: (value) => value.selectedConference,
-      );
+    loaded: (value) => value.selectedConference,
+  );
 
   EventRatingBloc(
     this.conferencesCubit,
-    this.getRateForEvent,
-    this.rateEvent,
+    this.rateEventRepository,
     this.eventId,
     this.eventItemType,
   ) : super(const _Initial()) {
     on<_GetRateForEvent>(_onGetRateForEvent);
-    on<_RateEvent>(
-      _onRateEvent,
-      transformer: droppable(),
-    );
+    on<_RateEvent>(_onRateEvent, transformer: droppable());
   }
 
   Future<void> _onGetRateForEvent(
@@ -45,7 +40,7 @@ class EventRatingBloc extends Bloc<EventRatingEvent, EventRatingState> {
       String? confId = _selectedConference?.confId;
       if (confId == null) return;
       emit(const EventRatingState.loading());
-      final int? rate = await getRateForEvent(
+      final int? rate = await rateEventRepository.getRateForEvent(
         GetRateForEventParams(
           confId: confId,
           eventId: eventId,
@@ -53,11 +48,7 @@ class EventRatingBloc extends Bloc<EventRatingEvent, EventRatingState> {
         ),
       );
       if (rate != null) {
-        emit(
-          EventRatingState.rated(
-            rateForEvent: rate,
-          ),
-        );
+        emit(EventRatingState.rated(rateForEvent: rate));
         return;
       }
       emit(const EventRatingState.readyToRate());
@@ -75,7 +66,7 @@ class EventRatingBloc extends Bloc<EventRatingEvent, EventRatingState> {
     emit(const EventRatingState.loading());
     try {
       int? rate;
-      rate = await rateEvent(
+      rate = await rateEventRepository.rateEvent(
         RateEventParams(
           confId: confId,
           eventId: eventId,
@@ -84,13 +75,9 @@ class EventRatingBloc extends Bloc<EventRatingEvent, EventRatingState> {
         ),
       );
       if (rate != null) {
-        emit(
-          EventRatingState.rated(
-            rateForEvent: rate,
-          ),
-        );
+        emit(EventRatingState.rated(rateForEvent: rate));
       } else {
-        rate = await getRateForEvent(
+        rate = await rateEventRepository.getRateForEvent(
           GetRateForEventParams(
             confId: confId,
             eventId: eventId,
@@ -98,11 +85,7 @@ class EventRatingBloc extends Bloc<EventRatingEvent, EventRatingState> {
           ),
         );
         if (rate != null) {
-          emit(
-            EventRatingState.rated(
-              rateForEvent: rate,
-            ),
-          );
+          emit(EventRatingState.rated(rateForEvent: rate));
           return;
         }
         emit(const EventRatingState.readyToRate());

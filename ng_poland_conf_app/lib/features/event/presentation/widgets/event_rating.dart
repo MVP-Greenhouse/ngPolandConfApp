@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
-import 'package:ng_poland_conf_app/features/event/domains/usecases/get_rate_for_event.dart';
-import 'package:ng_poland_conf_app/features/event/domains/usecases/rate_event.dart';
+import 'package:ng_poland_conf_app/features/event/domains/repositories/rate_event_repository.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/bloc/event_rating_bloc.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 // import 'package:rive/rive.dart';
@@ -30,8 +29,8 @@ class _EventRatingState extends State<EventRating> {
   final String isLoadingProperties = 'isLoading';
   final String stateMachineName = '5 Star';
   late final EventRatingBloc _eventRatingCubit;
-//  late StateMachineController _controller;
-//  Artboard? _riveArtboard;
+  //  late StateMachineController _controller;
+  //  Artboard? _riveArtboard;
   // SMINumber? smiNumber;
   // SMIBool? smiLoading;
 
@@ -50,13 +49,10 @@ class _EventRatingState extends State<EventRating> {
   void initState() {
     _eventRatingCubit = EventRatingBloc(
       getIt.get<ConferencesCubit>(),
-      getIt.get<GetRateForEvent>(),
-      getIt.get<RateEvent>(),
+      getIt.get<RateEventRepository>(),
       widget.id,
       widget.eventItemType,
-    )..add(
-        const EventRatingEvent.getRateForEvent(),
-      );
+    )..add(const EventRatingEvent.getRateForEvent());
     //  final Artboard artboard = widget.ratingFile.mainArtboard;
     // _controller = StateMachineController.fromArtboard(
     //   artboard,

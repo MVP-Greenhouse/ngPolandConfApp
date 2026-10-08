@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:ng_poland_conf_app/widgets/custom_button.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomBackButton extends StatelessWidget {
-  final void Function()? onPressed;
+  const CustomBackButton({super.key, this.onPressed});
 
-  const CustomBackButton({
-    super.key,
-    this.onPressed,
-  });
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return CustomButton(
-      onPressed: onPressed ??
-          () {
-            Navigator.pop(context);
-          },
-      child: const Icon(Icons.arrow_back_ios_sharp),
+    return IconButton(
+      onPressed: onPressed ?? () => context.pop(),
+      icon: const Icon(Icons.arrow_back_ios),
     );
   }
 }

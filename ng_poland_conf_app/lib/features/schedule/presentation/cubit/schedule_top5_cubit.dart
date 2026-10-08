@@ -10,9 +10,10 @@ import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_toggle.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
+import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/usecases/get_all_events_for_conference.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'schedule_top5_state.dart';
@@ -22,16 +23,16 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
   ScheduleTop5Cubit(
     this._configRepository,
     this._eventVoteRepository,
+    this._editions,
     this._conferencesCubit,
     this._userSessionCubit,
-    this._getAllEvents,
   ) : super(const ScheduleTop5State.loading());
 
   final EngagementConfigRepository _configRepository;
   final EventVoteRepository _eventVoteRepository;
+  final EditionRepository _editions;
   final ConferencesCubit _conferencesCubit;
   final UserSessionCubit _userSessionCubit;
-  final GetAllEventsForConference _getAllEvents;
 
   StreamSubscription<ScheduleTop5State>? _subscription;
   EventItemType _track = EventItemType.ngPoland;
@@ -136,12 +137,11 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
 
   Future<List<EventVoteRank>> _loadRanking(String confId) async {
     try {
-      final events = await _getAllEvents.call(
-        Params(
-          eventItemType: _track.name,
-          confId: confId,
-          limit: 1000,
-        ),
+      final edition = await _editions.load();
+      final events = eventItemsForConferenceTrack(
+        edition: edition,
+        confId: confId,
+        track: _track,
       );
       final counts = await _eventVoteRepository.loadVoteCounts(confId);
       final entries = [
@@ -190,7 +190,11 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
     });
   }
 
-  static String _timeLabel(DateTime? start, DateTime? end, {String timeLabel = ''}) {
+  static String _timeLabel(
+    DateTime? start,
+    DateTime? end, {
+    String timeLabel = '',
+  }) {
     if (timeLabel.isNotEmpty) return timeLabel;
     if (start == null || end == null) return '';
     return '${ConferenceDateTime.formatHm(start)} — ${ConferenceDateTime.formatHm(end)}';
@@ -212,11 +216,7 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
     final currentlyLiked = loaded.myLikedEventIds.contains(eventId);
     final nextLiked = EventVoteToggle.apply(currentlyLiked: currentlyLiked);
 
-    _emitLikedOptimistic(
-      current: loaded,
-      eventId: eventId,
-      liked: nextLiked,
-    );
+    _emitLikedOptimistic(current: loaded, eventId: eventId, liked: nextLiked);
 
     try {
       await _eventVoteRepository.setLike(

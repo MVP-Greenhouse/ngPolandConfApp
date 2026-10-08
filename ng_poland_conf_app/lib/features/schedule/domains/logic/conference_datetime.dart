@@ -105,3 +105,58 @@ DateTime? _minDate(DateTime? a, DateTime b) {
   if (a == null || b.isBefore(a)) return b;
   return a;
 }
+
+/// Venue clock label, for example `Warsaw (UTC+1)` in winter.
+String warsawZoneLabel(DateTime instant) {
+  final warsaw = tz.TZDateTime.from(
+    instant.toUtc(),
+    tz.getLocation(ConferenceDateTime.locationName),
+  );
+  final hours = warsaw.timeZoneOffset.inHours;
+  final sign = hours >= 0 ? '+' : '';
+  return 'Warsaw (UTC$sign$hours)';
+}
+
+/// Short length of a slot, for example `20 mins` or `1 hr`.
+String? scheduleDurationLabel(DateTime? start, DateTime? end) {
+  if (start == null || end == null) return null;
+  final minutes = end.difference(start).inMinutes;
+  if (minutes <= 0) return null;
+  if (minutes < 60) return '$minutes mins';
+  final hours = minutes ~/ 60;
+  final rest = minutes % 60;
+  if (rest == 0) return hours == 1 ? '1 hr' : '$hours hrs';
+  return '${hours}h $rest mins';
+}
+
+enum ScheduleDayPhase { upcoming, ongoing, ended }
+
+ScheduleDayPhase scheduleDayPhase({
+  required Iterable<({DateTime? start, DateTime? end})> events,
+  required DateTime now,
+  required bool inSlot,
+}) {
+  if (inSlot) return ScheduleDayPhase.ongoing;
+
+  DateTime? firstStart;
+  DateTime? lastEnd;
+  for (final event in events) {
+    final start = event.start?.toUtc();
+    final end = event.end?.toUtc();
+    if (start != null && (firstStart == null || start.isBefore(firstStart))) {
+      firstStart = start;
+    }
+    if (end != null && (lastEnd == null || end.isAfter(lastEnd))) {
+      lastEnd = end;
+    }
+  }
+
+  final nowUtc = now.toUtc();
+  if (firstStart != null && nowUtc.isBefore(firstStart)) {
+    return ScheduleDayPhase.upcoming;
+  }
+  if (lastEnd != null && !nowUtc.isBefore(lastEnd)) {
+    return ScheduleDayPhase.ended;
+  }
+  return ScheduleDayPhase.ongoing;
+}

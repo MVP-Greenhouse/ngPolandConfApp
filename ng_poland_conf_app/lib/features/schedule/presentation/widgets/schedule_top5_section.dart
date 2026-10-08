@@ -4,6 +4,7 @@ import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 
 class ScheduleTop5Section extends StatelessWidget {
   const ScheduleTop5Section({
@@ -23,8 +24,7 @@ class ScheduleTop5Section extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final accent = scheme.secondary;
+    final palette = context.palette;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -42,7 +42,7 @@ class ScheduleTop5Section extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.6,
-                    color: scheme.onSurface.withValues(alpha: 0.7),
+                    color: palette.muted,
                   ),
                 ),
                 TextSpan(
@@ -51,7 +51,7 @@ class ScheduleTop5Section extends StatelessWidget {
                     fontSize: 12,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.6,
-                    color: accent,
+                    color: palette.accent,
                   ),
                 ),
               ],
@@ -66,9 +66,9 @@ class ScheduleTop5Section extends StatelessWidget {
                     ? 'No votes in this track yet. Like talks to see them in the ranking.'
                     : 'No votes in this track.',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: scheme.onSurface.withValues(alpha: 0.7),
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: palette.muted),
               ),
             )
           else
@@ -99,19 +99,16 @@ class _VotingInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final accent = scheme.secondary;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final palette = context.palette;
     const closedAccent = Color(0xFFFFC107);
 
-    final cardColor = isDark
-        ? const Color(0xFF1E1E1E)
-        : scheme.surfaceContainerHighest;
     final borderColor = votingOpen
-        ? accent.withValues(alpha: 0.55)
+        ? palette.accent.withValues(alpha: 0.55)
         : closedAccent.withValues(alpha: 0.45);
-    final badgeColor = votingOpen ? accent : closedAccent;
-    final badgeForeground = votingOpen ? Colors.white : const Color(0xFF1A1200);
+    final badgeColor = votingOpen ? palette.accent : closedAccent;
+    final badgeForeground = votingOpen
+        ? palette.onAccent
+        : const Color(0xFF1A1200);
     final badgeLabel = votingOpen ? 'VOTING OPEN' : 'VOTING CLOSED';
     final title = votingOpen
         ? 'Vote for your favorite talks'
@@ -123,7 +120,7 @@ class _VotingInfoCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: cardColor,
+        color: palette.card,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: borderColor, width: 1.2),
         boxShadow: votingOpen
@@ -187,7 +184,7 @@ class _VotingInfoCard extends StatelessWidget {
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontSize: 15,
               fontWeight: FontWeight.w700,
-              color: scheme.onSurface,
+              color: palette.onCard,
             ),
           ),
           const SizedBox(height: 6),
@@ -196,7 +193,7 @@ class _VotingInfoCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontSize: 12,
               height: 1.35,
-              color: scheme.onSurface.withValues(alpha: 0.65),
+              color: palette.muted,
             ),
           ),
         ],
@@ -227,21 +224,13 @@ class _RankingCard extends StatelessWidget {
   void _openEvent(BuildContext context) {
     context.pushNamed(
       '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
-      pathParameters: {
-        'eventId': entry.eventId,
-        'eventItemType': track.name,
-      },
+      pathParameters: {'eventId': entry.eventId, 'eventItemType': track.name},
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final accent = scheme.secondary;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = isDark
-        ? const Color(0xFF1E1E1E)
-        : scheme.surfaceContainerHighest;
+    final palette = context.palette;
 
     return Material(
       color: Colors.transparent,
@@ -250,18 +239,16 @@ class _RankingCard extends StatelessWidget {
         onTap: () => _openEvent(context),
         child: Ink(
           decoration: BoxDecoration(
-            color: cardColor,
+            color: palette.card,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: _isLeader
-                  ? accent
-                  : scheme.onSurface.withValues(alpha: isDark ? 0.12 : 0.08),
+              color: _isLeader ? palette.accent : palette.hairline,
               width: _isLeader ? 1.6 : 1,
             ),
             boxShadow: _isLeader
                 ? [
                     BoxShadow(
-                      color: accent.withValues(alpha: 0.28),
+                      color: palette.accent.withValues(alpha: 0.28),
                       blurRadius: 16,
                     ),
                   ]
@@ -275,7 +262,7 @@ class _RankingCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _RankBadge(place: place, accent: accent),
+                    _RankBadge(place: place),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -289,10 +276,8 @@ class _RankingCard extends StatelessWidget {
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600,
                                     color: _isLeader
-                                        ? accent
-                                        : scheme.onSurface.withValues(
-                                            alpha: 0.55,
-                                          ),
+                                        ? palette.accent
+                                        : palette.muted,
                                   ),
                             ),
                             const SizedBox(height: 4),
@@ -306,7 +291,7 @@ class _RankingCard extends StatelessWidget {
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
                                   height: 1.25,
-                                  color: scheme.onSurface,
+                                  color: palette.onCard,
                                 ),
                           ),
                           if (entry.speakerName.isNotEmpty) ...[
@@ -315,9 +300,7 @@ class _RankingCard extends StatelessWidget {
                               children: [
                                 _SpeakerAvatar(
                                   name: entry.speakerName,
-                                  seed: entry.eventId,
                                   highlighted: _isLeader,
-                                  accent: accent,
                                 ),
                                 const SizedBox(width: 8),
                                 Expanded(
@@ -325,14 +308,10 @@ class _RankingCard extends StatelessWidget {
                                     entry.speakerName,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall
+                                    style: Theme.of(context).textTheme.bodySmall
                                         ?.copyWith(
                                           fontSize: 12,
-                                          color: scheme.onSurface.withValues(
-                                            alpha: 0.65,
-                                          ),
+                                          color: palette.muted,
                                         ),
                                   ),
                                 ),
@@ -345,11 +324,7 @@ class _RankingCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Divider(
-                height: 1,
-                thickness: 1,
-                color: scheme.onSurface.withValues(alpha: isDark ? 0.12 : 0.08),
-              ),
+              Divider(height: 1, thickness: 1, color: palette.hairline),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
                 child: _Footer(
@@ -385,16 +360,12 @@ class _Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final palette = context.palette;
 
     return Row(
       children: [
         if (isLeader) ...[
-          const Icon(
-            Icons.star_rounded,
-            size: 16,
-            color: Color(0xFFFFC107),
-          ),
+          const Icon(Icons.star_rounded, size: 16, color: Color(0xFFFFC107)),
           const SizedBox(width: 6),
           Expanded(
             child: Text(
@@ -409,11 +380,11 @@ class _Footer extends StatelessWidget {
           if (votingOpen)
             switch (onVote) {
               final vote? => _VoteButton(
-                  liked: likedByMe,
-                  likes: likes,
-                  showCount: true,
-                  onPressed: vote,
-                ),
+                liked: likedByMe,
+                likes: likes,
+                showCount: true,
+                onPressed: vote,
+              ),
               null => const SizedBox.shrink(),
             },
         ] else ...[
@@ -422,18 +393,18 @@ class _Footer extends StatelessWidget {
               EventVoteRanking.voteCountLabel(likes),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 fontSize: 12,
-                color: scheme.onSurface.withValues(alpha: 0.6),
+                color: palette.muted,
               ),
             ),
           ),
           if (votingOpen)
             switch (onVote) {
               final vote? => _VoteButton(
-                  liked: likedByMe,
-                  likes: likes,
-                  showCount: false,
-                  onPressed: vote,
-                ),
+                liked: likedByMe,
+                likes: likes,
+                showCount: false,
+                onPressed: vote,
+              ),
               null => const SizedBox.shrink(),
             },
         ],
@@ -443,14 +414,13 @@ class _Footer extends StatelessWidget {
 }
 
 class _RankBadge extends StatelessWidget {
-  const _RankBadge({required this.place, required this.accent});
+  const _RankBadge({required this.place});
 
   final int place;
-  final Color accent;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final palette = context.palette;
     final isLeader = place == 1;
 
     if (isLeader) {
@@ -469,11 +439,11 @@ class _RankBadge extends StatelessWidget {
                 height: 36,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: accent,
+                  color: palette.accent,
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: accent.withValues(alpha: 0.45),
+                      color: palette.accent.withValues(alpha: 0.45),
                       blurRadius: 10,
                     ),
                   ],
@@ -482,7 +452,7 @@ class _RankBadge extends StatelessWidget {
                   '$place',
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w800,
-                    color: Colors.white,
+                    color: palette.onAccent,
                     fontSize: 15,
                   ),
                 ),
@@ -495,12 +465,7 @@ class _RankBadge extends StatelessWidget {
                 Icons.emoji_events_rounded,
                 size: 18,
                 color: Color(0xFFFFC107),
-                shadows: [
-                  Shadow(
-                    color: Color(0x80FFC107),
-                    blurRadius: 6,
-                  ),
-                ],
+                shadows: [Shadow(color: Color(0x80FFC107), blurRadius: 6)],
               ),
             ),
           ],
@@ -508,25 +473,20 @@ class _RankBadge extends StatelessWidget {
       );
     }
 
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: 34,
       height: 34,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isDark
-            ? const Color(0xFF2A2A2A)
-            : scheme.onSurface.withValues(alpha: 0.08),
-        border: Border.all(
-          color: scheme.onSurface.withValues(alpha: isDark ? 0.28 : 0.16),
-        ),
+        color: palette.panel,
+        border: Border.all(color: palette.hairline),
       ),
       child: Text(
         '$place',
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
           fontWeight: FontWeight.w700,
-          color: scheme.onSurface,
+          color: palette.onCard,
           fontSize: 14,
         ),
       ),
@@ -535,43 +495,25 @@ class _RankBadge extends StatelessWidget {
 }
 
 class _SpeakerAvatar extends StatelessWidget {
-  const _SpeakerAvatar({
-    required this.name,
-    required this.seed,
-    required this.highlighted,
-    required this.accent,
-  });
+  const _SpeakerAvatar({required this.name, required this.highlighted});
 
   final String name;
-  final String seed;
   final bool highlighted;
-  final Color accent;
-
-  static const _palette = <Color>[
-    Color(0xFF7C4DFF),
-    Color(0xFFE91E63),
-    Color(0xFFFF8F00),
-    Color(0xFF2979FF),
-    Color(0xFF00BFA5),
-    Color(0xFFD500F9),
-  ];
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     final initials = _initials(name);
-    final color = highlighted
-        ? accent
-        : _palette[seed.hashCode.abs() % _palette.length];
 
     return CircleAvatar(
       radius: 11,
-      backgroundColor: color,
+      backgroundColor: highlighted ? palette.accent : palette.chip,
       child: Text(
         initials,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.w800,
-          color: Colors.white,
+          color: highlighted ? palette.onAccent : palette.onChip,
           height: 1,
         ),
       ),
@@ -608,13 +550,12 @@ class _VoteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.secondary;
+    final palette = context.palette;
 
     if (liked) {
-      // Leader: "Voted • 142"; others: "Voted" (count on left)
       final label = showCount ? 'Voted • $likes' : 'Voted';
       return Material(
-        color: accent,
+        color: palette.accent,
         borderRadius: BorderRadius.circular(22),
         child: InkWell(
           onTap: onPressed,
@@ -624,18 +565,18 @@ class _VoteButton extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
+                Icon(
                   Icons.thumb_up_alt_rounded,
                   size: 14,
-                  color: Colors.white,
+                  color: palette.onAccent,
                 ),
                 const SizedBox(width: 6),
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
+                    color: palette.onAccent,
                   ),
                 ),
               ],
@@ -645,12 +586,9 @@ class _VoteButton extends StatelessWidget {
       );
     }
 
-    // Mockup unvoted: outlined pink "👍 Vote 👍"
     return Material(
       color: Colors.transparent,
-      shape: StadiumBorder(
-        side: BorderSide(color: accent, width: 1.4),
-      ),
+      shape: StadiumBorder(side: BorderSide(color: palette.accent, width: 1.4)),
       child: InkWell(
         onTap: onPressed,
         customBorder: const StadiumBorder(),
@@ -659,21 +597,18 @@ class _VoteButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.thumb_up_alt_rounded, size: 13, color: accent),
+              Icon(Icons.thumb_up_alt_rounded, size: 13, color: palette.accent),
               const SizedBox(width: 5),
               Text(
                 'Vote',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
-                  color: accent,
+                  color: palette.accent,
                 ),
               ),
               const SizedBox(width: 4),
-              const Text(
-                '👍',
-                style: TextStyle(fontSize: 12, height: 1),
-              ),
+              const Text('👍', style: TextStyle(fontSize: 12, height: 1)),
             ],
           ),
         ),

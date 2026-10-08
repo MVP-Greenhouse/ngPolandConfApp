@@ -74,8 +74,6 @@ import 'features/event/datasources/repositories/rate_event_repository.dart'
 import 'features/event/domains/repositories/rate_event_repository.dart'
     as _i563;
 import 'features/event/domains/usecases/get_event.dart' as _i231;
-import 'features/event/domains/usecases/get_rate_for_event.dart' as _i473;
-import 'features/event/domains/usecases/rate_event.dart' as _i589;
 import 'features/event/presentation/bloc/event_rating_bloc.dart' as _i730;
 import 'features/event/presentation/cubit/event_cubit.dart' as _i224;
 import 'features/event/presentation/cubit/event_vote_cubit.dart' as _i217;
@@ -84,14 +82,6 @@ import 'features/home/datasources/data/theme_mode_local_datasource.dart'
 import 'features/home/datasources/repositories/theme_mode_repository.dart'
     as _i877;
 import 'features/home/domains/repositories/theme_mode_repository.dart' as _i905;
-import 'features/home/domains/usecases/get_theme_mode.dart' as _i189;
-import 'features/home/domains/usecases/update_theme_mode.dart' as _i184;
-import 'features/schedule/datasources/repositories/schedule_repository.dart'
-    as _i732;
-import 'features/schedule/domains/repositories/schedule_repository.dart'
-    as _i458;
-import 'features/schedule/domains/usecases/get_all_events_for_conference.dart'
-    as _i797;
 import 'features/schedule/presentation/cubit/schedule_cubit.dart' as _i211;
 import 'features/schedule/presentation/cubit/schedule_top5_cubit.dart' as _i960;
 import 'features/schedule/presentation/cubit/schedule_voting_banner_cubit.dart'
@@ -119,7 +109,6 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i933.ConferencesCubit>(() => _i933.ConferencesCubit());
-    gh.singleton<_i399.ThemeModeCubit>(() => _i399.ThemeModeCubit());
     gh.singleton<_i883.Routing>(() => _i883.Routing());
     gh.lazySingleton<_i327.AppLinks>(() => registerModule.appLinks());
     gh.lazySingleton<_i59.FirebaseAuth>(() => registerModule.firebaseAuth());
@@ -168,6 +157,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i905.ThemeModeRepository>(
       () => _i877.ThemeModeImpl(gh<_i397.ThemeModeLocalDataSource>()),
     );
+    gh.singleton<_i399.ThemeModeCubit>(
+      () => _i399.ThemeModeCubit(gh<_i905.ThemeModeRepository>()),
+    );
     gh.singleton<_i793.UserSessionCubit>(
       () => _i793.UserSessionCubit(
         gh<_i834.EnsureUserProfile>(),
@@ -186,26 +178,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i631.SignInGoogleUseCase>(
       () => _i631.SignInGoogleUseCase(gh<_i38.AuthenticationRepository>()),
     );
-    gh.factory<_i473.GetRateForEvent>(
-      () => _i473.GetRateForEvent(gh<_i563.RateEventRepository>()),
-    );
-    gh.factory<_i589.RateEvent>(
-      () => _i589.RateEvent(gh<_i563.RateEventRepository>()),
-    );
     gh.lazySingleton<_i105.EditionRemote>(
       () => _i5.NgPolandApi(gh<_i361.Dio>()),
-    );
-    gh.factory<_i189.GetThemeMode>(
-      () => _i189.GetThemeMode(gh<_i905.ThemeModeRepository>()),
-    );
-    gh.factory<_i184.UpdateThemeMode>(
-      () => _i184.UpdateThemeMode(gh<_i905.ThemeModeRepository>()),
     );
     gh.factory<_i730.EventRatingBloc>(
       () => _i730.EventRatingBloc(
         gh<_i933.ConferencesCubit>(),
-        gh<_i473.GetRateForEvent>(),
-        gh<_i589.RateEvent>(),
+        gh<_i563.RateEventRepository>(),
         gh<String>(),
         gh<String>(),
       ),
@@ -250,50 +229,38 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i974.Logger>(),
       ),
     );
-    gh.singleton<_i458.ScheduleRepository>(
-      () => _i732.ScheduleRepositoryImpl(gh<_i417.EditionRepository>()),
-    );
     gh.factory<_i231.GetEvent>(
-      () => _i231.GetEvent(gh<_i458.ScheduleRepository>()),
-    );
-    gh.factory<_i797.GetAllEventsForConference>(
-      () => _i797.GetAllEventsForConference(gh<_i458.ScheduleRepository>()),
+      () => _i231.GetEvent(gh<_i417.EditionRepository>()),
     );
     gh.singleton<_i1023.EditionCubit>(
       () => _i1023.EditionCubit(gh<_i417.EditionRepository>()),
     );
     gh.factory<_i211.ScheduleCubit>(
-      () => _i211.ScheduleCubit(
-        conferencesCubit: gh<_i933.ConferencesCubit>(),
-        getAllEventsForConference: gh<_i797.GetAllEventsForConference>(),
-      ),
+      () => _i211.ScheduleCubit(gh<_i417.EditionRepository>()),
     );
     gh.factory<_i960.ScheduleTop5Cubit>(
       () => _i960.ScheduleTop5Cubit(
         gh<_i419.EngagementConfigRepository>(),
         gh<_i670.EventVoteRepository>(),
+        gh<_i417.EditionRepository>(),
         gh<_i933.ConferencesCubit>(),
         gh<_i793.UserSessionCubit>(),
-        gh<_i797.GetAllEventsForConference>(),
       ),
     );
     gh.factory<_i224.EventCubit>(
-      () => _i224.EventCubit(
-        conferencesCubit: gh<_i933.ConferencesCubit>(),
-        getEvent: gh<_i231.GetEvent>(),
-      ),
+      () => _i224.EventCubit(gh<_i231.GetEvent>()),
     );
     gh.factory<_i152.AdminCubit>(
       () => _i152.AdminCubit(
         gh<_i419.EngagementConfigRepository>(),
         gh<_i670.EventVoteRepository>(),
-        gh<_i797.GetAllEventsForConference>(),
+        gh<_i417.EditionRepository>(),
         gh<_i793.UserSessionCubit>(),
         gh<_i933.ConferencesCubit>(),
       ),
     );
     gh.factory<_i181.SpeakersCubit>(
-      () => _i181.SpeakersCubit(gh<_i1023.EditionCubit>()),
+      () => _i181.SpeakersCubit(gh<_i417.EditionRepository>()),
     );
     return this;
   }

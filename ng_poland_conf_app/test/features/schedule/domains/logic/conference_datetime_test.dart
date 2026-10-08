@@ -102,4 +102,59 @@ void main() {
       expect(next, DateTime.utc(2026, 11, 19, 9));
     });
   });
+
+  test('labels the Warsaw offset for the venue instant', () {
+    expect(warsawZoneLabel(DateTime.utc(2026, 11, 19, 8)), 'Warsaw (UTC+1)');
+    expect(warsawZoneLabel(DateTime.utc(2026, 7, 1, 10)), 'Warsaw (UTC+2)');
+  });
+
+  test('formats a slot length', () {
+    expect(
+      scheduleDurationLabel(
+        DateTime.utc(2026, 11, 19, 8),
+        DateTime.utc(2026, 11, 19, 8, 20),
+      ),
+      '20 mins',
+    );
+    expect(
+      scheduleDurationLabel(
+        DateTime.utc(2026, 11, 19, 8),
+        DateTime.utc(2026, 11, 19, 9),
+      ),
+      '1 hr',
+    );
+  });
+
+  test('marks the day upcoming, ongoing, and ended', () {
+    final events = [
+      (
+        start: DateTime.utc(2026, 11, 19, 8),
+        end: DateTime.utc(2026, 11, 19, 9),
+      ),
+    ];
+    expect(
+      scheduleDayPhase(
+        events: events,
+        now: DateTime.utc(2026, 11, 19, 7),
+        inSlot: false,
+      ),
+      ScheduleDayPhase.upcoming,
+    );
+    expect(
+      scheduleDayPhase(
+        events: events,
+        now: DateTime.utc(2026, 11, 19, 8, 30),
+        inSlot: true,
+      ),
+      ScheduleDayPhase.ongoing,
+    );
+    expect(
+      scheduleDayPhase(
+        events: events,
+        now: DateTime.utc(2026, 11, 19, 12),
+        inSlot: false,
+      ),
+      ScheduleDayPhase.ended,
+    );
+  });
 }

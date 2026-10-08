@@ -50,13 +50,22 @@ Future<void> main() async {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+    getIt.get<ConferencesCubit>().getConferences();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final conferencesCubit = getIt.get<ConferencesCubit>();
-    conferencesCubit.getConferences();
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt.get<ConferencesCubit>()),

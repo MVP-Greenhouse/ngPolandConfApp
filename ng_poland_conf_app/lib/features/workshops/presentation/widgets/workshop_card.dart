@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/core/utils/hex_color.dart';
 import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/entities/agenda.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/entities/edition.dart';
 import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
-import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
 import 'package:ng_poland_conf_app/widgets/fixed_size_cross_origin_image.dart';
@@ -20,8 +21,8 @@ class WorkshopCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final accent = _color(workshop.color) ?? palette.accent;
-    final edition = getIt.get<EditionCubit>().current;
+    final accent = colorFromHex(workshop.color) ?? palette.accent;
+    final edition = context.read<EditionCubit>().current;
     final year = edition?.year ?? 0;
     final price = [
       if (workshop.pricePln != null) '${workshop.pricePln} PLN',
@@ -480,12 +481,4 @@ class _InfoChip extends StatelessWidget {
       ),
     );
   }
-}
-
-Color? _color(String hex) {
-  final value = hex.replaceFirst('#', '');
-  if (value.length != 6) return null;
-  final parsed = int.tryParse(value, radix: 16);
-  if (parsed == null) return null;
-  return Color(0xFF000000 | parsed);
 }

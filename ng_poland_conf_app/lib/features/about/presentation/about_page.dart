@@ -15,20 +15,29 @@ const _violet = Color(0xFF7B5CFF);
 const _repoUrl = 'https://github.com/MVP-Greenhouse/ngPolandConfApp';
 
 const _authors = [
-  Author(
-    name: 'Daniel Michalak',
-    image: 'danielmichalak',
-    linkedinUrl: 'https://www.linkedin.com/in/daniel-michalak-0219981b2/',
+  (
+    author: Author(
+      name: 'Daniel Michalak',
+      image: 'danielmichalak',
+      linkedinUrl: 'https://www.linkedin.com/in/daniel-michalak-0219981b2/',
+    ),
+    icon: Icons.code,
   ),
-  Author(
-    name: 'Sebastian Denis',
-    image: 'sebastiandenis',
-    linkedinUrl: 'https://www.linkedin.com/in/sebastian-denis-0a1782153/',
+  (
+    author: Author(
+      name: 'Sebastian Denis',
+      image: 'sebastiandenis',
+      linkedinUrl: 'https://www.linkedin.com/in/sebastian-denis-0a1782153/',
+    ),
+    icon: Icons.code,
   ),
-  Author(
-    name: 'Dariusz Kalbarczyk',
-    image: 'dariuszkalbarczyk',
-    linkedinUrl: 'https://www.linkedin.com/in/ngkalbarczyk/',
+  (
+    author: Author(
+      name: 'Dariusz Kalbarczyk',
+      image: 'dariuszkalbarczyk',
+      linkedinUrl: 'https://www.linkedin.com/in/ngkalbarczyk/',
+    ),
+    icon: Icons.event,
   ),
 ];
 
@@ -267,9 +276,9 @@ class _AuthorList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        for (final (index, author) in _authors.indexed) ...[
+        for (final (index, entry) in _authors.indexed) ...[
           if (index > 0) const SizedBox(height: 10),
-          _AuthorCard(author: author),
+          _AuthorCard(author: entry.author, icon: entry.icon),
         ],
       ],
     );
@@ -277,16 +286,14 @@ class _AuthorList extends StatelessWidget {
 }
 
 class _AuthorCard extends StatelessWidget {
-  const _AuthorCard({required this.author});
+  const _AuthorCard({required this.author, required this.icon});
 
   final Author author;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final icon = author.image == 'dariuszkalbarczyk'
-        ? Icons.event
-        : Icons.code;
     return Material(
       color: palette.card,
       shape: RoundedRectangleBorder(

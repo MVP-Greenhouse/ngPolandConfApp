@@ -5,6 +5,7 @@ import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 
 class ScheduleEventsList extends StatefulWidget {
   final List<EventItem> listEvents;
@@ -23,8 +24,9 @@ class ScheduleEventsList extends StatefulWidget {
 class _ScheduleEventsListState extends State<ScheduleEventsList>
     with WidgetsBindingObserver {
   Timer? _timer;
-  final ValueNotifier<String?> _activeEventIdNotifier =
-      ValueNotifier<String?>(null);
+  final ValueNotifier<String?> _activeEventIdNotifier = ValueNotifier<String?>(
+    null,
+  );
 
   @override
   void initState() {
@@ -42,9 +44,9 @@ class _ScheduleEventsListState extends State<ScheduleEventsList>
   }
 
   List<({String id, DateTime? start, DateTime? end})> get _slots => [
-        for (final event in widget.listEvents)
-          (id: event.id, start: event.startDate, end: event.endDate),
-      ];
+    for (final event in widget.listEvents)
+      (id: event.id, start: event.startDate, end: event.endDate),
+  ];
 
   void _checkActiveEvent() {
     _timer?.cancel();
@@ -89,45 +91,91 @@ class _ScheduleEventsListState extends State<ScheduleEventsList>
     super.dispose();
   }
 
-  bool _showSessionLabel(int index) {
-    final label = widget.listEvents[index].sessionLabel;
-    if (label.isEmpty) return false;
-    if (index == 0) return true;
-    return widget.listEvents[index - 1].sessionLabel != label;
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return ColoredBox(
+      color: palette.screen,
+      child: ValueListenableBuilder<String?>(
+        valueListenable: _activeEventIdNotifier,
+        builder: (context, activeEvent, _) {
+          final phase = scheduleDayPhase(
+            events: [
+              for (final slot in _slots) (start: slot.start, end: slot.end),
+            ],
+            now: DateTime.now().toUtc(),
+            inSlot: activeEvent != null,
+          );
+          return ListView.builder(
+            padding: const EdgeInsets.only(top: 8, bottom: 24),
+            itemCount: widget.listEvents.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return _ScheduleStatusBar(
+                  phase: phase,
+                  zoneLabel: warsawZoneLabel(DateTime.now()),
+                );
+              }
+              final event = widget.listEvents[index - 1];
+              return ScheduleEvent(
+                eventItem: event,
+                eventItemType: widget.eventItemType,
+                isActiveEvent: activeEvent == event.id,
+              );
+            },
+          );
+        },
+      ),
+    );
   }
+}
+
+class _ScheduleStatusBar extends StatelessWidget {
+  const _ScheduleStatusBar({required this.phase, required this.zoneLabel});
+
+  final ScheduleDayPhase phase;
+  final String zoneLabel;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 24.0),
-      itemCount: widget.listEvents.length,
-      itemBuilder: (context, index) {
-        return ValueListenableBuilder(
-          valueListenable: _activeEventIdNotifier,
-          builder: (context, activeEvent, _) {
-            final event = widget.listEvents[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (_showSessionLabel(index))
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                    child: Text(
-                      event.sessionLabel.toUpperCase(),
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
-                  ),
-                ScheduleEvent(
-                  eventItem: event,
-                  eventItemType: widget.eventItemType,
-                  iconColor: Theme.of(context).colorScheme.tertiary,
-                  isActiveEvent: activeEvent == event.id,
-                ),
-              ],
-            );
-          },
-        );
-      },
+    final palette = context.palette;
+    final ongoing = phase == ScheduleDayPhase.ongoing;
+    final label = switch (phase) {
+      ScheduleDayPhase.upcoming => 'CONFERENCE UPCOMING',
+      ScheduleDayPhase.ongoing => 'CONFERENCE ONGOING',
+      ScheduleDayPhase.ended => 'CONFERENCE ENDED',
+    };
+    final color = ongoing ? palette.accent : palette.muted;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 14),
+      child: Row(
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            child: const SizedBox.square(dimension: 8),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.1,
+            ),
+          ),
+          const Spacer(),
+          Text(
+            zoneLabel,
+            style: TextStyle(
+              color: palette.muted,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

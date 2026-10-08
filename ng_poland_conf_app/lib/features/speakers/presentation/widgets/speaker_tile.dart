@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/core/utils/hex_color.dart';
 import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
 import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
-import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
 import 'package:ng_poland_conf_app/widgets/fixed_size_cross_origin_image.dart';
@@ -16,14 +17,14 @@ class SpeakerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profile = getIt.get<EditionCubit>().current?.speakerBySlug(
+    final profile = context.read<EditionCubit>().current?.speakerBySlug(
       speaker.id ?? '',
       conference: speaker.conferenceKey,
     );
     final palette = context.palette;
     final position = profile?.position ?? '';
     final company = profile?.company ?? '';
-    final accent = _color(profile?.color ?? '') ?? palette.accent;
+    final accent = colorFromHex(profile?.color ?? '') ?? palette.accent;
     final sessions = _sessions(speaker.talkTitle);
     final role = speaker.role ?? '';
 
@@ -239,12 +240,4 @@ String _sessionKind(String title) {
   if (lower.contains('q&a') || lower.contains('q & a')) return 'Q&A';
   if (lower.startsWith('keynote')) return 'KEYNOTE';
   return 'TALK';
-}
-
-Color? _color(String hex) {
-  final value = hex.replaceFirst('#', '');
-  if (value.length != 6) return null;
-  final parsed = int.tryParse(value, radix: 16);
-  if (parsed == null) return null;
-  return Color(0xFF000000 | parsed);
 }

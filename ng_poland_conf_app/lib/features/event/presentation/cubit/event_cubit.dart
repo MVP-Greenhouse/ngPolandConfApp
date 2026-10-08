@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
 import 'package:ng_poland_conf_app/features/event/domains/usecases/get_event.dart';
-import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
 
 part 'event_state.dart';
@@ -11,13 +9,9 @@ part 'event_cubit.freezed.dart';
 
 @injectable
 class EventCubit extends Cubit<EventState> {
-  final ConferencesCubit conferencesCubit;
-  final GetEvent getEvent;
+  EventCubit(this.getEvent) : super(const EventState.initial());
 
-  EventCubit({
-    required this.conferencesCubit,
-    required this.getEvent,
-  }) : super(const EventState.initial());
+  final GetEvent getEvent;
 
   Future<void> getData({
     required String eventId,
@@ -25,25 +19,10 @@ class EventCubit extends Cubit<EventState> {
   }) async {
     try {
       emit(const EventState.loading());
-      Conference? conference = conferencesCubit.selectedConference;
-      if (conference == null) {
-        await conferencesCubit.getConferences();
-        conference = conferencesCubit.selectedConference;
-      }
-      if (conference == null) return emit(const EventState.error('Something went wrong'));
-      final EventItem eventItem = await getEvent(
-        Params(
-          eventId: eventId,
-          confId: conference.confId,
-          eventItemType: eventItemType,
-          limit: 1,
-        ),
+      final eventItem = await getEvent(
+        Params(eventId: eventId, eventItemType: eventItemType),
       );
-      emit(
-        EventState.loaded(
-          eventItem: eventItem,
-        ),
-      );
+      emit(EventState.loaded(eventItem: eventItem));
     } catch (_) {
       emit(const EventState.error('Something went wrong'));
     }

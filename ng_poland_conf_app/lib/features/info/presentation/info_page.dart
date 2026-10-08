@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ng_poland_conf_app/core/utils/hex_color.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/entities/agenda.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/entities/edition.dart';
 import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
@@ -341,7 +342,7 @@ class _DayRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final accent = _color(day.color) ?? palette.accent;
+    final accent = colorFromHex(day.color) ?? palette.accent;
     final workshop = day.kind == AgendaDayKind.workshops;
     final comingSoon = !workshop && !day.published;
 
@@ -492,12 +493,4 @@ void _open(String url) {
   final uri = Uri.tryParse(url);
   if (uri == null) return;
   launchUrl(uri, mode: LaunchMode.externalApplication);
-}
-
-Color? _color(String hex) {
-  final value = hex.replaceFirst('#', '');
-  if (value.length != 6) return null;
-  final parsed = int.tryParse(value, radix: 16);
-  if (parsed == null) return null;
-  return Color(0xFF000000 | parsed);
 }

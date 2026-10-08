@@ -15,11 +15,10 @@ import 'package:ng_poland_conf_app/features/engagement/domains/entities/engageme
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/event_vote_counts.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
+import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/repositories/edition_store.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/repositories/schedule_repository.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/usecases/get_all_events_for_conference.dart';
 import 'package:rxdart/rxdart.dart';
 
 void main() {
@@ -30,9 +29,7 @@ void main() {
     top5Enabled: true,
   );
   final config = EngagementConfig(
-    tracks: {
-      for (final type in EventItemType.values) type: trackConfig,
-    },
+    tracks: {for (final type in EventItemType.values) type: trackConfig},
   );
 
   late _TestConferencesCubit conferences;
@@ -43,18 +40,14 @@ void main() {
   setUp(() async {
     conferences = _TestConferencesCubit()
       ..load(
-        const Conference(
-          confId: '2026',
-          confName: 'NG Poland',
-          listItems: [],
-        ),
+        const Conference(confId: '2026', confName: 'NG Poland', listItems: []),
       );
     session = _TestUserSessionCubit()..signInAdmin();
     configRepo = _FakeConfigRepository(config);
     cubit = AdminCubit(
       configRepo,
       _FakeVoteRepository(),
-      GetAllEventsForConference(_EmptyScheduleRepository()),
+      EditionRepository(_EmptyEditionRemote(), _EmptyEditionCache()),
       session,
       conferences,
     );
@@ -163,13 +156,21 @@ class _FakeVoteRepository implements EventVoteRepository {
     required String confId,
     required String eventId,
     required String uid,
-  }) =>
-      Stream.value(false);
+  }) => Stream.value(false);
 }
 
-class _EmptyScheduleRepository implements ScheduleRepository {
+class _EmptyEditionRemote implements EditionRemote {
   @override
-  Future<List<EventItem>> getAllEvents(Params params) async => const [];
+  Future<EditionFetch> get(String path, {String? etag}) async =>
+      const EditionFetch.notModified();
+}
+
+class _EmptyEditionCache implements EditionCache {
+  @override
+  Future<EditionCacheEntry?> read(String resource) async => null;
+
+  @override
+  Future<void> write(String resource, EditionCacheEntry entry) async {}
 }
 
 class _NoopUserRepository implements UserRepository {

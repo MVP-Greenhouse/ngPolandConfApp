@@ -7,6 +7,7 @@ import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_section_card.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_voting_section.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
+import 'package:ng_poland_conf_app/widgets/custom_back_button.dart';
 import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
@@ -21,7 +22,9 @@ class AdminVotingPage extends StatelessWidget {
       builder: (context, state) {
         return CustomScaffold(
           appBar: AppBar(
-            leading: BackButton(onPressed: () => context.go(AdminPage.path)),
+            leading: CustomBackButton(
+              onPressed: () => context.go(AdminPage.path),
+            ),
             title: Text(
               'Voting',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -93,9 +96,9 @@ class AdminVotingPage extends StatelessWidget {
               'Edytujesz ${state.selectedTrack.label} / ${state.selectedConfId}'
               '${state.selectedConfId == state.latestConfId ? ' (najnowsza)' : ''}.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(
-                  alpha: 0.8,
-                ),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.8),
               ),
             ),
           ),

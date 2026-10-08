@@ -58,12 +58,17 @@ List<EventItem> eventItemsForTrack({
   if (day == null || !day.published) return const [];
   return [
     for (final item in day.conferenceItems)
-      eventItemFromAgenda(
-        item: item,
-        confId: edition.confId,
-        track: track,
-      ),
+      eventItemFromAgenda(item: item, confId: edition.confId, track: track),
   ];
+}
+
+List<EventItem> eventItemsForConferenceTrack({
+  required Edition? edition,
+  required String confId,
+  required EventItemType track,
+}) {
+  if (edition == null || edition.confId != confId) return const [];
+  return eventItemsForTrack(edition: edition, track: track);
 }
 
 EventItem eventItemFromAgenda({
@@ -71,7 +76,9 @@ EventItem eventItemFromAgenda({
   required String confId,
   required EventItemType track,
 }) {
-  final speakers = [for (final speaker in item.speakers) speakerFromSummary(speaker)];
+  final speakers = [
+    for (final speaker in item.speakers) speakerFromSummary(speaker),
+  ];
   return EventItem(
     id: item.eventId,
     title: item.title,
@@ -80,7 +87,10 @@ EventItem eventItemFromAgenda({
     category: item.type,
     shortDescription: item.sessionLabel.isEmpty ? null : item.sessionLabel,
     description: item.description.isEmpty ? null : item.description,
-    startDate: ConferenceDateTime.combineWarsawDateAndHm(item.dayDate, item.start),
+    startDate: ConferenceDateTime.combineWarsawDateAndHm(
+      item.dayDate,
+      item.start,
+    ),
     endDate: ConferenceDateTime.combineWarsawDateAndHm(item.dayDate, item.end),
     speaker: speakers.isEmpty ? null : speakers.first,
     speakers: speakers,

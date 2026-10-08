@@ -9,8 +9,9 @@ import 'package:ng_poland_conf_app/features/engagement/domains/entities/engageme
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
+import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/usecases/get_all_events_for_conference.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'admin_state.dart';
@@ -20,7 +21,7 @@ class AdminCubit extends Cubit<AdminState> {
   AdminCubit(
     this._configRepository,
     this._eventVoteRepository,
-    this._getAllEvents,
+    this._editions,
     this._userSessionCubit,
     this._conferencesCubit,
   ) : super(_seedState(_userSessionCubit, _conferencesCubit)) {
@@ -31,7 +32,7 @@ class AdminCubit extends Cubit<AdminState> {
 
   final EngagementConfigRepository _configRepository;
   final EventVoteRepository _eventVoteRepository;
-  final GetAllEventsForConference _getAllEvents;
+  final EditionRepository _editions;
   final UserSessionCubit _userSessionCubit;
   final ConferencesCubit _conferencesCubit;
 
@@ -167,12 +168,11 @@ class AdminCubit extends Cubit<AdminState> {
   }) async {
     try {
       final counts = await _eventVoteRepository.loadVoteCounts(confId);
-      final events = await _getAllEvents.call(
-        Params(
-          eventItemType: track.name,
-          confId: confId,
-          limit: 1000,
-        ),
+      final edition = await _editions.load();
+      final events = eventItemsForConferenceTrack(
+        edition: edition,
+        confId: confId,
+        track: track,
       );
       final ranking = [
         for (final event in events)
@@ -244,8 +244,7 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   static List<String> _sortedConfIds(Iterable<String> confIds) {
-    final unique = confIds.toSet().toList()
-      ..sort((a, b) => b.compareTo(a));
+    final unique = confIds.toSet().toList()..sort((a, b) => b.compareTo(a));
     return unique;
   }
 

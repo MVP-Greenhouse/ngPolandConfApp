@@ -1,16 +1,18 @@
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/event/datasources/data/local/rate_event_local_datasource.dart';
 import 'package:ng_poland_conf_app/features/event/datasources/data/remote/rate_event_remote_datasource.dart';
+import 'package:ng_poland_conf_app/features/event/domains/entities/rate_event_basic_params.dart';
 import 'package:ng_poland_conf_app/features/event/domains/repositories/rate_event_repository.dart';
-import 'package:ng_poland_conf_app/features/event/domains/usecases/get_rate_for_event.dart';
-import 'package:ng_poland_conf_app/features/event/domains/usecases/rate_event.dart';
 
 @Singleton(as: RateEventRepository)
 class RateEventRepositoryImpl implements RateEventRepository {
   final RateEventRemoteDataSource rateEventRemoteDataSource;
   final RateEventLocalDataSource rateEventLocalDataSource;
 
-  RateEventRepositoryImpl(this.rateEventRemoteDataSource, this.rateEventLocalDataSource);
+  RateEventRepositoryImpl(
+    this.rateEventRemoteDataSource,
+    this.rateEventLocalDataSource,
+  );
 
   @override
   Future<int?> rateEvent(RateEventParams params) async {

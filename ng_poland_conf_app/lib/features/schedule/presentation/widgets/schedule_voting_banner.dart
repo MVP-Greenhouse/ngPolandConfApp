@@ -6,6 +6,7 @@ import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule
 import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_top5_page.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 
 class ScheduleVotingBanner extends StatelessWidget {
   const ScheduleVotingBanner({
@@ -21,15 +22,12 @@ class ScheduleVotingBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final accent = scheme.secondary;
+    final palette = context.palette;
     const closedAccent = Color(0xFFFFC107);
-    final highlight = votingOpen ? accent : closedAccent;
+    final highlight = votingOpen ? palette.accent : closedAccent;
     final canOpenTop5 = top5Enabled;
 
-    final title = votingOpen
-        ? 'LIVE VOTING IS OPEN!'
-        : 'VOTING CLOSED';
+    final title = votingOpen ? 'LIVE VOTING IS OPEN!' : 'VOTING CLOSED';
     final String subtitle;
     if (!votingOpen) {
       subtitle = 'See the official Top 5 ranking';
@@ -56,16 +54,15 @@ class ScheduleVotingBanner extends StatelessWidget {
           child: Ink(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(14),
-              color: scheme.surface.withValues(alpha: 0.35),
+              color: palette.card,
               border: Border.all(
-                color: highlight.withValues(alpha: 0.75),
+                color: highlight.withValues(alpha: votingOpen ? 0.55 : 0.45),
                 width: 1.4,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: highlight.withValues(alpha: 0.22),
+                  color: highlight.withValues(alpha: 0.16),
                   blurRadius: 16,
-                  spreadRadius: 0,
                 ),
               ],
             ),
@@ -108,20 +105,13 @@ class ScheduleVotingBanner extends StatelessWidget {
                         Text(
                           subtitle,
                           style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                fontSize: 12,
-                                color: scheme.onSurface.withValues(alpha: 0.72),
-                              ),
+                              ?.copyWith(fontSize: 12, color: palette.muted),
                         ),
                       ],
                     ),
                   ),
                   if (canOpenTop5)
-                    Icon(
-                      Icons.arrow_forward,
-                      size: 20,
-                      color: scheme.onSurface.withValues(alpha: 0.85),
-                    ),
+                    Icon(Icons.arrow_forward, size: 20, color: palette.muted),
                 ],
               ),
             ),
@@ -152,8 +142,7 @@ class _ScheduleVotingBannerHostState extends State<ScheduleVotingBannerHost> {
 
   @override
   void initState() {
-    _cubit = getIt.get<ScheduleVotingBannerCubit>()
-      ..load(track: widget.track);
+    _cubit = getIt.get<ScheduleVotingBannerCubit>()..load(track: widget.track);
     super.initState();
   }
 
@@ -176,18 +165,21 @@ class _ScheduleVotingBannerHostState extends State<ScheduleVotingBannerHost> {
     return BlocBuilder<ScheduleVotingBannerCubit, ScheduleVotingBannerState>(
       bloc: _cubit,
       builder: (context, state) {
-        return Column(
-          children: [
-            state.maybeWhen(
-              visible: (votingOpen, top5Enabled) => ScheduleVotingBanner(
-                track: widget.track,
-                votingOpen: votingOpen,
-                top5Enabled: top5Enabled,
+        return ColoredBox(
+          color: context.palette.screen,
+          child: Column(
+            children: [
+              state.maybeWhen(
+                visible: (votingOpen, top5Enabled) => ScheduleVotingBanner(
+                  track: widget.track,
+                  votingOpen: votingOpen,
+                  top5Enabled: top5Enabled,
+                ),
+                orElse: () => const SizedBox.shrink(),
               ),
-              orElse: () => const SizedBox.shrink(),
-            ),
-            Expanded(child: widget.child),
-          ],
+              Expanded(child: widget.child),
+            ],
+          ),
         );
       },
     );

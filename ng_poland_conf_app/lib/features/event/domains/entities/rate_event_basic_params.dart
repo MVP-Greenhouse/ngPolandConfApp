@@ -11,3 +11,22 @@ abstract class RateEventBasicParams {
     required this.eventItemType,
   });
 }
+
+class GetRateForEventParams extends RateEventBasicParams {
+  GetRateForEventParams({
+    required super.confId,
+    required super.eventId,
+    required super.eventItemType,
+  });
+}
+
+class RateEventParams extends RateEventBasicParams {
+  final int rate;
+
+  RateEventParams({
+    required super.confId,
+    required super.eventId,
+    required super.eventItemType,
+    required this.rate,
+  });
+}

@@ -1,37 +1,30 @@
 import 'package:injectable/injectable.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
+import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/repositories/schedule_repository.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/usecases/get_all_events_for_conference.dart' as schedule;
 
 @injectable
 class GetEvent implements UseCase<EventItem, Params> {
-  final ScheduleRepository scheduleRepository;
+  GetEvent(this._editions);
 
-  GetEvent(this.scheduleRepository);
+  final EditionRepository _editions;
 
   @override
   Future<EventItem> call(Params params) async {
-    final List<EventItem> events = await scheduleRepository.getAllEvents(
-      schedule.Params(
-        confId: params.confId,
-        eventItemType: params.eventItemType,
-        limit: params.limit,
-      ),
-    );
-    return events.firstWhere(
-      (event) => event.id == params.eventId,
-    );
+    final edition = await _editions.load();
+    final track = EventItemType.values.asNameMap()[params.eventItemType];
+    final events = edition == null || track == null
+        ? const <EventItem>[]
+        : eventItemsForTrack(edition: edition, track: track);
+    return events.firstWhere((event) => event.id == params.eventId);
   }
 }
 
-class Params extends schedule.Params {
+class Params {
   final String eventId;
+  final String eventItemType;
 
-  Params({
-    required this.eventId,
-    required super.confId,
-    required super.eventItemType,
-    required super.limit,
-  });
+  Params({required this.eventId, required this.eventItemType});
 }

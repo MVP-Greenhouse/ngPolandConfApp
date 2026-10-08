@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/core/utils/hex_color.dart';
 import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/entities/edition.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/entities/speaker_profile.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
 import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
@@ -10,6 +13,7 @@ import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/widgets/custom_back_button.dart';
 import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
 import 'package:ng_poland_conf_app/widgets/fixed_size_cross_origin_image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -72,10 +76,7 @@ class _SpeakerDetailsState extends State<SpeakerDetails> {
             color: Theme.of(context).colorScheme.inversePrimary,
           ),
         ),
-        leading: IconButton(
-          onPressed: () => GoRouter.of(context).pop(),
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
+        leading: const CustomBackButton(),
       ),
       body: StreamBuilder<EditionState>(
         stream: _editionCubit.stream,
@@ -125,7 +126,7 @@ class _SpeakerBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final accent = _color(profile.color) ?? palette.accent;
+    final accent = colorFromHex(profile.color) ?? palette.accent;
     final workshops = uniqueSpeakerWorkshops(
       profile.workshops,
       conference: conference.isNotEmpty ? conference : profile.conference,
@@ -334,7 +335,7 @@ class _SpeakerSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final edition = getIt.get<EditionCubit>().current;
+    final edition = context.read<EditionCubit>().current;
     return LayoutBuilder(
       builder: (context, constraints) {
         return SingleChildScrollView(
@@ -497,7 +498,8 @@ class _WorkshopTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final date = _workshopDateLabel(workshop);
+    final edition = context.read<EditionCubit>().current;
+    final date = _workshopDateLabel(workshop, edition);
     return Material(
       color: palette.card,
       shape: RoundedRectangleBorder(
@@ -506,7 +508,7 @@ class _WorkshopTile extends StatelessWidget {
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => _openWorkshop(context, workshop),
+        onTap: () => _openWorkshop(context, workshop, edition),
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -685,6 +687,8 @@ class _AgendaTile extends StatelessWidget {
             item.title,
             style: TextStyle(
               color: palette.onCard,
+              fontSize: 13,
+              height: 1.3,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -754,8 +758,7 @@ class _Pill extends StatelessWidget {
   }
 }
 
-String? _workshopDayKey(SpeakerWorkshopRef workshop) {
-  final edition = getIt.get<EditionCubit>().current;
+String? _workshopDayKey(SpeakerWorkshopRef workshop, Edition? edition) {
   if (edition == null) return null;
   for (final day in edition.days) {
     for (final item in day.workshopItems) {
@@ -765,8 +768,12 @@ String? _workshopDayKey(SpeakerWorkshopRef workshop) {
   return null;
 }
 
-void _openWorkshop(BuildContext context, SpeakerWorkshopRef workshop) {
-  final dayKey = _workshopDayKey(workshop);
+void _openWorkshop(
+  BuildContext context,
+  SpeakerWorkshopRef workshop,
+  Edition? edition,
+) {
+  final dayKey = _workshopDayKey(workshop, edition);
   context.go(
     Uri(
       path: Pages.workshops.path,
@@ -778,10 +785,9 @@ void _openWorkshop(BuildContext context, SpeakerWorkshopRef workshop) {
   );
 }
 
-String? _workshopDateLabel(SpeakerWorkshopRef workshop) {
+String? _workshopDateLabel(SpeakerWorkshopRef workshop, Edition? edition) {
   final own = _dateLabel(workshop.date);
   if (own != null) return own;
-  final edition = getIt.get<EditionCubit>().current;
   if (edition == null) return null;
   for (final day in edition.days) {
     if (day.dateLabel.isEmpty) continue;
@@ -831,11 +837,3 @@ FaIconData _socialIcon(String network) => switch (network) {
   'medium' => FontAwesomeIcons.medium,
   _ => FontAwesomeIcons.globe,
 };
-
-Color? _color(String hex) {
-  final value = hex.replaceFirst('#', '');
-  if (value.length != 6) return null;
-  final parsed = int.tryParse(value, radix: 16);
-  if (parsed == null) return null;
-  return Color(0xFF000000 | parsed);
-}

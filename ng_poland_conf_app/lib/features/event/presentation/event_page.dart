@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/core/constants/event_types.dart';
+import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_cubit.dart';
-import 'package:ng_poland_conf_app/features/event/presentation/widgets/event_rating.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/widgets/event_vote_button.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
+import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
+import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
+import 'package:ng_poland_conf_app/routing/routing.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/widgets/custom_back_button.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
+import 'package:ng_poland_conf_app/widgets/simple_cross_origin_image.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:rive/rive.dart';
-import '../../../widgets/cross_origin_image.dart';
+
 import '../../settings/presentation/connection_status.dart';
 
 class EventPage extends StatefulWidget {
@@ -34,26 +38,23 @@ class EventPage extends StatefulWidget {
   State<EventPage> createState() => _EventPageState();
 }
 
-class _EventPageState extends State<EventPage> with ConnectivityMixin {
+class _EventPageState extends State<EventPage> {
   late final EventCubit _eventCubit;
-  // late final File? ratingFile;
 
   @override
   void initState() {
-    rootBundle.load(EventRating.ratingFilePath).then((data) async {
-      //   ratingFile = rive.RiveFile.import(data); // TODO: fix Rive 0.14 migration
-    });
+    super.initState();
     _eventCubit = getIt.get<EventCubit>()
       ..getData(eventId: widget.eventId, eventItemType: widget.eventItemType);
-
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return CustomScaffold(
       showDrawer: false,
       appBar: AppBar(
+        leading: const CustomBackButton(),
         title: Text(
           'Event',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -62,170 +63,272 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
         ),
         actions: const [ConnectionStatus()],
       ),
-      body: BlocBuilder<EventCubit, EventState>(
-        bloc: _eventCubit,
-        builder: (context, state) {
-          return state.maybeWhen(
-            loaded: (eventItem) {
-              return SingleChildScrollView(
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      for (final speaker in _speakersOf(eventItem))
-                        _buildSpeaker(speaker),
-                      if (eventItem.hasSpeaker && !eventItem.isBreak)
-                        EventVoteButtonHost(
-                          eventId: widget.eventId,
-                          eventItemType: widget.eventItemType,
+      body: ColoredBox(
+        color: palette.screen,
+        child: BlocBuilder<EventCubit, EventState>(
+          bloc: _eventCubit,
+          builder: (context, state) {
+            return state.maybeWhen(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              loaded: (eventItem) => _EventBody(
+                eventItem: eventItem,
+                eventId: widget.eventId,
+                eventItemType: widget.eventItemType,
+              ),
+              orElse: () => const SizedBox.shrink(),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _EventBody extends StatelessWidget {
+  const _EventBody({
+    required this.eventItem,
+    required this.eventId,
+    required this.eventItemType,
+  });
+
+  final EventItem eventItem;
+  final String eventId;
+  final String eventItemType;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    final speakers = _speakersOf(eventItem);
+    final session = eventItem.sessionLabel.trim();
+    final descriptionHtml = eventItem.descriptionHtml.trim();
+    final description = eventItem.description?.trim() ?? '';
+    final time = _timeLabel(eventItem);
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+      children: [
+        if (time.isNotEmpty)
+          Text(
+            time,
+            style: TextStyle(
+              color: palette.muted,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        const SizedBox(height: 6),
+        Text(
+          eventItem.title,
+          style: TextStyle(
+            color: palette.onCard,
+            fontSize: 26,
+            height: 1.2,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (session.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: _SessionChip(label: session),
+          ),
+        ],
+        if (speakers.isNotEmpty) ...[
+          const SizedBox(height: 18),
+          for (final speaker in speakers) ...[
+            _SpeakerCard(speaker: speaker, eventItemType: eventItemType),
+            const SizedBox(height: 12),
+          ],
+        ],
+        if (eventItem.hasSpeaker && !eventItem.isBreak) ...[
+          EventVoteButtonHost(eventId: eventId, eventItemType: eventItemType),
+          const SizedBox(height: 12),
+        ],
+        if (_hasVisibleCopy(html: descriptionHtml, plain: description))
+          _DescriptionCard(html: descriptionHtml, plain: description),
+      ],
+    );
+  }
+}
+
+class _SessionChip extends StatelessWidget {
+  const _SessionChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: palette.chip,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: palette.onChip,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SpeakerCard extends StatelessWidget {
+  const _SpeakerCard({required this.speaker, required this.eventItemType});
+
+  final Speaker speaker;
+  final String eventItemType;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    final photo = networkPhotoUrl(speaker.photoFileUrl);
+    final website = speaker.urlWww?.trim() ?? '';
+    final name = speaker.name;
+    final role = speaker.role;
+    final speakerId = speaker.id;
+
+    return Material(
+      color: palette.card,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(22),
+        side: BorderSide(color: palette.hairline),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: speakerId == null || speakerId.isEmpty
+            ? null
+            : () => _openSpeaker(context, speakerId),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Row(
+            children: [
+              ClipOval(
+                child: photo.isEmpty
+                    ? Image.asset(
+                        'assets/images/person.png',
+                        width: 56,
+                        height: 56,
+                        fit: BoxFit.cover,
+                      )
+                    : SimpleCrossOriginImage(
+                        imageUrl: photo,
+                        width: 56,
+                        height: 56,
+                        placeholderAsset: 'assets/images/person.png',
+                      ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (name case final speakerName?
+                        when speakerName.isNotEmpty)
+                      Text(
+                        speakerName,
+                        style: TextStyle(
+                          color: palette.onCard,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                         ),
-                      _buildEventInfo(eventItem),
-                    ],
-                  ),
+                      ),
+                    if (role case final speakerRole?
+                        when speakerRole.isNotEmpty)
+                      Text(
+                        speakerRole,
+                        style: TextStyle(color: palette.muted, fontSize: 13),
+                      ),
+                  ],
                 ),
-              );
-            },
-            orElse: () => const SizedBox.shrink(),
-          );
-        },
+              ),
+              if (website.isNotEmpty)
+                IconButton(
+                  onPressed: () => _openWebsite(website),
+                  icon: Icon(Icons.open_in_new, color: palette.muted, size: 18),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildEventInfo(EventItem eventItem) {
-    return Column(
-      children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            eventItem.title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Theme.of(
-                context,
-              ).colorScheme.onBackground.withOpacity(0.9),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        // BlocBuilder<ConferencesCubit, ConferencesState>(
-        //   builder: (context, state) {
-        //     return state.isCurrent
-        //         ? EventRating(
-        //             id: widget.eventId,
-        //             ratingFile: ratingFile,
-        //             eventItemType: widget.eventItemType,
-        //           )
-        //         : const SizedBox.shrink();
-        //   },
-        // ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Container(
-            alignment: Alignment.centerLeft,
-            child: eventItem.descriptionHtml.isNotEmpty
-                ? HtmlWidget(eventItem.descriptionHtml)
-                : eventItem.description != null
-                ? Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      eventItem.description ?? '',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  )
-                : Container(
-                    padding: const EdgeInsets.only(top: 40, bottom: 20),
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    width: double.infinity,
-                    child: const FittedBox(
-                      child: Opacity(
-                        opacity: 0.1,
-                        child: Icon(Icons.question_mark),
-                      ),
-                    ),
-                  ),
-          ),
-        ),
-      ],
+  void _openSpeaker(BuildContext context, String speakerId) {
+    final track = EventItemType.values.asNameMap()[eventItemType];
+    final conference = speaker.conferenceKey.isNotEmpty
+        ? speaker.conferenceKey
+        : track == null
+        ? ''
+        : conferenceKeyForTrack(track);
+    context.pushNamed(
+      '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',
+      pathParameters: {'id': speakerId},
+      queryParameters: {if (conference.isNotEmpty) 'conference': conference},
     );
   }
+}
 
-  List<Speaker> _speakersOf(EventItem eventItem) {
-    if (eventItem.speakers.isNotEmpty) return eventItem.speakers;
-    final speaker = eventItem.speaker;
-    if (speaker == null) return const [];
-    return [speaker];
-  }
+class _DescriptionCard extends StatelessWidget {
+  const _DescriptionCard({required this.html, required this.plain});
 
-  Widget _buildSpeaker(Speaker speaker) {
-    final flatButtonStyle = TextButton.styleFrom(
-      foregroundColor: Colors.black87,
-      minimumSize: const Size(50, 50),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
-    );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            speaker.name as String,
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              color: Theme.of(context).colorScheme.tertiary,
-              fontSize: 18.0,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.5,
-            child: Stack(
-              children: [
-                Center(
-                  child: CrossOriginImage(
-                    imageUrl: networkPhotoUrl(speaker.photoFileUrl),
-                    placeholderAsset: 'assets/images/person.png',
-                    sizeFactor: 0.2,
-                  ),
-                ),
-                if (speaker.urlTwitter case final twitter?)
-                  if (twitter.isNotEmpty)
-                    Container(
-                      alignment: Alignment.bottomRight,
-                      margin: const EdgeInsets.only(right: 20.0),
-                      height:
-                          MediaQuery.of(context).orientation ==
-                              Orientation.portrait
-                          ? MediaQuery.of(context).size.width * 0.30
-                          : MediaQuery.of(context).size.width * 0.37,
-                      width:
-                          MediaQuery.of(context).orientation ==
-                              Orientation.portrait
-                          ? null
-                          : MediaQuery.of(context).size.width * 0.33,
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.white,
-                        child: TextButton(
-                          style: flatButtonStyle,
-                          onPressed: () => launchUrl(Uri.parse(twitter)),
-                          child: const FaIcon(
-                            FontAwesomeIcons.twitter,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ),
-              ],
-            ),
-          ),
-        ),
-      ],
+  final String html;
+  final String plain;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    final style = TextStyle(color: palette.onCard, fontSize: 15, height: 1.45);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: palette.card,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: palette.hairline),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        child: html.isNotEmpty
+            ? HtmlWidget(html, textStyle: style)
+            : Text(plain, style: style),
+      ),
     );
   }
+}
+
+List<Speaker> _speakersOf(EventItem eventItem) {
+  if (eventItem.speakers.isNotEmpty) return eventItem.speakers;
+  final speaker = eventItem.speaker;
+  if (speaker == null) return const [];
+  return [speaker];
+}
+
+bool _hasVisibleCopy({required String html, required String plain}) {
+  if (plain.isNotEmpty) return true;
+  final text = html
+      .replaceAll(RegExp(r'<[^>]*>'), ' ')
+      .replaceAll('&nbsp;', ' ')
+      .replaceAll(RegExp(r'&\w+;'), ' ')
+      .trim();
+  return text.isNotEmpty;
+}
+
+String _timeLabel(EventItem event) {
+  if (event.timeLabel.isNotEmpty) return event.timeLabel;
+  final start = ConferenceDateTime.formatHm(event.startDate);
+  final end = ConferenceDateTime.formatHm(event.endDate);
+  if (start.isEmpty) return '';
+  if (end.isEmpty) return start;
+  return '$start – $end';
+}
+
+void _openWebsite(String url) {
+  final uri = Uri.tryParse(url);
+  if (uri == null) return;
+  launchUrl(uri, mode: LaunchMode.externalApplication);
 }
