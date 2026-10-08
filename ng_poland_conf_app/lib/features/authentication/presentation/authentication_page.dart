@@ -237,10 +237,8 @@ class _AuthHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.secondary;
-
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 4, 12, 4),
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: SizedBox(
         height: 56,
         child: Row(
@@ -254,63 +252,16 @@ class _AuthHeader extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: AuthUiTokens.chipBg,
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: AuthUiTokens.fieldBorder,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      child: Text(
-                        'NG Poland',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.8,
-                          color: accent,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    'Sign In',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white.withValues(alpha: 0.95),
-                        ),
-                  ),
-                ],
+              child: Text(
+                'Sign In',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white.withValues(alpha: 0.95),
+                ),
               ),
             ),
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: accent,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: accent.withValues(alpha: 0.45),
-                    blurRadius: 12,
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.person_rounded,
-                size: 18,
-                color: Colors.white,
-              ),
-            ),
+            const SizedBox(width: 48),
           ],
         ),
       ),

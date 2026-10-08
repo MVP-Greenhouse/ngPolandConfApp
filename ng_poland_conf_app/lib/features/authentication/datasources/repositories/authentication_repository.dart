@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:crypto/crypto.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,16 +22,19 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<Either<String, String>> signInWithApple() async {
     try {
+      final rawNonce = _appleNonce();
       final AuthorizationCredentialAppleID appleCredential =
           await SignInWithApple.getAppleIDCredential(
             scopes: [
               AppleIDAuthorizationScopes.email,
               AppleIDAuthorizationScopes.fullName,
             ],
+            nonce: _sha256ofString(rawNonce),
           );
       final AuthCredential authCredential = OAuthProvider('apple.com')
           .credential(
             idToken: appleCredential.identityToken,
+            rawNonce: rawNonce,
             accessToken: appleCredential.authorizationCode,
           );
       await _auth.signInWithCredential(authCredential);
@@ -95,9 +102,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
       final email = await _magicLinkEmailLocalDataSource.getPendingEmail();
       if (email == null || email.isEmpty) {
-        return left(
-          'No saved email. Send the link again on this device.',
-        );
+        return left('No saved email. Send the link again on this device.');
       }
 
       await _auth.signInWithEmailLink(email: email, emailLink: emailLink);
@@ -108,3 +113,16 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     }
   }
 }
+
+String _appleNonce([int length = 32]) {
+  const charset =
+      '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+  final random = Random.secure();
+  return List.generate(
+    length,
+    (_) => charset[random.nextInt(charset.length)],
+  ).join();
+}
+
+String _sha256ofString(String input) =>
+    sha256.convert(utf8.encode(input)).toString();

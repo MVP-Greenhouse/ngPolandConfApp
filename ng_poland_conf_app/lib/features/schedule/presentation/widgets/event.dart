@@ -6,7 +6,9 @@ import 'package:ng_poland_conf_app/core/blocks/themeMode/theme_mode_cubit.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
+import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/agenda_icon.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/highlight_shadow.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 
@@ -37,87 +39,72 @@ class _ScheduleEventState extends State<ScheduleEvent>
   @override
   bool get wantKeepAlive => widget.isActiveEvent;
 
-  Widget _getIcon(String? category) {
-    var icon = switch (category) {
-      'registration' => FontAwesomeIcons.addressCard,
-      'welcome' => FontAwesomeIcons.child,
-      'presentation' => FontAwesomeIcons.microphone,
-      'eating' => FontAwesomeIcons.utensils,
-      'award' => FontAwesomeIcons.trophy,
-      'break' => FontAwesomeIcons.solidComments,
-      'final' => FontAwesomeIcons.doorOpen,
-      'movie' => FontAwesomeIcons.video,
-      'party' => FontAwesomeIcons.champagneGlasses,
-      'qa' => FontAwesomeIcons.circleQuestion,
-      _ => null,
-    };
-
-    return FaIcon(icon, color: widget.iconColor);
+  Widget _getIcon() {
+    return FaIcon(
+      agendaIcon(widget.eventItem.icon, widget.eventItem.category),
+      color: widget.iconColor,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    final DateTime? startDate = widget.eventItem.startDate;
-    final DateTime? endDate = widget.eventItem.endDate;
+    final timeLabel = widget.eventItem.timeLabel;
+    final speakers = widget.eventItem.speakers.isNotEmpty
+        ? widget.eventItem.speakers
+        : [if (widget.eventItem.speaker case final speaker?) speaker];
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        children: [
-          BlocBuilder<ThemeModeCubit, ThemeModeState>(
-            builder: (_, state) {
-              return HighlightShadow(
-                isDarkMode: state.isDarkMode,
-                animate: widget.isActiveEvent,
-                child: _listElement(context, startDate, endDate),
-              );
-            },
-          ),
-          Divider(
-            color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
-            height: 40,
-          ),
-        ],
+    return Opacity(
+      opacity: widget.eventItem.isBreak ? 0.55 : 1,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            BlocBuilder<ThemeModeCubit, ThemeModeState>(
+              builder: (_, state) {
+                return HighlightShadow(
+                  isDarkMode: state.isDarkMode,
+                  animate: widget.isActiveEvent,
+                  child: _listElement(context, timeLabel, speakers),
+                );
+              },
+            ),
+            Divider(
+              color: Theme.of(context).dividerTheme.color?.withOpacity(0.2),
+              height: 40,
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _listElement(
     BuildContext context,
-    DateTime? startDate,
-    DateTime? endDate,
+    String timeLabel,
+    List<Speaker> speakers,
   ) {
     return ListTile(
-      leading: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          if (startDate != null)
-            Text(
-              ConferenceDateTime.formatHm(startDate),
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context).textTheme.bodySmall?.color,
-              ),
-            ),
-          if (endDate != null)
-            Text(
-              ConferenceDateTime.formatHm(endDate),
-              style: const TextStyle(fontSize: 12),
-            ),
-        ],
+      leading: Text(
+        timeLabel.isNotEmpty
+            ? timeLabel
+            : ConferenceDateTime.formatHm(widget.eventItem.startDate),
+        style: TextStyle(
+          fontSize: 12,
+          color: Theme.of(context).textTheme.bodySmall?.color,
+        ),
       ),
       title: _buildButton(
-        onPressed: widget.eventItem.speaker == null
-            ? null
-            : () => context.pushNamed(
+        onPressed: widget.eventItem.hasSpeaker
+            ? () => context.pushNamed(
                 '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
                 pathParameters: {
                   'eventId': widget.eventItem.id,
                   'eventItemType': widget.eventItemType.name,
                 },
-              ),
+              )
+            : null,
         child: Text(
           widget.eventItem.title,
           style: TextStyle(
@@ -129,63 +116,53 @@ class _ScheduleEventState extends State<ScheduleEvent>
           ),
         ),
       ),
-      subtitle: _buildSpeaker(widget.eventItem.speaker),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [for (final speaker in speakers) _buildSpeaker(speaker)],
+      ),
       trailing: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Opacity(opacity: 0.7, child: _getIcon(widget.eventItem.category)),
-        ],
+        children: <Widget>[Opacity(opacity: 0.7, child: _getIcon())],
       ),
     );
   }
 
-  Widget _buildSpeaker(Speaker? speaker) {
-    final String? photoFileUrl = speaker?.photoFileUrl;
-    final String? name = speaker?.name;
-    return speaker == null
-        ? const Text('')
-        : Padding(
-            padding: const EdgeInsets.only(top: 6.0),
-            child: _buildButton(
-              onPressed: () => context.pushNamed(
-                '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',
-                pathParameters: {'id': widget.eventItem.speaker?.id ?? ''},
+  Widget _buildSpeaker(Speaker speaker) {
+    final photoFileUrl = networkPhotoUrl(speaker.photoFileUrl);
+    final name = speaker.name;
+    return Padding(
+      padding: const EdgeInsets.only(top: 6.0),
+      child: _buildButton(
+        onPressed: () => context.pushNamed(
+          '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',
+          pathParameters: {'id': speaker.id ?? ''},
+          queryParameters: {
+            if (speaker.conferenceKey.isNotEmpty)
+              'conference': speaker.conferenceKey,
+          },
+        ),
+        child: Wrap(
+          direction: Axis.horizontal,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 10,
+          children: [
+            if (photoFileUrl.isNotEmpty)
+              ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
+                child: SimpleCrossOriginImage(
+                  imageUrl: photoFileUrl,
+                  width: 20,
+                  placeholderAsset: 'assets/images/person.png',
+                ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    direction: Axis.horizontal,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 10,
-                    children: [
-                      if (photoFileUrl != null)
-                        ClipRRect(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                          child: SimpleCrossOriginImage(
-                            imageUrl: 'https:${speaker.photoFileUrl}',
-                            width: 20,
-                            placeholderAsset: 'assets/images/person.png',
-                          ),
-                        ),
-                      if (name != null)
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            // color: _darkMode ? Theme.of(context).textTheme.bodyText1.color.withOpacity(0.7) : Theme.of(context).primaryColor,
-                            fontSize: 13,
-                          ),
-                        ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
+            if (name != null) Text(name, style: const TextStyle(fontSize: 13)),
+            if (speaker.role case final role? when role.isNotEmpty)
+              Text(role, style: const TextStyle(fontSize: 12)),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildButton({

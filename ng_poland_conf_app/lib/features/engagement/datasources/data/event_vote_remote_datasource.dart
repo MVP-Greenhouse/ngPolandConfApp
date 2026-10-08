@@ -40,20 +40,31 @@ class EventVoteRemoteDataSource {
     required String uid,
     required bool liked,
   }) async {
-    final ref = _voteRef(confId: confId, eventId: eventId, uid: uid);
-    if (!liked) {
-      await ref.delete();
-      return;
-    }
-    await _firestore
+    final parent = _firestore
         .collection('conf')
         .doc(confId)
         .collection('eventVotes')
-        .doc(eventId)
-        .set({}, SetOptions(merge: true));
-    await ref.set({
-      'value': 1,
-      'updatedAt': FieldValue.serverTimestamp(),
+        .doc(eventId);
+    final vote = parent.collection('votes').doc(uid);
+
+    await _firestore.runTransaction((transaction) async {
+      final parentSnap = await transaction.get(parent);
+      final voteSnap = await transaction.get(vote);
+      final likes = (parentSnap.data()?['likes'] as num?)?.toInt() ?? 0;
+      if (!liked) {
+        if (!voteSnap.exists) return;
+        transaction.set(parent, {
+          'likes': likes > 0 ? likes - 1 : 0,
+        }, SetOptions(merge: true));
+        transaction.delete(vote);
+        return;
+      }
+      if (voteSnap.exists) return;
+      transaction.set(parent, {'likes': likes + 1}, SetOptions(merge: true));
+      transaction.set(vote, {
+        'value': 1,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
     });
   }
 
@@ -65,20 +76,12 @@ class EventVoteRemoteDataSource {
         .get();
 
     final counts = <String, EventVoteCounts>{};
-    await Future.wait(
-      eventsSnap.docs.map((eventDoc) async {
-        final votesSnap = await eventDoc.reference.collection('votes').get();
-        var likes = 0;
-        for (final voteDoc in votesSnap.docs) {
-          if (EngagementMappers.isLikeFromMap(voteDoc.data())) {
-            likes++;
-          }
-        }
-        if (likes > 0) {
-          counts[eventDoc.id] = EventVoteCounts(likes: likes);
-        }
-      }),
-    );
+    for (final eventDoc in eventsSnap.docs) {
+      final likes = (eventDoc.data()['likes'] as num?)?.toInt() ?? 0;
+      if (likes > 0) {
+        counts[eventDoc.id] = EventVoteCounts(likes: likes);
+      }
+    }
     return counts;
   }
 }

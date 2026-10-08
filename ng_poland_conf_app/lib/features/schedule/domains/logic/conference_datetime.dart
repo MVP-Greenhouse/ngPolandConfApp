@@ -33,6 +33,27 @@ class ConferenceDateTime {
     return warsaw.toUtc();
   }
 
+  /// `YYYY-MM-DD` plus `HH:MM` as a Europe/Warsaw wall-clock, returned in UTC.
+  static DateTime? combineWarsawDateAndHm(String date, String hm) {
+    final dateParts = date.trim().split('-');
+    final hmParts = hm.trim().split(':');
+    if (dateParts.length != 3 || hmParts.length < 2) return null;
+    final year = int.tryParse(dateParts[0]);
+    final month = int.tryParse(dateParts[1]);
+    final day = int.tryParse(dateParts[2]);
+    final hour = int.tryParse(hmParts[0]);
+    final minute = int.tryParse(hmParts[1]);
+    if (year == null ||
+        month == null ||
+        day == null ||
+        hour == null ||
+        minute == null) {
+      return null;
+    }
+    final warsaw = tz.TZDateTime(_warsaw, year, month, day, hour, minute);
+    return warsaw.toUtc();
+  }
+
   /// Formats an instant as HH:mm in Europe/Warsaw (venue local time).
   static String formatHm(DateTime? instant) {
     if (instant == null) return '';

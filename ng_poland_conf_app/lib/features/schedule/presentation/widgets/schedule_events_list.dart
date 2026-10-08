@@ -89,6 +89,13 @@ class _ScheduleEventsListState extends State<ScheduleEventsList>
     super.dispose();
   }
 
+  bool _showSessionLabel(int index) {
+    final label = widget.listEvents[index].sessionLabel;
+    if (label.isEmpty) return false;
+    if (index == 0) return true;
+    return widget.listEvents[index - 1].sessionLabel != label;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -98,11 +105,25 @@ class _ScheduleEventsListState extends State<ScheduleEventsList>
         return ValueListenableBuilder(
           valueListenable: _activeEventIdNotifier,
           builder: (context, activeEvent, _) {
-            return ScheduleEvent(
-              eventItem: widget.listEvents[index],
-              eventItemType: widget.eventItemType,
-              iconColor: Theme.of(context).colorScheme.tertiary,
-              isActiveEvent: activeEvent == widget.listEvents[index].id,
+            final event = widget.listEvents[index];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (_showSessionLabel(index))
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                    child: Text(
+                      event.sessionLabel.toUpperCase(),
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                  ),
+                ScheduleEvent(
+                  eventItem: event,
+                  eventItemType: widget.eventItemType,
+                  iconColor: Theme.of(context).colorScheme.tertiary,
+                  isActiveEvent: activeEvent == event.id,
+                ),
+              ],
             );
           },
         );

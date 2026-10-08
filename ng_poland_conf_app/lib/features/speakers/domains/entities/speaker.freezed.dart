@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Speaker {
 
- String? get id; String? get name; String? get role; String? get bio; String? get photoFileUrl; String? get photoTitle; String? get photoDescription; String? get email; String? get urlGithub; String? get urlLinkedIn; String? get urlTwitter; String? get urlWww;
+ String? get id; String? get name; String? get role; String? get bio; String? get photoFileUrl; String? get photoTitle; String? get photoDescription; String? get email; String? get urlGithub; String? get urlLinkedIn; String? get urlTwitter; String? get urlWww; String get conferenceKey; String get talkTitle;
 /// Create a copy of Speaker
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $SpeakerCopyWith<Speaker> get copyWith => _$SpeakerCopyWithImpl<Speaker>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Speaker&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.role, role) || other.role == role)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.photoFileUrl, photoFileUrl) || other.photoFileUrl == photoFileUrl)&&(identical(other.photoTitle, photoTitle) || other.photoTitle == photoTitle)&&(identical(other.photoDescription, photoDescription) || other.photoDescription == photoDescription)&&(identical(other.email, email) || other.email == email)&&(identical(other.urlGithub, urlGithub) || other.urlGithub == urlGithub)&&(identical(other.urlLinkedIn, urlLinkedIn) || other.urlLinkedIn == urlLinkedIn)&&(identical(other.urlTwitter, urlTwitter) || other.urlTwitter == urlTwitter)&&(identical(other.urlWww, urlWww) || other.urlWww == urlWww));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Speaker&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.role, role) || other.role == role)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.photoFileUrl, photoFileUrl) || other.photoFileUrl == photoFileUrl)&&(identical(other.photoTitle, photoTitle) || other.photoTitle == photoTitle)&&(identical(other.photoDescription, photoDescription) || other.photoDescription == photoDescription)&&(identical(other.email, email) || other.email == email)&&(identical(other.urlGithub, urlGithub) || other.urlGithub == urlGithub)&&(identical(other.urlLinkedIn, urlLinkedIn) || other.urlLinkedIn == urlLinkedIn)&&(identical(other.urlTwitter, urlTwitter) || other.urlTwitter == urlTwitter)&&(identical(other.urlWww, urlWww) || other.urlWww == urlWww)&&(identical(other.conferenceKey, conferenceKey) || other.conferenceKey == conferenceKey)&&(identical(other.talkTitle, talkTitle) || other.talkTitle == talkTitle));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,role,bio,photoFileUrl,photoTitle,photoDescription,email,urlGithub,urlLinkedIn,urlTwitter,urlWww);
+int get hashCode => Object.hash(runtimeType,id,name,role,bio,photoFileUrl,photoTitle,photoDescription,email,urlGithub,urlLinkedIn,urlTwitter,urlWww,conferenceKey,talkTitle);
 
 @override
 String toString() {
-  return 'Speaker(id: $id, name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
+  return 'Speaker(id: $id, name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww, conferenceKey: $conferenceKey, talkTitle: $talkTitle)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $SpeakerCopyWith<$Res>  {
   factory $SpeakerCopyWith(Speaker value, $Res Function(Speaker) _then) = _$SpeakerCopyWithImpl;
 @useResult
 $Res call({
- String? id, String? name, String? role, String? bio, String? photoFileUrl, String? photoTitle, String? photoDescription, String? email, String? urlGithub, String? urlLinkedIn, String? urlTwitter, String? urlWww
+ String? id, String? name, String? role, String? bio, String? photoFileUrl, String? photoTitle, String? photoDescription, String? email, String? urlGithub, String? urlLinkedIn, String? urlTwitter, String? urlWww, String conferenceKey, String talkTitle
 });
 
 
@@ -62,7 +62,7 @@ class _$SpeakerCopyWithImpl<$Res>
 
 /// Create a copy of Speaker
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? role = freezed,Object? bio = freezed,Object? photoFileUrl = freezed,Object? photoTitle = freezed,Object? photoDescription = freezed,Object? email = freezed,Object? urlGithub = freezed,Object? urlLinkedIn = freezed,Object? urlTwitter = freezed,Object? urlWww = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? role = freezed,Object? bio = freezed,Object? photoFileUrl = freezed,Object? photoTitle = freezed,Object? photoDescription = freezed,Object? email = freezed,Object? urlGithub = freezed,Object? urlLinkedIn = freezed,Object? urlTwitter = freezed,Object? urlWww = freezed,Object? conferenceKey = null,Object? talkTitle = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -76,7 +76,9 @@ as String?,urlGithub: freezed == urlGithub ? _self.urlGithub : urlGithub // igno
 as String?,urlLinkedIn: freezed == urlLinkedIn ? _self.urlLinkedIn : urlLinkedIn // ignore: cast_nullable_to_non_nullable
 as String?,urlTwitter: freezed == urlTwitter ? _self.urlTwitter : urlTwitter // ignore: cast_nullable_to_non_nullable
 as String?,urlWww: freezed == urlWww ? _self.urlWww : urlWww // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,conferenceKey: null == conferenceKey ? _self.conferenceKey : conferenceKey // ignore: cast_nullable_to_non_nullable
+as String,talkTitle: null == talkTitle ? _self.talkTitle : talkTitle // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -161,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww,  String conferenceKey,  String talkTitle)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Speaker() when $default != null:
-return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww);case _:
+return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww,_that.conferenceKey,_that.talkTitle);case _:
   return orElse();
 
 }
@@ -182,10 +184,10 @@ return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww,  String conferenceKey,  String talkTitle)  $default,) {final _that = this;
 switch (_that) {
 case _Speaker():
-return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww);case _:
+return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww,_that.conferenceKey,_that.talkTitle);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +204,10 @@ return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? role,  String? bio,  String? photoFileUrl,  String? photoTitle,  String? photoDescription,  String? email,  String? urlGithub,  String? urlLinkedIn,  String? urlTwitter,  String? urlWww,  String conferenceKey,  String talkTitle)?  $default,) {final _that = this;
 switch (_that) {
 case _Speaker() when $default != null:
-return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww);case _:
+return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_that.photoTitle,_that.photoDescription,_that.email,_that.urlGithub,_that.urlLinkedIn,_that.urlTwitter,_that.urlWww,_that.conferenceKey,_that.talkTitle);case _:
   return null;
 
 }
@@ -217,7 +219,7 @@ return $default(_that.id,_that.name,_that.role,_that.bio,_that.photoFileUrl,_tha
 
 
 class _Speaker implements Speaker {
-  const _Speaker({required this.id, required this.name, required this.role, required this.bio, required this.photoFileUrl, required this.photoTitle, required this.photoDescription, required this.email, required this.urlGithub, required this.urlLinkedIn, required this.urlTwitter, required this.urlWww});
+  const _Speaker({required this.id, required this.name, required this.role, required this.bio, required this.photoFileUrl, required this.photoTitle, required this.photoDescription, required this.email, required this.urlGithub, required this.urlLinkedIn, required this.urlTwitter, required this.urlWww, this.conferenceKey = '', this.talkTitle = ''});
   
 
 @override final  String? id;
@@ -232,6 +234,8 @@ class _Speaker implements Speaker {
 @override final  String? urlLinkedIn;
 @override final  String? urlTwitter;
 @override final  String? urlWww;
+@override@JsonKey() final  String conferenceKey;
+@override@JsonKey() final  String talkTitle;
 
 /// Create a copy of Speaker
 /// with the given fields replaced by the non-null parameter values.
@@ -243,16 +247,16 @@ _$SpeakerCopyWith<_Speaker> get copyWith => __$SpeakerCopyWithImpl<_Speaker>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Speaker&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.role, role) || other.role == role)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.photoFileUrl, photoFileUrl) || other.photoFileUrl == photoFileUrl)&&(identical(other.photoTitle, photoTitle) || other.photoTitle == photoTitle)&&(identical(other.photoDescription, photoDescription) || other.photoDescription == photoDescription)&&(identical(other.email, email) || other.email == email)&&(identical(other.urlGithub, urlGithub) || other.urlGithub == urlGithub)&&(identical(other.urlLinkedIn, urlLinkedIn) || other.urlLinkedIn == urlLinkedIn)&&(identical(other.urlTwitter, urlTwitter) || other.urlTwitter == urlTwitter)&&(identical(other.urlWww, urlWww) || other.urlWww == urlWww));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Speaker&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.role, role) || other.role == role)&&(identical(other.bio, bio) || other.bio == bio)&&(identical(other.photoFileUrl, photoFileUrl) || other.photoFileUrl == photoFileUrl)&&(identical(other.photoTitle, photoTitle) || other.photoTitle == photoTitle)&&(identical(other.photoDescription, photoDescription) || other.photoDescription == photoDescription)&&(identical(other.email, email) || other.email == email)&&(identical(other.urlGithub, urlGithub) || other.urlGithub == urlGithub)&&(identical(other.urlLinkedIn, urlLinkedIn) || other.urlLinkedIn == urlLinkedIn)&&(identical(other.urlTwitter, urlTwitter) || other.urlTwitter == urlTwitter)&&(identical(other.urlWww, urlWww) || other.urlWww == urlWww)&&(identical(other.conferenceKey, conferenceKey) || other.conferenceKey == conferenceKey)&&(identical(other.talkTitle, talkTitle) || other.talkTitle == talkTitle));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,name,role,bio,photoFileUrl,photoTitle,photoDescription,email,urlGithub,urlLinkedIn,urlTwitter,urlWww);
+int get hashCode => Object.hash(runtimeType,id,name,role,bio,photoFileUrl,photoTitle,photoDescription,email,urlGithub,urlLinkedIn,urlTwitter,urlWww,conferenceKey,talkTitle);
 
 @override
 String toString() {
-  return 'Speaker(id: $id, name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww)';
+  return 'Speaker(id: $id, name: $name, role: $role, bio: $bio, photoFileUrl: $photoFileUrl, photoTitle: $photoTitle, photoDescription: $photoDescription, email: $email, urlGithub: $urlGithub, urlLinkedIn: $urlLinkedIn, urlTwitter: $urlTwitter, urlWww: $urlWww, conferenceKey: $conferenceKey, talkTitle: $talkTitle)';
 }
 
 
@@ -263,7 +267,7 @@ abstract mixin class _$SpeakerCopyWith<$Res> implements $SpeakerCopyWith<$Res> {
   factory _$SpeakerCopyWith(_Speaker value, $Res Function(_Speaker) _then) = __$SpeakerCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String? name, String? role, String? bio, String? photoFileUrl, String? photoTitle, String? photoDescription, String? email, String? urlGithub, String? urlLinkedIn, String? urlTwitter, String? urlWww
+ String? id, String? name, String? role, String? bio, String? photoFileUrl, String? photoTitle, String? photoDescription, String? email, String? urlGithub, String? urlLinkedIn, String? urlTwitter, String? urlWww, String conferenceKey, String talkTitle
 });
 
 
@@ -280,7 +284,7 @@ class __$SpeakerCopyWithImpl<$Res>
 
 /// Create a copy of Speaker
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,Object? role = freezed,Object? bio = freezed,Object? photoFileUrl = freezed,Object? photoTitle = freezed,Object? photoDescription = freezed,Object? email = freezed,Object? urlGithub = freezed,Object? urlLinkedIn = freezed,Object? urlTwitter = freezed,Object? urlWww = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,Object? role = freezed,Object? bio = freezed,Object? photoFileUrl = freezed,Object? photoTitle = freezed,Object? photoDescription = freezed,Object? email = freezed,Object? urlGithub = freezed,Object? urlLinkedIn = freezed,Object? urlTwitter = freezed,Object? urlWww = freezed,Object? conferenceKey = null,Object? talkTitle = null,}) {
   return _then(_Speaker(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -294,7 +298,9 @@ as String?,urlGithub: freezed == urlGithub ? _self.urlGithub : urlGithub // igno
 as String?,urlLinkedIn: freezed == urlLinkedIn ? _self.urlLinkedIn : urlLinkedIn // ignore: cast_nullable_to_non_nullable
 as String?,urlTwitter: freezed == urlTwitter ? _self.urlTwitter : urlTwitter // ignore: cast_nullable_to_non_nullable
 as String?,urlWww: freezed == urlWww ? _self.urlWww : urlWww // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,conferenceKey: null == conferenceKey ? _self.conferenceKey : conferenceKey // ignore: cast_nullable_to_non_nullable
+as String,talkTitle: null == talkTitle ? _self.talkTitle : talkTitle // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

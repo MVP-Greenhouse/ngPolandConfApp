@@ -170,7 +170,6 @@ class CustomDrawer extends StatelessWidget {
       Pages.home => FontAwesomeIcons.gripVertical,
       Pages.schedule => FontAwesomeIcons.solidClock,
       Pages.workshops => FontAwesomeIcons.solidKeyboard,
-      Pages.nggirls => FontAwesomeIcons.personDress,
       Pages.speakers => FontAwesomeIcons.microphone,
       Pages.questions => FontAwesomeIcons.solidComments,
       Pages.info => FontAwesomeIcons.circleInfo,

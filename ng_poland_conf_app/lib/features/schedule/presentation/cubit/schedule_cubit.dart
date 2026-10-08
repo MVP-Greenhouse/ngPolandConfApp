@@ -20,9 +20,7 @@ class ScheduleCubit extends Cubit<ScheduleState> {
     required this.getAllEventsForConference,
   }) : super(const ScheduleState.initial());
 
-  Future<void> getListEvents({
-    required EventItemType eventItemType,
-  }) async {
+  Future<void> getListEvents({required EventItemType eventItemType}) async {
     emit(const ScheduleState.loading());
     Conference? conference = conferencesCubit.selectedConference;
 
@@ -30,13 +28,14 @@ class ScheduleCubit extends Cubit<ScheduleState> {
       await conferencesCubit.getConferences();
       conference = conferencesCubit.selectedConference;
     }
+    final confId = conference?.confId;
+    if (confId == null) {
+      emit(const ScheduleState.error('error'));
+      return;
+    }
 
-    List<EventItem> listEvents = await getAllEventsForConference.call(
-      Params(
-        eventItemType: eventItemType.name,
-        confId: conference!.confId,
-        limit: 1000,
-      ),
+    final listEvents = await getAllEventsForConference.call(
+      Params(eventItemType: eventItemType.name, confId: confId, limit: 1000),
     );
 
     emit(ScheduleState.loaded(listEvents: listEvents));

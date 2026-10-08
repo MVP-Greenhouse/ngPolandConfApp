@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
+import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_cubit.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/schedule_events_list.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/schedule_voting_banner.dart';
@@ -63,16 +65,26 @@ class _SchedulePageState extends State<SchedulePage> with ConnectivityMixin {
               child: CircularProgressIndicator(),
             ),
             error: (error) => const EmptyListInformation(),
-            loaded: (listEvents) => listEvents.isEmpty
-                ? const EmptyListInformation()
-                : ScheduleVotingBannerHost(
-                    track: _eventItemType,
-                    child: ScheduleEventsList(
-                      listEvents: listEvents,
-                      eventItemType: _eventItemType,
-                    ),
-                  ),
-            orElse: SizedBox.shrink,
+            loaded: (listEvents) {
+              if (listEvents.isEmpty) {
+                final edition = getIt.get<EditionCubit>().current;
+                final day = edition == null
+                    ? null
+                    : conferenceDayForTrack(edition, _eventItemType);
+                if (day != null && !day.published) {
+                  return const Center(child: Text('Agenda coming soon'));
+                }
+                return const EmptyListInformation();
+              }
+              return ScheduleVotingBannerHost(
+                track: _eventItemType,
+                child: ScheduleEventsList(
+                  listEvents: listEvents,
+                  eventItemType: _eventItemType,
+                ),
+              );
+            },
+            orElse: () => const SizedBox.shrink(),
           );
         },
       ),

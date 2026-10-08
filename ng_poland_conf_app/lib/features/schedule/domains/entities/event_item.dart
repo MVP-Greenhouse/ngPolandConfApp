@@ -19,7 +19,24 @@ abstract class EventItem with _$EventItem {
     required DateTime? startDate,
     required DateTime? endDate,
     required Speaker? speaker,
+    @Default([]) List<Speaker> speakers,
+    @Default(false) bool isBreak,
+    @Default('') String sessionLabel,
+    @Default('') String timeLabel,
+    @Default('') String icon,
+    @Default('') String descriptionHtml,
   }) = _EventItem;
+
+  bool get hasSpeaker => speakers.isNotEmpty || speaker != null;
+
+  String get speakerNames {
+    final names = [
+      for (final person in speakers)
+        if (person.name case final name? when name.isNotEmpty) name,
+    ];
+    if (names.isNotEmpty) return names.join(', ');
+    return speaker?.name ?? '';
+  }
 
   String startTime() => ConferenceDateTime.formatHm(startDate);
 

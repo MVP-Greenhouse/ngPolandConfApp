@@ -20,19 +20,28 @@ class FixedSizeCrossOriginImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid || Platform.isIOS) {
-      return CachedNetworkImage(
-        imageUrl: imageUrl,
-        progressIndicatorBuilder: (_, __, ___) => Image.asset(placeholderAsset),
-        errorWidget: (_, __, ___) {
-          return Image.asset(placeholderAsset);
-        },
-        imageBuilder: (_, imageProvider) => Container(
+      return SizedBox(
+        width: size,
+        height: size,
+        child: CachedNetworkImage(
+          imageUrl: imageUrl,
           width: size,
           height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              image: imageProvider,
+          fit: BoxFit.cover,
+          progressIndicatorBuilder: (_, __, ___) => Image.asset(
+            placeholderAsset,
+            width: size,
+            height: size,
+          ),
+          errorWidget: (_, __, ___) => Image.asset(
+            placeholderAsset,
+            width: size,
+            height: size,
+          ),
+          imageBuilder: (_, imageProvider) => DecoratedBox(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
             ),
           ),
         ),

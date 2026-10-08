@@ -28,6 +28,69 @@ service cloud.firestore {
       allow write: if isAdmin() && docId == 'config';
     }
 
+    // Public Top 5 reads the likes counter. Individual votes stay private.
+    match /conf/{confId}/eventVotes/{eventId} {
+      function votePath(uid) {
+        return /databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId)/votes/$(uid);
+      }
+      function likesBefore() {
+        return exists(/databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId))
+          ? get(/databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId)).data.get('likes', 0)
+          : 0;
+      }
+
+      allow read: if true;
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['likes'])
+        && request.resource.data.likes == 1
+        && existsAfter(votePath(request.auth.uid));
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
+        && request.resource.data.likes is int
+        && request.resource.data.likes >= 0
+        && (
+          (
+            request.resource.data.likes == resource.data.get('likes', 0) + 1
+            && !exists(votePath(request.auth.uid))
+            && existsAfter(votePath(request.auth.uid))
+          )
+          || (
+            exists(votePath(request.auth.uid))
+            && !existsAfter(votePath(request.auth.uid))
+            && (
+              (
+                resource.data.get('likes', 0) > 0
+                && request.resource.data.likes == resource.data.get('likes', 0) - 1
+              )
+              || (
+                resource.data.get('likes', 0) == 0
+                && request.resource.data.likes == 0
+              )
+            )
+          )
+        );
+      allow delete: if false;
+
+      match /votes/{uid} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['value', 'updatedAt'])
+          && request.resource.data.value == 1
+          && getAfter(/databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId)).data.likes
+              == likesBefore() + 1;
+        allow update: if false;
+        allow delete: if isOwner(uid)
+          && (
+            getAfter(/databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId)).data.likes
+                == likesBefore() - 1
+            || (
+              likesBefore() == 0
+              && getAfter(/databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId)).data.likes == 0
+            )
+          );
+      }
+    }
+
     match /conf/{confId}/speakerVotes/{speakerId} {
       allow read: if isAdmin();
       allow create, update: if signedIn()

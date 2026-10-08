@@ -146,14 +146,18 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
       final counts = await _eventVoteRepository.loadVoteCounts(confId);
       final entries = [
         for (final event in events)
-          if (event.speaker != null)
+          if (event.hasSpeaker && !event.isBreak)
             EventVoteRank(
               eventId: event.id,
               title: event.title,
-              speakerName: event.speaker?.name ?? '',
+              speakerName: event.speakerNames,
               trackType: event.type,
               likes: counts[event.id]?.likes ?? 0,
-              timeLabel: _timeLabel(event.startDate, event.endDate),
+              timeLabel: _timeLabel(
+                event.startDate,
+                event.endDate,
+                timeLabel: event.timeLabel,
+              ),
             ),
       ];
       return EventVoteRanking.topForTrack(
@@ -186,7 +190,8 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
     });
   }
 
-  static String _timeLabel(DateTime? start, DateTime? end) {
+  static String _timeLabel(DateTime? start, DateTime? end, {String timeLabel = ''}) {
+    if (timeLabel.isNotEmpty) return timeLabel;
     if (start == null || end == null) return '';
     return '${ConferenceDateTime.formatHm(start)} — ${ConferenceDateTime.formatHm(end)}';
   }

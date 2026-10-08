@@ -6,10 +6,11 @@ import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dar
 import 'package:ng_poland_conf_app/core/constants/app_dimensions.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 import 'package:ng_poland_conf_app/features/home/domains/logic/home_schedule_navigation.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/entities/edition.dart';
+import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/widgets/custom_timer.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
-import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
 import '../../settings/presentation/connection_status.dart';
@@ -51,20 +52,8 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
               ),
               style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.inversePrimary),
             ),
-            actions: [
-              state.maybeWhen(
-                loaded: (conferences, selectedConference) => CustomDropDown(
-                  options: conferences.list
-                      .map(
-                        (conference) => conference.confId,
-                      )
-                      .toList(),
-                  selectedOption: selectedConference.confId,
-                  onChanged: (String? confId) => confId != null ? _cubit.changeConference(confId) : null,
-                ),
-                orElse: () => const SizedBox.shrink(),
-              ),
-              const ConnectionStatus(),
+            actions: const [
+              ConnectionStatus(),
             ],
           ),
           body: Container(
@@ -121,16 +110,20 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
                 height: 50.0,
               ),
               state.maybeWhen(
-                loaded: (conferences, selectedConference) => Column(
-                  children: [
-                    for (final item in selectedConference.listItems)
-                      _HomeScheduleItem(
-                        date: item.desc,
-                        name: item.name,
-                        onTap: () => _openScheduleItem(context, item.name),
-                      ),
-                  ],
-                ),
+                loaded: (_, _) {
+                  final edition = getIt.get<EditionCubit>().current;
+                  if (edition == null) return const SizedBox.shrink();
+                  return Column(
+                    children: [
+                      for (final row in homeScheduleRows(edition))
+                        _HomeScheduleItem(
+                          date: row.dateLabel,
+                          name: row.name,
+                          onTap: () => _openScheduleItem(context, row),
+                        ),
+                    ],
+                  );
+                },
                 orElse: () => const SizedBox.shrink(),
               ),
             ],
@@ -140,15 +133,16 @@ class _HomePageState extends State<HomePage> with ConnectivityMixin {
     );
   }
 
-  void _openScheduleItem(BuildContext context, String name) {
-    final target = HomeScheduleNavigation.targetForName(name);
+  void _openScheduleItem(BuildContext context, HomeScheduleRow row) {
+    final target = HomeScheduleNavigation.targetForDayKey(row.key);
     if (target == null) return;
-
-    final base = switch (target.destination) {
-      HomeScheduleDestination.schedule => Pages.schedule.path,
-      HomeScheduleDestination.workshops => Pages.workshops.path,
+    final location = switch (target.destination) {
+      HomeScheduleDestination.schedule =>
+        '${Pages.schedule.path}?track=${target.track?.name}',
+      HomeScheduleDestination.workshops =>
+        '${Pages.workshops.path}?day=${target.dayKey}',
     };
-    context.go('$base?track=${target.track.name}');
+    context.go(location);
   }
 
   String _getTitleForConference(String? confId) {

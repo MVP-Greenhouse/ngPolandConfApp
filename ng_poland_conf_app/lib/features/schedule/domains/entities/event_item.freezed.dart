@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$EventItem {
 
- String get id; String get title; String get confId; String get type; String get category; String? get shortDescription; String? get description; DateTime? get startDate; DateTime? get endDate; Speaker? get speaker;
+ String get id; String get title; String get confId; String get type; String get category; String? get shortDescription; String? get description; DateTime? get startDate; DateTime? get endDate; Speaker? get speaker; List<Speaker> get speakers; bool get isBreak; String get sessionLabel; String get timeLabel; String get icon; String get descriptionHtml;
 /// Create a copy of EventItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $EventItemCopyWith<EventItem> get copyWith => _$EventItemCopyWithImpl<EventItem>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is EventItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.confId, confId) || other.confId == confId)&&(identical(other.type, type) || other.type == type)&&(identical(other.category, category) || other.category == category)&&(identical(other.shortDescription, shortDescription) || other.shortDescription == shortDescription)&&(identical(other.description, description) || other.description == description)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.speaker, speaker) || other.speaker == speaker));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is EventItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.confId, confId) || other.confId == confId)&&(identical(other.type, type) || other.type == type)&&(identical(other.category, category) || other.category == category)&&(identical(other.shortDescription, shortDescription) || other.shortDescription == shortDescription)&&(identical(other.description, description) || other.description == description)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&const DeepCollectionEquality().equals(other.speakers, speakers)&&(identical(other.isBreak, isBreak) || other.isBreak == isBreak)&&(identical(other.sessionLabel, sessionLabel) || other.sessionLabel == sessionLabel)&&(identical(other.timeLabel, timeLabel) || other.timeLabel == timeLabel)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.descriptionHtml, descriptionHtml) || other.descriptionHtml == descriptionHtml));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,confId,type,category,shortDescription,description,startDate,endDate,speaker);
+int get hashCode => Object.hash(runtimeType,id,title,confId,type,category,shortDescription,description,startDate,endDate,speaker,const DeepCollectionEquality().hash(speakers),isBreak,sessionLabel,timeLabel,icon,descriptionHtml);
 
 @override
 String toString() {
-  return 'EventItem(id: $id, title: $title, confId: $confId, type: $type, category: $category, shortDescription: $shortDescription, description: $description, startDate: $startDate, endDate: $endDate, speaker: $speaker)';
+  return 'EventItem(id: $id, title: $title, confId: $confId, type: $type, category: $category, shortDescription: $shortDescription, description: $description, startDate: $startDate, endDate: $endDate, speaker: $speaker, speakers: $speakers, isBreak: $isBreak, sessionLabel: $sessionLabel, timeLabel: $timeLabel, icon: $icon, descriptionHtml: $descriptionHtml)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $EventItemCopyWith<$Res>  {
   factory $EventItemCopyWith(EventItem value, $Res Function(EventItem) _then) = _$EventItemCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String confId, String type, String category, String? shortDescription, String? description, DateTime? startDate, DateTime? endDate, Speaker? speaker
+ String id, String title, String confId, String type, String category, String? shortDescription, String? description, DateTime? startDate, DateTime? endDate, Speaker? speaker, List<Speaker> speakers, bool isBreak, String sessionLabel, String timeLabel, String icon, String descriptionHtml
 });
 
 
@@ -62,7 +62,7 @@ class _$EventItemCopyWithImpl<$Res>
 
 /// Create a copy of EventItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? confId = null,Object? type = null,Object? category = null,Object? shortDescription = freezed,Object? description = freezed,Object? startDate = freezed,Object? endDate = freezed,Object? speaker = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? confId = null,Object? type = null,Object? category = null,Object? shortDescription = freezed,Object? description = freezed,Object? startDate = freezed,Object? endDate = freezed,Object? speaker = freezed,Object? speakers = null,Object? isBreak = null,Object? sessionLabel = null,Object? timeLabel = null,Object? icon = null,Object? descriptionHtml = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,13 @@ as String?,description: freezed == description ? _self.description : description
 as String?,startDate: freezed == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,speaker: freezed == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
-as Speaker?,
+as Speaker?,speakers: null == speakers ? _self.speakers : speakers // ignore: cast_nullable_to_non_nullable
+as List<Speaker>,isBreak: null == isBreak ? _self.isBreak : isBreak // ignore: cast_nullable_to_non_nullable
+as bool,sessionLabel: null == sessionLabel ? _self.sessionLabel : sessionLabel // ignore: cast_nullable_to_non_nullable
+as String,timeLabel: null == timeLabel ? _self.timeLabel : timeLabel // ignore: cast_nullable_to_non_nullable
+as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String,descriptionHtml: null == descriptionHtml ? _self.descriptionHtml : descriptionHtml // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 /// Create a copy of EventItem
@@ -171,10 +177,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String confId,  String type,  String category,  String? shortDescription,  String? description,  DateTime? startDate,  DateTime? endDate,  Speaker? speaker)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String confId,  String type,  String category,  String? shortDescription,  String? description,  DateTime? startDate,  DateTime? endDate,  Speaker? speaker,  List<Speaker> speakers,  bool isBreak,  String sessionLabel,  String timeLabel,  String icon,  String descriptionHtml)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _EventItem() when $default != null:
-return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_that.shortDescription,_that.description,_that.startDate,_that.endDate,_that.speaker);case _:
+return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_that.shortDescription,_that.description,_that.startDate,_that.endDate,_that.speaker,_that.speakers,_that.isBreak,_that.sessionLabel,_that.timeLabel,_that.icon,_that.descriptionHtml);case _:
   return orElse();
 
 }
@@ -192,10 +198,10 @@ return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String confId,  String type,  String category,  String? shortDescription,  String? description,  DateTime? startDate,  DateTime? endDate,  Speaker? speaker)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String confId,  String type,  String category,  String? shortDescription,  String? description,  DateTime? startDate,  DateTime? endDate,  Speaker? speaker,  List<Speaker> speakers,  bool isBreak,  String sessionLabel,  String timeLabel,  String icon,  String descriptionHtml)  $default,) {final _that = this;
 switch (_that) {
 case _EventItem():
-return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_that.shortDescription,_that.description,_that.startDate,_that.endDate,_that.speaker);case _:
+return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_that.shortDescription,_that.description,_that.startDate,_that.endDate,_that.speaker,_that.speakers,_that.isBreak,_that.sessionLabel,_that.timeLabel,_that.icon,_that.descriptionHtml);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -212,10 +218,10 @@ return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String confId,  String type,  String category,  String? shortDescription,  String? description,  DateTime? startDate,  DateTime? endDate,  Speaker? speaker)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String confId,  String type,  String category,  String? shortDescription,  String? description,  DateTime? startDate,  DateTime? endDate,  Speaker? speaker,  List<Speaker> speakers,  bool isBreak,  String sessionLabel,  String timeLabel,  String icon,  String descriptionHtml)?  $default,) {final _that = this;
 switch (_that) {
 case _EventItem() when $default != null:
-return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_that.shortDescription,_that.description,_that.startDate,_that.endDate,_that.speaker);case _:
+return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_that.shortDescription,_that.description,_that.startDate,_that.endDate,_that.speaker,_that.speakers,_that.isBreak,_that.sessionLabel,_that.timeLabel,_that.icon,_that.descriptionHtml);case _:
   return null;
 
 }
@@ -227,7 +233,7 @@ return $default(_that.id,_that.title,_that.confId,_that.type,_that.category,_tha
 
 
 class _EventItem extends EventItem {
-  const _EventItem({required this.id, required this.title, required this.confId, required this.type, required this.category, required this.shortDescription, required this.description, required this.startDate, required this.endDate, required this.speaker}): super._();
+  const _EventItem({required this.id, required this.title, required this.confId, required this.type, required this.category, required this.shortDescription, required this.description, required this.startDate, required this.endDate, required this.speaker, final  List<Speaker> speakers = const [], this.isBreak = false, this.sessionLabel = '', this.timeLabel = '', this.icon = '', this.descriptionHtml = ''}): _speakers = speakers,super._();
   
 
 @override final  String id;
@@ -240,6 +246,18 @@ class _EventItem extends EventItem {
 @override final  DateTime? startDate;
 @override final  DateTime? endDate;
 @override final  Speaker? speaker;
+ final  List<Speaker> _speakers;
+@override@JsonKey() List<Speaker> get speakers {
+  if (_speakers is EqualUnmodifiableListView) return _speakers;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_speakers);
+}
+
+@override@JsonKey() final  bool isBreak;
+@override@JsonKey() final  String sessionLabel;
+@override@JsonKey() final  String timeLabel;
+@override@JsonKey() final  String icon;
+@override@JsonKey() final  String descriptionHtml;
 
 /// Create a copy of EventItem
 /// with the given fields replaced by the non-null parameter values.
@@ -251,16 +269,16 @@ _$EventItemCopyWith<_EventItem> get copyWith => __$EventItemCopyWithImpl<_EventI
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EventItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.confId, confId) || other.confId == confId)&&(identical(other.type, type) || other.type == type)&&(identical(other.category, category) || other.category == category)&&(identical(other.shortDescription, shortDescription) || other.shortDescription == shortDescription)&&(identical(other.description, description) || other.description == description)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.speaker, speaker) || other.speaker == speaker));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _EventItem&&(identical(other.id, id) || other.id == id)&&(identical(other.title, title) || other.title == title)&&(identical(other.confId, confId) || other.confId == confId)&&(identical(other.type, type) || other.type == type)&&(identical(other.category, category) || other.category == category)&&(identical(other.shortDescription, shortDescription) || other.shortDescription == shortDescription)&&(identical(other.description, description) || other.description == description)&&(identical(other.startDate, startDate) || other.startDate == startDate)&&(identical(other.endDate, endDate) || other.endDate == endDate)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&const DeepCollectionEquality().equals(other._speakers, _speakers)&&(identical(other.isBreak, isBreak) || other.isBreak == isBreak)&&(identical(other.sessionLabel, sessionLabel) || other.sessionLabel == sessionLabel)&&(identical(other.timeLabel, timeLabel) || other.timeLabel == timeLabel)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.descriptionHtml, descriptionHtml) || other.descriptionHtml == descriptionHtml));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,title,confId,type,category,shortDescription,description,startDate,endDate,speaker);
+int get hashCode => Object.hash(runtimeType,id,title,confId,type,category,shortDescription,description,startDate,endDate,speaker,const DeepCollectionEquality().hash(_speakers),isBreak,sessionLabel,timeLabel,icon,descriptionHtml);
 
 @override
 String toString() {
-  return 'EventItem(id: $id, title: $title, confId: $confId, type: $type, category: $category, shortDescription: $shortDescription, description: $description, startDate: $startDate, endDate: $endDate, speaker: $speaker)';
+  return 'EventItem(id: $id, title: $title, confId: $confId, type: $type, category: $category, shortDescription: $shortDescription, description: $description, startDate: $startDate, endDate: $endDate, speaker: $speaker, speakers: $speakers, isBreak: $isBreak, sessionLabel: $sessionLabel, timeLabel: $timeLabel, icon: $icon, descriptionHtml: $descriptionHtml)';
 }
 
 
@@ -271,7 +289,7 @@ abstract mixin class _$EventItemCopyWith<$Res> implements $EventItemCopyWith<$Re
   factory _$EventItemCopyWith(_EventItem value, $Res Function(_EventItem) _then) = __$EventItemCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String confId, String type, String category, String? shortDescription, String? description, DateTime? startDate, DateTime? endDate, Speaker? speaker
+ String id, String title, String confId, String type, String category, String? shortDescription, String? description, DateTime? startDate, DateTime? endDate, Speaker? speaker, List<Speaker> speakers, bool isBreak, String sessionLabel, String timeLabel, String icon, String descriptionHtml
 });
 
 
@@ -288,7 +306,7 @@ class __$EventItemCopyWithImpl<$Res>
 
 /// Create a copy of EventItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? confId = null,Object? type = null,Object? category = null,Object? shortDescription = freezed,Object? description = freezed,Object? startDate = freezed,Object? endDate = freezed,Object? speaker = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? confId = null,Object? type = null,Object? category = null,Object? shortDescription = freezed,Object? description = freezed,Object? startDate = freezed,Object? endDate = freezed,Object? speaker = freezed,Object? speakers = null,Object? isBreak = null,Object? sessionLabel = null,Object? timeLabel = null,Object? icon = null,Object? descriptionHtml = null,}) {
   return _then(_EventItem(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
@@ -300,7 +318,13 @@ as String?,description: freezed == description ? _self.description : description
 as String?,startDate: freezed == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,speaker: freezed == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
-as Speaker?,
+as Speaker?,speakers: null == speakers ? _self._speakers : speakers // ignore: cast_nullable_to_non_nullable
+as List<Speaker>,isBreak: null == isBreak ? _self.isBreak : isBreak // ignore: cast_nullable_to_non_nullable
+as bool,sessionLabel: null == sessionLabel ? _self.sessionLabel : sessionLabel // ignore: cast_nullable_to_non_nullable
+as String,timeLabel: null == timeLabel ? _self.timeLabel : timeLabel // ignore: cast_nullable_to_non_nullable
+as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
+as String,descriptionHtml: null == descriptionHtml ? _self.descriptionHtml : descriptionHtml // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

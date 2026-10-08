@@ -7,6 +7,8 @@ import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_cubit
 import 'package:ng_poland_conf_app/features/event/presentation/widgets/event_rating.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/widgets/event_vote_button.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
 import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
@@ -71,8 +73,9 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     children: [
-                      _buildSpeaker(eventItem.speaker),
-                      if (eventItem.speaker != null)
+                      for (final speaker in _speakersOf(eventItem))
+                        _buildSpeaker(speaker),
+                      if (eventItem.hasSpeaker && !eventItem.isBreak)
                         EventVoteButtonHost(
                           eventId: widget.eventId,
                           eventItemType: widget.eventItemType,
@@ -121,7 +124,9 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Container(
             alignment: Alignment.centerLeft,
-            child: eventItem.description != null
+            child: eventItem.descriptionHtml.isNotEmpty
+                ? HtmlWidget(eventItem.descriptionHtml)
+                : eventItem.description != null
                 ? Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
@@ -146,8 +151,14 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
     );
   }
 
-  Widget _buildSpeaker(Speaker? speaker) {
-    if (speaker == null) return const SizedBox.shrink();
+  List<Speaker> _speakersOf(EventItem eventItem) {
+    if (eventItem.speakers.isNotEmpty) return eventItem.speakers;
+    final speaker = eventItem.speaker;
+    if (speaker == null) return const [];
+    return [speaker];
+  }
+
+  Widget _buildSpeaker(Speaker speaker) {
     final flatButtonStyle = TextButton.styleFrom(
       foregroundColor: Colors.black87,
       minimumSize: const Size(50, 50),
@@ -177,39 +188,39 @@ class _EventPageState extends State<EventPage> with ConnectivityMixin {
               children: [
                 Center(
                   child: CrossOriginImage(
-                    imageUrl: 'https:${speaker.photoFileUrl}',
+                    imageUrl: networkPhotoUrl(speaker.photoFileUrl),
                     placeholderAsset: 'assets/images/person.png',
                     sizeFactor: 0.2,
                   ),
                 ),
-                Container(
-                  alignment: Alignment.bottomRight,
-                  margin: const EdgeInsets.only(right: 20.0),
-                  height:
-                      MediaQuery.of(context).orientation == Orientation.portrait
-                      ? MediaQuery.of(context).size.width * 0.30
-                      : MediaQuery.of(context).size.width * 0.37,
-                  width:
-                      MediaQuery.of(context).orientation == Orientation.portrait
-                      ? null
-                      : MediaQuery.of(context).size.width * 0.33,
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.white,
-                    child: TextButton(
-                      style: flatButtonStyle,
-                      onPressed: () {
-                        speaker.urlTwitter != null
-                            ? launchUrl(Uri.parse(speaker.urlTwitter as String))
-                            : null;
-                      },
-                      child: const FaIcon(
-                        FontAwesomeIcons.twitter,
-                        color: Colors.blue,
+                if (speaker.urlTwitter case final twitter?)
+                  if (twitter.isNotEmpty)
+                    Container(
+                      alignment: Alignment.bottomRight,
+                      margin: const EdgeInsets.only(right: 20.0),
+                      height:
+                          MediaQuery.of(context).orientation ==
+                              Orientation.portrait
+                          ? MediaQuery.of(context).size.width * 0.30
+                          : MediaQuery.of(context).size.width * 0.37,
+                      width:
+                          MediaQuery.of(context).orientation ==
+                              Orientation.portrait
+                          ? null
+                          : MediaQuery.of(context).size.width * 0.33,
+                      child: CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: TextButton(
+                          style: flatButtonStyle,
+                          onPressed: () => launchUrl(Uri.parse(twitter)),
+                          child: const FaIcon(
+                            FontAwesomeIcons.twitter,
+                            color: Colors.blue,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
               ],
             ),
           ),

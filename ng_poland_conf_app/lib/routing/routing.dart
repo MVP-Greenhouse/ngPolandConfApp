@@ -11,7 +11,6 @@ import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/us
 import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/home_page.dart';
 import 'package:ng_poland_conf_app/features/info/presentation/info_page.dart';
-import 'package:ng_poland_conf_app/features/nggirls/presentation/nggirls_page.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_page.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_top5_page.dart';
 import 'package:ng_poland_conf_app/features/speakers/presentation/speakers_page.dart';
@@ -117,7 +116,8 @@ String? authRedirect({
     return null;
   }
 
-  final onAuth = matchedLocation == AuthenticationPage.path ||
+  final onAuth =
+      matchedLocation == AuthenticationPage.path ||
       (fullPath?.contains(AuthenticationPage.path) ?? false);
   if (!onAuth) {
     return null;
@@ -130,7 +130,6 @@ enum Pages {
   home('/', 'Home'),
   schedule('/schedule', 'Schedule'),
   workshops('/workshops', 'Workshops'),
-  nggirls('/nggirls', 'ngGirls'),
   speakers('/speakers', 'Speakers'),
   questions('/questions', 'Q&A'),
   info('/info', 'Info'),
@@ -139,10 +138,7 @@ enum Pages {
   final String path;
   final String nameKey;
 
-  const Pages(
-    this.path,
-    this.nameKey,
-  );
+  const Pages(this.path, this.nameKey);
 }
 
 @singleton
@@ -151,9 +147,9 @@ class Routing {
   late final GoRouter router;
 
   Pages currentPage(BuildContext context) => Pages.values.firstWhere(
-        (page) => page.path == ModalRoute.of(context)?.settings.name,
-        orElse: () => Pages.home,
-      );
+    (page) => page.path == ModalRoute.of(context)?.settings.name,
+    orElse: () => Pages.home,
+  );
 
   Routing() {
     navigatorKey = GlobalKey<NavigatorState>();
@@ -222,67 +218,88 @@ class Routing {
             initialTrack: trackFromQuery(state.uri.queryParameters),
           ),
           routes: [
-          GoRoute(
-            path: '${ScheduleTop5Page.pathSegment}/:eventItemType',
-            name: '${Pages.schedule.nameKey}-${ScheduleTop5Page.routeNameKey}',
-            builder: (context, state) {
-              final eventItemType = state.pathParameters['eventItemType'];
-              return ScheduleTop5Page(eventItemType: eventItemType!);
-            },
-          ),
-          GoRoute(
-            path: 'schedule/${EventPage.routeName}/:eventId/:eventItemType',
-            name: '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
-            builder: (context, state) {
-              final eventId = state.pathParameters['eventId'];
-              final eventItemType = state.pathParameters['eventItemType'];
-              return EventPage(
-                eventId: eventId!,
-                eventItemType: eventItemType!,
-              );
-            },
-          ),
-          GoRoute(
-            path: 'speaker/${SpeakerDetails.routeName}/:id',
-            name: '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',
-            builder: (context, state) {
-              // Extract the id from the path
-              final id = state.pathParameters['id'];
-              return SpeakerDetails(id: id!);
-            },
-          )
-        ]),
+            GoRoute(
+              path: '${ScheduleTop5Page.pathSegment}/:eventItemType',
+              name:
+                  '${Pages.schedule.nameKey}-${ScheduleTop5Page.routeNameKey}',
+              builder: (context, state) {
+                final eventItemType = state.pathParameters['eventItemType'];
+                return ScheduleTop5Page(eventItemType: eventItemType!);
+              },
+            ),
+            GoRoute(
+              path: 'schedule/${EventPage.routeName}/:eventId/:eventItemType',
+              name: '${Pages.schedule.nameKey}-${EventPage.routeNameKey}',
+              builder: (context, state) {
+                final eventId = state.pathParameters['eventId'];
+                final eventItemType = state.pathParameters['eventItemType'];
+                return EventPage(
+                  eventId: eventId!,
+                  eventItemType: eventItemType!,
+                );
+              },
+            ),
+            GoRoute(
+              path: 'speaker/${SpeakerDetails.routeName}/:id',
+              name: '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',
+              builder: (context, state) {
+                // Extract the id from the path
+                final id = state.pathParameters['id'];
+                return SpeakerDetails(
+                  id: id!,
+                  conference: state.uri.queryParameters['conference'] ?? '',
+                );
+              },
+            ),
+          ],
+        ),
         GoRoute(
           path: Pages.workshops.path,
           builder: (context, state) => WorkshopsPage(
-            initialTrack: trackFromQuery(state.uri.queryParameters),
+            initialDayKey: state.uri.queryParameters['day'],
+            initialWorkshopId: int.tryParse(
+              state.uri.queryParameters['workshop'] ?? '',
+            ),
           ),
           routes: [
-          GoRoute(
-            path: 'speaker/${SpeakerDetails.routeName}/:id',
-            name: '${Pages.workshops.nameKey}-${SpeakerDetails.routeNameKey}',
-            builder: (context, state) {
-              // Extract the id from the path
-              final id = state.pathParameters['id'];
-              return SpeakerDetails(id: id!);
-            },
-          )
-        ]),
-        GoRoute(
-          path: Pages.nggirls.path,
-          builder: (context, state) => const NgGirlsPage(),
+            GoRoute(
+              path: 'speaker/${SpeakerDetails.routeName}/:id',
+              name: '${Pages.workshops.nameKey}-${SpeakerDetails.routeNameKey}',
+              builder: (context, state) {
+                final id = state.pathParameters['id'];
+                final speakers = state.uri.queryParameters['speakers'];
+                return SpeakerDetails(
+                  id: id!,
+                  conference: state.uri.queryParameters['conference'] ?? '',
+                  workshopSpeakerIds: speakers == null
+                      ? const []
+                      : [
+                          for (final slug in speakers.split(','))
+                            if (slug.isNotEmpty) slug,
+                        ],
+                );
+              },
+            ),
+          ],
         ),
-        GoRoute(path: Pages.speakers.path, builder: (context, state) => const SpeakersPage(), routes: [
-          GoRoute(
-            path: '${SpeakerDetails.routeName}/:id',
-            name: '${Pages.speakers.nameKey}-${SpeakerDetails.routeNameKey}',
-            builder: (context, state) {
-              // Extract the id from the path
-              final id = state.pathParameters['id'];
-              return SpeakerDetails(id: id!);
-            },
-          )
-        ]),
+        GoRoute(
+          path: Pages.speakers.path,
+          builder: (context, state) => const SpeakersPage(),
+          routes: [
+            GoRoute(
+              path: '${SpeakerDetails.routeName}/:id',
+              name: '${Pages.speakers.nameKey}-${SpeakerDetails.routeNameKey}',
+              builder: (context, state) {
+                // Extract the id from the path
+                final id = state.pathParameters['id'];
+                return SpeakerDetails(
+                  id: id!,
+                  conference: state.uri.queryParameters['conference'] ?? '',
+                );
+              },
+            ),
+          ],
+        ),
         GoRoute(
           path: Pages.questions.path,
           builder: (context, state) => const QuestionsPage(),

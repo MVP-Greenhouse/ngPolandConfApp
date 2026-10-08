@@ -176,11 +176,11 @@ class AdminCubit extends Cubit<AdminState> {
       );
       final ranking = [
         for (final event in events)
-          if (event.speaker != null)
+          if (event.hasSpeaker && !event.isBreak)
             EventVoteRank(
               eventId: event.id,
               title: event.title,
-              speakerName: event.speaker?.name ?? '',
+              speakerName: event.speakerNames,
               trackType: event.type,
               likes: counts[event.id]?.likes ?? 0,
             ),

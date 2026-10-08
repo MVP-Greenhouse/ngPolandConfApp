@@ -3,36 +3,32 @@ import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/home/domains/logic/home_schedule_navigation.dart';
 
 void main() {
-  test('maps NG/JS/AI poland to schedule tracks', () {
+  test('maps conference day keys to schedule tracks', () {
     expect(
-      HomeScheduleNavigation.targetForName('NG Poland')?.track,
+      HomeScheduleNavigation.targetForDayKey('ng')?.track,
       EventItemType.ngPoland,
     );
     expect(
-      HomeScheduleNavigation.targetForName('js poland')?.track,
+      HomeScheduleNavigation.targetForDayKey('js')?.track,
       EventItemType.jsPoland,
     );
     expect(
-      HomeScheduleNavigation.targetForName('AI Poland')?.destination,
+      HomeScheduleNavigation.targetForDayKey('ai')?.destination,
       HomeScheduleDestination.schedule,
     );
   });
 
-  test('maps workshops names to workshops + track', () {
-    final plain = HomeScheduleNavigation.targetForName('WORKSHOPS');
-    expect(plain?.destination, HomeScheduleDestination.workshops);
-    expect(plain?.track, EventItemType.ngPoland);
+  test('maps workshop day keys without a conference track', () {
+    final first = HomeScheduleNavigation.targetForDayKey('workshops');
+    expect(first?.destination, HomeScheduleDestination.workshops);
+    expect(first?.track, isNull);
 
-    final ng = HomeScheduleNavigation.targetForName('NG Workshops');
-    expect(ng?.destination, HomeScheduleDestination.workshops);
-    expect(ng?.track, EventItemType.ngPoland);
-    expect(
-      HomeScheduleNavigation.targetForName('JS Workshops')?.track,
-      EventItemType.jsPoland,
-    );
+    final second = HomeScheduleNavigation.targetForDayKey('workshops2');
+    expect(second?.destination, HomeScheduleDestination.workshops);
+    expect(second?.dayKey, 'workshops2');
   });
 
-  test('unknown name returns null', () {
-    expect(HomeScheduleNavigation.targetForName('Unknown'), isNull);
+  test('unknown key returns null', () {
+    expect(HomeScheduleNavigation.targetForDayKey('unknown'), isNull);
   });
 }

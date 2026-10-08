@@ -2,10 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/core/usecases/usecases.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
-import 'package:ng_poland_conf_app/features/home/domains/usecases/get_all_conferences.dart';
+import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
+import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/conference_timer_mixin.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:collection/collection.dart';
@@ -39,11 +39,11 @@ class ConferencesCubit extends Cubit<ConferencesState> with ConferenceTimerMixin
   }
 
   Future<void> getConferences() async {
-    final Conferences? conferences = await getIt.get<GetAllConferences>().call(
-          NoParams(),
-        );
+    final edition = await getIt.get<EditionCubit>().ensure();
+    if (edition == null) return emit(const ConferencesState.error('error'));
 
-    if (conferences == null) return emit(const ConferencesState.error('error'));
+    final conference = conferenceFromEdition(edition);
+    final conferences = Conferences(list: [conference]);
 
     _conferences = conferences;
 

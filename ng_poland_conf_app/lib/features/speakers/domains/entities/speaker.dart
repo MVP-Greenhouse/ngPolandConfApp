@@ -17,6 +17,8 @@ abstract class Speaker with _$Speaker {
     required String? urlLinkedIn,
     required String? urlTwitter,
     required String? urlWww,
+    @Default('') String conferenceKey,
+    @Default('') String talkTitle,
   }) = _Speaker;
 
   factory Speaker.fromJson(Map<String, dynamic> json) {
