@@ -21,7 +21,10 @@ void main() {
     expect(edition.days, hasLength(3));
     expect(edition.dayByKey('js')?.published, isFalse);
     expect(edition.dayByKey('workshops')?.homeName, 'Hands-on Workshops Day');
-    expect(edition.speakerBySlug('anna-kowalska')?.talk?.title, 'Signals Deep Dive');
+    expect(
+      edition.speakerBySlug('anna-kowalska')?.talk?.title,
+      'Signals Deep Dive',
+    );
 
     final events = eventItemsForTrack(
       edition: edition,
@@ -74,21 +77,24 @@ void main() {
     final repository = EditionRepository(remote, cache)..now = () => now;
 
     remote.next = {
-      '/api/agenda.json': EditionFetch.ok(body: _encode(_agenda), etag: 'a1'),
-      '/api/speakers.json': EditionFetch.ok(body: _encode(_speakers), etag: 's1'),
+      'agenda': EditionFetch.ok(body: _encode(_agenda), etag: 'a1'),
+      'speakers': EditionFetch.ok(body: _encode(_speakers), etag: 's1'),
     };
     final first = await repository.load();
     expect(first?.confId, '2026');
 
     remote.next = {
-      '/api/agenda.json': const EditionFetch.notModified(etag: 'a1'),
-      '/api/speakers.json': const EditionFetch.notModified(etag: 's1'),
+      'agenda': const EditionFetch.notModified(etag: 'a1'),
+      'speakers': const EditionFetch.notModified(etag: 's1'),
     };
     remote.fail = false;
     final staleClock = EditionRepository(remote, cache)
       ..now = () => now.add(const Duration(minutes: 6));
     final second = await staleClock.load();
-    expect(second?.dayByKey('ng')?.conferenceItems.single.title, 'Opening Keynote');
+    expect(
+      second?.dayByKey('ng')?.conferenceItems.single.title,
+      'Opening Keynote',
+    );
 
     remote.fail = true;
     final offline = EditionRepository(remote, cache)
@@ -105,9 +111,14 @@ class _FakeRemote implements EditionRemote {
   bool fail = false;
 
   @override
-  Future<EditionFetch> get(String path, {String? etag}) async {
+  Future<EditionFetch> agenda({String? etag}) => _fetch('agenda');
+
+  @override
+  Future<EditionFetch> speakers({String? etag}) => _fetch('speakers');
+
+  Future<EditionFetch> _fetch(String resource) async {
     if (fail) throw Exception('offline');
-    return next[path] ?? (throw StateError('missing $path'));
+    return next[resource] ?? (throw StateError('missing $resource'));
   }
 }
 

@@ -60,8 +60,12 @@ class AdminVotingSection extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: TextButton.icon(
+                child: FilledButton.icon(
                   onPressed: onEndNow,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: scheme.error,
+                    foregroundColor: Colors.white,
+                  ),
                   icon: const Icon(Icons.stop_circle_outlined),
                   label: const Text('End now'),
                 ),

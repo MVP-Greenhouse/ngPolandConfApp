@@ -6,7 +6,6 @@ import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit
 import 'package:ng_poland_conf_app/features/admin/presentation/logic/admin_hub_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/settings/presentation/connection_status.dart';
-import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
 class AdminPage extends StatelessWidget {
@@ -25,20 +24,7 @@ class AdminPage extends StatelessWidget {
         return CustomScaffold(
           appBar: AppBar(
             title: Text('Admin', style: titleStyle),
-            actions: [
-              if (state.confIds.isNotEmpty && state.selectedConfId != null)
-                CustomDropDown(
-                  options: state.confIds,
-                  selectedOption: state.selectedConfId!,
-                  tooltip: 'Select conference',
-                  onChanged: (confId) {
-                    if (confId != null) {
-                      context.read<AdminCubit>().selectConference(confId);
-                    }
-                  },
-                ),
-              const ConnectionStatus(),
-            ],
+            actions: const [ConnectionStatus()],
           ),
           body: _buildBody(context, state),
         );

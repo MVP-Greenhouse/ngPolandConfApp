@@ -29,7 +29,9 @@ class EditionCacheEntry {
 }
 
 abstract class EditionRemote {
-  Future<EditionFetch> get(String path, {String? etag});
+  Future<EditionFetch> agenda({String? etag});
+
+  Future<EditionFetch> speakers({String? etag});
 }
 
 abstract class EditionCache {

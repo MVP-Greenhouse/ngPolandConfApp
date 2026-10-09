@@ -27,8 +27,8 @@ class EditionRepository {
       return memory;
     }
 
-    final agendaBody = await _body('/api/agenda.json', 'agenda');
-    final speakersBody = await _body('/api/speakers.json', 'speakers');
+    final agendaBody = await _body('agenda', _remote.agenda);
+    final speakersBody = await _body('speakers', _remote.speakers);
     if (agendaBody == null || speakersBody == null) return _memory;
 
     try {
@@ -44,28 +44,32 @@ class EditionRepository {
     }
   }
 
-  Future<String?> _body(String path, String resource) async {
+  Future<String?> _body(
+    String resource,
+    Future<EditionFetch> Function({String? etag}) fetch,
+  ) async {
     final cached = await _cache.read(resource);
     final now = this.now();
-    if (cached != null && editionCacheIsFresh(fetchedAt: cached.fetchedAt, now: now)) {
+    if (cached != null &&
+        editionCacheIsFresh(fetchedAt: cached.fetchedAt, now: now)) {
       return cached.body;
     }
 
     try {
-      final fetch = await _remote.get(path, etag: cached?.etag);
-      if (fetch.notModified) {
+      final result = await fetch(etag: cached?.etag);
+      if (result.notModified) {
         if (cached == null) return null;
         await _cache.write(
           resource,
-          cached.copyWith(etag: fetch.etag, fetchedAt: now),
+          cached.copyWith(etag: result.etag, fetchedAt: now),
         );
         return cached.body;
       }
-      final body = fetch.body;
+      final body = result.body;
       if (body == null || body.isEmpty) return cached?.body;
       await _cache.write(
         resource,
-        EditionCacheEntry(body: body, etag: fetch.etag, fetchedAt: now),
+        EditionCacheEntry(body: body, etag: result.etag, fetchedAt: now),
       );
       return body;
     } catch (_) {

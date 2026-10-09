@@ -3,23 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/entities/edition.dart';
 
-sealed class EditionState {
-  const EditionState();
-}
-
-class EditionInitial extends EditionState {
-  const EditionInitial();
-}
-
-class EditionReady extends EditionState {
-  const EditionReady(this.edition);
-
-  final Edition edition;
-}
-
-class EditionFailed extends EditionState {
-  const EditionFailed();
-}
+part 'edition_state.dart';
 
 @singleton
 class EditionCubit extends Cubit<EditionState> {

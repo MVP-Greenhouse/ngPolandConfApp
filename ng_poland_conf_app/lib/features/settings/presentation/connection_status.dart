@@ -3,35 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
 
 class ConnectionStatus extends StatefulWidget {
-  const ConnectionStatus({Key? key}) : super(key: key);
+  const ConnectionStatus({super.key});
 
   @override
   State<ConnectionStatus> createState() => _ConnectionStatusState();
 }
 
-class _ConnectionStatusState extends State<ConnectionStatus> with ConnectivityMixin {
-  bool hasConnection = false;
+class _ConnectionStatusState extends State<ConnectionStatus>
+    with ConnectivityMixin {
+  var _known = false;
 
   @override
   void initState() {
     super.initState();
-    (Connectivity().checkConnectivity()).then((status) {
+    Connectivity().checkConnectivity().then((results) {
+      if (!mounted || results.isEmpty) return;
       setState(() {
-        hasConnection = status != ConnectivityResult.none;
+        _known = true;
+        connectivityResult = results.last;
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return hasConnection
-        ? const SizedBox()
-        : Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Icon(
-              Icons.wifi_off,
-              color: Theme.of(context).colorScheme.onError,
-            ),
-          );
+    if (!_known || connectivityResult != ConnectivityResult.none) {
+      return const SizedBox.shrink();
+    }
+
+    return const Padding(
+      padding: EdgeInsets.only(right: 8),
+      child: Icon(Icons.wifi_off),
+    );
   }
 }

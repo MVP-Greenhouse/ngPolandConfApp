@@ -43,11 +43,6 @@ class AdminCubit extends Cubit<AdminState> {
 
   StreamSubscription<AdminState>? _subscription;
 
-  void selectConference(String confId) {
-    if (_selectedConfId$.value == confId) return;
-    _selectedConfId$.add(confId);
-  }
-
   void selectTrack(EventItemType track) {
     if (_selectedTrack$.value == track) return;
     _selectedTrack$.add(track);

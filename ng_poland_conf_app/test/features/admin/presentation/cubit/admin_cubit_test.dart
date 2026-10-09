@@ -83,21 +83,6 @@ void main() {
     expect(configRepo.lastSavedTrackType, EventItemType.ngPoland);
   });
 
-  test('selectConference switches edited conference', () async {
-    conferences.loadMany([
-      const Conference(confId: '2025', confName: 'NG', listItems: []),
-      const Conference(confId: '2026', confName: 'NG', listItems: []),
-    ]);
-    await pumpUntil(() => cubit.state.confIds.contains('2025'));
-
-    cubit.selectConference('2025');
-    await pumpUntil(() => cubit.state.selectedConfId == '2025');
-
-    expect(cubit.state.selectedConfId, '2025');
-    expect(cubit.state.latestConfId, '2026');
-    expect(configRepo.lastWatchedConfId, '2025');
-  });
-
   test('selectTrack filters ranking track', () async {
     expect(cubit.state.availableTracks, contains(EventItemType.aiPoland));
     cubit.selectTrack(EventItemType.jsPoland);
@@ -207,7 +192,11 @@ class _FakeVoteRepository implements EventVoteRepository {
 
 class _EmptyEditionRemote implements EditionRemote {
   @override
-  Future<EditionFetch> get(String path, {String? etag}) async =>
+  Future<EditionFetch> agenda({String? etag}) async =>
+      const EditionFetch.notModified();
+
+  @override
+  Future<EditionFetch> speakers({String? etag}) async =>
       const EditionFetch.notModified();
 }
 

@@ -8,17 +8,20 @@ class NgPolandApi implements EditionRemote {
 
   final Dio _dio;
 
-  static const host = 'https://ng-poland.pl';
+  @override
+  Future<EditionFetch> agenda({String? etag}) =>
+      _get('/api/agenda.json', etag: etag);
 
   @override
-  Future<EditionFetch> get(String path, {String? etag}) async {
+  Future<EditionFetch> speakers({String? etag}) =>
+      _get('/api/speakers.json', etag: etag);
+
+  Future<EditionFetch> _get(String path, {String? etag}) async {
     final response = await _dio.get<String>(
-      '$host$path',
+      path,
       options: Options(
         responseType: ResponseType.plain,
-        headers: {
-          if (etag != null && etag.isNotEmpty) 'If-None-Match': etag,
-        },
+        headers: {if (etag != null && etag.isNotEmpty) 'If-None-Match': etag},
         validateStatus: (code) => code == 200 || code == 304,
       ),
     );

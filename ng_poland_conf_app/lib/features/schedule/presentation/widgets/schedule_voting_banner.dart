@@ -1,10 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/features/schedule/presentation/cubit/schedule_voting_banner_cubit.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_top5_page.dart';
-import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
 
@@ -19,6 +18,39 @@ class ScheduleVotingBanner extends StatelessWidget {
   final EventItemType track;
   final bool votingOpen;
   final bool top5Enabled;
+
+  /// Height of this banner, including its padding, for [AppBar.bottom].
+  static double barExtent(BuildContext context) {
+    final textDirection = Directionality.of(context);
+    final textScaler = MediaQuery.textScalerOf(context);
+    final titleStyle =
+        Theme.of(context).textTheme.labelLarge?.copyWith(
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.2,
+          fontSize: 13,
+        ) ??
+        const TextStyle(fontSize: 13, fontWeight: FontWeight.w800);
+    final subtitleStyle =
+        Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12) ??
+        const TextStyle(fontSize: 12);
+    final textWidth = math.max(0.0, MediaQuery.sizeOf(context).width - 124);
+    final titleHeight = _textHeight(
+      'LIVE VOTING IS OPEN!',
+      titleStyle,
+      textDirection,
+      textScaler,
+      textWidth,
+    );
+    final subtitleHeight = _textHeight(
+      'Vote for your favorite talks • Top 5 ranking',
+      subtitleStyle,
+      textDirection,
+      textScaler,
+      textWidth,
+    );
+    final contentHeight = math.max(32, titleHeight + 4 + subtitleHeight);
+    return (44 + contentHeight).ceilToDouble();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,66 +154,20 @@ class ScheduleVotingBanner extends StatelessWidget {
   }
 }
 
-class ScheduleVotingBannerHost extends StatefulWidget {
-  const ScheduleVotingBannerHost({
-    super.key,
-    required this.track,
-    required this.child,
-  });
-
-  final EventItemType track;
-  final Widget child;
-
-  @override
-  State<ScheduleVotingBannerHost> createState() =>
-      _ScheduleVotingBannerHostState();
-}
-
-class _ScheduleVotingBannerHostState extends State<ScheduleVotingBannerHost> {
-  late final ScheduleVotingBannerCubit _cubit;
-
-  @override
-  void initState() {
-    _cubit = getIt.get<ScheduleVotingBannerCubit>()..load(track: widget.track);
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant ScheduleVotingBannerHost oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.track != widget.track) {
-      _cubit.load(track: widget.track);
-    }
-  }
-
-  @override
-  void dispose() {
-    _cubit.close();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ScheduleVotingBannerCubit, ScheduleVotingBannerState>(
-      bloc: _cubit,
-      builder: (context, state) {
-        return ColoredBox(
-          color: context.palette.screen,
-          child: Column(
-            children: [
-              state.maybeWhen(
-                visible: (votingOpen, top5Enabled) => ScheduleVotingBanner(
-                  track: widget.track,
-                  votingOpen: votingOpen,
-                  top5Enabled: top5Enabled,
-                ),
-                orElse: () => const SizedBox.shrink(),
-              ),
-              Expanded(child: widget.child),
-            ],
-          ),
-        );
-      },
-    );
-  }
+double _textHeight(
+  String text,
+  TextStyle style,
+  TextDirection textDirection,
+  TextScaler textScaler,
+  double maxWidth,
+) {
+  final painter = TextPainter(
+    text: TextSpan(text: text, style: style),
+    textDirection: textDirection,
+    textScaler: textScaler,
+    maxLines: 2,
+  )..layout(maxWidth: maxWidth);
+  final height = painter.height;
+  painter.dispose();
+  return height;
 }

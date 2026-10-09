@@ -161,7 +161,11 @@ class _FakeVoteRepository implements EventVoteRepository {
 
 class _EmptyEditionRemote implements EditionRemote {
   @override
-  Future<EditionFetch> get(String path, {String? etag}) async =>
+  Future<EditionFetch> agenda({String? etag}) async =>
+      const EditionFetch.notModified();
+
+  @override
+  Future<EditionFetch> speakers({String? etag}) async =>
       const EditionFetch.notModified();
 }
 

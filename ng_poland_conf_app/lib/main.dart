@@ -187,7 +187,7 @@ class _MainAppState extends State<MainApp> {
                 appBarTheme: const AppBarTheme(
                   backgroundColor: Color(0xffE91E63),
                   foregroundColor: Color(0xfffdfdfd),
-                  shadowColor: Color(0xfffafafb),
+                  shadowColor: Color(0xFF4A3A5C),
                 ),
                 applyElevationOverlayColor: false,
                 bottomNavigationBarTheme: const BottomNavigationBarThemeData(

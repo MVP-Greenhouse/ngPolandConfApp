@@ -7,8 +7,8 @@ import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_section_card.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_voting_section.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 import 'package:ng_poland_conf_app/widgets/custom_back_button.dart';
-import 'package:ng_poland_conf_app/widgets/custom_dropdown.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
 class AdminVotingPage extends StatelessWidget {
@@ -31,19 +31,6 @@ class AdminVotingPage extends StatelessWidget {
                 color: Theme.of(context).colorScheme.inversePrimary,
               ),
             ),
-            actions: [
-              if (state.confIds.isNotEmpty && state.selectedConfId != null)
-                CustomDropDown(
-                  options: state.confIds,
-                  selectedOption: state.selectedConfId!,
-                  tooltip: 'Select conference',
-                  onChanged: (confId) {
-                    if (confId != null) {
-                      context.read<AdminCubit>().selectConference(confId);
-                    }
-                  },
-                ),
-            ],
           ),
           body: _buildBody(context, state),
         );
@@ -113,12 +100,7 @@ class AdminVotingPage extends StatelessWidget {
                   ButtonSegment<EventItemType>(
                     value: track,
                     tooltip: track.label,
-                    icon: Image.asset(
-                      track.imagePath,
-                      height: 28,
-                      width: 28,
-                      fit: BoxFit.contain,
-                    ),
+                    icon: _TrackIcon(track: track),
                   ),
               ],
               selected: {state.selectedTrack},
@@ -160,6 +142,31 @@ class AdminVotingPage extends StatelessWidget {
           onTop5EnabledChanged: cubit.saveTop5Enabled,
         ),
       ],
+    );
+  }
+}
+
+class _TrackIcon extends StatelessWidget {
+  const _TrackIcon({required this.track});
+
+  final EventItemType track;
+
+  @override
+  Widget build(BuildContext context) {
+    final image = Image.asset(
+      track.imagePath,
+      height: 28,
+      width: 28,
+      fit: BoxFit.contain,
+    );
+    if (Theme.of(context).brightness == Brightness.dark) return image;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppPalette.dark.screen,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(padding: const EdgeInsets.all(4), child: image),
     );
   }
 }
