@@ -39,6 +39,7 @@ dependencies:
   # UI
   font_awesome_flutter: ^11.0.0
   cached_network_image: 3.4.1
+  flutter_cache_manager: ^3.4.1
   flutter_widget_from_html_core: ^0.17.0
   # rive: 0.14.0-dev.12 // TODO: fix Rive 0.14 migration
   webview_flutter: ^4.14.1

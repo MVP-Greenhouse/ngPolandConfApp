@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/image_helper.dart';
+import 'package:ng_poland_conf_app/widgets/app_image_cache.dart';
 
 class FixedSizeCrossOriginImage extends StatelessWidget {
   final String imageUrl;
@@ -19,25 +18,26 @@ class FixedSizeCrossOriginImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!kIsWeb) {
+      final cachePixels = (size * MediaQuery.devicePixelRatioOf(context))
+          .ceil();
       return SizedBox(
         width: size,
         height: size,
         child: CachedNetworkImage(
           imageUrl: imageUrl,
+          cacheManager: AppImageCache.instance,
+          memCacheWidth: cachePixels,
+          memCacheHeight: cachePixels,
+          fadeInDuration: Duration.zero,
+          fadeOutDuration: Duration.zero,
           width: size,
           height: size,
           fit: BoxFit.cover,
-          progressIndicatorBuilder: (_, __, ___) => Image.asset(
-            placeholderAsset,
-            width: size,
-            height: size,
-          ),
-          errorWidget: (_, __, ___) => Image.asset(
-            placeholderAsset,
-            width: size,
-            height: size,
-          ),
+          progressIndicatorBuilder: (_, _, _) =>
+              Image.asset(placeholderAsset, width: size, height: size),
+          errorWidget: (_, _, _) =>
+              Image.asset(placeholderAsset, width: size, height: size),
           imageBuilder: (_, imageProvider) => DecoratedBox(
             decoration: BoxDecoration(
               shape: BoxShape.circle,

@@ -398,7 +398,7 @@ class _SettingsButton extends StatelessWidget {
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.code, size: 18),
+          Icon(Icons.wifi, size: 18),
           SizedBox(width: 8),
           Text(
             'Check network settings',

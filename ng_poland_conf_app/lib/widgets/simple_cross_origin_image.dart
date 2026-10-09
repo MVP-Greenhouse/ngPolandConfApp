@@ -3,12 +3,11 @@
 // that accepts width and height, or just a single size parameter for simplicity.
 
 // Reverting to the simpler custom widget structure for minimal styling:
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/image_helper.dart';
+import 'package:ng_poland_conf_app/widgets/app_image_cache.dart';
 
 class SimpleCrossOriginImage extends StatelessWidget {
   final String imageUrl;
@@ -26,11 +25,23 @@ class SimpleCrossOriginImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!kIsWeb) {
+      final resolvedHeight = height ?? width;
+      final ratio = MediaQuery.devicePixelRatioOf(context);
       return CachedNetworkImage(
-        progressIndicatorBuilder: (_, __, ___) => Image.asset(placeholderAsset),
-        width: width,
         imageUrl: imageUrl,
+        cacheManager: AppImageCache.instance,
+        memCacheWidth: (width * ratio).ceil(),
+        memCacheHeight: (resolvedHeight * ratio).ceil(),
+        fadeInDuration: Duration.zero,
+        fadeOutDuration: Duration.zero,
+        width: width,
+        height: resolvedHeight,
+        fit: BoxFit.cover,
+        progressIndicatorBuilder: (_, _, _) =>
+            Image.asset(placeholderAsset, width: width, height: resolvedHeight),
+        errorWidget: (_, _, _) =>
+            Image.asset(placeholderAsset, width: width, height: resolvedHeight),
       );
     }
     final imageProvider = NetworkImage(imageUrl);
@@ -42,7 +53,11 @@ class SimpleCrossOriginImage extends StatelessWidget {
 
       // --- Error Handling ---
       errorBuilder: (context, error, stackTrace) {
-        return Image.asset(placeholderAsset, width: width, height: height ?? width);
+        return Image.asset(
+          placeholderAsset,
+          width: width,
+          height: height ?? width,
+        );
       },
 
       // --- Loading and CORS Fix ---

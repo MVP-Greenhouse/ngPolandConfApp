@@ -14,6 +14,7 @@ import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speake
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/widgets/caching_html_widget_factory.dart';
 import 'package:ng_poland_conf_app/widgets/custom_back_button.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:ng_poland_conf_app/widgets/simple_cross_origin_image.dart';
@@ -294,7 +295,11 @@ class _DescriptionCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         child: html.isNotEmpty
-            ? HtmlWidget(html, textStyle: style)
+            ? HtmlWidget(
+                html,
+                factoryBuilder: CachingHtmlWidgetFactory.new,
+                textStyle: style,
+              )
             : Text(plain, style: style),
       ),
     );

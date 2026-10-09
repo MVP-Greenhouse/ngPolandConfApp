@@ -6,6 +6,7 @@ import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit
 import 'package:ng_poland_conf_app/features/admin/presentation/logic/admin_hub_status.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/settings/presentation/connection_status.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 
 class AdminPage extends StatelessWidget {
@@ -26,7 +27,10 @@ class AdminPage extends StatelessWidget {
             title: Text('Admin', style: titleStyle),
             actions: const [ConnectionStatus()],
           ),
-          body: _buildBody(context, state),
+          body: ColoredBox(
+            color: context.palette.screen,
+            child: _buildBody(context, state),
+          ),
         );
       },
     );
@@ -37,7 +41,9 @@ class AdminPage extends StatelessWidget {
       return const SizedBox.shrink();
     }
     if (state.loading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(color: context.palette.accent),
+      );
     }
 
     final config =
@@ -71,8 +77,6 @@ class AdminHubContent extends StatelessWidget {
         AdminHubNavCard(
           title: trackLabel == null ? 'Voting' : 'Voting · $trackLabel',
           icon: Icons.thumb_up_alt_outlined,
-          iconBackground: _votingIconBackground(context),
-          accentColor: _accentColor(context),
           chips: [
             _StatusChip(
               label: AdminHubStatus.votingSubtitle(config),
@@ -88,21 +92,6 @@ class AdminHubContent extends StatelessWidget {
       ],
     );
   }
-
-  static Color _accentColor(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Theme.of(context).brightness == Brightness.dark
-        ? scheme.primaryContainer
-        : scheme.secondary;
-  }
-
-  static Color _votingIconBackground(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    if (Theme.of(context).brightness == Brightness.dark) {
-      return scheme.secondaryContainer.withValues(alpha: 0.35);
-    }
-    return scheme.primary.withValues(alpha: 0.12);
-  }
 }
 
 class AdminHubNavCard extends StatelessWidget {
@@ -110,88 +99,66 @@ class AdminHubNavCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
-    required this.iconBackground,
-    required this.accentColor,
     required this.chips,
     required this.onTap,
   });
 
   final String title;
   final IconData icon;
-  final Color iconBackground;
-  final Color accentColor;
   final List<Widget> chips;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
+    final palette = context.palette;
 
     return Material(
-      color: scheme.surface,
-      borderRadius: BorderRadius.circular(12),
-      clipBehavior: Clip.antiAlias,
+      color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(22),
         child: Ink(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: scheme.outline.withValues(alpha: isDark ? 0.28 : 0.12),
-            ),
+            color: palette.card,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: palette.hairline),
           ),
-          child: IntrinsicHeight(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Container(width: 4, color: accentColor),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: iconBackground,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(icon, size: 20, color: scheme.onSurface),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                title,
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: scheme.onSurface,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Wrap(spacing: 6, runSpacing: 6, children: chips),
-                            ],
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: scheme.onSurface.withValues(alpha: 0.5),
-                        ),
-                      ],
-                    ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: palette.accent.withValues(alpha: 0.16),
+                    shape: BoxShape.circle,
+                  ),
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: Icon(icon, size: 20, color: palette.accent),
                   ),
                 ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: palette.onCard,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(spacing: 6, runSpacing: 6, children: chips),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right, color: palette.muted),
               ],
             ),
           ),
@@ -209,27 +176,19 @@ class _StatusChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    if (filled) {
-      return Chip(
-        label: Text(label),
-        labelStyle: TextStyle(fontSize: 12, color: scheme.onPrimaryContainer),
-        backgroundColor: scheme.primaryContainer,
-        side: BorderSide.none,
-        visualDensity: VisualDensity.compact,
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        padding: EdgeInsets.zero,
-        labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-      );
-    }
+    final palette = context.palette;
+    final labelStyle = TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w600,
+      color: filled ? palette.accent : palette.muted,
+    );
     return Chip(
       label: Text(label),
-      labelStyle: TextStyle(
-        fontSize: 12,
-        color: scheme.onSurface.withValues(alpha: 0.7),
-      ),
-      backgroundColor: Colors.transparent,
-      side: BorderSide(color: scheme.outline.withValues(alpha: 0.35)),
+      labelStyle: labelStyle,
+      backgroundColor: filled
+          ? palette.accent.withValues(alpha: 0.16)
+          : palette.panel,
+      side: BorderSide(color: filled ? Colors.transparent : palette.hairline),
       visualDensity: VisualDensity.compact,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       padding: EdgeInsets.zero,

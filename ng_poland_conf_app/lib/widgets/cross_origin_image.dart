@@ -1,9 +1,8 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/image_helper.dart';
+import 'package:ng_poland_conf_app/widgets/app_image_cache.dart';
 
 class CrossOriginImage extends StatelessWidget {
   final String imageUrl;
@@ -20,20 +19,24 @@ class CrossOriginImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double size = MediaQuery.sizeOf(context).width * sizeFactor;
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (!kIsWeb) {
+      final cachePixels = (size * MediaQuery.devicePixelRatioOf(context))
+          .ceil();
       return CachedNetworkImage(
         imageUrl: imageUrl,
-        progressIndicatorBuilder: (_, __, ___) => Image.asset(placeholderAsset),
+        cacheManager: AppImageCache.instance,
+        memCacheWidth: cachePixels,
+        memCacheHeight: cachePixels,
+        fadeInDuration: Duration.zero,
+        fadeOutDuration: Duration.zero,
+        progressIndicatorBuilder: (_, _, _) => Image.asset(placeholderAsset),
         errorWidget: (_, url, dynamic error) {
           return Image.asset(placeholderAsset);
         },
         imageBuilder: (_, imageProvider) => SizedBox(
           width: size,
           height: size,
-          child: CircleAvatar(
-            radius: 25,
-            backgroundImage: imageProvider,
-          ),
+          child: CircleAvatar(radius: 25, backgroundImage: imageProvider),
         ),
       );
     }
@@ -67,11 +70,7 @@ class CrossOriginImage extends StatelessWidget {
           }
 
           // Replicates the progressIndicatorBuilder behavior (using placeholder)
-          return Image.asset(
-            placeholderAsset,
-            width: size,
-            height: size,
-          );
+          return Image.asset(placeholderAsset, width: size, height: size);
         },
       ),
     );

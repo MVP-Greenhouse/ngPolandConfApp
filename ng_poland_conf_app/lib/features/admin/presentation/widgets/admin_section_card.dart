@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 
 /// Shared surface card used on admin detail screens (matches hub radius/accent).
 class AdminSectionCard extends StatelessWidget {
@@ -15,49 +16,33 @@ class AdminSectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final scheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
-    final accent = isDark ? scheme.primaryContainer : scheme.secondary;
+    final palette = context.palette;
 
     return Material(
-      color: scheme.surface,
-      borderRadius: BorderRadius.circular(12),
-      clipBehavior: Clip.antiAlias,
+      color: Colors.transparent,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: scheme.outline.withValues(alpha: isDark ? 0.28 : 0.12),
-          ),
+          color: palette.card,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: palette.hairline),
         ),
-        child: IntrinsicHeight(
-          child: Row(
+        child: Padding(
+          padding: padding,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(width: 4, color: accent),
-              Expanded(
-                child: Padding(
-                  padding: padding,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (title != null) ...[
-                        Text(
-                          title!,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: scheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                      ],
-                      child,
-                    ],
+              if (title case final sectionTitle?) ...[
+                Text(
+                  sectionTitle,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: palette.onCard,
                   ),
                 ),
-              ),
+                const SizedBox(height: 12),
+              ],
+              child,
             ],
           ),
         ),
@@ -83,9 +68,7 @@ class AdminSwitchListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final activeTrack = isDark ? scheme.primaryContainer : scheme.secondary;
+    final palette = context.palette;
 
     return SwitchListTile(
       contentPadding: contentPadding,
@@ -93,60 +76,41 @@ class AdminSwitchListTile extends StatelessWidget {
       value: value,
       onChanged: onChanged,
       thumbColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return Colors.white;
-        }
-        return scheme.outline;
+        if (states.contains(WidgetState.selected)) return palette.onAccent;
+        return palette.muted;
       }),
       trackColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return activeTrack;
-        }
-        return scheme.surfaceContainerHighest;
+        if (states.contains(WidgetState.selected)) return palette.accent;
+        return palette.panel;
       }),
       trackOutlineColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.selected)) {
-          return Colors.transparent;
-        }
-        return scheme.outline;
+        if (states.contains(WidgetState.selected)) return Colors.transparent;
+        return palette.hairline;
       }),
     );
   }
 }
 
 class AdminCompactChip extends StatelessWidget {
-  const AdminCompactChip({
-    super.key,
-    required this.label,
-    this.filled = false,
-  });
+  const AdminCompactChip({super.key, required this.label, this.filled = false});
 
   final String label;
   final bool filled;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    if (filled) {
-      return Chip(
-        label: Text(label),
-        labelStyle: TextStyle(fontSize: 12, color: scheme.onPrimaryContainer),
-        backgroundColor: scheme.primaryContainer,
-        side: BorderSide.none,
-        visualDensity: VisualDensity.compact,
-        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        padding: EdgeInsets.zero,
-        labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-      );
-    }
+    final palette = context.palette;
     return Chip(
       label: Text(label),
       labelStyle: TextStyle(
         fontSize: 12,
-        color: scheme.onSurface.withValues(alpha: 0.7),
+        fontWeight: FontWeight.w600,
+        color: filled ? palette.accent : palette.muted,
       ),
-      backgroundColor: Colors.transparent,
-      side: BorderSide(color: scheme.outline.withValues(alpha: 0.35)),
+      backgroundColor: filled
+          ? palette.accent.withValues(alpha: 0.16)
+          : palette.panel,
+      side: BorderSide(color: filled ? Colors.transparent : palette.hairline),
       visualDensity: VisualDensity.compact,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       padding: EdgeInsets.zero,

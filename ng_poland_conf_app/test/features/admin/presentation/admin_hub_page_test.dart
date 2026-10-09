@@ -21,6 +21,7 @@ import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edi
 import 'package:ng_poland_conf_app/features/edition/domains/repositories/edition_store.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 import 'package:rxdart/rxdart.dart';
 
 void main() {
@@ -67,6 +68,7 @@ void main() {
   testWidgets('shows hub with voting status', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
+        theme: ThemeData(extensions: const [AppPalette.light]),
         home: BlocProvider<AdminCubit>.value(
           value: cubit,
           child: const AdminPage(),

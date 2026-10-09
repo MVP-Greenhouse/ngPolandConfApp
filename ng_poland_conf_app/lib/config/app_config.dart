@@ -3,7 +3,7 @@ import 'package:ng_poland_conf_app/config/raw_config.dart';
 
 @singleton
 class AppConfig {
-  static const version = '20260718.1';
+  static const version = '20261010.1';
 
   final RawConfig _config;
 

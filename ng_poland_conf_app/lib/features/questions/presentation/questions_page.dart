@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:ng_poland_conf_app/core/mixins/connectivity_mixin.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -83,9 +84,12 @@ class _QuestionsPageState extends State<QuestionsPage> with ConnectivityMixin {
         ),
       ),
       body: loadingPercentage < 100 && webViewPlatform()
-          ? Center(
-              child: CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.tertiaryContainer,
+          ? ColoredBox(
+              color: context.palette.screen,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.tertiaryContainer,
+                ),
               ),
             )
           : !webViewPlatform()

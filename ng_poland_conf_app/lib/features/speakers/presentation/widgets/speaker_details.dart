@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -13,6 +15,8 @@ import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/widgets/app_image_cache.dart';
+import 'package:ng_poland_conf_app/widgets/caching_html_widget_factory.dart';
 import 'package:ng_poland_conf_app/widgets/custom_back_button.dart';
 import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
 import 'package:ng_poland_conf_app/widgets/fixed_size_cross_origin_image.dart';
@@ -425,7 +429,11 @@ class _RichCopy extends StatelessWidget {
     if (plain.isNotEmpty) {
       return Text(plain, textAlign: textAlign, style: style);
     }
-    return HtmlWidget(html, textStyle: style);
+    return HtmlWidget(
+      html,
+      factoryBuilder: CachingHtmlWidgetFactory.new,
+      textStyle: style,
+    );
   }
 }
 
@@ -568,6 +576,7 @@ class _VideoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
+    final ratio = MediaQuery.devicePixelRatioOf(context);
     return Row(
       children: [
         ClipRRect(
@@ -578,10 +587,15 @@ class _VideoTile extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Image.network(
-                  video.thumbnail,
+                CachedNetworkImage(
+                  imageUrl: video.thumbnail,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => ColoredBox(
+                  cacheManager: kIsWeb ? null : AppImageCache.instance,
+                  memCacheWidth: (120 * ratio).ceil(),
+                  memCacheHeight: (72 * ratio).ceil(),
+                  fadeInDuration: Duration.zero,
+                  fadeOutDuration: Duration.zero,
+                  errorWidget: (_, _, _) => ColoredBox(
                     color: palette.card,
                     child: Icon(Icons.play_circle, color: palette.muted),
                   ),
@@ -622,16 +636,22 @@ class _BookTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ratio = MediaQuery.devicePixelRatioOf(context);
     return Row(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            book.cover,
+          child: CachedNetworkImage(
+            imageUrl: book.cover,
             width: 48,
             height: 72,
             fit: BoxFit.cover,
-            errorBuilder: (_, _, _) =>
+            cacheManager: kIsWeb ? null : AppImageCache.instance,
+            memCacheWidth: (48 * ratio).ceil(),
+            memCacheHeight: (72 * ratio).ceil(),
+            fadeInDuration: Duration.zero,
+            fadeOutDuration: Duration.zero,
+            errorWidget: (_, _, _) =>
                 Icon(Icons.menu_book, color: context.palette.muted),
           ),
         ),

@@ -10,6 +10,7 @@ import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.d
 import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/widgets/caching_html_widget_factory.dart';
 import 'package:ng_poland_conf_app/widgets/fixed_size_cross_origin_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -408,7 +409,11 @@ class _About extends StatelessWidget {
             if (description.isNotEmpty)
               Text(description, style: copy)
             else
-              HtmlWidget(descriptionHtml, textStyle: copy),
+              HtmlWidget(
+                descriptionHtml,
+                factoryBuilder: CachingHtmlWidgetFactory.new,
+                textStyle: copy,
+              ),
           ],
         ),
       ),

@@ -32,27 +32,38 @@ class AdminVotingPage extends StatelessWidget {
               ),
             ),
           ),
-          body: _buildBody(context, state),
+          body: ColoredBox(
+            color: context.palette.screen,
+            child: _buildBody(context, state),
+          ),
         );
       },
     );
   }
 
   Future<void> _confirmEndNow(BuildContext context, AdminCubit cubit) async {
+    final palette = context.palette;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('End voting?'),
-        content: const Text(
+        backgroundColor: palette.card,
+        title: Text('End voting?', style: TextStyle(color: palette.onCard)),
+        content: Text(
           'Voting will close immediately (window end = now).',
+          style: TextStyle(color: palette.muted),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
+            style: TextButton.styleFrom(foregroundColor: palette.muted),
             child: const Text('Anuluj'),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: palette.onAccent,
+            ),
             child: const Text('End now'),
           ),
         ],
@@ -66,7 +77,9 @@ class AdminVotingPage extends StatelessWidget {
   Widget _buildBody(BuildContext context, AdminState state) {
     if (!state.isAdmin) return const SizedBox.shrink();
     if (state.loading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(
+        child: CircularProgressIndicator(color: context.palette.accent),
+      );
     }
 
     final config =
@@ -82,11 +95,9 @@ class AdminVotingPage extends StatelessWidget {
             child: Text(
               'Edytujesz ${state.selectedTrack.label} / ${state.selectedConfId}'
               '${state.selectedConfId == state.latestConfId ? ' (najnowsza)' : ''}.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(
-                  context,
-                ).colorScheme.onSurface.withValues(alpha: 0.8),
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: context.palette.muted),
             ),
           ),
           const SizedBox(height: 12),
@@ -109,10 +120,21 @@ class AdminVotingPage extends StatelessWidget {
                   cubit.selectTrack(selection.first);
                 }
               },
-              style: const ButtonStyle(
+              style: ButtonStyle(
                 visualDensity: VisualDensity.comfortable,
-                padding: WidgetStatePropertyAll(
+                padding: const WidgetStatePropertyAll(
                   EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                ),
+                backgroundColor: WidgetStateProperty.resolveWith((states) {
+                  final palette = context.palette;
+                  if (states.contains(WidgetState.selected)) {
+                    return palette.accent.withValues(alpha: 0.16);
+                  }
+                  return palette.card;
+                }),
+                foregroundColor: WidgetStatePropertyAll(context.palette.onCard),
+                side: WidgetStatePropertyAll(
+                  BorderSide(color: context.palette.hairline),
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_section_card.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
+import 'package:ng_poland_conf_app/theme/app_palette.dart';
 
 class AdminVotingSection extends StatelessWidget {
   const AdminVotingSection({
@@ -30,7 +31,10 @@ class AdminVotingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final palette = context.palette;
+    final titleStyle = Theme.of(
+      context,
+    ).textTheme.titleSmall?.copyWith(fontSize: 16, color: palette.onCard);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -40,13 +44,7 @@ class AdminVotingSection extends StatelessWidget {
           child: Column(
             children: [
               AdminSwitchListTile(
-                title: Text(
-                  'Voting enabled',
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontSize: 16,
-                    color: scheme.onSurface,
-                  ),
-                ),
+                title: Text('Voting enabled', style: titleStyle),
                 value: config.votingEnabled,
                 onChanged: onEnabledChanged,
               ),
@@ -65,8 +63,8 @@ class AdminVotingSection extends StatelessWidget {
                 child: FilledButton.icon(
                   onPressed: onEndNow,
                   style: FilledButton.styleFrom(
-                    backgroundColor: scheme.error,
-                    foregroundColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    foregroundColor: palette.onAccent,
                   ),
                   icon: const Icon(Icons.stop_circle_outlined),
                   label: const Text('End now'),
@@ -85,7 +83,8 @@ class AdminVotingSection extends StatelessWidget {
                 'Replace the allowlist with talks from the ng-poland agenda. A like is accepted only after that talk has ended.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontSize: 14,
-                  color: scheme.onSurface.withValues(alpha: 0.7),
+                  height: 1.35,
+                  color: palette.muted,
                 ),
               ),
               const SizedBox(height: 12),
@@ -93,6 +92,10 @@ class AdminVotingSection extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: FilledButton.icon(
                   onPressed: onSyncVotableEvents,
+                  style: FilledButton.styleFrom(
+                    backgroundColor: palette.accent,
+                    foregroundColor: palette.onAccent,
+                  ),
                   icon: const Icon(Icons.sync),
                   label: const Text('Sync votable events'),
                 ),
@@ -104,13 +107,7 @@ class AdminVotingSection extends StatelessWidget {
         AdminSectionCard(
           title: 'Top 5 na schedule',
           child: AdminSwitchListTile(
-            title: Text(
-              'Top 5 enabled',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                fontSize: 16,
-                color: scheme.onSurface,
-              ),
-            ),
+            title: Text('Top 5 enabled', style: titleStyle),
             value: config.top5Enabled,
             onChanged: onTop5EnabledChanged,
           ),
@@ -124,17 +121,13 @@ class AdminVotingSection extends StatelessWidget {
                   'No votes in this track',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontSize: 14,
-                    color: scheme.onSurface.withValues(alpha: 0.6),
+                    color: palette.muted,
                   ),
                 )
               : Column(
                   children: [
                     for (var i = 0; i < ranking.length; i++) ...[
-                      if (i > 0)
-                        Divider(
-                          height: 1,
-                          color: scheme.outline.withValues(alpha: 0.15),
-                        ),
+                      if (i > 0) Divider(height: 1, color: palette.hairline),
                       _RankingRow(rank: ranking[i]),
                     ],
                   ],
@@ -152,7 +145,7 @@ class _RankingRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final palette = context.palette;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -167,16 +160,16 @@ class _RankingRow extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    color: scheme.onSurface,
+                    color: palette.onCard,
                     height: 1.25,
                   ),
                 ),
                 if (rank.speakerName.isNotEmpty)
                   Text(
                     rank.speakerName,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: scheme.onSurface.withValues(alpha: 0.65),
-                    ),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: palette.muted),
                   ),
               ],
             ),
@@ -185,7 +178,7 @@ class _RankingRow extends StatelessWidget {
           _VoteCount(
             icon: Icons.thumb_up_alt_outlined,
             count: rank.likes,
-            color: scheme.secondary,
+            color: palette.accent,
           ),
         ],
       ),
@@ -216,7 +209,7 @@ class _VoteCount extends StatelessWidget {
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Theme.of(context).colorScheme.onSurface,
+            color: context.palette.onCard,
           ),
         ),
       ],
@@ -240,7 +233,7 @@ class AdminDateTimeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final palette = context.palette;
     final unset = value.millisecondsSinceEpoch == 0;
     return InkWell(
       onTap: () => _pick(context),
@@ -255,7 +248,7 @@ class AdminDateTimeTile extends StatelessWidget {
                 label,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontSize: 14,
-                  color: scheme.onSurface.withValues(alpha: 0.65),
+                  color: palette.muted,
                 ),
               ),
             ),
@@ -265,15 +258,11 @@ class AdminDateTimeTile extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontSize: 15,
                   fontWeight: FontWeight.w500,
-                  color: scheme.onSurface,
+                  color: palette.onCard,
                 ),
               ),
             ),
-            Icon(
-              Icons.event,
-              size: 18,
-              color: scheme.onSurface.withValues(alpha: 0.45),
-            ),
+            Icon(Icons.event, size: 18, color: palette.muted),
           ],
         ),
       ),
@@ -289,13 +278,33 @@ class AdminDateTimeTile extends StatelessWidget {
       initialDate: local,
       firstDate: DateTime(2018),
       lastDate: DateTime(2100),
+      builder: (context, child) =>
+          _pickerTheme(context, child ?? const SizedBox.shrink()),
     );
     if (date == null || !context.mounted) return;
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(local),
+      builder: (context, child) =>
+          _pickerTheme(context, child ?? const SizedBox.shrink()),
     );
     if (time == null) return;
     onPicked(DateTime(date.year, date.month, date.day, time.hour, time.minute));
   }
+}
+
+Widget _pickerTheme(BuildContext context, Widget child) {
+  final palette = context.palette;
+  final scheme = Theme.of(context).colorScheme;
+  return Theme(
+    data: Theme.of(context).copyWith(
+      colorScheme: scheme.copyWith(
+        primary: palette.accent,
+        onPrimary: palette.onAccent,
+        surface: palette.card,
+        onSurface: palette.onCard,
+      ),
+    ),
+    child: child,
+  );
 }
