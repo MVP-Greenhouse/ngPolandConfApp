@@ -39,6 +39,10 @@ class ScheduleEvent extends StatelessWidget {
         opacity: eventItem.isBreak ? 0.72 : 1,
         child: Material(
           color: Colors.transparent,
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(22),
+          ),
           child: InkWell(
             onTap: eventItem.hasSpeaker ? () => _openEvent(context) : null,
             borderRadius: BorderRadius.circular(22),
@@ -49,6 +53,7 @@ class ScheduleEvent extends StatelessWidget {
                   color: highlighted
                       ? palette.accent.withValues(alpha: 0.85)
                       : palette.hairline,
+                  width: highlighted ? 1.6 : 1,
                 ),
                 gradient: LinearGradient(
                   begin: Alignment.centerLeft,
@@ -60,13 +65,6 @@ class ScheduleEvent extends StatelessWidget {
                         : palette.card,
                   ],
                 ),
-                boxShadow: [
-                  if (highlighted)
-                    BoxShadow(
-                      color: palette.accent.withValues(alpha: 0.28),
-                      blurRadius: 22,
-                    ),
-                ],
               ),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 14, 14, 16),

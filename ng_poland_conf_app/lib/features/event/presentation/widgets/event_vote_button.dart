@@ -6,6 +6,7 @@ import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_vote_
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/widgets/app_notice.dart';
 
 class EventLikeButton extends StatelessWidget {
   const EventLikeButton({
@@ -103,9 +104,7 @@ class _EventVoteButtonHostState extends State<EventVoteButtonHost> {
       listenWhen: (previous, current) =>
           current.maybeWhen(failure: (_) => true, orElse: () => false),
       listener: (context, state) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Could not save your vote')),
-        );
+        showAppNotice(context, AppNotice.voteUnavailable);
       },
       builder: (context, state) {
         if (!state.showButton) {

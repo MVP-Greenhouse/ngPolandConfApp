@@ -8,10 +8,12 @@ import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/us
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/logic/votable_event_catalog.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
 import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/repositories/votable_event_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'admin_state.dart';
@@ -22,6 +24,7 @@ class AdminCubit extends Cubit<AdminState> {
     this._configRepository,
     this._eventVoteRepository,
     this._editions,
+    this._votableEvents,
     this._userSessionCubit,
     this._conferencesCubit,
   ) : super(_seedState(_userSessionCubit, _conferencesCubit)) {
@@ -33,6 +36,7 @@ class AdminCubit extends Cubit<AdminState> {
   final EngagementConfigRepository _configRepository;
   final EventVoteRepository _eventVoteRepository;
   final EditionRepository _editions;
+  final VotableEventRepository _votableEvents;
   final UserSessionCubit _userSessionCubit;
   final ConferencesCubit _conferencesCubit;
 
@@ -218,6 +222,38 @@ class AdminCubit extends Cubit<AdminState> {
       track: state.selectedTrack,
       config: trackConfig.copyWith(top5Enabled: enabled),
     );
+  }
+
+  bool _syncingVotableEvents = false;
+
+  Future<void> syncVotableEvents() async {
+    final confId = state.selectedConfId;
+    if (confId == null || _syncingVotableEvents) return;
+    _syncingVotableEvents = true;
+    try {
+      final edition = await _editions.refresh();
+      if (edition.confId != confId) {
+        _emitMessage(
+          'Agenda is for ${edition.confId}, selected conference is $confId',
+        );
+        return;
+      }
+      final catalog = votableEventsFromEdition(edition);
+      await _votableEvents.replaceCatalog(
+        confId: confId,
+        events: catalog.events,
+      );
+      _emitMessage(votableSyncMessage(catalog));
+    } catch (_) {
+      _emitMessage('Could not sync votable events');
+    } finally {
+      _syncingVotableEvents = false;
+    }
+  }
+
+  void _emitMessage(String message) {
+    if (isClosed) return;
+    emit(state.copyWith(message: message));
   }
 
   Future<void> endVotingNow() async {

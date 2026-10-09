@@ -102,6 +102,23 @@ void main() {
     final third = await offline.load();
     expect(third?.speakers.single.slug, 'anna-kowalska');
   });
+
+  test('refresh fails closed when the network is down', () async {
+    final remote = _FakeRemote();
+    final cache = _MemoryCache();
+    final now = DateTime.utc(2026, 10, 6, 12);
+    final repository = EditionRepository(remote, cache)..now = () => now;
+    remote.next = {
+      'agenda': EditionFetch.ok(body: _encode(_agenda), etag: 'a1'),
+      'speakers': EditionFetch.ok(body: _encode(_speakers), etag: 's1'),
+    };
+    await repository.load();
+
+    remote.fail = true;
+    final offline = EditionRepository(remote, cache)
+      ..now = () => now.add(const Duration(minutes: 1));
+    expect(offline.refresh(), throwsA(isA<EditionRefreshException>()));
+  });
 }
 
 String _encode(Map<String, dynamic> json) => jsonEncode(json);

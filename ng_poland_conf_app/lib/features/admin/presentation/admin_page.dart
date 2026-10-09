@@ -213,10 +213,7 @@ class _StatusChip extends StatelessWidget {
     if (filled) {
       return Chip(
         label: Text(label),
-        labelStyle: TextStyle(
-          fontSize: 12,
-          color: scheme.onPrimaryContainer,
-        ),
+        labelStyle: TextStyle(fontSize: 12, color: scheme.onPrimaryContainer),
         backgroundColor: scheme.primaryContainer,
         side: BorderSide.none,
         visualDensity: VisualDensity.compact,

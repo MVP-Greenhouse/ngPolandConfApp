@@ -8,6 +8,7 @@ import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/schedu
 import 'package:ng_poland_conf_app/injectable.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/widgets/app_notice.dart';
 import 'package:ng_poland_conf_app/widgets/custom_back_button.dart';
 import 'package:ng_poland_conf_app/widgets/custom_scaffold.dart';
 import 'package:ng_poland_conf_app/widgets/empty_list_info.dart';
@@ -59,9 +60,7 @@ class _ScheduleTop5PageState extends State<ScheduleTop5Page> {
       await _cubit.toggleLike(eventId);
     } catch (_) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Could not save your vote')));
+      showAppNotice(context, AppNotice.voteUnavailable);
     }
   }
 

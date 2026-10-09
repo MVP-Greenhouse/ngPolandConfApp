@@ -8,11 +8,13 @@ import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/us
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/engagement_visibility.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_toggle.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/logic/votable_event_catalog.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
 import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/repositories/votable_event_repository.dart';
 import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -23,6 +25,7 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
   ScheduleTop5Cubit(
     this._configRepository,
     this._eventVoteRepository,
+    this._votableEvents,
     this._editions,
     this._conferencesCubit,
     this._userSessionCubit,
@@ -30,6 +33,7 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
 
   final EngagementConfigRepository _configRepository;
   final EventVoteRepository _eventVoteRepository;
+  final VotableEventRepository _votableEvents;
   final EditionRepository _editions;
   final ConferencesCubit _conferencesCubit;
   final UserSessionCubit _userSessionCubit;
@@ -144,6 +148,7 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
         track: _track,
       );
       final counts = await _eventVoteRepository.loadVoteCounts(confId);
+      final catalog = await _votableEvents.loadEvents(confId);
       final entries = [
         for (final event in events)
           if (event.hasSpeaker && !event.isBreak)
@@ -158,6 +163,7 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
                 event.endDate,
                 timeLabel: event.timeLabel,
               ),
+              endsAt: catalog[event.id]?.endsAt,
             ),
       ];
       return EventVoteRanking.topForTrack(
@@ -214,6 +220,7 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
     if (uid == null) return;
 
     final currentlyLiked = loaded.myLikedEventIds.contains(eventId);
+    if (!currentlyLiked && !_canCastNewLike(loaded, eventId)) return;
     final nextLiked = EventVoteToggle.apply(currentlyLiked: currentlyLiked);
 
     _emitLikedOptimistic(current: loaded, eventId: eventId, liked: nextLiked);
@@ -233,6 +240,14 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
       );
       rethrow;
     }
+  }
+
+  bool _canCastNewLike(_Loaded loaded, String eventId) {
+    final endsAt = loaded.top
+        .where((entry) => entry.eventId == eventId)
+        .map((entry) => entry.endsAt)
+        .firstOrNull;
+    return eventHasEnded(endsAt: endsAt, now: DateTime.now());
   }
 
   void _emitLikedOptimistic({
@@ -262,6 +277,7 @@ class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
               currentLikes: entry.likes,
             ),
             timeLabel: entry.timeLabel,
+            endsAt: entry.endsAt,
           )
         else
           entry,

@@ -6,6 +6,10 @@ import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_cache_
 import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_parser.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/repositories/edition_store.dart';
 
+class EditionRefreshException implements Exception {
+  const EditionRefreshException();
+}
+
 @lazySingleton
 class EditionRepository {
   EditionRepository(this._remote, this._cache);
@@ -42,6 +46,52 @@ class EditionRepository {
     } catch (_) {
       return _memory;
     }
+  }
+
+  /// Always asks the ng-poland API. A network or parse failure throws and
+  /// leaves the in-memory edition unchanged so callers can avoid writing a
+  /// stale catalog.
+  Future<Edition> refresh() async {
+    final agendaBody = await _freshBody('agenda', _remote.agenda);
+    final speakersBody = await _freshBody('speakers', _remote.speakers);
+    final edition = EditionParser.parse(
+      agenda: _decode(agendaBody),
+      speakers: _decode(speakersBody),
+    );
+    _memory = edition;
+    _memoryAt = now();
+    return edition;
+  }
+
+  Future<String> _freshBody(
+    String resource,
+    Future<EditionFetch> Function({String? etag}) fetch,
+  ) async {
+    final cached = await _cache.read(resource);
+    final EditionFetch result;
+    try {
+      result = await fetch(etag: cached?.etag);
+    } catch (_) {
+      throw const EditionRefreshException();
+    }
+
+    final fetchedAt = now();
+    if (result.notModified) {
+      if (cached == null) throw const EditionRefreshException();
+      await _cache.write(
+        resource,
+        cached.copyWith(etag: result.etag, fetchedAt: fetchedAt),
+      );
+      return cached.body;
+    }
+
+    final body = result.body;
+    if (body == null || body.isEmpty) throw const EditionRefreshException();
+    await _cache.write(
+      resource,
+      EditionCacheEntry(body: body, etag: result.etag, fetchedAt: fetchedAt),
+    );
+    return body;
   }
 
   Future<String?> _body(

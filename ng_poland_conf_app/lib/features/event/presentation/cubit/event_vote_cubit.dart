@@ -8,9 +8,12 @@ import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/engagement_visibility.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_toggle.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/logic/votable_event_catalog.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/repositories/votable_event_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/votable_event.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'event_vote_state.dart';
@@ -20,6 +23,7 @@ part 'event_vote_cubit.freezed.dart';
 class EventVoteCubit extends Cubit<EventVoteState> {
   EventVoteCubit(
     this._eventVoteRepository,
+    this._votableEvents,
     this._configRepository,
     this._userSessionCubit,
     this._conferencesCubit,
@@ -30,6 +34,7 @@ class EventVoteCubit extends Cubit<EventVoteState> {
   }
 
   final EventVoteRepository _eventVoteRepository;
+  final VotableEventRepository _votableEvents;
   final EngagementConfigRepository _configRepository;
   final UserSessionCubit _userSessionCubit;
   final ConferencesCubit _conferencesCubit;
@@ -99,23 +104,46 @@ class EventVoteCubit extends Cubit<EventVoteState> {
         return Stream<EventVoteState>.value(const EventVoteState.hidden());
       }
 
-      return snapshot.session.when(
-        loading: () => Stream<EventVoteState>.value(
-          const EventVoteState.hidden(),
-        ),
-        unauthenticated: () => Stream<EventVoteState>.value(
-          const EventVoteState.needsLogin(),
-        ),
-        authenticated: (profile) => _eventVoteRepository
-            .watchMyLike(
-              confId: selectedConfId,
-              eventId: eventId,
-              uid: profile.uid,
-            )
-            .map(EventVoteState.ready)
-            .startWith(const EventVoteState.hidden()),
-      );
+      return _votableEvents
+          .watchEvent(confId: selectedConfId, eventId: eventId)
+          .switchMap(
+            (event) => _whenEventHasEnded(event, () {
+              return snapshot.session.when(
+                loading: () =>
+                    Stream<EventVoteState>.value(const EventVoteState.hidden()),
+                unauthenticated: () => Stream<EventVoteState>.value(
+                  const EventVoteState.needsLogin(),
+                ),
+                authenticated: (profile) => _eventVoteRepository
+                    .watchMyLike(
+                      confId: selectedConfId,
+                      eventId: eventId,
+                      uid: profile.uid,
+                    )
+                    .map(EventVoteState.ready)
+                    .startWith(const EventVoteState.hidden()),
+              );
+            }),
+          );
     });
+  }
+
+  Stream<EventVoteState> _whenEventHasEnded(
+    VotableEvent? event,
+    Stream<EventVoteState> Function() next,
+  ) {
+    final endsAt = event?.endsAt;
+    if (eventHasEnded(endsAt: endsAt, now: DateTime.now())) return next();
+    if (endsAt == null) {
+      return Stream.value(const EventVoteState.hidden());
+    }
+
+    final wait = endsAt.toUtc().difference(DateTime.now().toUtc());
+    if (wait <= Duration.zero) return next();
+    return Rx.concat([
+      Stream<EventVoteState>.value(const EventVoteState.hidden()),
+      Rx.timer<void>(null, wait).asyncExpand((_) => next()),
+    ]);
   }
 
   bool _shouldIgnoreWatchMyLike(EventVoteState next) {

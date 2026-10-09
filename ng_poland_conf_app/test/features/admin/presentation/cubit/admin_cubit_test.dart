@@ -11,11 +11,14 @@ import 'package:ng_poland_conf_app/features/engagement/domains/entities/engageme
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/event_vote_counts.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/repositories/votable_event_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/votable_event.dart';
 import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/repositories/edition_store.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
 
 TrackEngagementConfig _track({
   bool votingEnabled = true,
@@ -36,9 +39,13 @@ EngagementConfig _config(TrackEngagementConfig track) {
 }
 
 void main() {
+  setUpAll(tzdata.initializeTimeZones);
+
   late _FakeConfigRepository configRepo;
   late _TestConferencesCubit conferences;
   late _TestUserSessionCubit session;
+  late _FakeVotableEventRepository votableEvents;
+  late _ScriptedEditionRemote editionRemote;
   late AdminCubit cubit;
 
   setUp(() async {
@@ -46,10 +53,13 @@ void main() {
     conferences = _TestConferencesCubit()
       ..load(const Conference(confId: '2026', confName: 'NG', listItems: []));
     session = _TestUserSessionCubit()..signInAdmin();
+    votableEvents = _FakeVotableEventRepository();
+    editionRemote = _ScriptedEditionRemote();
     cubit = AdminCubit(
       configRepo,
       _FakeVoteRepository(),
-      EditionRepository(_EmptyEditionRemote(), _EmptyEditionCache()),
+      EditionRepository(editionRemote, _EmptyEditionCache()),
+      votableEvents,
       session,
       conferences,
     );
@@ -92,6 +102,32 @@ void main() {
     await cubit.saveTop5Enabled(true);
     expect(configRepo.lastSavedTrackType, EventItemType.jsPoland);
   });
+
+  test('syncVotableEvents writes the agenda allowlist', () async {
+    editionRemote.next = {
+      'agenda': EditionFetch.ok(body: _syncAgenda, etag: 'a'),
+      'speakers': EditionFetch.ok(body: _syncSpeakers, etag: 's'),
+    };
+
+    await cubit.syncVotableEvents();
+
+    expect(votableEvents.replaceCalls, 1);
+    expect(votableEvents.lastConfId, '2026');
+    expect(votableEvents.lastEvents?.single.eventId, '2');
+    expect(cubit.state.message, 'Synced 1 votable event');
+  });
+
+  test(
+    'syncVotableEvents does not write when the agenda request fails',
+    () async {
+      editionRemote.fail = true;
+
+      await cubit.syncVotableEvents();
+
+      expect(votableEvents.replaceCalls, 0);
+      expect(cubit.state.message, 'Could not sync votable events');
+    },
+  );
 }
 
 Future<void> pumpUntil(bool Function() condition) async {
@@ -190,16 +226,6 @@ class _FakeVoteRepository implements EventVoteRepository {
   }) => Stream.value(false);
 }
 
-class _EmptyEditionRemote implements EditionRemote {
-  @override
-  Future<EditionFetch> agenda({String? etag}) async =>
-      const EditionFetch.notModified();
-
-  @override
-  Future<EditionFetch> speakers({String? etag}) async =>
-      const EditionFetch.notModified();
-}
-
 class _EmptyEditionCache implements EditionCache {
   @override
   Future<EditionCacheEntry?> read(String resource) async => null;
@@ -207,6 +233,91 @@ class _EmptyEditionCache implements EditionCache {
   @override
   Future<void> write(String resource, EditionCacheEntry entry) async {}
 }
+
+class _ScriptedEditionRemote implements EditionRemote {
+  Map<String, EditionFetch> next = const {};
+  bool fail = false;
+
+  @override
+  Future<EditionFetch> agenda({String? etag}) => _fetch('agenda');
+
+  @override
+  Future<EditionFetch> speakers({String? etag}) => _fetch('speakers');
+
+  Future<EditionFetch> _fetch(String resource) async {
+    if (fail) throw Exception('offline');
+    return next[resource] ?? (throw StateError('missing $resource'));
+  }
+}
+
+class _FakeVotableEventRepository implements VotableEventRepository {
+  int replaceCalls = 0;
+  String? lastConfId;
+  List<VotableEvent>? lastEvents;
+
+  @override
+  Future<Map<String, VotableEvent>> loadEvents(String confId) async => const {};
+
+  @override
+  Future<void> replaceCatalog({
+    required String confId,
+    required List<VotableEvent> events,
+  }) async {
+    replaceCalls++;
+    lastConfId = confId;
+    lastEvents = events;
+  }
+
+  @override
+  Stream<VotableEvent?> watchEvent({
+    required String confId,
+    required String eventId,
+  }) => const Stream.empty();
+}
+
+const _syncAgenda = '''
+{
+  "year": 2026,
+  "days": [
+    {
+      "key": "ng",
+      "kind": "conference",
+      "conference": "ng",
+      "date": "2026-11-17",
+      "published": true,
+      "items": [
+        {
+          "id": 2,
+          "isBreak": false,
+          "start": "09:00",
+          "end": "09:40",
+          "title": "Opening Keynote",
+          "speakers": [{"name": "Anna", "slug": "anna"}]
+        },
+        {
+          "id": 3,
+          "isBreak": true,
+          "start": "09:40",
+          "end": "10:00",
+          "title": "Break",
+          "speakers": []
+        }
+      ]
+    },
+    {
+      "key": "workshops",
+      "kind": "workshops",
+      "date": "2026-11-16",
+      "published": true,
+      "items": [
+        {"id": 20, "title": "Workshop", "speakers": [{"name": "Anna", "slug": "anna"}]}
+      ]
+    }
+  ]
+}
+''';
+
+const _syncSpeakers = '{"year": 2026, "speakers": []}';
 
 class _NoopUserRepository implements UserRepository {
   const _NoopUserRepository();

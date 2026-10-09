@@ -28,10 +28,53 @@ service cloud.firestore {
       allow write: if isAdmin() && docId == 'config';
     }
 
+    // Admin-synced allowlist. A new like requires this doc and a passed endsAt.
+    match /conf/{confId}/votableEvents/{eventId} {
+      function hasValidVotableEventData() {
+        return request.resource.data.keys().hasOnly(['endsAt', 'track'])
+          && request.resource.data.endsAt is timestamp
+          && request.resource.data.track is string
+          && request.resource.data.track in ['ngPoland', 'jsPoland', 'aiPoland'];
+      }
+
+      allow read: if true;
+      allow create, update: if isAdmin() && hasValidVotableEventData();
+      allow delete: if isAdmin();
+    }
+
     // Public Top 5 reads the likes counter. Individual votes stay private.
     match /conf/{confId}/eventVotes/{eventId} {
       function votePath(uid) {
         return /databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId)/votes/$(uid);
+      }
+      function votableEventPath() {
+        return /databases/$(database)/documents/conf/$(confId)/votableEvents/$(eventId);
+      }
+      function engagementConfigPath() {
+        return /databases/$(database)/documents/conf/$(confId)/engagement/config;
+      }
+      function votableEventData() {
+        return get(votableEventPath()).data;
+      }
+      function engagementConfigData() {
+        return get(engagementConfigPath()).data;
+      }
+      function trackConfig() {
+        return engagementConfigData().tracks[votableEventData().track];
+      }
+      function votingIsOpen() {
+        return exists(votableEventPath())
+          && votableEventData().endsAt is timestamp
+          && votableEventData().track is string
+          && exists(engagementConfigPath())
+          && engagementConfigData().tracks is map
+          && votableEventData().track in engagementConfigData().tracks
+          && trackConfig().votingEnabled == true
+          && trackConfig().votingStartsAt is timestamp
+          && trackConfig().votingEndsAt is timestamp
+          && request.time >= votableEventData().endsAt
+          && request.time >= trackConfig().votingStartsAt
+          && request.time <= trackConfig().votingEndsAt;
       }
       function likesBefore() {
         return exists(/databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId))
@@ -41,10 +84,12 @@ service cloud.firestore {
 
       allow read: if true;
       allow create: if signedIn()
+        && votingIsOpen()
         && request.resource.data.keys().hasOnly(['likes'])
         && request.resource.data.likes == 1
         && existsAfter(votePath(request.auth.uid));
       allow update: if signedIn()
+        && votingIsOpen()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
         && request.resource.data.likes is int
         && request.resource.data.likes >= 0
@@ -74,12 +119,14 @@ service cloud.firestore {
       match /votes/{uid} {
         allow read: if isOwner(uid) || isAdmin();
         allow create: if isOwner(uid)
+          && votingIsOpen()
           && request.resource.data.keys().hasOnly(['value', 'updatedAt'])
           && request.resource.data.value == 1
           && getAfter(/databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId)).data.likes
               == likesBefore() + 1;
         allow update: if false;
         allow delete: if isOwner(uid)
+          && votingIsOpen()
           && (
             getAfter(/databases/$(database)/documents/conf/$(confId)/eventVotes/$(eventId)).data.likes
                 == likesBefore() - 1
@@ -93,13 +140,11 @@ service cloud.firestore {
 
     match /conf/{confId}/speakerVotes/{speakerId} {
       allow read: if isAdmin();
-      allow create, update: if signedIn()
-        && request.resource.data.keys().size() == 0;
-      allow delete: if false;
+      allow write: if false;
 
       match /votes/{uid} {
         allow read: if isOwner(uid) || isAdmin();
-        allow create, update, delete: if isOwner(uid);
+        allow write: if false;
       }
     }
 
@@ -121,9 +166,10 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    // Existing event star ratings — keep working under default-deny.
+    // Legacy star ratings are read-only; active voting uses eventVotes.
     match /conf/{confId}/{eventItemType}/{eventId}/rates/{uid} {
-      allow read, write: if isOwner(uid);
+      allow read: if isOwner(uid);
+      allow write: if false;
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit.dart';
 import 'package:ng_poland_conf_app/injectable.dart';
+import 'package:ng_poland_conf_app/widgets/app_notice.dart';
 
 class AdminShell extends StatefulWidget {
   const AdminShell({super.key, required this.child});
@@ -37,9 +38,7 @@ class _AdminShellState extends State<AdminShell> {
         listener: (context, state) {
           final message = state.message;
           if (message == null) return;
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message)));
+          showAppNotice(context, AppNotice.fromAdminMessage(message));
           _cubit.clearMessage();
         },
         child: widget.child,

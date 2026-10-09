@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/constants/event_types.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/logic/votable_event_catalog.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
 import 'package:ng_poland_conf_app/routing/routing.dart';
 import 'package:ng_poland_conf_app/theme/app_palette.dart';
@@ -80,15 +81,22 @@ class ScheduleTop5Section extends StatelessWidget {
                 track: track,
                 votingOpen: votingOpen,
                 likedByMe: myLikedEventIds.contains(top[i].eventId),
-                onVote: switch (onVote) {
-                  final vote? => () => vote(top[i].eventId),
-                  null => null,
-                },
+                onVote: _voteFor(top[i], myLikedEventIds),
               ),
             ],
         ],
       ),
     );
+  }
+
+  VoidCallback? _voteFor(EventVoteRank entry, Set<String> likedIds) {
+    final vote = onVote;
+    if (vote == null || !votingOpen) return null;
+    final likedByMe = likedIds.contains(entry.eventId);
+    final canLike =
+        likedByMe || eventHasEnded(endsAt: entry.endsAt, now: DateTime.now());
+    if (!canLike) return null;
+    return () => vote(entry.eventId);
   }
 }
 

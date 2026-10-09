@@ -15,6 +15,8 @@ import 'package:ng_poland_conf_app/features/engagement/domains/entities/engageme
 import 'package:ng_poland_conf_app/features/engagement/domains/entities/event_vote_counts.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
 import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/entities/votable_event.dart';
+import 'package:ng_poland_conf_app/features/engagement/domains/repositories/votable_event_repository.dart';
 import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
 import 'package:ng_poland_conf_app/features/edition/domains/repositories/edition_store.dart';
 import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
@@ -48,6 +50,7 @@ void main() {
       configRepo,
       _FakeVoteRepository(),
       EditionRepository(_EmptyEditionRemote(), _EmptyEditionCache()),
+      _FakeVotableEventRepository(),
       session,
       conferences,
     );
@@ -157,6 +160,23 @@ class _FakeVoteRepository implements EventVoteRepository {
     required String eventId,
     required String uid,
   }) => Stream.value(false);
+}
+
+class _FakeVotableEventRepository implements VotableEventRepository {
+  @override
+  Future<Map<String, VotableEvent>> loadEvents(String confId) async => const {};
+
+  @override
+  Future<void> replaceCatalog({
+    required String confId,
+    required List<VotableEvent> events,
+  }) async {}
+
+  @override
+  Stream<VotableEvent?> watchEvent({
+    required String confId,
+    required String eventId,
+  }) => const Stream.empty();
 }
 
 class _EmptyEditionRemote implements EditionRemote {

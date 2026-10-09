@@ -6,6 +6,7 @@ class EventVoteRank {
     required this.trackType,
     required this.likes,
     this.timeLabel = '',
+    this.endsAt,
   });
 
   final String eventId;
@@ -14,6 +15,7 @@ class EventVoteRank {
   final String trackType;
   final int likes;
   final String timeLabel;
+  final DateTime? endsAt;
 }
 
 class EventVoteRanking {
