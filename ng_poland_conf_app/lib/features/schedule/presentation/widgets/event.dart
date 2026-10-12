@@ -197,7 +197,7 @@ class _ScheduleIconBadge extends StatelessWidget {
     final palette = context.palette;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: highlighted ? palette.accent : palette.panel,
+        color: highlighted ? Colors.transparent : palette.panel,
         borderRadius: BorderRadius.circular(14),
       ),
       child: SizedBox(
@@ -207,7 +207,7 @@ class _ScheduleIconBadge extends StatelessWidget {
           child: FaIcon(
             agendaIcon(iconName, category),
             size: 16,
-            color: highlighted ? palette.onAccent : palette.muted,
+            color: palette.muted,
           ),
         ),
       ),
