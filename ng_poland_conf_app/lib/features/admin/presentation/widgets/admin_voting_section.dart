@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_section_card.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
-import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/entities/engagement_config.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/services/event_vote_ranking.dart';
 
 class AdminVotingSection extends StatelessWidget {
   const AdminVotingSection({
@@ -231,10 +231,14 @@ class AdminDateTimeTile extends StatelessWidget {
 
   static final _format = DateFormat('yyyy-MM-dd HH:mm');
 
+  /// Range offered by the picker; the app's first edition is 2018.
+  static final _firstPickableDate = DateTime(2018);
+  static final _lastPickableDate = DateTime(2100);
+
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final unset = value.millisecondsSinceEpoch == 0;
+    final unset = TrackEngagementConfig.isUnset(value);
     return InkWell(
       onTap: () => _pick(context),
       borderRadius: BorderRadius.circular(8),
@@ -270,41 +274,47 @@ class AdminDateTimeTile extends StatelessWidget {
   }
 
   Future<void> _pick(BuildContext context) async {
-    final local = value.millisecondsSinceEpoch == 0
+    final local = TrackEngagementConfig.isUnset(value)
         ? DateTime.now()
         : value.toLocal();
     final date = await showDatePicker(
       context: context,
       initialDate: local,
-      firstDate: DateTime(2018),
-      lastDate: DateTime(2100),
-      builder: (context, child) =>
-          _pickerTheme(context, child ?? const SizedBox.shrink()),
+      firstDate: _firstPickableDate,
+      lastDate: _lastPickableDate,
+      builder: (context, child) => _PickerTheme(child: child),
     );
     if (date == null || !context.mounted) return;
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(local),
-      builder: (context, child) =>
-          _pickerTheme(context, child ?? const SizedBox.shrink()),
+      builder: (context, child) => _PickerTheme(child: child),
     );
     if (time == null) return;
     onPicked(DateTime(date.year, date.month, date.day, time.hour, time.minute));
   }
 }
 
-Widget _pickerTheme(BuildContext context, Widget child) {
-  final palette = context.palette;
-  final scheme = Theme.of(context).colorScheme;
-  return Theme(
-    data: Theme.of(context).copyWith(
-      colorScheme: scheme.copyWith(
-        primary: palette.accent,
-        onPrimary: palette.onAccent,
-        surface: palette.card,
-        onSurface: palette.onCard,
+/// Applies the app palette to the date and time pickers.
+class _PickerTheme extends StatelessWidget {
+  const _PickerTheme({required this.child});
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    final theme = Theme.of(context);
+    return Theme(
+      data: theme.copyWith(
+        colorScheme: theme.colorScheme.copyWith(
+          primary: palette.accent,
+          onPrimary: palette.onAccent,
+          surface: palette.card,
+          onSurface: palette.onCard,
+        ),
       ),
-    ),
-    child: child,
-  );
+      child: child ?? const SizedBox.shrink(),
+    );
+  }
 }

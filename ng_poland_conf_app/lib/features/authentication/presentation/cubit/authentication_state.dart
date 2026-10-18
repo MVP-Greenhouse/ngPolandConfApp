@@ -1,17 +1,17 @@
 part of 'authentication_cubit.dart';
 
 @freezed
-class AuthenticationState with _$AuthenticationState {
-  const factory AuthenticationState.initial() = _Initial;
+sealed class AuthenticationState with _$AuthenticationState {
+  const factory AuthenticationState.initial() = AuthenticationInitial;
 
   const factory AuthenticationState.inProgress({
     required AuthenticationType type,
-  }) = _InProgress;
+  }) = AuthenticationInProgress;
 
   const factory AuthenticationState.linkSent({required String email}) =
-      _LinkSent;
+      AuthenticationLinkSent;
 
-  const factory AuthenticationState.authenticated() = _Authenticated;
+  const factory AuthenticationState.authenticated() = Authenticated;
 
-  const factory AuthenticationState.error(String text) = _Error;
+  const factory AuthenticationState.error(String text) = AuthenticationError;
 }

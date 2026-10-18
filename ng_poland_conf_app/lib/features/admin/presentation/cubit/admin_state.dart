@@ -5,52 +5,46 @@ const _adminCopyWithSentinel = Object();
 class AdminState {
   const AdminState({
     this.isAdmin = false,
-    this.latestConfId,
     this.selectedConfId,
-    this.confIds = const <String>[],
     this.selectedTrack = EventItemType.ngPoland,
-    this.availableTracks = const [EventItemType.ngPoland, EventItemType.jsPoland],
+    this.availableTracks = const [],
     this.config,
     this.ranking = const <EventVoteRank>[],
-    this.message,
+    this.notice,
     this.loading = false,
   });
 
   final bool isAdmin;
-  final String? latestConfId;
   final String? selectedConfId;
-  final List<String> confIds;
   final EventItemType selectedTrack;
   final List<EventItemType> availableTracks;
   final EngagementConfig? config;
   final List<EventVoteRank> ranking;
-  final String? message;
+
+  /// One-off feedback for the last admin action; cleared once shown.
+  final AppNotice? notice;
   final bool loading;
 
   AdminState copyWith({
     bool? isAdmin,
-    String? latestConfId,
     String? selectedConfId,
-    List<String>? confIds,
     EventItemType? selectedTrack,
     List<EventItemType>? availableTracks,
     EngagementConfig? config,
     List<EventVoteRank>? ranking,
-    Object? message = _adminCopyWithSentinel,
+    Object? notice = _adminCopyWithSentinel,
     bool? loading,
   }) {
     return AdminState(
       isAdmin: isAdmin ?? this.isAdmin,
-      latestConfId: latestConfId ?? this.latestConfId,
       selectedConfId: selectedConfId ?? this.selectedConfId,
-      confIds: confIds ?? this.confIds,
       selectedTrack: selectedTrack ?? this.selectedTrack,
       availableTracks: availableTracks ?? this.availableTracks,
       config: config ?? this.config,
       ranking: ranking ?? this.ranking,
-      message: identical(message, _adminCopyWithSentinel)
-          ? this.message
-          : message as String?,
+      notice: identical(notice, _adminCopyWithSentinel)
+          ? this.notice
+          : notice as AppNotice?,
       loading: loading ?? this.loading,
     );
   }

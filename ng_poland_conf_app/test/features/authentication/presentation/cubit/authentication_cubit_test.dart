@@ -1,167 +1,114 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/entities/user_profile.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/entities/user_role.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/repositories/authentication_repository.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/repositories/user_repository.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/usecases/complete_magic_link.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/usecases/ensure_user_profile.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/usecases/send_magic_link.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/usecases/sign_in_apple.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/usecases/sign_in_google.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/exceptions/auth_exception.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/complete_magic_link.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/ensure_user_profile.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/handle_magic_link.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/send_magic_link.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/sign_in_with_apple.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/sign_in_with_google.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/watch_incoming_links.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/authentication_cubit.dart';
+import 'package:ng_poland_conf_app/features/authentication/presentation/magic_link_listener.dart';
 
-class _AuthRepo implements AuthenticationRepository {
-  _AuthRepo({
-    this.sendResult,
-    this.completeResult,
-  });
-
-  Either<String, String>? sendResult;
-  Either<String, String>? completeResult;
-  String? lastSendEmail;
-  String? lastCompleteLink;
-
-  @override
-  Future<Either<String, String>> signInWithApple() async => right('ok');
-
-  @override
-  Future<Either<String, String>> signInWithGoogle() async => right('ok');
-
-  @override
-  Future<Either<String, String>> sendSignInLink(String email) async {
-    lastSendEmail = email;
-    return sendResult ?? right('sent');
-  }
-
-  @override
-  Future<Either<String, String>> completeSignInWithEmailLink(
-    String emailLink,
-  ) async {
-    lastCompleteLink = emailLink;
-    return completeResult ??
-        left('No saved email. Send the link again on this device.');
-  }
-}
-
-class _ThrowingUserRepository implements UserRepository {
-  @override
-  Future<UserProfile> ensureProfile({
-    required String uid,
-    required String displayName,
-    required String email,
-  }) async {
-    throw Exception('firestore unavailable');
-  }
-
-  @override
-  Stream<UserProfile?> watchProfile(String uid) => Stream.value(null);
-}
-
-class _OkUserRepository implements UserRepository {
-  @override
-  Future<UserProfile> ensureProfile({
-    required String uid,
-    required String displayName,
-    required String email,
-  }) async {
-    return UserProfile(
-      uid: uid,
-      displayName: displayName,
-      email: email,
-      role: UserRole.user,
-    );
-  }
-
-  @override
-  Stream<UserProfile?> watchProfile(String uid) => Stream.value(null);
-}
-
-AuthenticationCubit _cubit(
-  UserRepository repo, {
-  AuthenticationRepository? authRepo,
-}) {
-  final resolvedAuthRepo = authRepo ?? _AuthRepo();
-  return AuthenticationCubit(
-    SignInAppleUseCase(resolvedAuthRepo),
-    SignInGoogleUseCase(resolvedAuthRepo),
-    SendMagicLinkUseCase(resolvedAuthRepo),
-    CompleteMagicLinkUseCase(resolvedAuthRepo),
-    EnsureUserProfile(repo),
-  );
-}
+import '../../../../helpers/fakes.dart';
 
 void main() {
-  test('emits error when ensureUserProfile throws after sign-in', () async {
-    final cubit = _cubit(_ThrowingUserRepository());
+  late FakeAuthenticationRepository auth;
+  late FakeIncomingLinksRepository links;
+  late AuthenticationCubit cubit;
 
-    await cubit.ensureProfileAfterSignIn(
-      uid: 'u1',
-      displayName: 'Ada',
-      email: 'ada@example.com',
+  AuthenticationCubit build(FakeUserRepository users) {
+    final ensureProfile = EnsureUserProfile(users);
+    final completeMagicLink = CompleteMagicLink(auth, ensureProfile);
+    return AuthenticationCubit(
+      SignInWithGoogle(auth, ensureProfile),
+      SignInWithApple(auth, ensureProfile),
+      SendMagicLink(auth),
+      completeMagicLink,
+      MagicLinkListener(
+        WatchIncomingLinks(links),
+        HandleMagicLink(auth, completeMagicLink),
+        silentLogger,
+      ),
+      silentLogger,
     );
+  }
+
+  setUp(() {
+    auth = FakeAuthenticationRepository();
+    links = FakeIncomingLinksRepository();
+  });
+
+  tearDown(() async {
+    await cubit.close();
+    await auth.dispose();
+    await links.dispose();
+  });
+
+  test('emits authenticated when sign-in and profile sync succeed', () async {
+    cubit = build(FakeUserRepository());
+
+    await cubit.signInWithGoogle();
+
+    expect(cubit.state, const AuthenticationState.authenticated());
+  });
+
+  test('emits the profile error when saving the profile fails', () async {
+    cubit = build(
+      FakeUserRepository(ensureError: const ProfileSyncException()),
+    );
+
+    await cubit.signInWithApple();
 
     expect(
       cubit.state,
-      const AuthenticationState.error('There was a problem saving your profile.'),
+      const AuthenticationState.error(
+        'There was a problem saving your profile.',
+      ),
     );
-    await cubit.close();
   });
 
-  test('emits authenticated when ensureUserProfile succeeds', () async {
-    final cubit = _cubit(_OkUserRepository());
-
-    await cubit.ensureProfileAfterSignIn(
-      uid: 'u1',
-      displayName: 'Ada',
-      email: 'ada@example.com',
-    );
-
-    expect(cubit.state, const AuthenticationState.authenticated());
-    await cubit.close();
-  });
-
-  test('sendMagicLink emits linkSent on success', () async {
-    final authRepo = _AuthRepo(sendResult: right('sent'));
-    final cubit = _cubit(_OkUserRepository(), authRepo: authRepo);
+  test('sendMagicLink emits linkSent with the trimmed email', () async {
+    cubit = build(FakeUserRepository());
 
     await cubit.sendMagicLink(' ada@example.com ');
 
-    expect(authRepo.lastSendEmail, ' ada@example.com ');
+    expect(auth.lastSentEmail, 'ada@example.com');
     expect(
       cubit.state,
       const AuthenticationState.linkSent(email: 'ada@example.com'),
     );
-    await cubit.close();
   });
 
-  test('sendMagicLink emits error on failure', () async {
-    final authRepo = _AuthRepo(sendResult: left('fail'));
-    final cubit = _cubit(_OkUserRepository(), authRepo: authRepo);
+  test(
+    'sendMagicLink rejects an invalid address before calling Firebase',
+    () async {
+      cubit = build(FakeUserRepository());
 
-    await cubit.sendMagicLink('ada@example.com');
+      await cubit.sendMagicLink('not-an-email');
 
-    expect(cubit.state, const AuthenticationState.error('fail'));
-    await cubit.close();
-  });
+      expect(auth.lastSentEmail, isNull);
+      expect(
+        cubit.state,
+        const AuthenticationState.error('Enter a valid email address.'),
+      );
+    },
+  );
 
-  test('completeMagicLink emits error when pending email missing', () async {
-    final authRepo = _AuthRepo(
-      completeResult: left(
-        'No saved email. Send the link again on this device.',
-      ),
+  test('completeMagicLink reports repository failures', () async {
+    auth.failure = const AuthException(
+      'No saved email. Send the link again on this device.',
     );
-    final cubit = _cubit(_OkUserRepository(), authRepo: authRepo);
+    cubit = build(FakeUserRepository());
 
     await cubit.completeMagicLink('https://example.com/auth?link=1');
 
+    expect(auth.lastCompletedLink, 'https://example.com/auth?link=1');
     expect(
       cubit.state,
       const AuthenticationState.error(
         'No saved email. Send the link again on this device.',
       ),
     );
-    expect(authRepo.lastCompleteLink, 'https://example.com/auth?link=1');
-    await cubit.close();
   });
 }

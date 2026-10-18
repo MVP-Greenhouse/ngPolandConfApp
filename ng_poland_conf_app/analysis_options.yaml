@@ -3,3 +3,31 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - build/**
+    - ios/build/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  language:
+    strict-casts: true
+
+linter:
+  rules:
+    # Layout widgets (LeanCode #11: replace single-purpose containers).
+    - avoid_unnecessary_containers
+    - sized_box_for_whitespace
+    - use_colored_box
+    - use_decorated_box
+    # Async hygiene (LeanCode #5: avoid redundant async/await).
+    - avoid_void_async
+    - unawaited_futures
+    - unnecessary_await_in_return
+    # Resource lifecycle.
+    - cancel_subscriptions
+    - close_sinks
+    # Style and readability.
+    - always_use_package_imports
+    - directives_ordering
+    - prefer_const_constructors
+    - prefer_final_locals
+    - prefer_single_quotes
+    - avoid_print
+    - use_build_context_synchronously

@@ -14,12 +14,14 @@ class HiveConstantsForBoxes {
   static const String magicLinkPendingEmail = 'magicLinkPendingEmail';
   static const String editionCache = 'editionCache';
 
-  static const legacyContentBoxes = [
+  /// Boxes left behind by removed features; deleted on startup.
+  static const legacyBoxes = [
     conferences,
     infoItems,
     ngGirls,
     eventItem,
     workshops,
     speakers,
+    rateEvent,
   ];
 }

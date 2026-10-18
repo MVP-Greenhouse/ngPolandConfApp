@@ -3,196 +3,83 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
-import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/engagement_visibility.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_toggle.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/votable_event_catalog.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/votable_event_repository.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/votable_event.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:logger/logger.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/entities/event_vote_status.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/exceptions/engagement_exception.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/services/event_vote_toggle.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/usecases/cast_event_vote.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/usecases/watch_event_vote.dart';
 
-part 'event_vote_state.dart';
 part 'event_vote_cubit.freezed.dart';
+part 'event_vote_state.dart';
 
 @injectable
 class EventVoteCubit extends Cubit<EventVoteState> {
   EventVoteCubit(
-    this._eventVoteRepository,
-    this._votableEvents,
-    this._configRepository,
-    this._userSessionCubit,
-    this._conferencesCubit,
+    WatchEventVote watchEventVote,
+    this._castEventVote,
+    this._logger,
     @factoryParam this.eventId,
-    @factoryParam this.trackName,
+    @factoryParam EventItemType track,
   ) : super(const EventVoteState.hidden()) {
-    _listen();
+    _subscription = watchEventVote(
+      WatchEventVoteParams(eventId: eventId, track: track),
+    ).listen(_onStatus, onError: _onError);
   }
 
-  final EventVoteRepository _eventVoteRepository;
-  final VotableEventRepository _votableEvents;
-  final EngagementConfigRepository _configRepository;
-  final UserSessionCubit _userSessionCubit;
-  final ConferencesCubit _conferencesCubit;
+  final CastEventVote _castEventVote;
+  final Logger _logger;
   final String eventId;
-  final String trackName;
+  late final StreamSubscription<EventVoteStatus> _subscription;
 
-  StreamSubscription<EventVoteState>? _subscription;
+  bool get requiresLogin => state is VoteNeedsLogin;
 
-  bool requiresLogin() =>
-      state.maybeWhen(needsLogin: () => true, orElse: () => false);
-
-  void _listen() {
-    final conferences$ = _conferencesCubit.stream.startWith(
-      _conferencesCubit.state,
-    );
-    final session$ = _userSessionCubit.stream.startWith(
-      _userSessionCubit.state,
-    );
-
-    _subscription =
-        Rx.combineLatest2(
-              conferences$,
-              session$,
-              (ConferencesState conferences, UserSessionState session) =>
-                  (conferences: conferences, session: session),
-            )
-            .switchMap(_mapToState)
-            .listen(
-              (next) {
-                if (isClosed) return;
-                if (_shouldIgnoreWatchMyLike(next)) return;
-                emit(next);
-              },
-              onError: (_) {
-                if (!isClosed) emit(const EventVoteState.hidden());
-              },
-            );
-  }
-
-  Stream<EventVoteState> _mapToState(
-    ({ConferencesState conferences, UserSessionState session}) snapshot,
-  ) {
-    final loaded = snapshot.conferences.mapOrNull(loaded: (state) => state);
-    if (loaded == null) {
-      return Stream.value(const EventVoteState.hidden());
-    }
-
-    final selectedConfId = loaded.selectedConference.confId;
-    final latestConfId = LatestConferenceResolver.fromConfIds(
-      loaded.conferences.list.map((conference) => conference.confId),
-    );
-    if (latestConfId == null) {
-      return Stream.value(const EventVoteState.hidden());
-    }
-
-    return _configRepository.watchConfig(latestConfId).switchMap((config) {
-      final track = EventItemType.values.firstWhere(
-        (type) => type.name == trackName,
-        orElse: () => EventItemType.ngPoland,
-      );
-      final showVoting = EngagementVisibility.showVoting(
-        selectedConfId: selectedConfId,
-        latestConfId: latestConfId,
-        votingOpen: config.forTrack(track).isVotingOpen(DateTime.now()),
-      );
-      if (!showVoting) {
-        return Stream<EventVoteState>.value(const EventVoteState.hidden());
-      }
-
-      return _votableEvents
-          .watchEvent(confId: selectedConfId, eventId: eventId)
-          .switchMap(
-            (event) => _whenEventHasEnded(event, () {
-              return snapshot.session.when(
-                loading: () =>
-                    Stream<EventVoteState>.value(const EventVoteState.hidden()),
-                unauthenticated: () => Stream<EventVoteState>.value(
-                  const EventVoteState.needsLogin(),
-                ),
-                authenticated: (profile) => _eventVoteRepository
-                    .watchMyLike(
-                      confId: selectedConfId,
-                      eventId: eventId,
-                      uid: profile.uid,
-                    )
-                    .map(EventVoteState.ready)
-                    .startWith(const EventVoteState.hidden()),
-              );
-            }),
-          );
+  void _onStatus(EventVoteStatus status) {
+    // A snapshot arriving mid-save would overwrite the optimistic state.
+    final inFlight = state is VoteSaving || state is VoteFailure;
+    if (inFlight && status is EventVoteAvailable) return;
+    emit(switch (status) {
+      EventVoteHidden() => const EventVoteState.hidden(),
+      EventVoteNeedsLogin() => const EventVoteState.needsLogin(),
+      EventVoteAvailable(:final liked) => EventVoteState.ready(liked),
     });
   }
 
-  Stream<EventVoteState> _whenEventHasEnded(
-    VotableEvent? event,
-    Stream<EventVoteState> Function() next,
-  ) {
-    final endsAt = event?.endsAt;
-    if (eventHasEnded(endsAt: endsAt, now: DateTime.now())) return next();
-    if (endsAt == null) {
-      return Stream.value(const EventVoteState.hidden());
-    }
-
-    final wait = endsAt.toUtc().difference(DateTime.now().toUtc());
-    if (wait <= Duration.zero) return next();
-    return Rx.concat([
-      Stream<EventVoteState>.value(const EventVoteState.hidden()),
-      Rx.timer<void>(null, wait).asyncExpand((_) => next()),
-    ]);
-  }
-
-  bool _shouldIgnoreWatchMyLike(EventVoteState next) {
-    final inFlight = state.maybeWhen(
-      saving: (_) => true,
-      failure: (_) => true,
-      orElse: () => false,
+  void _onError(Object error, StackTrace stackTrace) {
+    _logger.w(
+      'Event vote: status unavailable',
+      error: error,
+      stackTrace: stackTrace,
     );
-    if (!inFlight) return false;
-    return next.maybeWhen(ready: (_) => true, orElse: () => false);
+    emit(const EventVoteState.hidden());
   }
 
   Future<void> toggleLike() async {
-    if (requiresLogin()) return;
+    final previous = switch (state) {
+      VoteReady(:final vote) || VoteFailure(:final vote) => vote,
+      _ => null,
+    };
+    if (previous == null) return;
 
-    final votable = state.maybeWhen(
-      ready: (_) => true,
-      failure: (_) => true,
-      orElse: () => false,
-    );
-    if (!votable) return;
-
-    final previousLiked = state.liked;
-    final uid = _userSessionCubit.state.profile?.uid;
-    final confId =
-        _conferencesCubit.state.mapOrNull(
-          loaded: (value) => value.selectedConference.confId,
-        ) ??
-        _conferencesCubit.selectedConference?.confId;
-    if (uid == null || confId == null) return;
-
-    final nextLiked = EventVoteToggle.apply(currentlyLiked: previousLiked);
-    emit(EventVoteState.saving(previousLiked));
+    final next = EventVoteToggle.apply(currentlyLiked: previous);
+    emit(EventVoteState.saving(previous));
     try {
-      await _eventVoteRepository.setLike(
-        confId: confId,
-        eventId: eventId,
-        uid: uid,
-        liked: nextLiked,
+      await _castEventVote(CastEventVoteParams(eventId: eventId, liked: next));
+      if (!isClosed) emit(EventVoteState.ready(next));
+    } on EngagementException catch (error, stackTrace) {
+      _logger.w(
+        'Event vote: saving failed',
+        error: error,
+        stackTrace: stackTrace,
       );
-      if (!isClosed) emit(EventVoteState.ready(nextLiked));
-    } catch (_) {
-      if (!isClosed) emit(EventVoteState.failure(previousLiked));
+      if (!isClosed) emit(EventVoteState.failure(previous));
     }
   }
 
   @override
   Future<void> close() async {
-    await _subscription?.cancel();
+    await _subscription.cancel();
     return super.close();
   }
 }

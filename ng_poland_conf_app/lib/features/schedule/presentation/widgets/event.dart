@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ng_poland_conf_app/core/constants/event_types.dart';
+import 'package:ng_poland_conf_app/core/presentation/navigation/app_pages.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/simple_cross_origin_image.dart';
 import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
-import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/speaker.dart';
+import 'package:ng_poland_conf_app/features/event/presentation/pages/event_page.dart';
+import 'package:ng_poland_conf_app/features/schedule/domain/services/schedule_card.dart';
+import 'package:ng_poland_conf_app/features/schedule/domain/services/schedule_timeline.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/agenda_icon.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
-import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
-import 'package:ng_poland_conf_app/routing/routing.dart';
-import 'package:ng_poland_conf_app/theme/app_palette.dart';
-import 'package:ng_poland_conf_app/widgets/simple_cross_origin_image.dart';
+import 'package:ng_poland_conf_app/features/speakers/presentation/pages/speaker_details_page.dart';
 
 class ScheduleEvent extends StatelessWidget {
   const ScheduleEvent({
@@ -28,9 +29,7 @@ class ScheduleEvent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final speakers = eventItem.speakers.isNotEmpty
-        ? eventItem.speakers
-        : [?eventItem.speaker];
+    final speakers = eventItem.allSpeakers;
     final highlighted = isActiveEvent;
 
     return Padding(
@@ -106,8 +105,8 @@ class _ScheduleCardBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final time = _timeLabel(eventItem);
-    final note = _cardNote(eventItem);
+    final time = eventItem.timeRangeLabel;
+    final note = scheduleCardNote(eventItem);
     final session = eventItem.sessionLabel.trim();
     final showSessionChip = speakers.isNotEmpty && session.isNotEmpty;
     final duration = speakers.isNotEmpty && !eventItem.isBreak
@@ -229,7 +228,7 @@ class _ScheduleSpeakerTile extends StatelessWidget {
 
     return InkWell(
       onTap: () => context.pushNamed(
-        '${Pages.schedule.nameKey}-${SpeakerDetails.routeNameKey}',
+        '${Pages.schedule.nameKey}-${SpeakerDetailsPage.routeNameKey}',
         pathParameters: {'id': speaker.id ?? ''},
         queryParameters: {
           if (speaker.conferenceKey.isNotEmpty)
@@ -410,24 +409,4 @@ class _DurationChip extends StatelessWidget {
       ),
     );
   }
-}
-
-String _timeLabel(EventItem event) {
-  if (event.timeLabel.isNotEmpty) return event.timeLabel;
-  final start = ConferenceDateTime.formatHm(event.startDate);
-  final end = ConferenceDateTime.formatHm(event.endDate);
-  if (start.isEmpty) return '';
-  if (end.isEmpty) return start;
-  return '$start – $end';
-}
-
-String? _cardNote(EventItem event) {
-  final description = event.description?.trim() ?? '';
-  if (description.isEmpty ||
-      description.length > 72 ||
-      description.contains('\n')) {
-    return null;
-  }
-  if (description == event.sessionLabel.trim()) return null;
-  return description;
 }

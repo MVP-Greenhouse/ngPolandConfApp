@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/core/presentation/navigation/app_pages.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/fixed_size_cross_origin_image.dart';
 import 'package:ng_poland_conf_app/core/utils/hex_color.dart';
 import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
-import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
-import 'package:ng_poland_conf_app/features/speakers/domains/entities/speaker.dart';
-import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
-import 'package:ng_poland_conf_app/routing/routing.dart';
-import 'package:ng_poland_conf_app/theme/app_palette.dart';
-import 'package:ng_poland_conf_app/widgets/fixed_size_cross_origin_image.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/speaker.dart';
+import 'package:ng_poland_conf_app/features/speakers/domain/entities/speaker_list_item.dart';
+import 'package:ng_poland_conf_app/features/speakers/presentation/pages/speaker_details_page.dart';
 
 class SpeakerTile extends StatelessWidget {
-  const SpeakerTile(this.speaker, {super.key});
+  const SpeakerTile(this.item, {super.key});
 
-  final Speaker speaker;
+  final SpeakerListItem item;
+
+  Speaker get speaker => item.speaker;
 
   @override
   Widget build(BuildContext context) {
-    final profile = context.read<EditionCubit>().current?.speakerBySlug(
-      speaker.id ?? '',
-      conference: speaker.conferenceKey,
-    );
     final palette = context.palette;
-    final position = profile?.position ?? '';
-    final company = profile?.company ?? '';
-    final accent = colorFromHex(profile?.color ?? '') ?? palette.accent;
-    final sessions = _sessions(speaker.talkTitle);
+    final position = item.position;
+    final company = item.company;
+    final accent = colorFromHex(item.color) ?? palette.accent;
     final role = speaker.role ?? '';
 
     return Padding(
@@ -125,11 +121,10 @@ class SpeakerTile extends StatelessWidget {
                     ),
                   ],
                 ),
-                for (final session in sessions) ...[
+                for (final session in item.sessions) ...[
                   const SizedBox(height: 10),
                   _SessionRow(
-                    kind: session.kind,
-                    title: session.title,
+                    session: session,
                     onTap: () => _openSpeaker(context),
                   ),
                 ],
@@ -145,7 +140,7 @@ class SpeakerTile extends StatelessWidget {
     final id = speaker.id;
     if (id == null || id.isEmpty) return;
     context.pushNamed(
-      '${Pages.speakers.nameKey}-${SpeakerDetails.routeNameKey}',
+      '${Pages.speakers.nameKey}-${SpeakerDetailsPage.routeNameKey}',
       pathParameters: {'id': id},
       queryParameters: {
         if (speaker.conferenceKey.isNotEmpty)
@@ -156,22 +151,20 @@ class SpeakerTile extends StatelessWidget {
 }
 
 class _SessionRow extends StatelessWidget {
-  const _SessionRow({
-    required this.kind,
-    required this.title,
-    required this.onTap,
-  });
+  const _SessionRow({required this.session, required this.onTap});
 
-  final String kind;
-  final String title;
+  final SpeakerSession session;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    final keynote = kind == 'KEYNOTE';
-    final qa = kind == 'Q&A';
-    final highlighted = keynote || qa;
+    final highlighted = session.kind != .talk;
+    final kind = switch (session.kind) {
+      .talk => 'TALK',
+      .keynote => 'KEYNOTE',
+      .qa => 'Q&A',
+    };
     final badgeColor = highlighted ? palette.accent : palette.chip;
     final badgeForeground = highlighted ? palette.onAccent : palette.onChip;
     return Material(
@@ -211,7 +204,7 @@ class _SessionRow extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  title,
+                  session.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: palette.onCard, fontSize: 13),
@@ -224,20 +217,4 @@ class _SessionRow extends StatelessWidget {
       ),
     );
   }
-}
-
-List<({String kind, String title})> _sessions(String talkTitle) {
-  if (talkTitle.isEmpty) return const [];
-  return [
-    for (final part in talkTitle.split(' + '))
-      if (part.trim().isNotEmpty)
-        (kind: _sessionKind(part.trim()), title: part.trim()),
-  ];
-}
-
-String _sessionKind(String title) {
-  final lower = title.toLowerCase();
-  if (lower.contains('q&a') || lower.contains('q & a')) return 'Q&A';
-  if (lower.startsWith('keynote')) return 'KEYNOTE';
-  return 'TALK';
 }

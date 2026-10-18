@@ -2,10 +2,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/features/schedule/presentation/schedule_top5_page.dart';
-import 'package:ng_poland_conf_app/routing/routing.dart';
-import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/navigation/app_pages.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/schedule/presentation/pages/schedule_top5_page.dart';
 
 class ScheduleVotingBanner extends StatelessWidget {
   const ScheduleVotingBanner({
@@ -18,6 +18,16 @@ class ScheduleVotingBanner extends StatelessWidget {
   final EventItemType track;
   final bool votingOpen;
   final bool top5Enabled;
+
+  static const _outerPadding = EdgeInsets.fromLTRB(16, 12, 16, 4);
+  static const _innerPadding = EdgeInsets.all(14);
+  static const _iconSize = 32.0;
+  static const _iconGap = 12.0;
+  static const _arrowSize = 20.0;
+  static const _titleGap = 4.0;
+  static const _openTitle = 'LIVE VOTING IS OPEN!';
+  static const _longestSubtitle =
+      'Vote for your favorite talks • Top 5 ranking';
 
   /// Height of this banner, including its padding, for [AppBar.bottom].
   static double barExtent(BuildContext context) {
@@ -33,49 +43,57 @@ class ScheduleVotingBanner extends StatelessWidget {
     final subtitleStyle =
         Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: 12) ??
         const TextStyle(fontSize: 12);
-    final textWidth = math.max(0.0, MediaQuery.sizeOf(context).width - 124);
+    final reservedWidth =
+        _outerPadding.horizontal +
+        _innerPadding.horizontal +
+        _iconSize +
+        _iconGap +
+        _arrowSize;
+    final textWidth = math.max(
+      0.0,
+      MediaQuery.sizeOf(context).width - reservedWidth,
+    );
     final titleHeight = _textHeight(
-      'LIVE VOTING IS OPEN!',
+      _openTitle,
       titleStyle,
       textDirection,
       textScaler,
       textWidth,
     );
     final subtitleHeight = _textHeight(
-      'Vote for your favorite talks • Top 5 ranking',
+      _longestSubtitle,
       subtitleStyle,
       textDirection,
       textScaler,
       textWidth,
     );
-    final contentHeight = math.max(32, titleHeight + 4 + subtitleHeight);
-    return (44 + contentHeight).ceilToDouble();
+    final contentHeight = math.max(
+      _iconSize,
+      titleHeight + _titleGap + subtitleHeight,
+    );
+    return (_outerPadding.vertical + _innerPadding.vertical + contentHeight)
+        .ceilToDouble();
   }
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    const closedAccent = Color(0xFFFFC107);
-    final highlight = votingOpen ? palette.accent : closedAccent;
-    final canOpenTop5 = top5Enabled;
+    final highlight = votingOpen ? palette.accent : AppPalette.gold;
 
-    final title = votingOpen ? 'LIVE VOTING IS OPEN!' : 'VOTING CLOSED';
-    final String subtitle;
-    if (!votingOpen) {
-      subtitle = 'See the official Top 5 ranking';
-    } else if (top5Enabled) {
-      subtitle = 'Vote for your favorite talks • Top 5 ranking';
-    } else {
-      subtitle = 'Vote for your favorite talks';
-    }
+    final title = votingOpen ? _openTitle : 'VOTING CLOSED';
+    final subtitle = switch ((votingOpen, top5Enabled)) {
+      (false, _) => 'See the official Top 5 ranking',
+      (true, true) => _longestSubtitle,
+      (true, false) => 'Vote for your favorite talks',
+    };
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+      padding: _outerPadding,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
-          onTap: canOpenTop5
+          onTap: top5Enabled
               ? () {
                   context.pushNamed(
                     '${Pages.schedule.nameKey}-${ScheduleTop5Page.routeNameKey}',
@@ -99,16 +117,16 @@ class ScheduleVotingBanner extends StatelessWidget {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              padding: _innerPadding,
               child: Row(
                 children: [
                   Container(
-                    width: 32,
-                    height: 32,
-                    alignment: Alignment.center,
+                    width: _iconSize,
+                    height: _iconSize,
+                    alignment: .center,
                     decoration: BoxDecoration(
                       color: highlight.withValues(alpha: 0.16),
-                      shape: BoxShape.circle,
+                      shape: .circle,
                     ),
                     child: Icon(
                       votingOpen
@@ -118,7 +136,7 @@ class ScheduleVotingBanner extends StatelessWidget {
                       color: highlight,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: _iconGap),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +151,7 @@ class ScheduleVotingBanner extends StatelessWidget {
                                 fontSize: 13,
                               ),
                         ),
-                        const SizedBox(height: 4),
+                        const SizedBox(height: _titleGap),
                         Text(
                           subtitle,
                           style: Theme.of(context).textTheme.bodySmall
@@ -142,8 +160,12 @@ class ScheduleVotingBanner extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (canOpenTop5)
-                    Icon(Icons.arrow_forward, size: 20, color: palette.muted),
+                  if (top5Enabled)
+                    Icon(
+                      Icons.arrow_forward,
+                      size: _arrowSize,
+                      color: palette.muted,
+                    ),
                 ],
               ),
             ),

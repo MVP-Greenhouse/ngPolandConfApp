@@ -1,95 +1,28 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/entities/user_profile.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/repositories/user_repository.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/usecases/ensure_user_profile.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/entities/user_session.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/sign_out.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/watch_user_session.dart';
 
-part 'user_session_state.dart';
-part 'user_session_cubit.freezed.dart';
-
+/// Exposes the [UserSession] to widgets (drawer, router guards).
 @singleton
-class UserSessionCubit extends Cubit<UserSessionState> {
-  UserSessionCubit(
-    this._ensureUserProfile,
-    this._userRepository, {
-    @ignoreParam Stream<User?>? authStateChanges,
-  }) : super(const UserSessionState.loading()) {
-    _authSub = (authStateChanges ?? FirebaseAuth.instance.authStateChanges())
-        .listen(_onAuth);
+class UserSessionCubit extends Cubit<UserSession> {
+  UserSessionCubit(WatchUserSession watchUserSession, this._signOut)
+    : super(const UserSession.loading()) {
+    _subscription = watchUserSession().listen(emit);
   }
 
-  final EnsureUserProfile _ensureUserProfile;
-  final UserRepository _userRepository;
-  StreamSubscription<User?>? _authSub;
-  StreamSubscription<UserProfile?>? _profileSub;
+  final SignOut _signOut;
+  late final StreamSubscription<UserSession> _subscription;
 
-  bool get isAdmin => state.isAdmin;
-
-  UserProfile? get currentProfile => state.profile;
-
-  Future<void> _onAuth(User? user) {
-    return onAuthChanged(
-      uid: user?.uid,
-      displayName: user?.displayName ?? '',
-      email: user?.email ?? '',
-    );
-  }
-
-  Future<void> onAuthChanged({
-    String? uid,
-    String displayName = '',
-    String email = '',
-  }) async {
-    if (uid == null) {
-      await _profileSub?.cancel();
-      _profileSub = null;
-      if (!isClosed) emit(const UserSessionState.unauthenticated());
-      return;
-    }
-    if (!isClosed) emit(const UserSessionState.loading());
-    await _profileSub?.cancel();
-    _profileSub = null;
-    try {
-      await _ensureUserProfile(
-        EnsureUserProfileParams(
-          uid: uid,
-          displayName: displayName,
-          email: email,
-        ),
-      );
-    } catch (_) {
-      // Attach watchProfile anyway so a later snapshot can recover the session.
-    }
-    if (isClosed) return;
-    try {
-      _profileSub = _userRepository
-          .watchProfile(uid)
-          .listen(
-            (profile) {
-              if (isClosed) return;
-              if (profile == null) {
-                emit(const UserSessionState.unauthenticated());
-                return;
-              }
-              emit(UserSessionState.authenticated(profile));
-            },
-            onError: (_) {
-              if (!isClosed) emit(const UserSessionState.unauthenticated());
-            },
-          );
-    } catch (_) {
-      if (!isClosed) emit(const UserSessionState.unauthenticated());
-    }
-  }
+  /// The new session arrives through [WatchUserSession] once signed out.
+  Future<void> signOut() => _signOut();
 
   @override
   Future<void> close() async {
-    await _authSub?.cancel();
-    await _profileSub?.cancel();
+    await _subscription.cancel();
     return super.close();
   }
 }

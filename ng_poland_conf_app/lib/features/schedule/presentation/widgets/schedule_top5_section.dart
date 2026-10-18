@@ -1,11 +1,13 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/votable_event_catalog.dart';
-import 'package:ng_poland_conf_app/features/event/presentation/event_page.dart';
-import 'package:ng_poland_conf_app/routing/routing.dart';
-import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/navigation/app_pages.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/services/event_vote_ranking.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/services/votable_event_catalog.dart';
+import 'package:ng_poland_conf_app/features/event/presentation/pages/event_page.dart';
 
 class ScheduleTop5Section extends StatelessWidget {
   const ScheduleTop5Section({
@@ -92,11 +94,12 @@ class ScheduleTop5Section extends StatelessWidget {
   VoidCallback? _voteFor(EventVoteRank entry, Set<String> likedIds) {
     final vote = onVote;
     if (vote == null || !votingOpen) return null;
-    final likedByMe = likedIds.contains(entry.eventId);
-    final canLike =
-        likedByMe || eventHasEnded(endsAt: entry.endsAt, now: DateTime.now());
-    if (!canLike) return null;
-    return () => vote(entry.eventId);
+    final canToggle = canToggleVote(
+      votedByMe: likedIds.contains(entry.eventId),
+      endsAt: entry.endsAt,
+      now: DateTime.now(),
+    );
+    return canToggle ? () => vote(entry.eventId) : null;
   }
 }
 
@@ -108,12 +111,11 @@ class _VotingInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
-    const closedAccent = Color(0xFFFFC107);
 
     final borderColor = votingOpen
         ? palette.accent.withValues(alpha: 0.55)
-        : closedAccent.withValues(alpha: 0.45);
-    final badgeColor = votingOpen ? palette.accent : closedAccent;
+        : AppPalette.gold.withValues(alpha: 0.45);
+    final badgeColor = votingOpen ? palette.accent : AppPalette.gold;
     final badgeForeground = votingOpen
         ? palette.onAccent
         : const Color(0xFF1A1200);
@@ -135,7 +137,7 @@ class _VotingInfoCard extends StatelessWidget {
             ? null
             : [
                 BoxShadow(
-                  color: closedAccent.withValues(alpha: 0.12),
+                  color: AppPalette.gold.withValues(alpha: 0.12),
                   blurRadius: 14,
                 ),
               ],
@@ -373,7 +375,7 @@ class _Footer extends StatelessWidget {
     return Row(
       children: [
         if (isLeader) ...[
-          const Icon(Icons.star_rounded, size: 16, color: Color(0xFFFFC107)),
+          const Icon(Icons.star_rounded, size: 16, color: AppPalette.gold),
           const SizedBox(width: 6),
           Expanded(
             child: Text(
@@ -381,7 +383,7 @@ class _Footer extends StatelessWidget {
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFFFFC107),
+                color: AppPalette.gold,
               ),
             ),
           ),
@@ -472,7 +474,7 @@ class _RankBadge extends StatelessWidget {
               child: Icon(
                 Icons.emoji_events_rounded,
                 size: 18,
-                color: Color(0xFFFFC107),
+                color: AppPalette.gold,
                 shadows: [Shadow(color: Color(0x80FFC107), blurRadius: 6)],
               ),
             ),
@@ -528,19 +530,17 @@ class _SpeakerAvatar extends StatelessWidget {
     );
   }
 
-  static String _initials(String name) {
-    final parts = name
-        .trim()
-        .split(RegExp(r'\s+'))
-        .where((part) => part.isNotEmpty)
-        .toList();
-    if (parts.isEmpty) return '?';
-    if (parts.length == 1) {
-      final value = parts.first;
-      return value.substring(0, value.length.clamp(0, 2)).toUpperCase();
-    }
-    return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
-  }
+  static final _whitespace = RegExp(r'\s+');
+
+  static String _initials(String name) => switch ([
+    for (final part in name.trim().split(_whitespace))
+      if (part.isNotEmpty) part,
+  ]) {
+    [] => '?',
+    [final single] =>
+      single.substring(0, math.min(2, single.length)).toUpperCase(),
+    [final first, ..., final last] => '${first[0]}${last[0]}'.toUpperCase(),
+  };
 }
 
 class _VoteButton extends StatelessWidget {

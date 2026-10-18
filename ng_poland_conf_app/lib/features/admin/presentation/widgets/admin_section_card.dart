@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ng_poland_conf_app/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
 
 /// Shared surface card used on admin detail screens (matches hub radius/accent).
 class AdminSectionCard extends StatelessWidget {
@@ -18,33 +18,33 @@ class AdminSectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = context.palette;
 
+    // The card colour is painted by the Material itself, so list tiles inside
+    // can draw their ink splashes on top of it.
     return Material(
-      color: Colors.transparent,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: palette.card,
-          borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: palette.hairline),
-        ),
-        child: Padding(
-          padding: padding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (title case final sectionTitle?) ...[
-                Text(
-                  sectionTitle,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: palette.onCard,
-                  ),
+      color: palette.card,
+      shape: RoundedRectangleBorder(
+        borderRadius: .circular(22),
+        side: BorderSide(color: palette.hairline),
+      ),
+      clipBehavior: .antiAlias,
+      child: Padding(
+        padding: padding,
+        child: Column(
+          crossAxisAlignment: .stretch,
+          children: [
+            if (title case final sectionTitle?) ...[
+              Text(
+                sectionTitle,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontSize: 16,
+                  fontWeight: .w700,
+                  color: palette.onCard,
                 ),
-                const SizedBox(height: 12),
-              ],
-              child,
+              ),
+              const SizedBox(height: 12),
             ],
-          ),
+            child,
+          ],
         ),
       ),
     );

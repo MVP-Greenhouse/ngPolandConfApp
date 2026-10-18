@@ -12,7 +12,10 @@ FaIconData agendaIcon(String iconName, String type) {
     _ => switch (type) {
       'registration' => FontAwesomeIcons.fileLines,
       'welcome' => FontAwesomeIcons.gem,
-      'presentation' || 'talk' || 'keynote' || 'panel' => FontAwesomeIcons.microphone,
+      'presentation' ||
+      'talk' ||
+      'keynote' ||
+      'panel' => FontAwesomeIcons.microphone,
       'eating' || 'lunch' => FontAwesomeIcons.utensils,
       'award' || 'awards' => FontAwesomeIcons.trophy,
       'break' => FontAwesomeIcons.mugSaucer,

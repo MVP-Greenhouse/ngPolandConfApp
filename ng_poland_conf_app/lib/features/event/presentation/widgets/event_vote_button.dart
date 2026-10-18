@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ng_poland_conf_app/features/authentication/presentation/authentication_page.dart';
+import 'package:ng_poland_conf_app/core/presentation/navigation/redirect_paths.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/app_notice.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_vote_cubit.dart';
-import 'package:ng_poland_conf_app/injectable.dart';
-import 'package:ng_poland_conf_app/routing/routing.dart';
-import 'package:ng_poland_conf_app/theme/app_palette.dart';
-import 'package:ng_poland_conf_app/widgets/app_notice.dart';
 
 class EventLikeButton extends StatelessWidget {
   const EventLikeButton({
@@ -65,73 +63,35 @@ class EventLikeButton extends StatelessWidget {
   }
 }
 
-class EventVoteButtonHost extends StatefulWidget {
-  const EventVoteButtonHost({
-    super.key,
-    required this.eventId,
-    required this.eventItemType,
-  });
-
-  final String eventId;
-  final String eventItemType;
-
-  @override
-  State<EventVoteButtonHost> createState() => _EventVoteButtonHostState();
-}
-
-class _EventVoteButtonHostState extends State<EventVoteButtonHost> {
-  late final EventVoteCubit _cubit;
-
-  @override
-  void initState() {
-    _cubit = getIt.get<EventVoteCubit>(
-      param1: widget.eventId,
-      param2: widget.eventItemType,
-    );
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _cubit.close();
-    super.dispose();
-  }
+/// Like button of a talk. Expects an [EventVoteCubit] above it.
+class EventVoteSection extends StatelessWidget {
+  const EventVoteSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<EventVoteCubit, EventVoteState>(
-      bloc: _cubit,
-      listenWhen: (previous, current) =>
-          current.maybeWhen(failure: (_) => true, orElse: () => false),
-      listener: (context, state) {
-        showAppNotice(context, AppNotice.voteUnavailable);
-      },
+      listenWhen: (_, current) => current is VoteFailure,
+      listener: (context, _) =>
+          showAppNotice(context, AppNotice.voteUnavailable),
       builder: (context, state) {
-        if (!state.showButton) {
-          return const SizedBox.shrink();
-        }
-
-        final enabled = state.maybeWhen(
-          saving: (_) => false,
-          orElse: () => true,
-        );
-
+        if (!state.showButton) return const SizedBox.shrink();
         return EventLikeButton(
           liked: state.liked,
-          enabled: enabled,
-          onTap: () {
-            if (_cubit.requiresLogin()) {
-              context.push(
-                AuthenticationPage.loginPath(
-                  from: internalLocationFromUri(GoRouterState.of(context).uri),
-                ),
-              );
-              return;
-            }
-            _cubit.toggleLike();
-          },
+          enabled: state is! VoteSaving,
+          onTap: () => _onTap(context),
         );
       },
+    );
+  }
+
+  void _onTap(BuildContext context) {
+    final cubit = context.read<EventVoteCubit>();
+    if (!cubit.requiresLogin) {
+      cubit.toggleLike();
+      return;
+    }
+    context.push(
+      loginPath(from: internalLocationFromUri(GoRouterState.of(context).uri)),
     );
   }
 }

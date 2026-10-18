@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/services/email_address.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/auth_ui_tokens.dart';
 
-class MagicLinkForm extends StatefulWidget {
+class MagicLinkForm extends HookWidget {
   const MagicLinkForm({
     super.key,
     required this.isLoading,
@@ -16,81 +18,52 @@ class MagicLinkForm extends StatefulWidget {
   final bool linkSent;
 
   @override
-  State<MagicLinkForm> createState() => _MagicLinkFormState();
-}
-
-class _MagicLinkFormState extends State<MagicLinkForm> {
-  late final TextEditingController _controller;
-  String? _validationError;
-  bool _focused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController(text: widget.initialEmail);
-  }
-
-  @override
-  void didUpdateWidget(covariant MagicLinkForm oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.initialEmail != oldWidget.initialEmail &&
-        widget.initialEmail.isNotEmpty &&
-        _controller.text.isEmpty) {
-      _controller.text = widget.initialEmail;
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final email = _controller.text.trim();
-    if (email.isEmpty || !email.contains('@')) {
-      setState(() => _validationError = 'Enter a valid email address.');
-      return;
-    }
-    setState(() => _validationError = null);
-    widget.onSubmit(email);
-  }
-
-  String get _emailDisplay {
-    final typed = _controller.text.trim();
-    if (typed.isNotEmpty) return typed;
-    return widget.initialEmail;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final accent = scheme.secondary;
+    final controller = useTextEditingController(text: initialEmail);
+    final validationError = useState<String?>(null);
+    final focused = useState(false);
+    useEffect(() {
+      if (initialEmail.isNotEmpty && controller.text.isEmpty) {
+        controller.text = initialEmail;
+      }
+      return null;
+    }, [initialEmail]);
+
+    void submit() {
+      final email = controller.text.trim();
+      if (!isValidEmailAddress(email)) {
+        validationError.value = 'Enter a valid email address.';
+        return;
+      }
+      validationError.value = null;
+      onSubmit(email);
+    }
+
+    final typedEmail = controller.text.trim();
+    final accent = Theme.of(context).colorScheme.secondary;
 
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AuthUiTokens.cardBg,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: accent.withValues(alpha: 0.22),
-        ),
+        borderRadius: .circular(16),
+        border: .all(color: accent.withValues(alpha: 0.22)),
         boxShadow: AuthUiTokens.cardShadow(accent),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: widget.linkSent
+        padding: const .all(20),
+        child: linkSent
             ? _MagicLinkSentContent(
-                emailDisplay: _emailDisplay,
-                isLoading: widget.isLoading,
-                onResend: _submit,
+                emailDisplay: typedEmail.isNotEmpty ? typedEmail : initialEmail,
+                isLoading: isLoading,
+                onResend: submit,
               )
             : _MagicLinkComposeContent(
-                controller: _controller,
-                isLoading: widget.isLoading,
-                focused: _focused,
-                validationError: _validationError,
-                onFocusChange: (v) => setState(() => _focused = v),
-                onSubmit: _submit,
+                controller: controller,
+                isLoading: isLoading,
+                focused: focused.value,
+                validationError: validationError.value,
+                onFocusChange: (value) => focused.value = value,
+                onSubmit: submit,
               ),
       ),
     );
@@ -244,11 +217,7 @@ class _MagicLinkComposeContent extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              Icons.verified_user_rounded,
-              size: 16,
-              color: accent,
-            ),
+            Icon(Icons.verified_user_rounded, size: 16, color: accent),
             const SizedBox(width: 6),
             Expanded(
               child: Text(

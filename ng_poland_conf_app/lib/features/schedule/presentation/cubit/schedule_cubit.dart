@@ -1,33 +1,31 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
-import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:logger/logger.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/exceptions/edition_unavailable_exception.dart';
+import 'package:ng_poland_conf_app/features/schedule/domain/entities/track_schedule.dart';
+import 'package:ng_poland_conf_app/features/schedule/domain/usecases/get_track_schedule.dart';
 
 part 'schedule_state.dart';
-part 'schedule_cubit.freezed.dart';
 
 @injectable
 class ScheduleCubit extends Cubit<ScheduleState> {
-  ScheduleCubit(this._editions) : super(const ScheduleState.initial());
+  ScheduleCubit(this._getTrackSchedule, this._logger)
+    : super(const ScheduleLoading(.ngPoland));
 
-  final EditionRepository _editions;
+  final GetTrackSchedule _getTrackSchedule;
+  final Logger _logger;
 
-  Future<void> getListEvents({required EventItemType eventItemType}) async {
-    emit(const ScheduleState.loading());
-
-    final edition = await _editions.load();
-    if (edition == null) {
-      emit(const ScheduleState.error('error'));
-      return;
+  Future<void> selectTrack(EventItemType track) async {
+    emit(ScheduleLoading(track));
+    try {
+      final schedule = await _getTrackSchedule(track);
+      if (!isClosed && state.track == track) {
+        emit(ScheduleLoaded(track, schedule));
+      }
+    } on EditionUnavailableException catch (error, stackTrace) {
+      _logger.w('Schedule unavailable', error: error, stackTrace: stackTrace);
+      if (!isClosed) emit(ScheduleFailed(track));
     }
-
-    emit(
-      ScheduleState.loaded(
-        listEvents: eventItemsForTrack(edition: edition, track: eventItemType),
-      ),
-    );
   }
 }

@@ -2,295 +2,113 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
-import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/engagement_visibility.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_ranking.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/event_vote_toggle.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/votable_event_catalog.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/logic/latest_conference_resolver.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
-import 'package:ng_poland_conf_app/features/edition/datasources/repositories/edition_repository.dart';
-import 'package:ng_poland_conf_app/features/edition/domains/logic/edition_projections.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/votable_event_repository.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/logic/conference_datetime.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:logger/logger.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/usecases/get_user_session.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/entities/top5_board.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/exceptions/engagement_exception.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/services/event_vote_toggle.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/services/votable_event_catalog.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/usecases/cast_event_vote.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/usecases/watch_top5.dart';
 
 part 'schedule_top5_state.dart';
 
 @injectable
 class ScheduleTop5Cubit extends Cubit<ScheduleTop5State> {
   ScheduleTop5Cubit(
-    this._configRepository,
-    this._eventVoteRepository,
-    this._votableEvents,
-    this._editions,
-    this._conferencesCubit,
-    this._userSessionCubit,
-  ) : super(const ScheduleTop5State.loading());
+    this._watchTop5,
+    this._castEventVote,
+    this._getUserSession,
+    this._logger,
+  ) : super(const Top5StateLoading());
 
-  final EngagementConfigRepository _configRepository;
-  final EventVoteRepository _eventVoteRepository;
-  final VotableEventRepository _votableEvents;
-  final EditionRepository _editions;
-  final ConferencesCubit _conferencesCubit;
-  final UserSessionCubit _userSessionCubit;
+  final WatchTop5 _watchTop5;
+  final CastEventVote _castEventVote;
+  final GetUserSession _getUserSession;
+  final Logger _logger;
+  StreamSubscription<Top5Status>? _subscription;
 
-  StreamSubscription<ScheduleTop5State>? _subscription;
-  EventItemType _track = EventItemType.ngPoland;
+  bool get requiresLogin => _getUserSession().profile == null;
 
   void load({required EventItemType track}) {
-    _track = track;
-    _subscription?.cancel();
-    if (!isClosed) emit(const ScheduleTop5State.loading());
-    _subscription =
-        Rx.combineLatest2(
-              _conferencesCubit.stream.startWith(_conferencesCubit.state),
-              _userSessionCubit.stream.startWith(_userSessionCubit.state),
-              (ConferencesState conferences, UserSessionState session) =>
-                  (conferences: conferences, session: session),
-            )
-            .switchMap(_streamTop5)
-            .listen(
-              (next) {
-                if (!isClosed) emit(next);
-              },
-              onError: (_) {
-                if (!isClosed) emit(const ScheduleTop5State.hidden());
-              },
-            );
-  }
-
-  Stream<ScheduleTop5State> _streamTop5(
-    ({ConferencesState conferences, UserSessionState session}) snapshot,
-  ) {
-    final loaded = snapshot.conferences.mapOrNull(loaded: (state) => state);
-    if (loaded == null) {
-      return Stream.value(const ScheduleTop5State.loading());
-    }
-
-    final selectedConfId = loaded.selectedConference.confId;
-    final latestConfId = LatestConferenceResolver.fromConfIds(
-      loaded.conferences.list.map((conference) => conference.confId),
+    unawaited(_subscription?.cancel());
+    emit(const Top5StateLoading());
+    _subscription = _watchTop5(track).listen(
+      (status) => emit(switch (status) {
+        Top5Hidden() => const Top5StateHidden(),
+        Top5Loading() => const Top5StateLoading(),
+        final Top5Board board => Top5Ready(board),
+      }),
+      onError: (Object error, StackTrace stackTrace) {
+        _logger.w('Top 5 unavailable', error: error, stackTrace: stackTrace);
+        emit(const Top5StateHidden());
+      },
     );
-    if (latestConfId == null) {
-      return Stream.value(const ScheduleTop5State.hidden());
-    }
-
-    final uid = snapshot.session.profile?.uid;
-
-    return _configRepository.watchConfig(latestConfId).switchMap((config) {
-      final trackConfig = config.forTrack(_track);
-      final show = EngagementVisibility.showTop5(
-        selectedConfId: selectedConfId,
-        latestConfId: latestConfId,
-        top5Enabled: trackConfig.top5Enabled,
-      );
-      if (!show) {
-        return Stream.value(const ScheduleTop5State.hidden());
-      }
-
-      final votingOpen = EngagementVisibility.showVoting(
-        selectedConfId: selectedConfId,
-        latestConfId: latestConfId,
-        votingOpen: trackConfig.isVotingOpen(DateTime.now()),
-      );
-
-      // Emit loading while ranking resolves — otherwise UI stays on the
-      // previous state (often initial hidden → empty placeholder).
-      return Stream.fromFuture(_loadRanking(selectedConfId))
-          .asyncExpand((top) async* {
-            if (top.isEmpty) {
-              yield ScheduleTop5State.empty(
-                track: _track,
-                confId: selectedConfId,
-                votingOpen: votingOpen,
-              );
-              return;
-            }
-
-            if (uid == null) {
-              yield ScheduleTop5State.loaded(
-                top: top,
-                track: _track,
-                confId: selectedConfId,
-                votingOpen: votingOpen,
-              );
-              return;
-            }
-
-            yield* _watchMyLikes(
-              confId: selectedConfId,
-              uid: uid,
-              eventIds: top.map((entry) => entry.eventId),
-            ).map(
-              (likedIds) => ScheduleTop5State.loaded(
-                top: top,
-                track: _track,
-                confId: selectedConfId,
-                votingOpen: votingOpen,
-                myLikedEventIds: likedIds,
-              ),
-            );
-          })
-          .startWith(const ScheduleTop5State.loading());
-    });
   }
 
-  Future<List<EventVoteRank>> _loadRanking(String confId) async {
-    try {
-      final edition = await _editions.load();
-      final events = eventItemsForConferenceTrack(
-        edition: edition,
-        confId: confId,
-        track: _track,
-      );
-      final counts = await _eventVoteRepository.loadVoteCounts(confId);
-      final catalog = await _votableEvents.loadEvents(confId);
-      final entries = [
-        for (final event in events)
-          if (event.hasSpeaker && !event.isBreak)
-            EventVoteRank(
-              eventId: event.id,
-              title: event.title,
-              speakerName: event.speakerNames,
-              trackType: event.type,
-              likes: counts[event.id]?.likes ?? 0,
-              timeLabel: _timeLabel(
-                event.startDate,
-                event.endDate,
-                timeLabel: event.timeLabel,
-              ),
-              endsAt: catalog[event.id]?.endsAt,
-            ),
-      ];
-      return EventVoteRanking.topForTrack(
-        input: entries,
-        trackType: _track.name,
-      );
-    } catch (_) {
-      return const [];
-    }
-  }
-
-  Stream<Set<String>> _watchMyLikes({
-    required String confId,
-    required String uid,
-    required Iterable<String> eventIds,
-  }) {
-    final ids = eventIds.toList();
-    if (ids.isEmpty) return Stream.value(const <String>{});
-
-    return Rx.combineLatestList([
-      for (final eventId in ids)
-        _eventVoteRepository
-            .watchMyLike(confId: confId, eventId: eventId, uid: uid)
-            .map((liked) => MapEntry(eventId, liked)),
-    ]).map((entries) {
-      return {
-        for (final entry in entries)
-          if (entry.value) entry.key,
-      };
-    });
-  }
-
-  static String _timeLabel(
-    DateTime? start,
-    DateTime? end, {
-    String timeLabel = '',
-  }) {
-    if (timeLabel.isNotEmpty) return timeLabel;
-    if (start == null || end == null) return '';
-    return '${ConferenceDateTime.formatHm(start)} — ${ConferenceDateTime.formatHm(end)}';
-  }
-
-  bool get requiresLogin => _userSessionCubit.state.profile?.uid == null;
-
-  Future<void> toggleLike(String eventId) async {
-    if (requiresLogin) return;
-    final loaded = switch (state) {
-      final _Loaded value => value,
+  /// Toggles the vote optimistically. Returns `false` when it was rejected.
+  Future<bool> toggleLike(String eventId) async {
+    final board = switch (state) {
+      Top5Ready(:final board) when board.votingOpen => board,
       _ => null,
     };
-    if (loaded == null || !loaded.votingOpen) return;
+    if (board == null || requiresLogin) return true;
 
-    final uid = _userSessionCubit.state.profile?.uid;
-    if (uid == null) return;
+    final votedByMe = board.myVotes.contains(eventId);
+    final endsAt = board.top
+        .where((entry) => entry.eventId == eventId)
+        .firstOrNull
+        ?.endsAt;
+    if (!canToggleVote(
+      votedByMe: votedByMe,
+      endsAt: endsAt,
+      now: DateTime.now(),
+    )) {
+      return true;
+    }
 
-    final currentlyLiked = loaded.myLikedEventIds.contains(eventId);
-    if (!currentlyLiked && !_canCastNewLike(loaded, eventId)) return;
-    final nextLiked = EventVoteToggle.apply(currentlyLiked: currentlyLiked);
-
-    _emitLikedOptimistic(current: loaded, eventId: eventId, liked: nextLiked);
-
+    final liked = EventVoteToggle.apply(currentlyLiked: votedByMe);
+    emit(Top5Ready(_withVote(board, eventId, liked: liked)));
     try {
-      await _eventVoteRepository.setLike(
-        confId: loaded.confId,
-        eventId: eventId,
-        uid: uid,
-        liked: nextLiked,
+      await _castEventVote(CastEventVoteParams(eventId: eventId, liked: liked));
+      return true;
+    } on EngagementException catch (error, stackTrace) {
+      _logger.w(
+        'Top 5: saving vote failed',
+        error: error,
+        stackTrace: stackTrace,
       );
-    } catch (_) {
-      _emitLikedOptimistic(
-        current: loaded,
-        eventId: eventId,
-        liked: currentlyLiked,
-      );
-      rethrow;
+      if (!isClosed) emit(Top5Ready(board));
+      return false;
     }
   }
 
-  bool _canCastNewLike(_Loaded loaded, String eventId) {
-    final endsAt = loaded.top
-        .where((entry) => entry.eventId == eventId)
-        .map((entry) => entry.endsAt)
-        .firstOrNull;
-    return eventHasEnded(endsAt: endsAt, now: DateTime.now());
-  }
-
-  void _emitLikedOptimistic({
-    required _Loaded current,
-    required String eventId,
+  static Top5Board _withVote(
+    Top5Board board,
+    String eventId, {
     required bool liked,
   }) {
-    final nextIds = {...current.myLikedEventIds};
-    final wasLiked = nextIds.contains(eventId);
-    if (liked) {
-      nextIds.add(eventId);
-    } else {
-      nextIds.remove(eventId);
-    }
-
-    final nextTop = [
-      for (final entry in current.top)
-        if (entry.eventId == eventId)
-          EventVoteRank(
-            eventId: entry.eventId,
-            title: entry.title,
-            speakerName: entry.speakerName,
-            trackType: entry.trackType,
-            likes: nextOptimisticLikes(
-              liked: liked,
-              wasLiked: wasLiked,
-              currentLikes: entry.likes,
-            ),
-            timeLabel: entry.timeLabel,
-            endsAt: entry.endsAt,
-          )
-        else
-          entry,
-    ];
-
-    emit(
-      ScheduleTop5State.loaded(
-        top: nextTop,
-        track: current.track,
-        confId: current.confId,
-        votingOpen: current.votingOpen,
-        myLikedEventIds: nextIds,
-      ),
+    final wasLiked = board.myVotes.contains(eventId);
+    return Top5Board(
+      confId: board.confId,
+      track: board.track,
+      votingOpen: board.votingOpen,
+      myVotes: liked ? {...board.myVotes, eventId} : {...board.myVotes}
+        ..remove(eventId),
+      top: [
+        for (final entry in board.top)
+          if (entry.eventId == eventId)
+            entry.withLikes(
+              nextOptimisticLikes(
+                liked: liked,
+                wasLiked: wasLiked,
+                currentLikes: entry.likes,
+              ),
+            )
+          else
+            entry,
+      ],
     );
   }
 

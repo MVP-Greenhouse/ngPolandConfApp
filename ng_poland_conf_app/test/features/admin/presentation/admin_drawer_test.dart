@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ng_poland_conf_app/widgets/custom_drawer.dart';
+import 'package:ng_poland_conf_app/app/shell/app_drawer.dart';
 
 void main() {
   testWidgets('hides admin tile when not visible', (tester) async {

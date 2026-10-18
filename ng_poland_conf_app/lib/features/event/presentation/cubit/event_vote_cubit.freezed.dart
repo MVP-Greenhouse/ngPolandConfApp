@@ -55,14 +55,14 @@ extension EventVoteStatePatterns on EventVoteState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Hidden value)?  hidden,TResult Function( _NeedsLogin value)?  needsLogin,TResult Function( _Ready value)?  ready,TResult Function( _Saving value)?  saving,TResult Function( _Failure value)?  failure,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( VoteHidden value)?  hidden,TResult Function( VoteNeedsLogin value)?  needsLogin,TResult Function( VoteReady value)?  ready,TResult Function( VoteSaving value)?  saving,TResult Function( VoteFailure value)?  failure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Hidden() when hidden != null:
-return hidden(_that);case _NeedsLogin() when needsLogin != null:
-return needsLogin(_that);case _Ready() when ready != null:
-return ready(_that);case _Saving() when saving != null:
-return saving(_that);case _Failure() when failure != null:
+case VoteHidden() when hidden != null:
+return hidden(_that);case VoteNeedsLogin() when needsLogin != null:
+return needsLogin(_that);case VoteReady() when ready != null:
+return ready(_that);case VoteSaving() when saving != null:
+return saving(_that);case VoteFailure() when failure != null:
 return failure(_that);case _:
   return orElse();
 
@@ -81,18 +81,15 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Hidden value)  hidden,required TResult Function( _NeedsLogin value)  needsLogin,required TResult Function( _Ready value)  ready,required TResult Function( _Saving value)  saving,required TResult Function( _Failure value)  failure,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( VoteHidden value)  hidden,required TResult Function( VoteNeedsLogin value)  needsLogin,required TResult Function( VoteReady value)  ready,required TResult Function( VoteSaving value)  saving,required TResult Function( VoteFailure value)  failure,}){
 final _that = this;
 switch (_that) {
-case _Hidden():
-return hidden(_that);case _NeedsLogin():
-return needsLogin(_that);case _Ready():
-return ready(_that);case _Saving():
-return saving(_that);case _Failure():
-return failure(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case VoteHidden():
+return hidden(_that);case VoteNeedsLogin():
+return needsLogin(_that);case VoteReady():
+return ready(_that);case VoteSaving():
+return saving(_that);case VoteFailure():
+return failure(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -106,14 +103,14 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Hidden value)?  hidden,TResult? Function( _NeedsLogin value)?  needsLogin,TResult? Function( _Ready value)?  ready,TResult? Function( _Saving value)?  saving,TResult? Function( _Failure value)?  failure,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( VoteHidden value)?  hidden,TResult? Function( VoteNeedsLogin value)?  needsLogin,TResult? Function( VoteReady value)?  ready,TResult? Function( VoteSaving value)?  saving,TResult? Function( VoteFailure value)?  failure,}){
 final _that = this;
 switch (_that) {
-case _Hidden() when hidden != null:
-return hidden(_that);case _NeedsLogin() when needsLogin != null:
-return needsLogin(_that);case _Ready() when ready != null:
-return ready(_that);case _Saving() when saving != null:
-return saving(_that);case _Failure() when failure != null:
+case VoteHidden() when hidden != null:
+return hidden(_that);case VoteNeedsLogin() when needsLogin != null:
+return needsLogin(_that);case VoteReady() when ready != null:
+return ready(_that);case VoteSaving() when saving != null:
+return saving(_that);case VoteFailure() when failure != null:
 return failure(_that);case _:
   return null;
 
@@ -133,11 +130,11 @@ return failure(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  hidden,TResult Function()?  needsLogin,TResult Function( bool vote)?  ready,TResult Function( bool vote)?  saving,TResult Function( bool vote)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Hidden() when hidden != null:
-return hidden();case _NeedsLogin() when needsLogin != null:
-return needsLogin();case _Ready() when ready != null:
-return ready(_that.vote);case _Saving() when saving != null:
-return saving(_that.vote);case _Failure() when failure != null:
+case VoteHidden() when hidden != null:
+return hidden();case VoteNeedsLogin() when needsLogin != null:
+return needsLogin();case VoteReady() when ready != null:
+return ready(_that.vote);case VoteSaving() when saving != null:
+return saving(_that.vote);case VoteFailure() when failure != null:
 return failure(_that.vote);case _:
   return orElse();
 
@@ -158,15 +155,12 @@ return failure(_that.vote);case _:
 
 @optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  hidden,required TResult Function()  needsLogin,required TResult Function( bool vote)  ready,required TResult Function( bool vote)  saving,required TResult Function( bool vote)  failure,}) {final _that = this;
 switch (_that) {
-case _Hidden():
-return hidden();case _NeedsLogin():
-return needsLogin();case _Ready():
-return ready(_that.vote);case _Saving():
-return saving(_that.vote);case _Failure():
-return failure(_that.vote);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case VoteHidden():
+return hidden();case VoteNeedsLogin():
+return needsLogin();case VoteReady():
+return ready(_that.vote);case VoteSaving():
+return saving(_that.vote);case VoteFailure():
+return failure(_that.vote);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -182,11 +176,11 @@ return failure(_that.vote);case _:
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  hidden,TResult? Function()?  needsLogin,TResult? Function( bool vote)?  ready,TResult? Function( bool vote)?  saving,TResult? Function( bool vote)?  failure,}) {final _that = this;
 switch (_that) {
-case _Hidden() when hidden != null:
-return hidden();case _NeedsLogin() when needsLogin != null:
-return needsLogin();case _Ready() when ready != null:
-return ready(_that.vote);case _Saving() when saving != null:
-return saving(_that.vote);case _Failure() when failure != null:
+case VoteHidden() when hidden != null:
+return hidden();case VoteNeedsLogin() when needsLogin != null:
+return needsLogin();case VoteReady() when ready != null:
+return ready(_that.vote);case VoteSaving() when saving != null:
+return saving(_that.vote);case VoteFailure() when failure != null:
 return failure(_that.vote);case _:
   return null;
 
@@ -198,8 +192,8 @@ return failure(_that.vote);case _:
 /// @nodoc
 
 
-class _Hidden extends EventVoteState {
-  const _Hidden(): super._();
+class VoteHidden extends EventVoteState {
+  const VoteHidden(): super._();
   
 
 
@@ -209,7 +203,7 @@ class _Hidden extends EventVoteState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Hidden);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoteHidden);
 }
 
 
@@ -230,8 +224,8 @@ String toString() {
 /// @nodoc
 
 
-class _NeedsLogin extends EventVoteState {
-  const _NeedsLogin(): super._();
+class VoteNeedsLogin extends EventVoteState {
+  const VoteNeedsLogin(): super._();
   
 
 
@@ -241,7 +235,7 @@ class _NeedsLogin extends EventVoteState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NeedsLogin);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoteNeedsLogin);
 }
 
 
@@ -262,8 +256,8 @@ String toString() {
 /// @nodoc
 
 
-class _Ready extends EventVoteState {
-  const _Ready(this.vote): super._();
+class VoteReady extends EventVoteState {
+  const VoteReady(this.vote): super._();
   
 
  final  bool vote;
@@ -272,13 +266,13 @@ class _Ready extends EventVoteState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ReadyCopyWith<_Ready> get copyWith => __$ReadyCopyWithImpl<_Ready>(this, _$identity);
+$VoteReadyCopyWith<VoteReady> get copyWith => _$VoteReadyCopyWithImpl<VoteReady>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Ready&&(identical(other.vote, vote) || other.vote == vote));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoteReady&&(identical(other.vote, vote) || other.vote == vote));
 }
 
 
@@ -294,8 +288,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$ReadyCopyWith<$Res> implements $EventVoteStateCopyWith<$Res> {
-  factory _$ReadyCopyWith(_Ready value, $Res Function(_Ready) _then) = __$ReadyCopyWithImpl;
+abstract mixin class $VoteReadyCopyWith<$Res> implements $EventVoteStateCopyWith<$Res> {
+  factory $VoteReadyCopyWith(VoteReady value, $Res Function(VoteReady) _then) = _$VoteReadyCopyWithImpl;
 @useResult
 $Res call({
  bool vote
@@ -306,17 +300,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$ReadyCopyWithImpl<$Res>
-    implements _$ReadyCopyWith<$Res> {
-  __$ReadyCopyWithImpl(this._self, this._then);
+class _$VoteReadyCopyWithImpl<$Res>
+    implements $VoteReadyCopyWith<$Res> {
+  _$VoteReadyCopyWithImpl(this._self, this._then);
 
-  final _Ready _self;
-  final $Res Function(_Ready) _then;
+  final VoteReady _self;
+  final $Res Function(VoteReady) _then;
 
 /// Create a copy of EventVoteState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? vote = null,}) {
-  return _then(_Ready(
+  return _then(VoteReady(
 null == vote ? _self.vote : vote // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -328,8 +322,8 @@ as bool,
 /// @nodoc
 
 
-class _Saving extends EventVoteState {
-  const _Saving(this.vote): super._();
+class VoteSaving extends EventVoteState {
+  const VoteSaving(this.vote): super._();
   
 
  final  bool vote;
@@ -338,13 +332,13 @@ class _Saving extends EventVoteState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$SavingCopyWith<_Saving> get copyWith => __$SavingCopyWithImpl<_Saving>(this, _$identity);
+$VoteSavingCopyWith<VoteSaving> get copyWith => _$VoteSavingCopyWithImpl<VoteSaving>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Saving&&(identical(other.vote, vote) || other.vote == vote));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoteSaving&&(identical(other.vote, vote) || other.vote == vote));
 }
 
 
@@ -360,8 +354,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$SavingCopyWith<$Res> implements $EventVoteStateCopyWith<$Res> {
-  factory _$SavingCopyWith(_Saving value, $Res Function(_Saving) _then) = __$SavingCopyWithImpl;
+abstract mixin class $VoteSavingCopyWith<$Res> implements $EventVoteStateCopyWith<$Res> {
+  factory $VoteSavingCopyWith(VoteSaving value, $Res Function(VoteSaving) _then) = _$VoteSavingCopyWithImpl;
 @useResult
 $Res call({
  bool vote
@@ -372,17 +366,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$SavingCopyWithImpl<$Res>
-    implements _$SavingCopyWith<$Res> {
-  __$SavingCopyWithImpl(this._self, this._then);
+class _$VoteSavingCopyWithImpl<$Res>
+    implements $VoteSavingCopyWith<$Res> {
+  _$VoteSavingCopyWithImpl(this._self, this._then);
 
-  final _Saving _self;
-  final $Res Function(_Saving) _then;
+  final VoteSaving _self;
+  final $Res Function(VoteSaving) _then;
 
 /// Create a copy of EventVoteState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? vote = null,}) {
-  return _then(_Saving(
+  return _then(VoteSaving(
 null == vote ? _self.vote : vote // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -394,8 +388,8 @@ as bool,
 /// @nodoc
 
 
-class _Failure extends EventVoteState {
-  const _Failure(this.vote): super._();
+class VoteFailure extends EventVoteState {
+  const VoteFailure(this.vote): super._();
   
 
  final  bool vote;
@@ -404,13 +398,13 @@ class _Failure extends EventVoteState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$FailureCopyWith<_Failure> get copyWith => __$FailureCopyWithImpl<_Failure>(this, _$identity);
+$VoteFailureCopyWith<VoteFailure> get copyWith => _$VoteFailureCopyWithImpl<VoteFailure>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Failure&&(identical(other.vote, vote) || other.vote == vote));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoteFailure&&(identical(other.vote, vote) || other.vote == vote));
 }
 
 
@@ -426,8 +420,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$FailureCopyWith<$Res> implements $EventVoteStateCopyWith<$Res> {
-  factory _$FailureCopyWith(_Failure value, $Res Function(_Failure) _then) = __$FailureCopyWithImpl;
+abstract mixin class $VoteFailureCopyWith<$Res> implements $EventVoteStateCopyWith<$Res> {
+  factory $VoteFailureCopyWith(VoteFailure value, $Res Function(VoteFailure) _then) = _$VoteFailureCopyWithImpl;
 @useResult
 $Res call({
  bool vote
@@ -438,17 +432,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$FailureCopyWithImpl<$Res>
-    implements _$FailureCopyWith<$Res> {
-  __$FailureCopyWithImpl(this._self, this._then);
+class _$VoteFailureCopyWithImpl<$Res>
+    implements $VoteFailureCopyWith<$Res> {
+  _$VoteFailureCopyWithImpl(this._self, this._then);
 
-  final _Failure _self;
-  final $Res Function(_Failure) _then;
+  final VoteFailure _self;
+  final $Res Function(VoteFailure) _then;
 
 /// Create a copy of EventVoteState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? vote = null,}) {
-  return _then(_Failure(
+  return _then(VoteFailure(
 null == vote ? _self.vote : vote // ignore: cast_nullable_to_non_nullable
 as bool,
   ));

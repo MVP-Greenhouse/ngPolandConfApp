@@ -1,38 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/core/presentation/navigation/app_pages.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/color_contrast.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/caching_html_widget_factory.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/fixed_size_cross_origin_image.dart';
 import 'package:ng_poland_conf_app/core/utils/hex_color.dart';
 import 'package:ng_poland_conf_app/core/utils/network_photo_url.dart';
-import 'package:ng_poland_conf_app/features/edition/domains/entities/agenda.dart';
-import 'package:ng_poland_conf_app/features/edition/domains/entities/edition.dart';
-import 'package:ng_poland_conf_app/features/edition/presentation/edition_cubit.dart';
-import 'package:ng_poland_conf_app/features/speakers/presentation/widgets/speaker_details.dart';
-import 'package:ng_poland_conf_app/routing/routing.dart';
-import 'package:ng_poland_conf_app/theme/app_palette.dart';
-import 'package:ng_poland_conf_app/widgets/caching_html_widget_factory.dart';
-import 'package:ng_poland_conf_app/widgets/fixed_size_cross_origin_image.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/agenda.dart';
+import 'package:ng_poland_conf_app/features/speakers/presentation/pages/speaker_details_page.dart';
+import 'package:ng_poland_conf_app/features/workshops/domain/entities/workshop_day.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class WorkshopCard extends StatelessWidget {
-  const WorkshopCard({super.key, required this.workshop});
+  const WorkshopCard({super.key, required this.item});
 
-  final WorkshopAgendaItem workshop;
+  final WorkshopListItem item;
+
+  WorkshopAgendaItem get workshop => item.workshop;
 
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
     final accent = colorFromHex(workshop.color) ?? palette.accent;
-    final edition = context.read<EditionCubit>().current;
-    final year = edition?.year ?? 0;
-    final price = [
-      if (workshop.pricePln != null) '${workshop.pricePln} PLN',
-      if (workshop.priceEur != null) '${workshop.priceEur} EUR',
-    ].join(' / ');
-    final conference = [
-      workshop.conferenceLabel.toUpperCase(),
-      if (year > 0) '$year',
-    ].join(' ');
+    final price = item.priceLabel;
+    final conference = item.conferenceLabel;
     final showHeader =
         workshop.conferenceLabel.isNotEmpty ||
         workshop.level.isNotEmpty ||
@@ -72,10 +65,7 @@ class WorkshopCard extends StatelessWidget {
                 const SizedBox(height: 14),
                 _SpeakerPanel(
                   conference: workshop.conference,
-                  speakers: [
-                    for (final speaker in workshop.speakers)
-                      (speaker: speaker, role: _role(speaker, edition)),
-                  ],
+                  speakers: item.speakers,
                 ),
               ],
               if (workshop.lunchProvided || price.isNotEmpty) ...[
@@ -135,9 +125,9 @@ class WorkshopCard extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      final uri = Uri.tryParse(workshop.buyUrl);
-                      if (uri == null) return;
-                      launchUrl(uri, mode: LaunchMode.externalApplication);
+                      if (Uri.tryParse(workshop.buyUrl) case final uri?) {
+                        launchUrl(uri, mode: .externalApplication);
+                      }
                     },
                     icon: const Icon(Icons.shopping_cart_outlined, size: 18),
                     label: const Text('Buy Ticket'),
@@ -149,15 +139,6 @@ class WorkshopCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _role(SpeakerSummary speaker, Edition? edition) {
-    if (speaker.roleLabel.isNotEmpty) return speaker.roleLabel;
-    if (speaker.slug.isEmpty) return '';
-    return edition
-            ?.speakerBySlug(speaker.slug, conference: workshop.conference)
-            ?.roleLabel ??
-        '';
   }
 }
 
@@ -187,9 +168,7 @@ class _Header extends StatelessWidget {
                 _Pill(
                   label: conference,
                   background: accent,
-                  foreground: accent.computeLuminance() > 0.55
-                      ? Colors.black
-                      : Colors.white,
+                  foreground: accent.readableForeground,
                 ),
               if (workshop.level.isNotEmpty)
                 _Pill(
@@ -227,7 +206,7 @@ class _Header extends StatelessWidget {
 class _SpeakerPanel extends StatelessWidget {
   const _SpeakerPanel({required this.speakers, required this.conference});
 
-  final List<({SpeakerSummary speaker, String role})> speakers;
+  final List<WorkshopSpeaker> speakers;
   final String conference;
 
   @override
@@ -253,7 +232,7 @@ class _SpeakerPanel extends StatelessWidget {
                             if (item.speaker.slug.isNotEmpty) item.speaker.slug,
                         ];
                         context.pushNamed(
-                          '${Pages.workshops.nameKey}-${SpeakerDetails.routeNameKey}',
+                          '${Pages.workshops.nameKey}-${SpeakerDetailsPage.routeNameKey}',
                           pathParameters: {'id': entry.speaker.slug},
                           queryParameters: {
                             if (slugs.length > 1) 'speakers': slugs.join(','),

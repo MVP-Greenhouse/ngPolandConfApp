@@ -1,84 +1,125 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
-import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/entities/user_profile.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/entities/user_role.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/repositories/user_repository.dart';
-import 'package:ng_poland_conf_app/features/authentication/domains/usecases/ensure_user_profile.dart';
-import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/engagement_config.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/event_vote_counts.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/entities/votable_event.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/engagement_config_repository.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/event_vote_repository.dart';
-import 'package:ng_poland_conf_app/features/engagement/domains/repositories/votable_event_repository.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/entities/user_session.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/conference.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/entities/engagement_config.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/entities/votable_event.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/exceptions/engagement_exception.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/usecases/cast_event_vote.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/usecases/watch_event_vote.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/usecases/watch_track_engagement.dart';
 import 'package:ng_poland_conf_app/features/event/presentation/cubit/event_vote_cubit.dart';
-import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
-import 'package:ng_poland_conf_app/features/home/domains/entities/conferences.dart';
-import 'package:rxdart/rxdart.dart';
+
+import '../../../../helpers/fakes.dart';
 
 void main() {
-  late _FakeVotableEvents votable;
-  late _TestUserSessionCubit session;
-  late _TestConferencesCubit conferences;
+  late FakeUserSessionRepository sessions;
+  late FakeConferenceRepository conferences;
+  late FakeEngagementConfigRepository configs;
+  late FakeEventVoteRepository votes;
+  late FakeVotableEventRepository votable;
   late EventVoteCubit cubit;
 
   setUp(() {
-    votable = _FakeVotableEvents();
-    session = _TestUserSessionCubit()..signIn();
-    conferences = _TestConferencesCubit()
-      ..load(const Conference(confId: '2026', confName: 'NG', listItems: []));
+    sessions = FakeUserSessionRepository(
+      const UserSession.signedIn(userProfile),
+    );
+    conferences = FakeConferenceRepository(
+      const Conference(confId: '2026', confName: 'NG', listItems: []),
+    );
+    configs = FakeEngagementConfigRepository(_openConfig());
+    votes = FakeEventVoteRepository();
+    votable = FakeVotableEventRepository();
   });
 
   tearDown(() async {
     await cubit.close();
-    await session.close();
-    await conferences.close();
-    await votable.dispose();
+    await sessions.dispose();
+    await conferences.dispose();
+    await configs.dispose();
+    await votes.dispose();
   });
 
-  EventVoteCubit open() {
-    return EventVoteCubit(
-      _FakeVoteRepository(),
+  EventVoteCubit open() => EventVoteCubit(
+    WatchEventVote(
+      WatchTrackEngagement(conferences, configs),
+      sessions,
       votable,
-      _FakeConfigRepository(_openConfig()),
-      session,
-      conferences,
-      '2',
-      EventItemType.ngPoland.name,
-    );
-  }
+      votes,
+    ),
+    CastEventVote(sessions, conferences, votes),
+    silentLogger,
+    '2',
+    EventItemType.ngPoland,
+  );
+
+  void endedTalk() => votable.events = {
+    '2': VotableEvent(
+      eventId: '2',
+      endsAt: DateTime.utc(2000),
+      track: EventItemType.ngPoland,
+    ),
+  };
 
   test('hides the like button when the catalog has no document', () async {
     cubit = open();
-    await Future<void>.delayed(const Duration(milliseconds: 40));
-    expect(cubit.state.showButton, isFalse);
+    await pumpEventQueue();
+
+    expect(cubit.state, isA<VoteHidden>());
   });
 
   test('hides the like button before the talk ends', () async {
-    votable.emit(
-      VotableEvent(
+    votable.events = {
+      '2': VotableEvent(
         eventId: '2',
         endsAt: DateTime.now().toUtc().add(const Duration(days: 1)),
         track: EventItemType.ngPoland,
       ),
-    );
+    };
     cubit = open();
-    await Future<void>.delayed(const Duration(milliseconds: 40));
+    await pumpEventQueue();
+
     expect(cubit.state.showButton, isFalse);
   });
 
   test('shows the like button after the talk has ended', () async {
-    votable.emit(
-      VotableEvent(
-        eventId: '2',
-        endsAt: DateTime.utc(2000),
-        track: EventItemType.ngPoland,
-      ),
-    );
+    endedTalk();
     cubit = open();
     await pumpUntil(() => cubit.state.showButton);
-    expect(cubit.state.liked, isFalse);
+
+    expect(cubit.state, const EventVoteState.ready(false));
+  });
+
+  test('asks signed-out users to log in', () async {
+    endedTalk();
+    sessions.emit(const UserSession.signedOut());
+    cubit = open();
+    await pumpUntil(() => cubit.state.showButton);
+
+    expect(cubit.state, isA<VoteNeedsLogin>());
+    expect(cubit.requiresLogin, isTrue);
+  });
+
+  test('toggleLike saves the vote', () async {
+    endedTalk();
+    cubit = open();
+    await pumpUntil(() => cubit.state.showButton);
+
+    await cubit.toggleLike();
+
+    expect(votes.setLikeCalls, [(eventId: '2', liked: true)]);
+    expect(cubit.state.liked, isTrue);
+  });
+
+  test('toggleLike keeps the previous vote when saving fails', () async {
+    endedTalk();
+    votes.setLikeError = const EngagementException();
+    cubit = open();
+    await pumpUntil(() => cubit.state.showButton);
+
+    await cubit.toggleLike();
+
+    expect(cubit.state, const EventVoteState.failure(false));
   });
 }
 
@@ -92,120 +133,4 @@ EngagementConfig _openConfig() {
   return EngagementConfig(
     tracks: {for (final type in EventItemType.values) type: track},
   );
-}
-
-Future<void> pumpUntil(bool Function() condition) async {
-  for (var i = 0; i < 50 && !condition(); i++) {
-    await Future<void>.delayed(const Duration(milliseconds: 10));
-  }
-}
-
-class _FakeVotableEvents implements VotableEventRepository {
-  final _events = BehaviorSubject<VotableEvent?>.seeded(null);
-
-  void emit(VotableEvent? event) => _events.add(event);
-
-  Future<void> dispose() => _events.close();
-
-  @override
-  Future<Map<String, VotableEvent>> loadEvents(String confId) async => const {};
-
-  @override
-  Future<void> replaceCatalog({
-    required String confId,
-    required List<VotableEvent> events,
-  }) async {}
-
-  @override
-  Stream<VotableEvent?> watchEvent({
-    required String confId,
-    required String eventId,
-  }) => _events.stream;
-}
-
-class _FakeVoteRepository implements EventVoteRepository {
-  @override
-  Future<Map<String, EventVoteCounts>> loadVoteCounts(String confId) async =>
-      const {};
-
-  @override
-  Future<void> setLike({
-    required String confId,
-    required String eventId,
-    required String uid,
-    required bool liked,
-  }) async {}
-
-  @override
-  Stream<bool> watchMyLike({
-    required String confId,
-    required String eventId,
-    required String uid,
-  }) => Stream.value(false);
-}
-
-class _FakeConfigRepository implements EngagementConfigRepository {
-  _FakeConfigRepository(this._config);
-
-  final EngagementConfig _config;
-
-  @override
-  Future<void> saveTrackConfig({
-    required String confId,
-    required EventItemType track,
-    required TrackEngagementConfig config,
-  }) async {}
-
-  @override
-  Stream<EngagementConfig> watchConfig(String confId) => Stream.value(_config);
-}
-
-class _TestConferencesCubit extends ConferencesCubit {
-  void load(Conference conference) {
-    selectedConference = conference;
-    emit(
-      ConferencesState.loaded(
-        conferences: Conferences(list: [conference]),
-        selectedConference: conference,
-      ),
-    );
-  }
-}
-
-class _TestUserSessionCubit extends UserSessionCubit {
-  _TestUserSessionCubit()
-    : super(
-        const EnsureUserProfile(_NoopUserRepository()),
-        const _NoopUserRepository(),
-        authStateChanges: const Stream.empty(),
-      );
-
-  void signIn() {
-    emit(
-      const UserSessionState.authenticated(
-        UserProfile(
-          uid: 'u1',
-          displayName: 'Ada',
-          email: 'ada@example.com',
-          role: UserRole.user,
-        ),
-      ),
-    );
-  }
-}
-
-class _NoopUserRepository implements UserRepository {
-  const _NoopUserRepository();
-
-  @override
-  Future<UserProfile> ensureProfile({
-    required String uid,
-    required String displayName,
-    required String email,
-  }) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Stream<UserProfile?> watchProfile(String uid) => const Stream.empty();
 }

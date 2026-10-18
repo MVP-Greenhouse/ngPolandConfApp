@@ -1,21 +1,26 @@
 part of 'event_vote_cubit.dart';
 
 @freezed
-class EventVoteState with _$EventVoteState {
+sealed class EventVoteState with _$EventVoteState {
   const EventVoteState._();
 
-  const factory EventVoteState.hidden() = _Hidden;
-  const factory EventVoteState.needsLogin() = _NeedsLogin;
-  const factory EventVoteState.ready(bool vote) = _Ready;
-  const factory EventVoteState.saving(bool vote) = _Saving;
-  const factory EventVoteState.failure(bool vote) = _Failure;
+  const factory EventVoteState.hidden() = VoteHidden;
 
-  bool get liked => maybeWhen(
-    ready: (vote) => vote,
-    saving: (vote) => vote,
-    failure: (vote) => vote,
-    orElse: () => false,
-  );
+  const factory EventVoteState.needsLogin() = VoteNeedsLogin;
 
-  bool get showButton => maybeWhen(hidden: () => false, orElse: () => true);
+  const factory EventVoteState.ready(bool vote) = VoteReady;
+
+  /// A vote change is being saved; [vote] is the value before the change.
+  const factory EventVoteState.saving(bool vote) = VoteSaving;
+
+  const factory EventVoteState.failure(bool vote) = VoteFailure;
+
+  bool get liked => switch (this) {
+    VoteReady(:final vote) ||
+    VoteSaving(:final vote) ||
+    VoteFailure(:final vote) => vote,
+    VoteHidden() || VoteNeedsLogin() => false,
+  };
+
+  bool get showButton => this is! VoteHidden;
 }

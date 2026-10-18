@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/icon_with_darkmode.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/entities/authentication_type.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/auth_ui_tokens.dart';
-import 'package:ng_poland_conf_app/widgets/icon_with_darkmode.dart';
 
-enum AuthenticationType {
-  google,
-  apple,
-  email;
+extension on AuthenticationType {
+  String get iconAsset => switch (this) {
+    .google || .email => 'auth_with_google.png',
+    .apple => 'auth_with_apple.png',
+  };
 
-  String getIconAsset() => switch (this) {
-        google => 'auth_with_google.png',
-        apple => 'auth_with_apple.png',
-        email => 'auth_with_google.png',
-      };
-
-  String getTitle() => switch (this) {
-        google => 'Continue with Google',
-        apple => 'Continue with Apple',
-        email => 'Send Magic Link',
-      };
+  String get title => switch (this) {
+    .google => 'Continue with Google',
+    .apple => 'Continue with Apple',
+    .email => 'Send Magic Link',
+  };
 }
 
 class SocialMediaButton extends StatelessWidget {
@@ -43,9 +39,7 @@ class SocialMediaButton extends StatelessWidget {
         ignoring: isLoading,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: AuthUiTokens.fieldBg.withValues(
-              alpha: isLoading ? 0.65 : 1,
-            ),
+            color: AuthUiTokens.fieldBg.withValues(alpha: isLoading ? 0.65 : 1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: AuthUiTokens.fieldBorder),
             boxShadow: [
@@ -54,10 +48,7 @@ class SocialMediaButton extends StatelessWidget {
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
-              BoxShadow(
-                color: accent.withValues(alpha: 0.08),
-                blurRadius: 16,
-              ),
+              BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 16),
             ],
           ),
           child: Material(
@@ -82,13 +73,13 @@ class SocialMediaButton extends StatelessWidget {
                       )
                     else
                       IconWithDarkMode(
-                        imageName: authenticationType.getIconAsset(),
+                        imageName: authenticationType.iconAsset,
                         height: 20,
                         width: 20,
                       ),
                     const SizedBox(width: 12),
                     Text(
-                      authenticationType.getTitle(),
+                      authenticationType.title,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,

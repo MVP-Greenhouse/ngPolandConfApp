@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ng_poland_conf_app/features/edition/domains/entities/agenda.dart';
+import 'package:ng_poland_conf_app/features/workshops/domain/entities/workshop_day.dart';
 
 class WorkshopsBottomNavigationBar extends StatelessWidget {
   const WorkshopsBottomNavigationBar({
@@ -9,89 +9,73 @@ class WorkshopsBottomNavigationBar extends StatelessWidget {
     required this.onSelected,
   });
 
-  final List<AgendaDay> days;
+  final List<WorkshopDay> days;
   final String selectedKey;
-  final ValueChanged<AgendaDay> onSelected;
+  final ValueChanged<WorkshopDay> onSelected;
 
   @override
   Widget build(BuildContext context) {
     final selectedIndex = days.indexWhere((day) => day.key == selectedKey);
-    final currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
 
     return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
+      type: .fixed,
       items: [
-        for (final day in days) _item(day),
+        for (final day in days)
+          BottomNavigationBarItem(
+            icon: _WorkshopDayIcon(day: day, selected: day.key == selectedKey),
+            label: day.tabLabel,
+          ),
       ],
-      currentIndex: currentIndex,
+      currentIndex: selectedIndex >= 0 ? selectedIndex : 0,
       selectedItemColor: Theme.of(context).colorScheme.inversePrimary,
       selectedFontSize: 12,
       unselectedFontSize: 12,
-      selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+      selectedLabelStyle: const TextStyle(fontWeight: .bold),
       onTap: (index) => onSelected(days[index]),
-    );
-  }
-
-  String _label(AgendaDay day) {
-    final name = day.homeName;
-    const suffix = ' Day';
-    if (name.endsWith(suffix) && name.length > suffix.length) {
-      return name.substring(0, name.length - suffix.length).toUpperCase();
-    }
-    return name.toUpperCase();
-  }
-
-  BottomNavigationBarItem _item(AgendaDay day) {
-    final selected = day.key == selectedKey;
-    return BottomNavigationBarItem(
-      icon: Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 5),
-        child: Opacity(
-          opacity: selected ? 1 : 0.5,
-          child: _WorkshopDayMark(dateLabel: day.dateLabel),
-        ),
-      ),
-      label: _label(day),
     );
   }
 }
 
-class _WorkshopDayMark extends StatelessWidget {
-  const _WorkshopDayMark({required this.dateLabel});
+class _WorkshopDayIcon extends StatelessWidget {
+  const _WorkshopDayIcon({required this.day, required this.selected});
 
-  final String dateLabel;
+  final WorkshopDay day;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
-    final parts = dateLabel.split(',').first.trim().split(' ');
-    final month = parts.first;
-    final day = parts.length > 1 ? parts[1] : '';
-
-    return SizedBox(
-      height: 40,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            month,
-            style: TextStyle(
-              color: IconTheme.of(context).color,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              height: 1.1,
-            ),
-          ),
-          if (day.isNotEmpty)
-            Text(
-              day,
-              style: TextStyle(
-                color: IconTheme.of(context).color,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                height: 1.1,
+    final color = IconTheme.of(context).color;
+    return Padding(
+      padding: const .only(top: 20, bottom: 5),
+      child: Opacity(
+        opacity: selected ? 1 : 0.5,
+        child: SizedBox(
+          height: 40,
+          child: Column(
+            mainAxisAlignment: .center,
+            children: [
+              Text(
+                day.month,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 12,
+                  fontWeight: .w600,
+                  height: 1.1,
+                ),
               ),
-            ),
-        ],
+              if (day.dayOfMonth.isNotEmpty)
+                Text(
+                  day.dayOfMonth,
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 16,
+                    fontWeight: .bold,
+                    height: 1.1,
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

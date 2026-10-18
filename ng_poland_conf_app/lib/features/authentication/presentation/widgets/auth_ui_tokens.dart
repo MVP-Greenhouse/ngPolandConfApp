@@ -8,15 +8,15 @@ abstract final class AuthUiTokens {
   static const chipBg = Color(0xF22C2D32);
 
   static List<BoxShadow> cardShadow(Color accent) => [
-        BoxShadow(
-          color: Colors.black.withValues(alpha: 0.45),
-          blurRadius: 20,
-          offset: const Offset(0, 8),
-        ),
-        BoxShadow(
-          color: accent.withValues(alpha: 0.12),
-          blurRadius: 28,
-          spreadRadius: -2,
-        ),
-      ];
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.45),
+      blurRadius: 20,
+      offset: const Offset(0, 8),
+    ),
+    BoxShadow(
+      color: accent.withValues(alpha: 0.12),
+      blurRadius: 28,
+      spreadRadius: -2,
+    ),
+  ];
 }
