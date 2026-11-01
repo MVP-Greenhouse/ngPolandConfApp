@@ -1,14 +1,24 @@
 part of 'event_cubit.dart';
 
-@freezed
-class EventState with _$EventState {
-  const factory EventState.initial() = _Initial;
+sealed class EventState {
+  const EventState();
+}
 
-  const factory EventState.loading() = _Loading;
+class EventLoading extends EventState {
+  const EventLoading();
+}
 
-  const factory EventState.loaded({
-    required EventItem eventItem,
-  }) = _Loaded;
+class EventLoaded extends EventState {
+  const EventLoaded({required this.event, required this.hasDescription});
 
-  const factory EventState.error(String error) = _Error;
+  final EventItem event;
+
+  /// Precomputed so the page does not parse HTML while building.
+  final bool hasDescription;
+}
+
+class EventFailed extends EventState {
+  const EventFailed(this.message);
+
+  final String message;
 }

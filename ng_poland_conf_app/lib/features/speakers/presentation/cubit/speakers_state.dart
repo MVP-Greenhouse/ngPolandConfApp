@@ -1,14 +1,21 @@
 part of 'speakers_cubit.dart';
 
-@freezed
-class SpeakersState with _$SpeakersState {
-  const factory SpeakersState.initial() = _Initial;
+sealed class SpeakersState {
+  const SpeakersState(this.track);
 
-  const factory SpeakersState.loading() = _Loading;
+  final EventItemType track;
+}
 
-  const factory SpeakersState.loaded({
-    required List<Speaker> listSpeakers,
-  }) = _Loaded;
+class SpeakersLoading extends SpeakersState {
+  const SpeakersLoading(super.track);
+}
 
-  const factory SpeakersState.error(String error) = _Error;
+class SpeakersLoaded extends SpeakersState {
+  const SpeakersLoaded(super.track, this.speakers);
+
+  final List<SpeakerListItem> speakers;
+}
+
+class SpeakersFailed extends SpeakersState {
+  const SpeakersFailed(super.track);
 }

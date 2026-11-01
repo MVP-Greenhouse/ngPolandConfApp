@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.mvpgreenhouse.ng_poland_conf_app",
+      "sha256_cert_fingerprints": [
+        "1A:6B:F5:D0:59:EE:3A:8E:FE:96:2A:F4:B5:25:4E:D0:5E:40:7B:DE:BB:28:92:52:19:A0:1E:25:1A:42:C5:02"
+      ]
+    }
+  }
+]

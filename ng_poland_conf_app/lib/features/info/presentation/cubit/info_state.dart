@@ -1,14 +1,19 @@
 part of 'info_cubit.dart';
 
-@freezed
-class InfoState with _$InfoState {
-  const factory InfoState.initial() = _Initial;
+sealed class InfoState {
+  const InfoState();
+}
 
-  const factory InfoState.loading() = _Loading;
+class InfoLoading extends InfoState {
+  const InfoLoading();
+}
 
-  const factory InfoState.loaded({
-    required List<InfoItem> listInfoItems,
-  }) = _Loaded;
+class InfoLoaded extends InfoState {
+  const InfoLoaded(this.info);
 
-  const factory InfoState.error(String error) = _Error;
+  final VenueInfo info;
+}
+
+class InfoFailed extends InfoState {
+  const InfoFailed();
 }

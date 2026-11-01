@@ -1,0 +1,202 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ng_poland_conf_app/core/presentation/navigation/app_pages.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/custom_back_button.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/custom_scaffold.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/pages/admin_page.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_section_card.dart';
+import 'package:ng_poland_conf_app/features/admin/presentation/widgets/admin_voting_section.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/engagement/domain/entities/engagement_config.dart';
+
+class AdminVotingPage extends StatelessWidget {
+  const AdminVotingPage({super.key});
+
+  static const path = '${AppPaths.admin}/voting';
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AdminCubit, AdminState>(
+      builder: (context, state) {
+        return CustomScaffold(
+          appBar: AppBar(
+            leading: CustomBackButton(
+              onPressed: () => context.go(AdminPage.path),
+            ),
+            title: Text(
+              'Voting',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ),
+          ),
+          body: ColoredBox(
+            color: context.palette.screen,
+            child: _AdminVotingBody(state: state),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _AdminVotingBody extends StatelessWidget {
+  const _AdminVotingBody({required this.state});
+
+  final AdminState state;
+
+  Future<void> _confirmEndNow(BuildContext context, AdminCubit cubit) async {
+    final palette = context.palette;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: palette.card,
+        title: Text('End voting?', style: TextStyle(color: palette.onCard)),
+        content: Text(
+          'Voting will close immediately (window end = now).',
+          style: TextStyle(color: palette.muted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            style: TextButton.styleFrom(foregroundColor: palette.muted),
+            child: const Text('Anuluj'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+              foregroundColor: palette.onAccent,
+            ),
+            child: const Text('End now'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await cubit.endVotingNow();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!state.isAdmin) return const SizedBox.shrink();
+    if (state.loading) {
+      return Center(
+        child: CircularProgressIndicator(color: context.palette.accent),
+      );
+    }
+
+    final config =
+        state.config?.forTrack(state.selectedTrack) ??
+        TrackEngagementConfig.missing;
+    final cubit = context.read<AdminCubit>();
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      children: [
+        if (state.selectedConfId != null) ...[
+          AdminSectionCard(
+            title: 'Konferencja',
+            child: Text(
+              'Edytujesz ${state.selectedTrack.label} / ${state.selectedConfId}.',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: context.palette.muted),
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
+        if (state.availableTracks.isNotEmpty) ...[
+          AdminSectionCard(
+            title: 'Track / rodzaj eventu',
+            child: SegmentedButton<EventItemType>(
+              segments: [
+                for (final track in state.availableTracks)
+                  ButtonSegment<EventItemType>(
+                    value: track,
+                    tooltip: track.label,
+                    icon: _TrackIcon(track: track),
+                  ),
+              ],
+              selected: {state.selectedTrack},
+              onSelectionChanged: (selection) {
+                if (selection.isNotEmpty) {
+                  cubit.selectTrack(selection.first);
+                }
+              },
+              style: ButtonStyle(
+                visualDensity: VisualDensity.comfortable,
+                padding: const WidgetStatePropertyAll(
+                  EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                ),
+                backgroundColor: WidgetStateProperty.resolveWith((states) {
+                  final palette = context.palette;
+                  if (states.contains(WidgetState.selected)) {
+                    return palette.accent.withValues(alpha: 0.16);
+                  }
+                  return palette.card;
+                }),
+                foregroundColor: WidgetStatePropertyAll(context.palette.onCard),
+                side: WidgetStatePropertyAll(
+                  BorderSide(color: context.palette.hairline),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+        ],
+        AdminVotingSection(
+          config: config,
+          ranking: state.ranking,
+          rankingTitle: 'Ranking — ${state.selectedTrack.label}',
+          onEnabledChanged: (enabled) => cubit.saveVoting(
+            enabled: enabled,
+            start: config.votingStartsAt,
+            end: config.votingEndsAt,
+          ),
+          onStartChanged: (start) => cubit.saveVoting(
+            enabled: config.votingEnabled,
+            start: start,
+            end: config.votingEndsAt,
+          ),
+          onEndChanged: (end) => cubit.saveVoting(
+            enabled: config.votingEnabled,
+            start: config.votingStartsAt,
+            end: end,
+          ),
+          onEndNow: () => _confirmEndNow(context, cubit),
+          onSyncVotableEvents: cubit.syncVotableEvents,
+          onTop5EnabledChanged: cubit.saveTop5Enabled,
+        ),
+      ],
+    );
+  }
+}
+
+class _TrackIcon extends StatelessWidget {
+  const _TrackIcon({required this.track});
+
+  final EventItemType track;
+
+  @override
+  Widget build(BuildContext context) {
+    final image = Image.asset(
+      track.imagePath,
+      height: 28,
+      width: 28,
+      fit: BoxFit.contain,
+    );
+    if (Theme.of(context).brightness == Brightness.dark) return image;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppPalette.dark.screen,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Padding(padding: const EdgeInsets.all(4), child: image),
+    );
+  }
+}

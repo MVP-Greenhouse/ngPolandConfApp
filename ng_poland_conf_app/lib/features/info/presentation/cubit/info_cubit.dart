@@ -1,40 +1,25 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
-import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
-import 'package:ng_poland_conf_app/features/info/domains/entities/info_item.dart';
-import 'package:ng_poland_conf_app/features/info/domains/usecases/get_all_info_items_for_conference.dart';
+import 'package:logger/logger.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/exceptions/edition_unavailable_exception.dart';
+import 'package:ng_poland_conf_app/features/info/domain/entities/venue_info.dart';
+import 'package:ng_poland_conf_app/features/info/domain/usecases/get_venue_info.dart';
 
 part 'info_state.dart';
-part 'info_cubit.freezed.dart';
 
 @injectable
 class InfoCubit extends Cubit<InfoState> {
-  final ConferencesCubit conferencesCubit;
-  final GetAllInfoItemsForConference getAllSpeakerGetAllInfoItemsForConference;
+  InfoCubit(this._getVenueInfo, this._logger) : super(const InfoLoading());
 
-  InfoCubit({
-    required this.conferencesCubit,
-    required this.getAllSpeakerGetAllInfoItemsForConference,
-  }) : super(const InfoState.initial());
+  final GetVenueInfo _getVenueInfo;
+  final Logger _logger;
 
-  Future<void> getListInfoItems() async {
-    emit(const InfoState.loading());
-    Conference? conference = conferencesCubit.selectedConference;
-
-    if (conference == null) {
-      await conferencesCubit.getConferences();
-      conference = conferencesCubit.selectedConference;
+  Future<void> load() async {
+    try {
+      emit(InfoLoaded(await _getVenueInfo()));
+    } on EditionUnavailableException catch (error, stackTrace) {
+      _logger.w('Venue info unavailable', error: error, stackTrace: stackTrace);
+      emit(const InfoFailed());
     }
-
-    List<InfoItem> listInfoItems = await getAllSpeakerGetAllInfoItemsForConference.call(
-      Params(
-        confId: conference!.confId,
-        limit: 1000,
-      ),
-    );
-
-    emit(InfoState.loaded(listInfoItems: listInfoItems));
   }
 }

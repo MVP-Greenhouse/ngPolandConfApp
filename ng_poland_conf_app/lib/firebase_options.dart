@@ -64,8 +64,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '416351507920',
     projectId: 'ngpolandconfapp',
     storageBucket: 'ngpolandconfapp.firebasestorage.app',
-    androidClientId: '416351507920-btm09gpd133ea5onoi75oiv7c0bg0h7e.apps.googleusercontent.com',
-    iosClientId: '416351507920-m8hrt7lp3ei07pdvb51qq1pskrt6bil0.apps.googleusercontent.com',
+    androidClientId:
+        '416351507920-btm09gpd133ea5onoi75oiv7c0bg0h7e.apps.googleusercontent.com',
+    iosClientId:
+        '416351507920-m8hrt7lp3ei07pdvb51qq1pskrt6bil0.apps.googleusercontent.com',
     iosBundleId: 'com.mvpgreenhouse.ngPolandConfApp',
   );
 
@@ -75,8 +77,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '416351507920',
     projectId: 'ngpolandconfapp',
     storageBucket: 'ngpolandconfapp.firebasestorage.app',
-    androidClientId: '416351507920-btm09gpd133ea5onoi75oiv7c0bg0h7e.apps.googleusercontent.com',
-    iosClientId: '416351507920-m8hrt7lp3ei07pdvb51qq1pskrt6bil0.apps.googleusercontent.com',
+    androidClientId:
+        '416351507920-btm09gpd133ea5onoi75oiv7c0bg0h7e.apps.googleusercontent.com',
+    iosClientId:
+        '416351507920-m8hrt7lp3ei07pdvb51qq1pskrt6bil0.apps.googleusercontent.com',
     iosBundleId: 'com.mvpgreenhouse.ngPolandConfApp',
   );
 

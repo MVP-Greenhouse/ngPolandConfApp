@@ -1,51 +1,42 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
-import 'package:ng_poland_conf_app/core/blocks/conferences/conferences_cubit.dart';
-import 'package:ng_poland_conf_app/features/event/domains/usecases/get_event.dart';
-import 'package:ng_poland_conf_app/features/home/domains/entities/conference.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:logger/logger.dart';
+import 'package:ng_poland_conf_app/core/domain/app_exception.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/services/rich_text.dart';
+import 'package:ng_poland_conf_app/features/event/domain/usecases/get_event.dart';
 
 part 'event_state.dart';
-part 'event_cubit.freezed.dart';
 
 @injectable
 class EventCubit extends Cubit<EventState> {
-  final ConferencesCubit conferencesCubit;
-  final GetEvent getEvent;
+  EventCubit(this._getEvent, this._logger) : super(const EventLoading());
 
-  EventCubit({
-    required this.conferencesCubit,
-    required this.getEvent,
-  }) : super(const EventState.initial());
+  final GetEvent _getEvent;
+  final Logger _logger;
 
-  Future<void> getData({
+  Future<void> load({
     required String eventId,
-    required String eventItemType,
+    required EventItemType track,
   }) async {
+    emit(const EventLoading());
     try {
-      emit(const EventState.loading());
-      Conference? conference = conferencesCubit.selectedConference;
-      if (conference == null) {
-        await conferencesCubit.getConferences();
-        conference = conferencesCubit.selectedConference;
-      }
-      if (conference == null) return emit(const EventState.error('Wystąpił problem'));
-      final EventItem eventItem = await getEvent(
-        Params(
-          eventId: eventId,
-          confId: conference.confId,
-          eventItemType: eventItemType,
-          limit: 1,
-        ),
+      final event = await _getEvent(
+        GetEventParams(eventId: eventId, track: track),
       );
       emit(
-        EventState.loaded(
-          eventItem: eventItem,
+        EventLoaded(
+          event: event,
+          hasDescription: hasVisibleText(
+            html: event.descriptionHtml,
+            plain: event.description ?? '',
+          ),
         ),
       );
-    } catch (_) {
-      emit(const EventState.error('Wystąpił problem'));
+    } on AppException catch (error, stackTrace) {
+      _logger.w('Event unavailable', error: error, stackTrace: stackTrace);
+      emit(EventFailed(error.message));
     }
   }
 }

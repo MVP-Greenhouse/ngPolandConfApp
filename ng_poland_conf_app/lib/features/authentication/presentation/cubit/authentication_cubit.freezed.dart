@@ -55,13 +55,14 @@ extension AuthenticationStatePatterns on AuthenticationState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _InProgress value)?  inProgress,TResult Function( _Authenticated value)?  authenticated,TResult Function( _Error value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthenticationInitial value)?  initial,TResult Function( AuthenticationInProgress value)?  inProgress,TResult Function( AuthenticationLinkSent value)?  linkSent,TResult Function( Authenticated value)?  authenticated,TResult Function( AuthenticationError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _InProgress() when inProgress != null:
-return inProgress(_that);case _Authenticated() when authenticated != null:
-return authenticated(_that);case _Error() when error != null:
+case AuthenticationInitial() when initial != null:
+return initial(_that);case AuthenticationInProgress() when inProgress != null:
+return inProgress(_that);case AuthenticationLinkSent() when linkSent != null:
+return linkSent(_that);case Authenticated() when authenticated != null:
+return authenticated(_that);case AuthenticationError() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -80,17 +81,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _InProgress value)  inProgress,required TResult Function( _Authenticated value)  authenticated,required TResult Function( _Error value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthenticationInitial value)  initial,required TResult Function( AuthenticationInProgress value)  inProgress,required TResult Function( AuthenticationLinkSent value)  linkSent,required TResult Function( Authenticated value)  authenticated,required TResult Function( AuthenticationError value)  error,}){
 final _that = this;
 switch (_that) {
-case _Initial():
-return initial(_that);case _InProgress():
-return inProgress(_that);case _Authenticated():
-return authenticated(_that);case _Error():
-return error(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case AuthenticationInitial():
+return initial(_that);case AuthenticationInProgress():
+return inProgress(_that);case AuthenticationLinkSent():
+return linkSent(_that);case Authenticated():
+return authenticated(_that);case AuthenticationError():
+return error(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -104,13 +103,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _InProgress value)?  inProgress,TResult? Function( _Authenticated value)?  authenticated,TResult? Function( _Error value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthenticationInitial value)?  initial,TResult? Function( AuthenticationInProgress value)?  inProgress,TResult? Function( AuthenticationLinkSent value)?  linkSent,TResult? Function( Authenticated value)?  authenticated,TResult? Function( AuthenticationError value)?  error,}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _InProgress() when inProgress != null:
-return inProgress(_that);case _Authenticated() when authenticated != null:
-return authenticated(_that);case _Error() when error != null:
+case AuthenticationInitial() when initial != null:
+return initial(_that);case AuthenticationInProgress() when inProgress != null:
+return inProgress(_that);case AuthenticationLinkSent() when linkSent != null:
+return linkSent(_that);case Authenticated() when authenticated != null:
+return authenticated(_that);case AuthenticationError() when error != null:
 return error(_that);case _:
   return null;
 
@@ -128,12 +128,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( AuthenticationType type)?  inProgress,TResult Function()?  authenticated,TResult Function( String text)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function( AuthenticationType type)?  inProgress,TResult Function( String email)?  linkSent,TResult Function()?  authenticated,TResult Function( String text)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _InProgress() when inProgress != null:
-return inProgress(_that.type);case _Authenticated() when authenticated != null:
-return authenticated();case _Error() when error != null:
+case AuthenticationInitial() when initial != null:
+return initial();case AuthenticationInProgress() when inProgress != null:
+return inProgress(_that.type);case AuthenticationLinkSent() when linkSent != null:
+return linkSent(_that.email);case Authenticated() when authenticated != null:
+return authenticated();case AuthenticationError() when error != null:
 return error(_that.text);case _:
   return orElse();
 
@@ -152,16 +153,14 @@ return error(_that.text);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( AuthenticationType type)  inProgress,required TResult Function()  authenticated,required TResult Function( String text)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function( AuthenticationType type)  inProgress,required TResult Function( String email)  linkSent,required TResult Function()  authenticated,required TResult Function( String text)  error,}) {final _that = this;
 switch (_that) {
-case _Initial():
-return initial();case _InProgress():
-return inProgress(_that.type);case _Authenticated():
-return authenticated();case _Error():
-return error(_that.text);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case AuthenticationInitial():
+return initial();case AuthenticationInProgress():
+return inProgress(_that.type);case AuthenticationLinkSent():
+return linkSent(_that.email);case Authenticated():
+return authenticated();case AuthenticationError():
+return error(_that.text);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -175,12 +174,13 @@ return error(_that.text);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( AuthenticationType type)?  inProgress,TResult? Function()?  authenticated,TResult? Function( String text)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function( AuthenticationType type)?  inProgress,TResult? Function( String email)?  linkSent,TResult? Function()?  authenticated,TResult? Function( String text)?  error,}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _InProgress() when inProgress != null:
-return inProgress(_that.type);case _Authenticated() when authenticated != null:
-return authenticated();case _Error() when error != null:
+case AuthenticationInitial() when initial != null:
+return initial();case AuthenticationInProgress() when inProgress != null:
+return inProgress(_that.type);case AuthenticationLinkSent() when linkSent != null:
+return linkSent(_that.email);case Authenticated() when authenticated != null:
+return authenticated();case AuthenticationError() when error != null:
 return error(_that.text);case _:
   return null;
 
@@ -192,8 +192,8 @@ return error(_that.text);case _:
 /// @nodoc
 
 
-class _Initial implements AuthenticationState {
-  const _Initial();
+class AuthenticationInitial implements AuthenticationState {
+  const AuthenticationInitial();
   
 
 
@@ -203,7 +203,7 @@ class _Initial implements AuthenticationState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthenticationInitial);
 }
 
 
@@ -224,8 +224,8 @@ String toString() {
 /// @nodoc
 
 
-class _InProgress implements AuthenticationState {
-  const _InProgress({required this.type});
+class AuthenticationInProgress implements AuthenticationState {
+  const AuthenticationInProgress({required this.type});
   
 
  final  AuthenticationType type;
@@ -234,13 +234,13 @@ class _InProgress implements AuthenticationState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$InProgressCopyWith<_InProgress> get copyWith => __$InProgressCopyWithImpl<_InProgress>(this, _$identity);
+$AuthenticationInProgressCopyWith<AuthenticationInProgress> get copyWith => _$AuthenticationInProgressCopyWithImpl<AuthenticationInProgress>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InProgress&&(identical(other.type, type) || other.type == type));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthenticationInProgress&&(identical(other.type, type) || other.type == type));
 }
 
 
@@ -256,8 +256,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$InProgressCopyWith<$Res> implements $AuthenticationStateCopyWith<$Res> {
-  factory _$InProgressCopyWith(_InProgress value, $Res Function(_InProgress) _then) = __$InProgressCopyWithImpl;
+abstract mixin class $AuthenticationInProgressCopyWith<$Res> implements $AuthenticationStateCopyWith<$Res> {
+  factory $AuthenticationInProgressCopyWith(AuthenticationInProgress value, $Res Function(AuthenticationInProgress) _then) = _$AuthenticationInProgressCopyWithImpl;
 @useResult
 $Res call({
  AuthenticationType type
@@ -268,17 +268,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$InProgressCopyWithImpl<$Res>
-    implements _$InProgressCopyWith<$Res> {
-  __$InProgressCopyWithImpl(this._self, this._then);
+class _$AuthenticationInProgressCopyWithImpl<$Res>
+    implements $AuthenticationInProgressCopyWith<$Res> {
+  _$AuthenticationInProgressCopyWithImpl(this._self, this._then);
 
-  final _InProgress _self;
-  final $Res Function(_InProgress) _then;
+  final AuthenticationInProgress _self;
+  final $Res Function(AuthenticationInProgress) _then;
 
 /// Create a copy of AuthenticationState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? type = null,}) {
-  return _then(_InProgress(
+  return _then(AuthenticationInProgress(
 type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as AuthenticationType,
   ));
@@ -290,8 +290,74 @@ as AuthenticationType,
 /// @nodoc
 
 
-class _Authenticated implements AuthenticationState {
-  const _Authenticated();
+class AuthenticationLinkSent implements AuthenticationState {
+  const AuthenticationLinkSent({required this.email});
+  
+
+ final  String email;
+
+/// Create a copy of AuthenticationState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AuthenticationLinkSentCopyWith<AuthenticationLinkSent> get copyWith => _$AuthenticationLinkSentCopyWithImpl<AuthenticationLinkSent>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthenticationLinkSent&&(identical(other.email, email) || other.email == email));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,email);
+
+@override
+String toString() {
+  return 'AuthenticationState.linkSent(email: $email)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AuthenticationLinkSentCopyWith<$Res> implements $AuthenticationStateCopyWith<$Res> {
+  factory $AuthenticationLinkSentCopyWith(AuthenticationLinkSent value, $Res Function(AuthenticationLinkSent) _then) = _$AuthenticationLinkSentCopyWithImpl;
+@useResult
+$Res call({
+ String email
+});
+
+
+
+
+}
+/// @nodoc
+class _$AuthenticationLinkSentCopyWithImpl<$Res>
+    implements $AuthenticationLinkSentCopyWith<$Res> {
+  _$AuthenticationLinkSentCopyWithImpl(this._self, this._then);
+
+  final AuthenticationLinkSent _self;
+  final $Res Function(AuthenticationLinkSent) _then;
+
+/// Create a copy of AuthenticationState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? email = null,}) {
+  return _then(AuthenticationLinkSent(
+email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class Authenticated implements AuthenticationState {
+  const Authenticated();
   
 
 
@@ -301,7 +367,7 @@ class _Authenticated implements AuthenticationState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Authenticated);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Authenticated);
 }
 
 
@@ -322,8 +388,8 @@ String toString() {
 /// @nodoc
 
 
-class _Error implements AuthenticationState {
-  const _Error(this.text);
+class AuthenticationError implements AuthenticationState {
+  const AuthenticationError(this.text);
   
 
  final  String text;
@@ -332,13 +398,13 @@ class _Error implements AuthenticationState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
+$AuthenticationErrorCopyWith<AuthenticationError> get copyWith => _$AuthenticationErrorCopyWithImpl<AuthenticationError>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.text, text) || other.text == text));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthenticationError&&(identical(other.text, text) || other.text == text));
 }
 
 
@@ -354,8 +420,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$ErrorCopyWith<$Res> implements $AuthenticationStateCopyWith<$Res> {
-  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
+abstract mixin class $AuthenticationErrorCopyWith<$Res> implements $AuthenticationStateCopyWith<$Res> {
+  factory $AuthenticationErrorCopyWith(AuthenticationError value, $Res Function(AuthenticationError) _then) = _$AuthenticationErrorCopyWithImpl;
 @useResult
 $Res call({
  String text
@@ -366,17 +432,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$ErrorCopyWithImpl<$Res>
-    implements _$ErrorCopyWith<$Res> {
-  __$ErrorCopyWithImpl(this._self, this._then);
+class _$AuthenticationErrorCopyWithImpl<$Res>
+    implements $AuthenticationErrorCopyWith<$Res> {
+  _$AuthenticationErrorCopyWithImpl(this._self, this._then);
 
-  final _Error _self;
-  final $Res Function(_Error) _then;
+  final AuthenticationError _self;
+  final $Res Function(AuthenticationError) _then;
 
 /// Create a copy of AuthenticationState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? text = null,}) {
-  return _then(_Error(
+  return _then(AuthenticationError(
 null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,
   ));

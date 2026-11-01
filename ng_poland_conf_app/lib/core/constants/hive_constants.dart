@@ -11,4 +11,17 @@ class HiveConstantsForBoxes {
   static const String workshops = 'workshops';
   static const String speakers = 'speakers';
   static const String rateEvent = 'rateEvent';
+  static const String magicLinkPendingEmail = 'magicLinkPendingEmail';
+  static const String editionCache = 'editionCache';
+
+  /// Boxes left behind by removed features; deleted on startup.
+  static const legacyBoxes = [
+    conferences,
+    infoItems,
+    ngGirls,
+    eventItem,
+    workshops,
+    speakers,
+    rateEvent,
+  ];
 }

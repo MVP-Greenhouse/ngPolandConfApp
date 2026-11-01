@@ -1,0 +1,128 @@
+/// Minimal ng-poland API payloads shared by edition tests.
+const editionAgendaJson = <String, Object?>{
+  'year': 2026,
+  'ticketsUrl': 'https://tickets.example',
+  'venue': {
+    'name': 'Multikino',
+    'address': 'Złota 59',
+    'mapsUrl': 'https://maps.example',
+  },
+  'days': [
+    {
+      'key': 'workshops',
+      'kind': 'workshops',
+      'label': 'Workshops',
+      'title': 'Hands-on Workshops Day',
+      'date': '2026-11-16',
+      'dateLabel': 'Nov 16, 2026',
+      'color': '#2f8fed',
+      'published': true,
+      'start': '10:00',
+      'items': [
+        {
+          'id': 20,
+          'title': 'Angular Signals Workshop',
+          'cardTitle': '',
+          'conference': 'ng',
+          'conferenceLabel': 'NG Poland',
+          'color': '#F230BF',
+          'level': 'Intermediate',
+          'benefits': ['Learn signals'],
+          'description': 'Full day.',
+          'descriptionHtml': '<p>Full day.</p>',
+          'pricePln': 1490,
+          'priceEur': null,
+          'buyUrl': 'https://buy.example',
+          'lunchProvided': true,
+          'timeLabel': '10:00 - 17:00',
+          'speakers': [
+            {
+              'name': 'Anna Kowalska',
+              'slug': 'anna-kowalska',
+              'position': 'GDE',
+              'company': 'Acme',
+              'photo': 'https://ng-poland.pl/images/speakers/anna.webp',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      'key': 'ng',
+      'kind': 'conference',
+      'conference': 'ng',
+      'label': 'NG Poland',
+      'date': '2026-11-17',
+      'dateLabel': 'Nov 17, 2026',
+      'color': '#F230BF',
+      'published': true,
+      'items': [
+        {
+          'id': 2,
+          'type': 'keynote',
+          'icon': 'fa-microphone',
+          'isBreak': false,
+          'session': 1,
+          'sessionLabel': 'Session One',
+          'start': '09:00',
+          'end': '09:40',
+          'timeLabel': '09:00 - 09:40',
+          'title': 'Opening Keynote',
+          'descriptionHtml': '<p>Hi</p>',
+          'description': 'Hi',
+          'speakers': [
+            {
+              'name': 'Anna Kowalska',
+              'slug': 'anna-kowalska',
+              'position': 'GDE',
+              'company': 'Acme',
+              'photo': 'https://ng-poland.pl/images/speakers/anna.webp',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      'key': 'js',
+      'kind': 'conference',
+      'conference': 'js',
+      'label': 'JS Poland',
+      'date': '2026-11-18',
+      'dateLabel': 'Nov 18, 2026',
+      'published': false,
+      'items': [],
+    },
+  ],
+};
+
+const editionSpeakersJson = <String, Object?>{
+  'year': 2026,
+  'speakers': [
+    {
+      'id': 10,
+      'slug': 'anna-kowalska',
+      'name': 'Anna Kowalska',
+      'conference': 'ng',
+      'conferenceLabel': 'NG Poland',
+      'position': 'GDE',
+      'company': 'Acme',
+      'photo': 'https://ng-poland.pl/images/speakers/anna.webp',
+      'bio': 'GDE & author',
+      'bioHtml': '<p>GDE</p>',
+      'talk': {
+        'title': 'Signals Deep Dive',
+        'description': 'All about signals.',
+        'descriptionHtml': '<p>All about signals.</p>',
+      },
+      'socials': [
+        {'network': 'linkedin', 'url': 'https://www.linkedin.com/in/anna'},
+      ],
+      'books': [],
+      'videos': [],
+      'workshops': [],
+      'agendaItems': [
+        {'id': 2, 'title': 'Opening Keynote', 'conference': 'ng'},
+      ],
+    },
+  ],
+};

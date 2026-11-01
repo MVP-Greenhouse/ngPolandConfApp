@@ -1,14 +1,21 @@
 part of 'schedule_cubit.dart';
 
-@freezed
-class ScheduleState with _$ScheduleState {
-  const factory ScheduleState.initial() = _Initial;
+sealed class ScheduleState {
+  const ScheduleState(this.track);
 
-  const factory ScheduleState.loading() = _Loading;
+  final EventItemType track;
+}
 
-  const factory ScheduleState.loaded({
-    required List<EventItem> listEvents,
-  }) = _Loaded;
+class ScheduleLoading extends ScheduleState {
+  const ScheduleLoading(super.track);
+}
 
-  const factory ScheduleState.error(String error) = _Error;
+class ScheduleLoaded extends ScheduleState {
+  const ScheduleLoaded(super.track, this.schedule);
+
+  final TrackSchedule schedule;
+}
+
+class ScheduleFailed extends ScheduleState {
+  const ScheduleFailed(super.track);
 }

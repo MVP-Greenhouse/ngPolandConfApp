@@ -1,11 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:ng_poland_conf_app/core/constants/event_types.dart';
-import 'package:ng_poland_conf_app/features/schedule/domains/entities/event_item.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item.dart';
+import 'package:ng_poland_conf_app/features/edition/domain/entities/event_item_type.dart';
+import 'package:ng_poland_conf_app/features/schedule/domain/services/schedule_timeline.dart';
+import 'package:ng_poland_conf_app/features/schedule/presentation/hooks/use_active_schedule_event.dart';
 import 'package:ng_poland_conf_app/features/schedule/presentation/widgets/event.dart';
 
-class ScheduleEventsList extends StatefulWidget {
+class ScheduleEventsList extends HookWidget {
   final List<EventItem> listEvents;
   final EventItemType eventItemType;
 
@@ -16,106 +18,92 @@ class ScheduleEventsList extends StatefulWidget {
   });
 
   @override
-  State<ScheduleEventsList> createState() => _ScheduleEventsListState();
-}
+  Widget build(BuildContext context) {
+    final slots = useMemoized(
+      () => [
+        for (final event in listEvents)
+          (id: event.id, start: event.startDate, end: event.endDate),
+      ],
+      [listEvents],
+    );
+    final activeEvent = useActiveScheduleEvent(slots);
+    final now = DateTime.now();
+    final phase = scheduleDayPhase(
+      events: slots,
+      now: now,
+      inSlot: activeEvent != null,
+    );
 
-class _ScheduleEventsListState extends State<ScheduleEventsList> with WidgetsBindingObserver {
-  Timer? _timer;
-  final ValueNotifier<String?> _activeEventIdNotifier = ValueNotifier<String?>(null);
-
-  @override
-  void initState() {
-    super.initState();
-    _checkActiveEvent(widget.listEvents);
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  bool checkTimeEventToAnimation(
-    DateTime dateNow,
-    DateTime? dateStartEvent,
-    DateTime? dateEndEvent,
-  ) {
-    if (dateStartEvent == null || dateEndEvent == null) return false;
-
-    return dateStartEvent.toUtc().millisecondsSinceEpoch < dateNow.toUtc().millisecondsSinceEpoch &&
-        dateNow.toUtc().millisecondsSinceEpoch < dateEndEvent.toUtc().millisecondsSinceEpoch;
-  }
-
-  void _checkActiveEvent(List<EventItem> listEvents) {
-    _timer?.cancel();
-    List<EventItem> listEventsToShow = [];
-    _activeEventIdNotifier.value = null;
-    if (listEvents.isEmpty) return;
-
-    final dateNow = DateTime.now().toUtc();
-    // Dodaj do listy tylko przyszle eventy
-    for (var event in listEvents) {
-      final dateStartEvent = event.startDate?.toUtc();
-      final dateEndEvent = event.endDate?.toUtc();
-      if (dateStartEvent == null || dateEndEvent == null) continue;
-      if (dateEndEvent.isBefore(dateNow)) continue;
-
-      if (checkTimeEventToAnimation(dateNow, dateStartEvent, dateEndEvent)) {
-        _activeEventIdNotifier.value = event.id;
-        continue;
-      }
-      listEventsToShow.add(event);
-    }
-    // Jezeli nie ma wiecej eventow do wyswietlenia to ustaw timer na koniec ostatniego eventu
-    if (listEventsToShow.isEmpty) {
-      final lastEventEndDate = listEvents.last.endDate?.toUtc();
-      if (lastEventEndDate == null) return;
-      _timer = Timer(
-        lastEventEndDate.difference(dateNow),
-        () => _checkActiveEvent(listEventsToShow),
-      );
-      return;
-    }
-
-    // Wykonaj ponownie przy nastepnym evencie
-    final nextEvent = listEventsToShow.first;
-    final nextEventStartDate = nextEvent.startDate?.toUtc();
-    if (nextEventStartDate == null) return;
-    _timer = Timer(
-      nextEventStartDate.difference(dateNow),
-      () => _checkActiveEvent(listEventsToShow),
+    return ColoredBox(
+      color: context.palette.screen,
+      child: ListView.builder(
+        padding: const .only(top: 8, bottom: 24),
+        itemCount: listEvents.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return _ScheduleStatusBar(
+              phase: phase,
+              zoneLabel: warsawZoneLabel(now),
+            );
+          }
+          final event = listEvents[index - 1];
+          return ScheduleEvent(
+            eventItem: event,
+            eventItemType: eventItemType,
+            isActiveEvent: activeEvent == event.id,
+          );
+        },
+      ),
     );
   }
+}
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      _checkActiveEvent(widget.listEvents);
-    }
-    super.didChangeAppLifecycleState(state);
-  }
+class _ScheduleStatusBar extends StatelessWidget {
+  const _ScheduleStatusBar({required this.phase, required this.zoneLabel});
 
-  @override
-  void dispose() {
-    _activeEventIdNotifier.dispose();
-    _timer?.cancel();
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
+  final ScheduleDayPhase phase;
+  final String zoneLabel;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 24.0),
-      itemCount: widget.listEvents.length,
-      itemBuilder: (context, index) {
-        return ValueListenableBuilder(
-          valueListenable: _activeEventIdNotifier,
-          builder: (context, activeEvent, _) {
-            return ScheduleEvent(
-              eventItem: widget.listEvents[index],
-              eventItemType: widget.eventItemType,
-              iconColor: Theme.of(context).colorScheme.tertiary,
-              isActiveEvent: activeEvent == widget.listEvents[index].id,
-            );
-          },
-        );
-      },
+    final palette = context.palette;
+    final ongoing = phase == ScheduleDayPhase.ongoing;
+    final label = switch (phase) {
+      .upcoming => 'CONFERENCE UPCOMING',
+      .ongoing => 'CONFERENCE ONGOING',
+      .ended => 'CONFERENCE ENDED',
+    };
+    final color = ongoing ? palette.accent : palette.muted;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 14),
+      child: Row(
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            child: const SizedBox.square(dimension: 8),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 1.1,
+            ),
+          ),
+          const Spacer(),
+          Text(
+            zoneLabel,
+            style: TextStyle(
+              color: palette.muted,
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

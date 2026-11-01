@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "P6QV9SJK6C.com.mvpgreenhouse.ngPolandConfApp",
+        "paths": ["/auth*", "/__/auth/*", "/__/auth/links/*"]
+      }
+    ]
+  }
+}
