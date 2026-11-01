@@ -20,7 +20,8 @@ service cloud.firestore {
         && request.resource.data.role == 'user';
       allow update: if isOwner(uid)
         && request.resource.data.role == resource.data.role;
-      allow delete: if false;
+      // In-app account deletion removes the user's own profile.
+      allow delete: if isOwner(uid);
     }
 
     match /conf/{confId}/engagement/{docId} {

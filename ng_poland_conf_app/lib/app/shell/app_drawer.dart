@@ -7,6 +7,7 @@ import 'package:ng_poland_conf_app/core/presentation/navigation/app_pages.dart';
 import 'package:ng_poland_conf_app/core/presentation/navigation/redirect_paths.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/entities/user_session.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/user_session_cubit.dart';
+import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/delete_account_button.dart';
 import 'package:ng_poland_conf_app/features/settings/presentation/cubit/theme_mode_cubit.dart';
 
 /// Main navigation drawer shown by every top-level page.
@@ -61,6 +62,17 @@ class AppDrawer extends StatelessWidget {
           const Padding(
             padding: .symmetric(horizontal: 12),
             child: Align(alignment: .centerLeft, child: _DarkModeSwitch()),
+          ),
+          Padding(
+            padding: const .symmetric(horizontal: 4),
+            child: Align(
+              alignment: .centerLeft,
+              child: DeleteAccountButton(
+                session: session.state,
+                onDelete: session.deleteAccount,
+                onDeleted: () => context.go(Pages.home.path),
+              ),
+            ),
           ),
         ],
       ),

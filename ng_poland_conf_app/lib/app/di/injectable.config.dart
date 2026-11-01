@@ -46,6 +46,8 @@ import '../../features/authentication/domain/repositories/user_session_repositor
     as _i879;
 import '../../features/authentication/domain/usecases/complete_magic_link.dart'
     as _i24;
+import '../../features/authentication/domain/usecases/delete_account.dart'
+    as _i1059;
 import '../../features/authentication/domain/usecases/ensure_user_profile.dart'
     as _i537;
 import '../../features/authentication/domain/usecases/get_user_session.dart'
@@ -278,6 +280,12 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i537.EnsureUserProfile>(),
       ),
     );
+    gh.factory<_i1059.DeleteAccount>(
+      () => _i1059.DeleteAccount(
+        gh<_i1048.AuthenticationRepository>(),
+        gh<_i875.UserRepository>(),
+      ),
+    );
     gh.factory<_i722.WatchIncomingLinks>(
       () => _i722.WatchIncomingLinks(gh<_i148.IncomingLinksRepository>()),
     );
@@ -337,6 +345,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i530.EditionRemote>(),
         gh<_i953.EditionCache>(),
         gh<_i974.Logger>(),
+      ),
+    );
+    gh.singleton<_i399.UserSessionCubit>(
+      () => _i399.UserSessionCubit(
+        gh<_i233.WatchUserSession>(),
+        gh<_i559.SignOut>(),
+        gh<_i1059.DeleteAccount>(),
       ),
     );
     gh.factory<_i675.AuthenticationCubit>(
@@ -423,12 +438,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i28.WatchTrackEngagement(
         gh<_i268.ConferenceRepository>(),
         gh<_i678.EngagementConfigRepository>(),
-      ),
-    );
-    gh.singleton<_i399.UserSessionCubit>(
-      () => _i399.UserSessionCubit(
-        gh<_i233.WatchUserSession>(),
-        gh<_i559.SignOut>(),
       ),
     );
     gh.singleton<_i282.AppRouter>(

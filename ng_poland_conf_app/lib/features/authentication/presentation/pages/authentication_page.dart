@@ -14,6 +14,14 @@ import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/
 import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/social_media_button.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/cubit/conferences_cubit.dart';
 
+/// Only the iOS app is set up for Sign in with Apple. The web app in Safari on
+/// an iPhone also reports iOS, but there the plugin needs a Services ID.
+@visibleForTesting
+bool showsAppleSignIn({
+  required TargetPlatform platform,
+  required bool isWeb,
+}) => !isWeb && platform == .iOS;
+
 /// Sign-in screen. Expects an [AuthenticationCubit] above it.
 class AuthenticationPage extends HookWidget {
   static const String path = AppPaths.auth;
@@ -117,7 +125,10 @@ class _AuthBody extends StatelessWidget {
                 onTap: cubit.signInWithGoogle,
                 authenticationType: .google,
               ),
-              if (defaultTargetPlatform == .iOS) ...[
+              if (showsAppleSignIn(
+                platform: defaultTargetPlatform,
+                isWeb: kIsWeb,
+              )) ...[
                 const SizedBox(height: 10),
                 SocialMediaButton(
                   isLoading: busyType == .apple,

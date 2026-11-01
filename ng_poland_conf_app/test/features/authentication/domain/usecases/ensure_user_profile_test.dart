@@ -27,6 +27,9 @@ class _FakeUserRepository implements UserRepository {
 
   @override
   Stream<UserProfile?> watchProfile(String uid) => Stream.value(stored);
+
+  @override
+  Future<void> deleteProfile(String uid) async => stored = null;
 }
 
 void main() {

@@ -17,4 +17,10 @@ abstract interface class AuthenticationRepository {
 
   /// Signs out and clears locally cached user data.
   Future<void> signOut();
+
+  /// Deletes the signed-in account. The user first signs in again with their
+  /// provider, then [deleteUserData] removes their data while still signed in.
+  Future<void> deleteAccount({
+    required Future<void> Function(String uid) deleteUserData,
+  });
 }

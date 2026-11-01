@@ -37,6 +37,11 @@ class UserRemoteDataSource {
     );
   }
 
+  Future<void> updateDisplayName(String uid, String displayName) =>
+      _doc(uid).update({'displayName': displayName});
+
+  Future<void> deleteProfile(String uid) => _doc(uid).delete();
+
   Stream<UserProfile?> watchProfile(String uid) {
     return _doc(uid).snapshots().map((snapshot) {
       final data = snapshot.data();

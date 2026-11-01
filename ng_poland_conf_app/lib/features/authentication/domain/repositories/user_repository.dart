@@ -11,4 +11,7 @@ abstract interface class UserRepository {
   });
 
   Stream<UserProfile?> watchProfile(String uid);
+
+  /// Throws `AuthException` when the profile cannot be deleted.
+  Future<void> deleteProfile(String uid);
 }

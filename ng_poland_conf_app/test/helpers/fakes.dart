@@ -96,6 +96,15 @@ class FakeAuthenticationRepository implements AuthenticationRepository {
     authUsers.add(null);
   }
 
+  @override
+  Future<void> deleteAccount({
+    required Future<void> Function(String uid) deleteUserData,
+  }) async {
+    if (failure case final error?) throw error;
+    await deleteUserData(testAuthUser.uid);
+    authUsers.add(null);
+  }
+
   Future<void> dispose() => authUsers.close();
 }
 
@@ -140,6 +149,11 @@ class FakeUserRepository implements UserRepository {
     if (watchStreamError) return Stream.error(Exception('snapshot failed'));
     return Stream.value(profile);
   }
+
+  final deletedProfiles = <String>[];
+
+  @override
+  Future<void> deleteProfile(String uid) async => deletedProfiles.add(uid);
 }
 
 class FakeIncomingLinksRepository implements IncomingLinksRepository {

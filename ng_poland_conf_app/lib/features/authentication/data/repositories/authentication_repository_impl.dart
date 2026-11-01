@@ -44,21 +44,25 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
           ],
           nonce: _sha256ofString(rawNonce),
         );
-        return OAuthProvider('apple.com').credential(
-          idToken: appleCredential.identityToken,
-          rawNonce: rawNonce,
-          accessToken: appleCredential.authorizationCode,
+        final user = _userOf(
+          await _auth.signInWithCredential(
+            OAuthProvider('apple.com').credential(
+              idToken: appleCredential.identityToken,
+              rawNonce: rawNonce,
+              accessToken: appleCredential.authorizationCode,
+            ),
+          ),
         );
+        return _withAppleName(user, appleCredential);
       });
 
   @override
-  Future<AuthUser> signInWithGoogle() =>
-      _signIn('There was a problem signing in with Google.', () async {
-        final googleUser = await GoogleSignIn.instance.authenticate();
-        return GoogleAuthProvider.credential(
-          idToken: googleUser.authentication.idToken,
-        );
-      });
+  Future<AuthUser> signInWithGoogle() => _signIn(
+    'There was a problem signing in with Google.',
+    () async => _userOf(
+      await _auth.signInWithCredential(await _googleCredential()),
+    ).toAuthUser(),
+  );
 
   @override
   Future<void> sendSignInLink(String email) async {
@@ -107,7 +111,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         emailLink: emailLink,
       );
       await _magicLinkEmailLocalDataSource.clearPendingEmail();
-      return _userOf(credential);
+      return _userOf(credential).toAuthUser();
     } on FirebaseAuthException catch (error, stackTrace) {
       _logger.w(
         'Magic link: sign-in failed',
@@ -138,13 +142,86 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     }
   }
 
-  /// Runs a provider flow and signs in to Firebase with its credential.
+  @override
+  Future<void> deleteAccount({
+    required Future<void> Function(String uid) deleteUserData,
+  }) async {
+    final user =
+        _auth.currentUser ??
+        (throw const AuthException('You are not signed in.'));
+    final providers = {for (final info in user.providerData) info.providerId};
+    try {
+      if (providers.contains('apple.com')) {
+        await _revokeAppleAccess(user);
+      } else if (providers.contains('google.com')) {
+        await user.reauthenticateWithCredential(await _googleCredential());
+      } else if (!_signedInRecently(user)) {
+        // Email links can't be re-sent mid-deletion, and deleting the data
+        // first would leave an account without a profile.
+        throw const AuthException(_signInAgainMessage);
+      }
+      await deleteUserData(user.uid);
+      await user.delete();
+    } on AuthException {
+      rethrow;
+    } catch (error, stackTrace) {
+      if (error case FirebaseAuthException(code: 'requires-recent-login')) {
+        throw const AuthException(_signInAgainMessage);
+      }
+      // Provider SDKs throw their own types (including user cancellation).
+      _logger.w(
+        'Account deletion failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      throw const AuthException('There was a problem deleting your account.');
+    }
+  }
+
+  static const _signInAgainMessage =
+      'For your security, sign out and sign in again, then delete your '
+      'account.';
+
+  /// Firebase deletes only accounts that signed in in the last 5 minutes.
+  static bool _signedInRecently(User user) {
+    final lastSignIn = user.metadata.lastSignInTime;
+    return lastSignIn != null &&
+        DateTime.now().difference(lastSignIn) < const Duration(minutes: 5);
+  }
+
+  /// Signs the user in again with Apple and revokes the app's Apple tokens,
+  /// which Apple requires when an account is deleted.
+  Future<void> _revokeAppleAccess(User user) async {
+    final rawNonce = _appleNonce();
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: const [],
+      nonce: _sha256ofString(rawNonce),
+    );
+    // The authorization code is single-use, so it goes only to the revocation.
+    await user.reauthenticateWithCredential(
+      OAuthProvider(
+        'apple.com',
+      ).credential(idToken: appleCredential.identityToken, rawNonce: rawNonce),
+    );
+    await _auth.revokeTokenWithAuthorizationCode(
+      appleCredential.authorizationCode,
+    );
+  }
+
+  Future<AuthCredential> _googleCredential() async {
+    final googleUser = await GoogleSignIn.instance.authenticate();
+    return GoogleAuthProvider.credential(
+      idToken: googleUser.authentication.idToken,
+    );
+  }
+
+  /// Runs a provider flow that ends signed in to Firebase.
   Future<AuthUser> _signIn(
     String failureMessage,
-    Future<AuthCredential> Function() credential,
+    Future<AuthUser> Function() signIn,
   ) async {
     try {
-      return _userOf(await _auth.signInWithCredential(await credential()));
+      return await signIn();
     } on AuthException {
       rethrow;
     } catch (error, stackTrace) {
@@ -154,14 +231,43 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     }
   }
 
-  AuthUser _userOf(UserCredential credential) =>
-      credential.user?.toAuthUser() ??
+  /// Apple shares the user's name only on the first sign-in and Firebase
+  /// doesn't keep it, so it's saved on the Firebase user here.
+  Future<AuthUser> _withAppleName(
+    User user,
+    AuthorizationCredentialAppleID appleCredential,
+  ) async {
+    final name = [
+      appleCredential.givenName,
+      appleCredential.familyName,
+    ].nonNulls.join(' ').trim();
+    if (name.isEmpty || (user.displayName ?? '').isNotEmpty) {
+      return user.toAuthUser();
+    }
+    try {
+      await user.updateDisplayName(name);
+    } on FirebaseAuthException catch (error, stackTrace) {
+      // The returned user still carries the name, so the profile gets it.
+      _logger.w(
+        'Apple sign-in: saving the name failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+    return user.toAuthUser(displayName: name);
+  }
+
+  User _userOf(UserCredential credential) =>
+      credential.user ??
       (throw const AuthException('Sign-in did not return a user.'));
 }
 
 extension on User {
-  AuthUser toAuthUser() =>
-      AuthUser(uid: uid, displayName: displayName ?? '', email: email ?? '');
+  AuthUser toAuthUser({String? displayName}) => AuthUser(
+    uid: uid,
+    displayName: displayName ?? this.displayName ?? '',
+    email: email ?? '',
+  );
 }
 
 String _appleNonce([int length = 32]) {
