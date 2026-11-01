@@ -1,12 +1,12 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/core/presentation/navigation/app_pages.dart';
 import 'package:ng_poland_conf_app/core/presentation/navigation/redirect_paths.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/apple_sign_in_support.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/entities/authentication_type.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/cubit/authentication_cubit.dart';
 import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/auth_ui_tokens.dart';
@@ -14,13 +14,9 @@ import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/
 import 'package:ng_poland_conf_app/features/authentication/presentation/widgets/social_media_button.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/cubit/conferences_cubit.dart';
 
-/// Only the iOS app is set up for Sign in with Apple. The web app in Safari on
-/// an iPhone also reports iOS, but there the plugin needs a Services ID.
-@visibleForTesting
-bool showsAppleSignIn({
-  required TargetPlatform platform,
-  required bool isWeb,
-}) => !isWeb && platform == .iOS;
+/// Email sign-in is switched off in Firebase for now. To bring it back, turn it
+/// on there and set this to true.
+bool get _emailSignInEnabled => false;
 
 /// Sign-in screen. Expects an [AuthenticationCubit] above it.
 class AuthenticationPage extends HookWidget {
@@ -125,10 +121,7 @@ class _AuthBody extends StatelessWidget {
                 onTap: cubit.signInWithGoogle,
                 authenticationType: .google,
               ),
-              if (showsAppleSignIn(
-                platform: defaultTargetPlatform,
-                isWeb: kIsWeb,
-              )) ...[
+              if (supportsAppleSignIn()) ...[
                 const SizedBox(height: 10),
                 SocialMediaButton(
                   isLoading: busyType == .apple,
@@ -136,15 +129,17 @@ class _AuthBody extends StatelessWidget {
                   authenticationType: .apple,
                 ),
               ],
-              const SizedBox(height: 24),
-              const _MagicLinkDivider(),
-              const SizedBox(height: 16),
-              MagicLinkForm(
-                isLoading: busyType == AuthenticationType.email,
-                linkSent: linkSentEmail != null,
-                initialEmail: linkSentEmail ?? '',
-                onSubmit: cubit.sendMagicLink,
-              ),
+              if (_emailSignInEnabled) ...[
+                const SizedBox(height: 24),
+                const _MagicLinkDivider(),
+                const SizedBox(height: 16),
+                MagicLinkForm(
+                  isLoading: busyType == AuthenticationType.email,
+                  linkSent: linkSentEmail != null,
+                  initialEmail: linkSentEmail ?? '',
+                  onSubmit: cubit.sendMagicLink,
+                ),
+              ],
               if (errorText != null) ...[
                 const SizedBox(height: 12),
                 Text(

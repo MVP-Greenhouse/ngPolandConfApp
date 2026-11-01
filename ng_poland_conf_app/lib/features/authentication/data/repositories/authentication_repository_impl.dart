@@ -9,6 +9,7 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:ng_poland_conf_app/features/authentication/data/datasources/firebase_auth_config.dart';
 import 'package:ng_poland_conf_app/features/authentication/data/datasources/magic_link_email_local_datasource.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/apple_sign_in_support.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/entities/auth_user.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/exceptions/auth_exception.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/repositories/authentication_repository.dart';
@@ -151,7 +152,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         (throw const AuthException('You are not signed in.'));
     final providers = {for (final info in user.providerData) info.providerId};
     try {
-      if (providers.contains('apple.com')) {
+      // An account can be linked to both when they share an email. Outside the
+      // iOS app there's no Apple flow, so its Apple access can't be revoked.
+      if (providers.contains('apple.com') && supportsAppleSignIn()) {
         await _revokeAppleAccess(user);
       } else if (providers.contains('google.com')) {
         await user.reauthenticateWithCredential(await _googleCredential());

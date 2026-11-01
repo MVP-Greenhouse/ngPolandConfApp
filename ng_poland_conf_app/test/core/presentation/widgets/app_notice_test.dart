@@ -38,4 +38,45 @@ void main() {
     expect(snackBar.backgroundColor, Colors.transparent);
     expect(snackBar.elevation, 0);
   });
+
+  testWidgets('an error notice stands out on a solid error background', (
+    tester,
+  ) async {
+    final theme = ThemeData(
+      brightness: Brightness.dark,
+      extensions: const [AppPalette.dark],
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        home: const Scaffold(
+          body: AppNoticeCard(
+            notice: AppNotice(
+              title: 'It failed',
+              body: 'Try again.',
+              tone: AppNoticeTone.error,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final card = tester.widget<DecoratedBox>(
+      find
+          .descendant(
+            of: find.byType(AppNoticeCard),
+            matching: find.byType(DecoratedBox),
+          )
+          .first,
+    );
+    expect((card.decoration as BoxDecoration).color, theme.colorScheme.error);
+    expect(
+      tester.widget<Text>(find.text('It failed')).style?.color,
+      AppPalette.dark.onAccent,
+    );
+    expect(
+      tester.widget<Text>(find.text('Try again.')).style?.color,
+      AppPalette.dark.onAccent,
+    );
+  });
 }

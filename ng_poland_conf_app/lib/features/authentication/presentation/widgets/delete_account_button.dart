@@ -34,6 +34,8 @@ class DeleteAccountButton extends StatelessWidget {
       builder: (_) => _DeleteAccountDialog(onDelete: onDelete),
     );
     if (outcome == null || !context.mounted) return;
+    // Snackbars are drawn below the drawer, which would cover the notice.
+    Scaffold.maybeOf(context)?.closeDrawer();
     if (outcome.error case final error?) {
       showAppNotice(
         context,

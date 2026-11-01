@@ -50,6 +50,9 @@ class AppNoticeCard extends StatelessWidget {
       AppNoticeTone.warning => AppPalette.gold,
       AppNoticeTone.error => Theme.of(context).colorScheme.error,
     };
+    // Errors must stand out, and a dark card barely does on a dark page.
+    final solid = notice.tone == AppNoticeTone.error;
+    final foreground = solid ? palette.onAccent : highlight;
     final icon = switch (notice.tone) {
       AppNoticeTone.success => Icons.sync_rounded,
       AppNoticeTone.warning => Icons.how_to_vote_outlined,
@@ -58,7 +61,7 @@ class AppNoticeCard extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: palette.card,
+        color: solid ? highlight : palette.card,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: highlight.withValues(alpha: 0.55)),
         boxShadow: [
@@ -71,13 +74,13 @@ class AppNoticeCard extends StatelessWidget {
           children: [
             DecoratedBox(
               decoration: BoxDecoration(
-                color: highlight.withValues(alpha: 0.16),
+                color: foreground.withValues(alpha: 0.16),
                 shape: BoxShape.circle,
               ),
               child: SizedBox(
                 width: 32,
                 height: 32,
-                child: Icon(icon, size: 18, color: highlight),
+                child: Icon(icon, size: 18, color: foreground),
               ),
             ),
             const SizedBox(width: 12),
@@ -91,7 +94,7 @@ class AppNoticeCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.2,
-                      color: highlight,
+                      color: foreground,
                       fontSize: 13,
                     ),
                   ),
@@ -101,7 +104,7 @@ class AppNoticeCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontSize: 12,
                       height: 1.35,
-                      color: palette.muted,
+                      color: solid ? palette.onAccent : palette.muted,
                     ),
                   ),
                 ],

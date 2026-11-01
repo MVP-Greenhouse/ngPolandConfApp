@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in_platform_interface/google_sign_in_platform_interface.dart';
@@ -75,11 +76,11 @@ class _FakeUserCredential implements UserCredential {
 /// Records each deletion step in [steps].
 class _FakeUser implements User {
   _FakeUser({
-    required String provider,
+    required List<String> providers,
     required DateTime lastSignIn,
     required this.steps,
     this.reauthenticateError,
-  }) : providerData = [_FakeUserInfo(provider)],
+  }) : providerData = [for (final id in providers) _FakeUserInfo(id)],
        metadata = _FakeUserMetadata(lastSignIn);
 
   final List<String> steps;
@@ -169,10 +170,13 @@ void main() {
   final anHourAgo = DateTime.now().subtract(const Duration(hours: 1));
   final aMinuteAgo = DateTime.now().subtract(const Duration(minutes: 1));
 
-  tearDown(
-    () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(_appleChannel, null),
-  );
+  setUp(() => debugDefaultTargetPlatformOverride = TargetPlatform.iOS);
+
+  tearDown(() {
+    debugDefaultTargetPlatformOverride = null;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(_appleChannel, null);
+  });
 
   final googleSignIn = GoogleSignInPlatform.instance;
   tearDown(() => GoogleSignInPlatform.instance = googleSignIn);
@@ -181,7 +185,7 @@ void main() {
       'and its data are deleted', () async {
     _appleReturns(authorizationCode: 'fresh-code');
     final user = _FakeUser(
-      provider: 'apple.com',
+      providers: const ['apple.com'],
       lastSignIn: anHourAgo,
       steps: [],
     );
@@ -202,7 +206,7 @@ void main() {
       'revoked', () async {
     _appleReturns(authorizationCode: 'fresh-code');
     final user = _FakeUser(
-      provider: 'apple.com',
+      providers: const ['apple.com'],
       lastSignIn: anHourAgo,
       steps: [],
     );
@@ -219,11 +223,53 @@ void main() {
     expect(user.steps, ['sign in again with apple.com']);
   });
 
+  test('on Android an account linked to Apple and Google goes through '
+      'Google, because the app has no Apple sign-in there', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    GoogleSignInPlatform.instance = _FakeGoogleSignIn();
+    final user = _FakeUser(
+      providers: const ['google.com', 'apple.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await _repository(user).deleteAccount(
+      deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+    );
+
+    expect(user.steps, [
+      'sign in again with google.com',
+      'delete data of u1',
+      'delete account',
+    ]);
+  });
+
+  test('on iOS an account linked to Apple and Google still revokes Apple '
+      'access, which Apple requires', () async {
+    _appleReturns(authorizationCode: 'fresh-code');
+    final user = _FakeUser(
+      providers: const ['google.com', 'apple.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await _repository(user).deleteAccount(
+      deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+    );
+
+    expect(user.steps, [
+      'sign in again with apple.com',
+      'revoke Apple access with fresh-code',
+      'delete data of u1',
+      'delete account',
+    ]);
+  });
+
   test('Google users sign in again with the picked account before the '
       'account and its data are deleted', () async {
     GoogleSignInPlatform.instance = _FakeGoogleSignIn();
     final user = _FakeUser(
-      provider: 'google.com',
+      providers: const ['google.com'],
       lastSignIn: anHourAgo,
       steps: [],
     );
@@ -253,7 +299,7 @@ void main() {
       error: const GoogleSignInException(code: .canceled),
     );
     final user = _FakeUser(
-      provider: 'google.com',
+      providers: const ['google.com'],
       lastSignIn: anHourAgo,
       steps: [],
     );
@@ -271,7 +317,7 @@ void main() {
       'picked', () async {
     GoogleSignInPlatform.instance = _FakeGoogleSignIn();
     final user = _FakeUser(
-      provider: 'google.com',
+      providers: const ['google.com'],
       lastSignIn: anHourAgo,
       steps: [],
       reauthenticateError: FirebaseAuthException(code: 'user-mismatch'),
@@ -289,7 +335,7 @@ void main() {
   test('asks magic-link users who signed in a while ago to sign in '
       'again', () async {
     final user = _FakeUser(
-      provider: 'password',
+      providers: const ['password'],
       lastSignIn: anHourAgo,
       steps: [],
     );
@@ -312,7 +358,7 @@ void main() {
 
   test('deletes magic-link users who just signed in', () async {
     final user = _FakeUser(
-      provider: 'password',
+      providers: const ['password'],
       lastSignIn: aMinuteAgo,
       steps: [],
     );

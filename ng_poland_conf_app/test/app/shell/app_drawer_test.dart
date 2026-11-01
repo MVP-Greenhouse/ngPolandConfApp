@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ng_poland_conf_app/app/shell/app_drawer.dart';
+import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/entities/user_session.dart';
+import 'package:ng_poland_conf_app/features/authentication/domain/exceptions/auth_exception.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/usecases/delete_account.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/usecases/sign_out.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/usecases/watch_user_session.dart';
@@ -21,8 +23,12 @@ class _FakeThemeModeCubit extends Cubit<ThemeModeState>
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-Future<GlobalKey<ScaffoldState>> _pumpOpenDrawer(WidgetTester tester) async {
-  final authentication = FakeAuthenticationRepository();
+Future<GlobalKey<ScaffoldState>> _pumpOpenDrawer(
+  WidgetTester tester, {
+  AuthException? deleteFailure,
+}) async {
+  final authentication = FakeAuthenticationRepository()
+    ..failure = deleteFailure;
   final session = UserSessionCubit(
     WatchUserSession(
       FakeUserSessionRepository(const UserSession.signedIn(userProfile)),
@@ -40,6 +46,7 @@ Future<GlobalKey<ScaffoldState>> _pumpOpenDrawer(WidgetTester tester) async {
         BlocProvider<ThemeModeCubit>(create: (_) => _FakeThemeModeCubit()),
       ],
       child: MaterialApp.router(
+        theme: ThemeData(extensions: const [AppPalette.dark]),
         routerConfig: GoRouter(
           routes: [
             GoRoute(
@@ -113,4 +120,28 @@ void main() {
     expect(scaffold.currentState!.isDrawerOpen, isFalse);
     expect(appHandlesBack.last, isFalse);
   });
+
+  testWidgets(
+    'a failed deletion closes the menu so nothing covers the notice',
+    (tester) async {
+      final scaffold = await _pumpOpenDrawer(
+        tester,
+        deleteFailure: const AuthException('Try again.'),
+      );
+
+      await tester.drag(find.byType(ListView), const Offset(0, -2000));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(TextButton, 'Delete account'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, 'Delete'));
+      await tester.pumpAndSettle();
+
+      expect(scaffold.currentState!.isDrawerOpen, isFalse);
+      expect(find.text("Your account wasn't deleted"), findsOneWidget);
+      expect(find.text('Try again.'), findsOneWidget);
+
+      await tester.pump(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
+    },
+  );
 }
