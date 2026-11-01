@@ -60,7 +60,7 @@ class _InfoBody extends StatelessWidget {
     );
 
     return ListView(
-      padding: const .fromLTRB(16, 16, 16, 24),
+      padding: .fromLTRB(16, 16, 16, 24 + MediaQuery.paddingOf(context).bottom),
       children: [
         if (venue != null) _VenueCard(venue: venue, city: info.city),
         if (info.ticketsUrl.isNotEmpty) ...[

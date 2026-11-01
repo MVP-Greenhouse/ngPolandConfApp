@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ng_poland_conf_app/core/constants/app_info.dart';
 import 'package:ng_poland_conf_app/core/presentation/platform/network_settings.dart';
 import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/app_version_text.dart';
 import 'package:ng_poland_conf_app/features/edition/presentation/cubit/edition_cubit.dart';
 import 'package:ng_poland_conf_app/features/home/presentation/cubit/conferences_cubit.dart';
 
@@ -435,8 +435,8 @@ class _Footer extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 6),
-        Text(
-          'App build: v$appVersion',
+        AppVersionText(
+          prefix: 'App build: v',
           style: TextStyle(color: palette.muted, fontSize: 12),
         ),
       ],

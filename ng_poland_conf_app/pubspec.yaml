@@ -65,6 +65,7 @@ dependencies:
   hive_ce_flutter: ^2.3.3
   hive_ce: ^2.15.1
   timezone: ^0.11.1
+  package_info_plus: ^10.2.2
 
 dev_dependencies:
   flutter_test:

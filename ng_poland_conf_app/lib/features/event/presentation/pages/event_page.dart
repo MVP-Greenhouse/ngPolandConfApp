@@ -79,7 +79,7 @@ class _EventBody extends StatelessWidget {
     final time = eventItem.timeRangeLabel;
 
     return ListView(
-      padding: const .fromLTRB(16, 12, 16, 28),
+      padding: .fromLTRB(16, 12, 16, 28 + MediaQuery.paddingOf(context).bottom),
       children: [
         if (time.isNotEmpty)
           Text(

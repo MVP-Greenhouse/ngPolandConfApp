@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ng_poland_conf_app/core/constants/app_info.dart';
 import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
+import 'package:ng_poland_conf_app/core/presentation/widgets/app_version_text.dart';
 import 'package:ng_poland_conf_app/core/presentation/widgets/connection_status.dart';
 import 'package:ng_poland_conf_app/core/presentation/widgets/custom_scaffold.dart';
 import 'package:ng_poland_conf_app/features/about/domain/entities/author.dart';
@@ -57,9 +57,14 @@ class AboutPage extends StatelessWidget {
       ),
       body: ColoredBox(
         color: context.palette.screen,
-        child: const SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(16, 28, 16, 32),
-          child: Column(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(
+            16,
+            28,
+            16,
+            32 + MediaQuery.paddingOf(context).bottom,
+          ),
+          child: const Column(
             children: [
               _LogoCluster(),
               SizedBox(height: 22),
@@ -412,8 +417,8 @@ class _Footer extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          'Version: $appVersion',
+        AppVersionText(
+          prefix: 'Version: ',
           style: TextStyle(color: palette.muted, fontSize: 12),
         ),
       ],

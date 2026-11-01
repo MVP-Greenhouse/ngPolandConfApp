@@ -32,49 +32,63 @@ class AppDrawer extends StatelessWidget {
     final session = context.watch<UserSessionCubit>();
     final scheme = Theme.of(context).colorScheme;
 
-    return Drawer(
-      backgroundColor: scheme.surface.withAlpha(210),
-      shadowColor: scheme.surface,
-      child: ListView(
-        padding: const .symmetric(horizontal: 8),
-        children: [
-          DrawerHeader(
-            padding: const .symmetric(vertical: 8),
-            child: Image.asset('assets/images/logo.png'),
+    // An open drawer alone doesn't tell Android that the app handles Back, so
+    // with predictive back (on by default from API 36) Back would exit the app.
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) Scaffold.of(context).closeDrawer();
+      },
+      child: Drawer(
+        backgroundColor: scheme.surface.withAlpha(210),
+        shadowColor: scheme.surface,
+        child: ListView(
+          // Setting padding turns off ListView's automatic inset, and without it
+          // the last items can't scroll clear of the system navigation bar.
+          padding: .only(
+            left: 8,
+            right: 8,
+            bottom: MediaQuery.paddingOf(context).bottom,
           ),
-          for (final page in Pages.values)
-            _PageTile(page: page, selected: page == currentPage),
-          AdminDrawerTile(
-            visible: session.state.isAdmin,
-            selected: isAdminRoute,
-            onTap: () => context.go(AppPaths.admin),
-          ),
-          AuthSessionDrawerTile(
-            session: session.state,
-            onLogin: () => context.push(
-              loginPath(
-                from: internalLocationFromUri(GoRouterState.of(context).uri),
+          children: [
+            DrawerHeader(
+              padding: const .symmetric(vertical: 8),
+              child: Image.asset('assets/images/logo.png'),
+            ),
+            for (final page in Pages.values)
+              _PageTile(page: page, selected: page == currentPage),
+            AdminDrawerTile(
+              visible: session.state.isAdmin,
+              selected: isAdminRoute,
+              onTap: () => context.go(AppPaths.admin),
+            ),
+            AuthSessionDrawerTile(
+              session: session.state,
+              onLogin: () => context.push(
+                loginPath(
+                  from: internalLocationFromUri(GoRouterState.of(context).uri),
+                ),
+              ),
+              onLogout: session.signOut,
+            ),
+            Divider(color: scheme.primary, thickness: 1, height: 30),
+            const Padding(
+              padding: .symmetric(horizontal: 12),
+              child: Align(alignment: .centerLeft, child: _DarkModeSwitch()),
+            ),
+            Padding(
+              padding: const .symmetric(horizontal: 4),
+              child: Align(
+                alignment: .centerLeft,
+                child: DeleteAccountButton(
+                  session: session.state,
+                  onDelete: session.deleteAccount,
+                  onDeleted: () => context.go(Pages.home.path),
+                ),
               ),
             ),
-            onLogout: session.signOut,
-          ),
-          Divider(color: scheme.primary, thickness: 1, height: 30),
-          const Padding(
-            padding: .symmetric(horizontal: 12),
-            child: Align(alignment: .centerLeft, child: _DarkModeSwitch()),
-          ),
-          Padding(
-            padding: const .symmetric(horizontal: 4),
-            child: Align(
-              alignment: .centerLeft,
-              child: DeleteAccountButton(
-                session: session.state,
-                onDelete: session.deleteAccount,
-                onDeleted: () => context.go(Pages.home.path),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

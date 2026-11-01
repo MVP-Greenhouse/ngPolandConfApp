@@ -75,7 +75,12 @@ class _SpeakerBody extends StatelessWidget {
     final talk = profile.talk;
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      padding: EdgeInsets.fromLTRB(
+        16,
+        8,
+        16,
+        24 + MediaQuery.paddingOf(context).bottom,
+      ),
       children: [
         if (details.coSpeakers.length > 1) ...[
           _SpeakerSwitch(
