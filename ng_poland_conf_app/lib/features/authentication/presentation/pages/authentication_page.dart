@@ -108,54 +108,66 @@ class _AuthBody extends StatelessWidget {
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         behavior: .opaque,
-        child: SingleChildScrollView(
+        child: CustomScrollView(
           keyboardDismissBehavior: .onDrag,
-          padding: const .fromLTRB(16, 8, 16, 24),
-          child: Column(
-            crossAxisAlignment: .stretch,
-            children: [
-              _AuthHero(editionLabel: editionLabel),
-              const SizedBox(height: 24),
-              SocialMediaButton(
-                isLoading: busyType == .google,
-                onTap: cubit.signInWithGoogle,
-                authenticationType: .google,
+          slivers: [
+            // Fills the viewport so the footer sits at the bottom, and grows
+            // with the content so taller layouts still scroll. Padding lives
+            // inside: a SliverPadding around it would add the bottom inset on
+            // top of the filled height and always overflow the viewport.
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const .fromLTRB(16, 8, 16, 24),
+                child: Column(
+                  crossAxisAlignment: .stretch,
+                  children: [
+                    _AuthHero(editionLabel: editionLabel),
+                    const SizedBox(height: 24),
+                    SocialMediaButton(
+                      isLoading: busyType == .google,
+                      onTap: cubit.signInWithGoogle,
+                      authenticationType: .google,
+                    ),
+                    if (supportsAppleSignIn()) ...[
+                      const SizedBox(height: 10),
+                      SocialMediaButton(
+                        isLoading: busyType == .apple,
+                        onTap: cubit.signInWithApple,
+                        authenticationType: .apple,
+                      ),
+                    ],
+                    if (_emailSignInEnabled) ...[
+                      const SizedBox(height: 24),
+                      const _MagicLinkDivider(),
+                      const SizedBox(height: 16),
+                      MagicLinkForm(
+                        isLoading: busyType == AuthenticationType.email,
+                        linkSent: linkSentEmail != null,
+                        initialEmail: linkSentEmail ?? '',
+                        onSubmit: cubit.sendMagicLink,
+                      ),
+                    ],
+                    if (errorText != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        errorText,
+                        textAlign: .center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontWeight: .w600,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 28),
+                    const Spacer(),
+                    const _AuthFooter(),
+                  ],
+                ),
               ),
-              if (supportsAppleSignIn()) ...[
-                const SizedBox(height: 10),
-                SocialMediaButton(
-                  isLoading: busyType == .apple,
-                  onTap: cubit.signInWithApple,
-                  authenticationType: .apple,
-                ),
-              ],
-              if (_emailSignInEnabled) ...[
-                const SizedBox(height: 24),
-                const _MagicLinkDivider(),
-                const SizedBox(height: 16),
-                MagicLinkForm(
-                  isLoading: busyType == AuthenticationType.email,
-                  linkSent: linkSentEmail != null,
-                  initialEmail: linkSentEmail ?? '',
-                  onSubmit: cubit.sendMagicLink,
-                ),
-              ],
-              if (errorText != null) ...[
-                const SizedBox(height: 12),
-                Text(
-                  errorText,
-                  textAlign: .center,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.error,
-                    fontWeight: .w600,
-                    fontSize: 13,
-                  ),
-                ),
-              ],
-              const SizedBox(height: 28),
-              const _AuthFooter(),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
