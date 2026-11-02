@@ -17,4 +17,16 @@ void main() {
     await tester.tap(find.byKey(const Key('event-vote-like')));
     expect(tapped, isTrue);
   });
+
+  testWidgets('label reflects liked state', (tester) async {
+    Widget button({required bool liked}) => MaterialApp(
+      home: EventLikeButton(liked: liked, enabled: true, onTap: () {}),
+    );
+
+    await tester.pumpWidget(button(liked: false));
+    expect(find.text('Like this talk'), findsOneWidget);
+
+    await tester.pumpWidget(button(liked: true));
+    expect(find.text('Liked'), findsOneWidget);
+  });
 }

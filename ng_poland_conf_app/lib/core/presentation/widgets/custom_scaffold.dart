@@ -7,6 +7,8 @@ class CustomScaffold extends StatelessWidget {
   final bool showDrawer;
   final bool showBottomNavigationBar;
   final Widget bottomNavigationBar;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
 
   const CustomScaffold({
     super.key,
@@ -15,6 +17,8 @@ class CustomScaffold extends StatelessWidget {
     this.showDrawer = true,
     this.showBottomNavigationBar = false,
     this.bottomNavigationBar = const SizedBox.shrink(),
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
   });
 
   @override
@@ -25,6 +29,8 @@ class CustomScaffold extends StatelessWidget {
       drawer: showDrawer ? drawerBuilder?.call(context) : null,
       body: body,
       bottomNavigationBar: showBottomNavigationBar ? bottomNavigationBar : null,
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
     );
   }
 }

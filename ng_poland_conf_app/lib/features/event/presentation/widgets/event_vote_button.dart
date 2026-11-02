@@ -22,41 +22,51 @@ class EventLikeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final palette = Theme.of(context).extension<AppPalette>();
     final colorScheme = Theme.of(context).colorScheme;
-    final background = palette?.card ?? colorScheme.surface;
-    final foreground = palette?.onCard ?? colorScheme.onSurface;
     final accent = palette?.accent ?? colorScheme.secondary;
-    final border = palette?.hairline ?? foreground.withValues(alpha: 0.12);
-    final idleColor = liked ? accent : foreground;
-    final contentColor = enabled ? idleColor : idleColor.withValues(alpha: 0.4);
+    final onAccent = palette?.onAccent ?? colorScheme.onSecondary;
+    final base = palette?.screen ?? colorScheme.surface;
+
+    // Not liked yet: accent tint with an accent outline. Liked: solid accent,
+    // so a cast vote stands out. Label and icon stay white in both states.
+    // The fill is opaque because the button floats over the page content.
+    final opacity = enabled ? 1.0 : 0.5;
+    final tint = (liked ? 1.0 : 0.4) * opacity;
+    final fillColor = Color.alphaBlend(accent.withValues(alpha: tint), base);
+    final contentColor = onAccent.withValues(alpha: opacity);
 
     return SizedBox(
-      width: double.infinity,
       height: 52,
       child: OutlinedButton.icon(
         key: const Key('event-vote-like'),
         onPressed: enabled ? onTap : null,
         style: OutlinedButton.styleFrom(
-          backgroundColor: enabled
-              ? background
-              : background.withValues(alpha: 0.45),
+          backgroundColor: fillColor,
           foregroundColor: contentColor,
           disabledForegroundColor: contentColor,
-          disabledBackgroundColor: background.withValues(alpha: 0.45),
+          disabledBackgroundColor: fillColor,
+          elevation: 6,
+          shadowColor: Colors.black.withValues(alpha: 0.5),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           side: BorderSide(
-            color: enabled ? border : border.withValues(alpha: 0.4),
+            color: accent.withValues(alpha: opacity),
+            width: 1.5,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
+            borderRadius: BorderRadius.circular(26),
           ),
         ),
         icon: Icon(
           liked ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
           color: contentColor,
-          size: 18,
+          size: 22,
         ),
         label: Text(
-          liked ? 'Liked' : 'Like talk',
-          style: TextStyle(fontWeight: FontWeight.w600, color: contentColor),
+          liked ? 'Liked' : 'Like this talk',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            color: contentColor,
+          ),
         ),
       ),
     );

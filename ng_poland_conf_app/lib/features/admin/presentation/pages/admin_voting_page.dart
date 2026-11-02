@@ -168,7 +168,6 @@ class _AdminVotingBody extends StatelessWidget {
             end: end,
           ),
           onEndNow: () => _confirmEndNow(context, cubit),
-          onSyncVotableEvents: cubit.syncVotableEvents,
           onTop5EnabledChanged: cubit.saveTop5Enabled,
         ),
       ],

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ng_poland_conf_app/core/presentation/theme/app_palette.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/cubit/admin_cubit.dart';
-import 'package:ng_poland_conf_app/features/admin/presentation/formatters/admin_hub_status.dart';
 import 'package:ng_poland_conf_app/features/admin/presentation/pages/admin_page.dart';
 import 'package:ng_poland_conf_app/features/authentication/domain/entities/user_session.dart';
 import 'package:ng_poland_conf_app/features/edition/domain/entities/conference.dart';
@@ -52,7 +51,7 @@ void main() {
     await configRepo.dispose();
   });
 
-  testWidgets('shows hub with voting status', (tester) async {
+  testWidgets('shows voting hub without per-track status', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData(extensions: const [AppPalette.light]),
@@ -68,9 +67,17 @@ void main() {
 
     await tester.pump();
 
-    expect(find.textContaining('Voting'), findsOneWidget);
-    expect(find.text(AdminHubStatus.votingSubtitle(trackConfig)), findsWidgets);
-    expect(find.textContaining('Top 5'), findsWidgets);
-    expect(find.byType(AdminHubNavCard), findsOneWidget);
+    expect(find.text('Voting'), findsOneWidget);
+    expect(find.byType(AdminHubNavRow), findsOneWidget);
+    expect(find.text('enabled'), findsNothing);
+    expect(find.textContaining('Top 5:'), findsNothing);
+
+    final syncButton = tester.widget<ButtonStyleButton>(
+      find.ancestor(
+        of: find.text('Sync votable events'),
+        matching: find.bySubtype<ButtonStyleButton>(),
+      ),
+    );
+    expect(syncButton.onPressed, isNotNull);
   });
 }

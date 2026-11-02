@@ -43,6 +43,14 @@ class EventPage extends StatelessWidget {
         ),
         actions: const [ConnectionStatus()],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: BlocBuilder<EventCubit, EventState>(
+        builder: (context, state) => switch (state) {
+          EventLoaded(:final event) when event.isVotable =>
+            const EventVoteSection(),
+          _ => const SizedBox.shrink(),
+        },
+      ),
       body: ColoredBox(
         color: palette.screen,
         child: BlocBuilder<EventCubit, EventState>(
@@ -79,7 +87,13 @@ class _EventBody extends StatelessWidget {
     final time = eventItem.timeRangeLabel;
 
     return ListView(
-      padding: .fromLTRB(16, 12, 16, 28 + MediaQuery.paddingOf(context).bottom),
+      padding: .fromLTRB(
+        16,
+        12,
+        16,
+        // Keeps the end of the content clear of the floating vote button.
+        (eventItem.isVotable ? 96 : 28) + MediaQuery.paddingOf(context).bottom,
+      ),
       children: [
         if (time.isNotEmpty)
           Text(
@@ -114,10 +128,6 @@ class _EventBody extends StatelessWidget {
             _SpeakerCard(speaker: speaker, track: track),
             const SizedBox(height: 12),
           ],
-        ],
-        if (eventItem.hasSpeaker && !eventItem.isBreak) ...[
-          const EventVoteSection(),
-          const SizedBox(height: 12),
         ],
         if (hasDescription)
           _DescriptionCard(
@@ -284,4 +294,9 @@ void _openWebsite(String url) {
   if (Uri.tryParse(url) case final uri?) {
     launchUrl(uri, mode: .externalApplication);
   }
+}
+
+extension on EventItem {
+  /// Talks with a speaker can be liked; breaks cannot.
+  bool get isVotable => hasSpeaker && !isBreak;
 }
