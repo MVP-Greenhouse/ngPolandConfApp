@@ -99,4 +99,27 @@ void main() {
     expect(deleted, isFalse);
     expect(find.text('Sign in again first.'), findsOneWidget);
   });
+
+  testWidgets('says which account to choose before Google asks', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _app(
+        DeleteAccountButton(
+          session: const UserSession.signedIn(userProfile),
+          onDelete: () async => null,
+          onDeleted: () {},
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Delete account'));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('choose ${userProfile.email},'), findsOneWidget);
+    expect(
+      find.textContaining('Google or Apple account stays'),
+      findsOneWidget,
+    );
+  });
 }

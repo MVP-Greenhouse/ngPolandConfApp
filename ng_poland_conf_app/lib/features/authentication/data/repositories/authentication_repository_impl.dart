@@ -157,7 +157,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       if (providers.contains('apple.com') && supportsAppleSignIn()) {
         await _revokeAppleAccess(user);
       } else if (providers.contains('google.com')) {
-        await user.reauthenticateWithCredential(await _googleCredential());
+        await _reauthenticateWithGoogle(user);
       } else if (!_signedInRecently(user)) {
         // Email links can't be re-sent mid-deletion, and deleting the data
         // first would leave an account without a profile.
@@ -170,6 +170,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     } catch (error, stackTrace) {
       if (error case FirebaseAuthException(code: 'requires-recent-login')) {
         throw const AuthException(_signInAgainMessage);
+      }
+      if (error case FirebaseAuthException(code: 'user-mismatch')) {
+        throw const AuthException(_differentAccountMessage);
       }
       // Provider SDKs throw their own types (including user cancellation).
       _logger.w(
@@ -184,6 +187,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   static const _signInAgainMessage =
       'For your security, sign out and sign in again, then delete your '
       'account.';
+
+  static const _differentAccountMessage =
+      "You chose a different account than the one you're signed in with. "
+      'Try again and choose that one.';
 
   /// Firebase deletes only accounts that signed in in the last 5 minutes.
   static bool _signedInRecently(User user) {
@@ -211,12 +218,28 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     );
   }
 
-  Future<AuthCredential> _googleCredential() async {
+  /// Firebase creates a user for a Google account it doesn't know, even when
+  /// it then rejects it, so a different account must never reach Firebase.
+  Future<void> _reauthenticateWithGoogle(User user) async {
     final googleUser = await GoogleSignIn.instance.authenticate();
-    return GoogleAuthProvider.credential(
-      idToken: googleUser.authentication.idToken,
+    final linked = user.providerData.firstWhere(
+      (info) => info.providerId == 'google.com',
     );
+    if (googleUser.id != linked.uid &&
+        googleUser.email.toLowerCase() != linked.email?.toLowerCase()) {
+      throw AuthException(
+        "You chose ${googleUser.email}, but you're signed in with "
+        "${linked.email ?? 'another account'}. Try again and choose that one.",
+      );
+    }
+    await user.reauthenticateWithCredential(_credentialOf(googleUser));
   }
+
+  Future<AuthCredential> _googleCredential() async =>
+      _credentialOf(await GoogleSignIn.instance.authenticate());
+
+  AuthCredential _credentialOf(GoogleSignInAccount googleUser) =>
+      GoogleAuthProvider.credential(idToken: googleUser.authentication.idToken);
 
   /// Runs a provider flow that ends signed in to Firebase.
   Future<AuthUser> _signIn(

@@ -28,19 +28,29 @@ void _appleReturns({required String authorizationCode}) {
 
 /// Stands in for the native SDK behind `GoogleSignIn.instance`.
 class _FakeGoogleSignIn extends GoogleSignInPlatform {
-  _FakeGoogleSignIn({this.error});
+  _FakeGoogleSignIn({
+    this.error,
+    this.email = 'user@example.com',
+    this.id = 'google-id',
+  });
 
   /// When set, [authenticate] fails with it.
   final GoogleSignInException? error;
+
+  /// The account the user picks.
+  final String email;
+  final String id;
 
   @override
   Future<AuthenticationResults> authenticate(
     AuthenticateParameters params,
   ) async {
     if (error case final error?) throw error;
-    return const AuthenticationResults(
-      user: GoogleSignInUserData(email: 'user@example.com', id: 'google-id'),
-      authenticationTokens: AuthenticationTokenData(idToken: 'google-token'),
+    return AuthenticationResults(
+      user: GoogleSignInUserData(email: email, id: id),
+      authenticationTokens: const AuthenticationTokenData(
+        idToken: 'google-token',
+      ),
     );
   }
 
@@ -53,6 +63,12 @@ class _FakeUserInfo implements UserInfo {
 
   @override
   final String providerId;
+
+  @override
+  String get uid => 'google-id';
+
+  @override
+  String get email => 'user@example.com';
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -313,8 +329,54 @@ void main() {
     expect(user.steps, isEmpty);
   });
 
-  test('keeps the account and its data when a different Google account is '
-      'picked', () async {
+  test('a different Google account never reaches Firebase, which would create '
+      'a user for it', () async {
+    GoogleSignInPlatform.instance = _FakeGoogleSignIn(
+      email: 'other@example.com',
+      id: 'other-id',
+    );
+    final user = _FakeUser(
+      providers: const ['google.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await expectLater(
+      _repository(user).deleteAccount(
+        deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+      ),
+      throwsA(
+        isA<AuthException>().having(
+          (error) => error.message,
+          'message',
+          "You chose other@example.com, but you're signed in with "
+              'user@example.com. Try again and choose that one.',
+        ),
+      ),
+    );
+    expect(user.reauthenticatedWith, isNull);
+    expect(user.steps, isEmpty);
+  });
+
+  test('recognises the signed-in Google account after its email '
+      'changed', () async {
+    GoogleSignInPlatform.instance = _FakeGoogleSignIn(
+      email: 'renamed@example.com',
+    );
+    final user = _FakeUser(
+      providers: const ['google.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await _repository(user).deleteAccount(
+      deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+    );
+
+    expect(user.steps, contains('delete account'));
+  });
+
+  test('explains when Firebase says the account does not match', () async {
     GoogleSignInPlatform.instance = _FakeGoogleSignIn();
     final user = _FakeUser(
       providers: const ['google.com'],
@@ -327,7 +389,14 @@ void main() {
       _repository(user).deleteAccount(
         deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
       ),
-      _deletionFailed,
+      throwsA(
+        isA<AuthException>().having(
+          (error) => error.message,
+          'message',
+          "You chose a different account than the one you're signed in with. "
+              'Try again and choose that one.',
+        ),
+      ),
     );
     expect(user.steps, isEmpty);
   });

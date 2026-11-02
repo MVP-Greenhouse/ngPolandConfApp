@@ -31,7 +31,10 @@ class DeleteAccountButton extends StatelessWidget {
   Future<void> _confirm(BuildContext context) async {
     final outcome = await showDialog<({String? error})>(
       context: context,
-      builder: (_) => _DeleteAccountDialog(onDelete: onDelete),
+      builder: (_) => _DeleteAccountDialog(
+        email: session.profile?.email ?? '',
+        onDelete: onDelete,
+      ),
     );
     if (outcome == null || !context.mounted) return;
     // Snackbars are drawn below the drawer, which would cover the notice.
@@ -70,8 +73,9 @@ class DeleteAccountButton extends StatelessWidget {
 /// Pops `(error: null)` once deleted, `(error: message)` when it failed, and
 /// `null` when cancelled.
 class _DeleteAccountDialog extends HookWidget {
-  const _DeleteAccountDialog({required this.onDelete});
+  const _DeleteAccountDialog({required this.email, required this.onDelete});
 
+  final String email;
   final Future<String?> Function() onDelete;
 
   @override
@@ -128,21 +132,33 @@ class _DeleteAccountDialog extends HookWidget {
           ),
         ],
       ),
-      content: const Column(
+      content: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
         children: [
-          _Consequence(
+          const _Consequence(
             icon: Icons.person_off_outlined,
-            text: 'Your sign-in and profile (name and email) are removed.',
+            text:
+                'Your sign-in and profile in this app (name and email) are '
+                'removed. Your Google or Apple account stays.',
           ),
-          SizedBox(height: 10),
-          _Consequence(
+          const SizedBox(height: 10),
+          const _Consequence(
             icon: Icons.how_to_vote_outlined,
             text: 'Your votes stay in the counts, without your name.',
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
+          // Google's account picker says the choice is for continuing to use
+          // the app, and its wording can't be changed.
           _Consequence(
+            icon: Icons.verified_user_outlined,
+            text:
+                "Next, you confirm it's you. If a list of accounts appears, "
+                'choose ${email.isEmpty ? 'the one you signed in with' : email}, '
+                "even if it says you'll keep using the app.",
+          ),
+          const SizedBox(height: 10),
+          const _Consequence(
             icon: Icons.error_outline_rounded,
             text: "This can't be undone.",
             emphasized: true,
