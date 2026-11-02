@@ -128,6 +128,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<void> signOut() async {
     await _auth.signOut();
+    await _forgetGoogleSignIn();
     try {
       await FirebaseFirestore.instance.clearPersistence();
     } on FirebaseException catch (error, stackTrace) {
@@ -165,6 +166,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       }
       await deleteUserData(user.uid);
       await user.delete();
+      await _forgetGoogleSignIn();
     } on AuthException {
       rethrow;
     } catch (error, stackTrace) {
@@ -221,18 +223,62 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   /// Firebase creates a user for a Google account it doesn't know, even when
   /// it then rejects it, so a different account must never reach Firebase.
   Future<void> _reauthenticateWithGoogle(User user) async {
-    final googleUser = await GoogleSignIn.instance.authenticate();
     final linked = user.providerData.firstWhere(
       (info) => info.providerId == 'google.com',
     );
-    if (googleUser.id != linked.uid &&
-        googleUser.email.toLowerCase() != linked.email?.toLowerCase()) {
+    bool isLinked(GoogleSignInAccount account) =>
+        account.id == linked.uid ||
+        account.email.toLowerCase() == linked.email?.toLowerCase();
+
+    // Google's picker can't be limited to one account, so the signed-in one
+    // is tried first without it: iOS restores the last Google sign-in, and
+    // Android picks the account already used in the app when there's one.
+    final restored = await _restoreGoogleSignIn();
+    final googleUser = restored != null && isLinked(restored)
+        ? restored
+        : await GoogleSignIn.instance.authenticate();
+    if (!isLinked(googleUser)) {
       throw AuthException(
         "You chose ${googleUser.email}, but you're signed in with "
         "${linked.email ?? 'another account'}. Try again and choose that one.",
       );
     }
     await user.reauthenticateWithCredential(_credentialOf(googleUser));
+  }
+
+  /// Clears the Google sign-in the platform keeps for the app, so the next
+  /// person signing in on the device isn't offered the previous account.
+  /// Firebase is already signed out, so a failure here is only logged.
+  Future<void> _forgetGoogleSignIn() async {
+    try {
+      await GoogleSignIn.instance.signOut();
+    } catch (error, stackTrace) {
+      _logger.w(
+        'Clearing the Google sign-in failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  /// Returns the Google account the platform gives without the full picker,
+  /// or null when there's none and the picker has to be shown.
+  Future<GoogleSignInAccount?> _restoreGoogleSignIn() async {
+    try {
+      return await GoogleSignIn.instance.attemptLightweightAuthentication(
+        reportAllExceptions: true,
+      );
+    } on GoogleSignInException catch (error, stackTrace) {
+      // Android may show a bottom sheet here; closing it cancels the deletion
+      // rather than opening a second picker.
+      if (error.code == GoogleSignInExceptionCode.canceled) rethrow;
+      _logger.w(
+        'Account deletion: restoring the Google sign-in failed',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      return null;
+    }
   }
 
   Future<AuthCredential> _googleCredential() async =>

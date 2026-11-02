@@ -32,6 +32,9 @@ class _FakeGoogleSignIn extends GoogleSignInPlatform {
     this.error,
     this.email = 'user@example.com',
     this.id = 'google-id',
+    this.restoredEmail,
+    this.restoredId = 'google-id',
+    this.restoreError,
   });
 
   /// When set, [authenticate] fails with it.
@@ -41,18 +44,50 @@ class _FakeGoogleSignIn extends GoogleSignInPlatform {
   final String email;
   final String id;
 
+  /// The account given without the picker, or none when null.
+  final String? restoredEmail;
+  final String restoredId;
+
+  /// When set, [attemptLightweightAuthentication] fails with it.
+  final GoogleSignInException? restoreError;
+
+  /// How many times the account picker was shown.
+  int pickerShown = 0;
+
+  /// Whether the app's Google sign-in was cleared.
+  bool signedOut = false;
+
+  @override
+  Future<void> signOut(SignOutParams params) async => signedOut = true;
+
+  @override
+  Future<AuthenticationResults?> attemptLightweightAuthentication(
+    AttemptLightweightAuthenticationParameters params,
+  ) async {
+    if (restoreError case final error?) throw error;
+    return switch (restoredEmail) {
+      final email? => _results(email, restoredId, 'restored-token'),
+      null => null,
+    };
+  }
+
   @override
   Future<AuthenticationResults> authenticate(
     AuthenticateParameters params,
   ) async {
+    pickerShown++;
     if (error case final error?) throw error;
-    return AuthenticationResults(
-      user: GoogleSignInUserData(email: email, id: id),
-      authenticationTokens: const AuthenticationTokenData(
-        idToken: 'google-token',
-      ),
-    );
+    return _results(email, id, 'google-token');
   }
+
+  static AuthenticationResults _results(
+    String email,
+    String id,
+    String idToken,
+  ) => AuthenticationResults(
+    user: GoogleSignInUserData(email: email, id: id),
+    authenticationTokens: AuthenticationTokenData(idToken: idToken),
+  );
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -281,6 +316,42 @@ void main() {
     ]);
   });
 
+  test('forgets the Google sign-in once the account is deleted', () async {
+    final google = _FakeGoogleSignIn();
+    GoogleSignInPlatform.instance = google;
+    final user = _FakeUser(
+      providers: const ['google.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await _repository(user).deleteAccount(
+      deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+    );
+
+    expect(google.signedOut, isTrue);
+  });
+
+  test('keeps the Google sign-in when the account is not deleted', () async {
+    final google = _FakeGoogleSignIn(
+      restoreError: const GoogleSignInException(code: .canceled),
+    );
+    GoogleSignInPlatform.instance = google;
+    final user = _FakeUser(
+      providers: const ['google.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await expectLater(
+      _repository(user).deleteAccount(
+        deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+      ),
+      _deletionFailed,
+    );
+    expect(google.signedOut, isFalse);
+  });
+
   test('Google users sign in again with the picked account before the '
       'account and its data are deleted', () async {
     GoogleSignInPlatform.instance = _FakeGoogleSignIn();
@@ -307,6 +378,106 @@ void main() {
         'google-token',
       ),
     );
+  });
+
+  test('Google users already signed in on the device skip the account '
+      'picker', () async {
+    final google = _FakeGoogleSignIn(restoredEmail: 'user@example.com');
+    GoogleSignInPlatform.instance = google;
+    final user = _FakeUser(
+      providers: const ['google.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await _repository(user).deleteAccount(
+      deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+    );
+
+    expect(google.pickerShown, 0);
+    expect(user.steps, [
+      'sign in again with google.com',
+      'delete data of u1',
+      'delete account',
+    ]);
+    expect(
+      user.reauthenticatedWith,
+      isA<OAuthCredential>().having(
+        (credential) => credential.idToken,
+        'idToken',
+        'restored-token',
+      ),
+    );
+  });
+
+  test('shows the account picker when the device gives a different Google '
+      'account', () async {
+    final google = _FakeGoogleSignIn(
+      restoredEmail: 'other@example.com',
+      restoredId: 'other-id',
+    );
+    GoogleSignInPlatform.instance = google;
+    final user = _FakeUser(
+      providers: const ['google.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await _repository(user).deleteAccount(
+      deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+    );
+
+    expect(google.pickerShown, 1);
+    expect(
+      user.reauthenticatedWith,
+      isA<OAuthCredential>().having(
+        (credential) => credential.idToken,
+        'idToken',
+        'google-token',
+      ),
+    );
+  });
+
+  test('shows the account picker when restoring the Google sign-in '
+      'fails', () async {
+    final google = _FakeGoogleSignIn(
+      restoreError: const GoogleSignInException(code: .unknownError),
+    );
+    GoogleSignInPlatform.instance = google;
+    final user = _FakeUser(
+      providers: const ['google.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await _repository(user).deleteAccount(
+      deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+    );
+
+    expect(google.pickerShown, 1);
+    expect(user.steps, contains('delete account'));
+  });
+
+  test('closing the Android account sheet cancels the deletion without a '
+      'second picker', () async {
+    final google = _FakeGoogleSignIn(
+      restoreError: const GoogleSignInException(code: .canceled),
+    );
+    GoogleSignInPlatform.instance = google;
+    final user = _FakeUser(
+      providers: const ['google.com'],
+      lastSignIn: anHourAgo,
+      steps: [],
+    );
+
+    await expectLater(
+      _repository(user).deleteAccount(
+        deleteUserData: (uid) async => user.steps.add('delete data of $uid'),
+      ),
+      _deletionFailed,
+    );
+    expect(google.pickerShown, 0);
+    expect(user.steps, isEmpty);
   });
 
   test('keeps the account and its data when the Google account picker is '
