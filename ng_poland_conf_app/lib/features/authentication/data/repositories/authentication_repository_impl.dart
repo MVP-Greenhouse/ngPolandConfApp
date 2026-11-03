@@ -154,7 +154,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     final providers = {for (final info in user.providerData) info.providerId};
     try {
       // An account can be linked to both when they share an email. Outside the
-      // iOS app there's no Apple flow, so its Apple access can't be revoked.
+      // iOS and macOS apps there's no Apple flow, so its Apple access can't be
+      // revoked.
       if (providers.contains('apple.com') && supportsAppleSignIn()) {
         await _revokeAppleAccess(user);
       } else if (providers.contains('google.com')) {

@@ -10,9 +10,23 @@ void main() {
     );
   });
 
+  test('Sign in with Apple works in the macOS app', () {
+    expect(
+      supportsAppleSignIn(platform: TargetPlatform.macOS, isWeb: false),
+      isTrue,
+    );
+  });
+
   test('Sign in with Apple is off on the web, even on an iPhone', () {
     expect(
       supportsAppleSignIn(platform: TargetPlatform.iOS, isWeb: true),
+      isFalse,
+    );
+  });
+
+  test('Sign in with Apple is off on the web, even on a Mac', () {
+    expect(
+      supportsAppleSignIn(platform: TargetPlatform.macOS, isWeb: true),
       isFalse,
     );
   });
